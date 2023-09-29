@@ -10,6 +10,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {windowWidth} from '../Utillity/utils';
 
+
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
@@ -22,6 +23,9 @@ const DropDownSingleSelect = ({
   rowTextForSelection,
   disabled,
   backgroundColor,
+  borderColor,
+  borderWidth,
+  marginTop,
   width,
   iconName,
   iconType,
@@ -51,6 +55,7 @@ const DropDownSingleSelect = ({
         !iconName && {
           paddingLeft: 0,
           marginBottom: 10,
+          marginTop:marginTop
         },
         myJobs && {
           backgroundColor: Color.themeInputText,
@@ -58,7 +63,6 @@ const DropDownSingleSelect = ({
           marginTop: 0,
           alignItems: 'center',
           borderRadius: 10,
-
           borderWidth: 0,
         },
 
@@ -99,6 +103,8 @@ const DropDownSingleSelect = ({
           }),
           ...(backgroundColor && {
             backgroundColor: backgroundColor,
+            borderWidth:borderWidth,
+            borderColor:borderColor,
           }),
           ...(!iconName && {
             width: width,
@@ -108,8 +114,8 @@ const DropDownSingleSelect = ({
           ...styles.dropDownBtnText,
           ...(item !== '' && {color: Colors ? Colors : Color.themeBlack}),
           ...(backgroundColor && {
-            color: `${Color.white}`,
-            fontSize: moderateScale(18, 0.3),
+            color: `${Color.veryLightGray}`,
+            fontSize: moderateScale(14, 0.3),
           }),
         }}
         dropdownStyle={{

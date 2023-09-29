@@ -25,6 +25,8 @@ import SendSMS from 'react-native-sms'
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource'
 
 
+
+
 const CreateNew = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
@@ -106,7 +108,7 @@ const CreateNew = () => {
             paddingTop: moderateScale(40, 0.3),
           }}>
           <CustomText isBold style={styles.header}>
-            Upload New Qoute
+           Vendor Qoutes price
           </CustomText>
           <TextInputWithTitle
             titleText={'Qoute Title'}

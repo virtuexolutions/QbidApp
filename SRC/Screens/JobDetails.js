@@ -20,6 +20,8 @@ import {ActivityIndicator} from 'react-native';
 import ReviewCard from '../Components/ReviewCard';
 import BidderDetail from '../Components/BidderDetail';
 import Detailcards from '../Components/Detailcards';
+import Modal from 'react-native-modal';
+import DropDownSingleSelect from '../Components/DropDownSingleSelect';
 
 const JobDetails = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
@@ -27,6 +29,19 @@ const JobDetails = () => {
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [bidDone, setBidDone] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [fullName, setFullName] = useState('');
+  const [Email, setEmail] = useState('');
+  const [number, setNumber] = useState('');
+  const [desc, setDesc] = useState('');
+  const [coverletterRole, setCoverLetterRole] = useState('Expertise In');
+
+  const UserCoverLetterArray = ['Expertise In', 'Expertise In'];
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
   return (
     <ScreenBoiler
       hideUser={false}
@@ -109,7 +124,8 @@ const JobDetails = () => {
                   width: moderateScale(6, 0.6),
                   height: moderateScale(6, 0.6),
                   borderRadius: moderateScale(3, 0.6),
-                  backgroundColor: userRole == 'Qbid Member' ? Color.blue : Color.themeColor,
+                  backgroundColor:
+                    userRole == 'Qbid Member' ? Color.blue : Color.themeColor,
                 }}
               />
               <CustomText
@@ -150,44 +166,42 @@ const JobDetails = () => {
               iconName={'vcard'}
               title={'Member Name'}
               iconType={FontAwesome}
-              marginTop={moderateScale(10,0.3)}
-
+              marginTop={moderateScale(10, 0.3)}
             />
             <Detailcards
               data={'$800'}
               iconName={'calculator'}
               title={'Expected Qoute'}
               iconType={Entypo}
-              marginTop={moderateScale(10,0.3)}
+              marginTop={moderateScale(10, 0.3)}
             />
             <Detailcards
               data={'NewYork'}
               iconName={'building'}
               title={'City'}
               iconType={FontAwesome}
-              marginTop={moderateScale(30,0.3)}
-
+              marginTop={moderateScale(30, 0.3)}
             />
             <Detailcards
               data={'10%'}
               iconName={'percent'}
               title={'Offering Percent'}
               iconType={FontAwesome}
-              marginTop={moderateScale(30,0.3)}
+              marginTop={moderateScale(30, 0.3)}
             />
             <Detailcards
               data={'$1000'}
               iconName={'calculator'}
               title={'Vendor Qoute'}
               iconType={Entypo}
-              marginTop={moderateScale(30,0.3)}
+              marginTop={moderateScale(30, 0.3)}
             />
             <Detailcards
               data={'Auto Repair'}
               iconName={'briefcase'}
               title={'Service Type'}
               iconType={Entypo}
-              marginTop={moderateScale(30,0.3)}
+              marginTop={moderateScale(30, 0.3)}
             />
           </View>
           {userRole == 'Qbid Member' ? (
@@ -210,33 +224,27 @@ const JobDetails = () => {
                 }}
               />
             </>
-          ) : 
-          
-          userRole != 'Qbid Member' && bidDone ?
-          (
+          ) : userRole != 'Qbid Member' && bidDone ? (
             <>
-            <CustomText
-              isBold
-              style={{
-                color: Color.white,
-                fontSize: moderateScale(17, 0.6),
-                marginVertical: moderateScale(20, 0.3),
-              }}>
-              Your Bid Detail
-            </CustomText>
-            <BidderDetail
-              item={{
-                image: require('../Assets/Images/man1.jpg'),
-                name: 'Steve Job',
-                rating: 4,
-                description: 'I can really help you with this task',
-              }}
-            />
-          </>
-          )
-          :
-          
-          (
+              <CustomText
+                isBold
+                style={{
+                  color: Color.white,
+                  fontSize: moderateScale(17, 0.6),
+                  marginVertical: moderateScale(20, 0.3),
+                }}>
+                Your Bid Detail
+              </CustomText>
+              <BidderDetail
+                item={{
+                  image: require('../Assets/Images/man1.jpg'),
+                  name: 'Steve Job',
+                  rating: 4,
+                  description: 'I can really help you with this task',
+                }}
+              />
+            </>
+          ) : (
             <>
               <MarkCheckWithText
                 checked={checked}
@@ -279,7 +287,8 @@ const JobDetails = () => {
                 height={windowHeight * 0.07}
                 marginTop={moderateScale(20, 0.3)}
                 onPress={() => {
-                  setBidDone(true);
+                  // setBidDone(true);
+                  toggleModal();
                 }}
                 bgColor={
                   userRole == 'Qbid Member' ? Color.blue : Color.themeColor
@@ -291,6 +300,136 @@ const JobDetails = () => {
           )}
         </ScrollView>
       </LinearGradient>
+
+      <Modal isVisible={isModalVisible}
+       onBackdropPress={() => {
+        setModalVisible(false)
+      }}>
+        <View
+          style={{
+            width: windowWidth * 0.9,
+            height: windowHeight * 0.75,
+            borderRadius: moderateScale(15, 0.3),
+            backgroundColor: '#f2fce4',
+            alignItems: 'center',
+          }}>
+          <View style={{marginTop: moderateScale(20, 0.3)}}>
+            <CustomText
+              isBold
+              style={{
+                fontSize: moderateScale(14, 0.6),
+              }}>
+              QBid Proposal
+            </CustomText>
+          </View>
+
+          <View style={{marginTop: moderateScale(10, 0.3)}}>
+            <TextInputWithTitle
+              secureText={false}
+              placeholder={'Full Name'}
+              setText={setFullName}
+              value={Email}
+              viewHeight={0.06}
+              viewWidth={0.75}
+              inputWidth={0.68}
+              border={1}
+              borderColor={Color.blue}
+              backgroundColor={'#FFFFFF'}
+              marginTop={moderateScale(15, 0.6)}
+              color={Color.themeColor}
+              placeholderColor={Color.themeLightGray}
+              borderRadius={moderateScale(25, 0.3)}
+            />
+            <TextInputWithTitle
+              secureText={false}
+              placeholder={'Enter your Email'}
+              setText={setFullName}
+              value={fullName}
+              viewHeight={0.06}
+              viewWidth={0.75}
+              inputWidth={0.68}
+              border={1}
+              borderColor={Color.blue}
+              backgroundColor={'#FFFFFF'}
+              marginTop={moderateScale(15, 0.6)}
+              color={Color.themeColor}
+              placeholderColor={Color.themeLightGray}
+              borderRadius={moderateScale(25, 0.3)}
+            />
+            <TextInputWithTitle
+              secureText={false}
+              placeholder={'Phone Number'}
+              setText={setNumber}
+              value={number}
+              viewHeight={0.06}
+              viewWidth={0.75}
+              inputWidth={0.68}
+              border={1}
+              borderColor={Color.blue}
+              backgroundColor={'#FFFFFF'}
+              marginTop={moderateScale(15, 0.6)}
+              color={Color.themeColor}
+              placeholderColor={Color.themeLightGray}
+              borderRadius={moderateScale(25, 0.3)}
+            />
+            <DropDownSingleSelect
+              array={UserCoverLetterArray}
+              backgroundColor={'white'}
+              item={coverletterRole}
+              borderColor={Color.blue}
+              borderWidth={1}
+              marginTop={moderateScale(20, 0.6)}
+              setItem={setCoverLetterRole}
+              placeholder={coverletterRole}
+              placeholderColor={Color.themeLightGray}
+              width={windowWidth * 0.75}
+              dropDownHeight={windowHeight * 0.06}
+              dropdownStyle={{
+                width: windowWidth * 0.75,
+              }}
+            />
+            <TextInputWithTitle
+              multiline={true}
+              secureText={false}
+              placeholder={'Cover Letter'}
+              setText={setDesc}
+              value={desc}
+              viewHeight={0.15}
+              viewWidth={0.75}
+              inputWidth={0.5}
+              border={1}
+              borderColor={Color.blue}
+              backgroundColor={'#FFFFFF'}
+              marginTop={moderateScale(15, 0.6)}
+              color={Color.themeColor}
+              placeholderColor={Color.themeLightGray}
+              borderRadius={moderateScale(25, 0.3)}
+            />
+
+            <CustomButton
+              text={
+                isLoading ? (
+                  <ActivityIndicator color={'#FFFFFF'} size={'small'} />
+                ) : (
+                  'Done'
+                )
+              }
+              textColor={Color.white}
+              width={windowWidth * 0.45}
+              height={windowHeight * 0.06}
+              marginTop={moderateScale(30, 0.3)}
+              onPress={() => {
+                setBidDone(true);
+                setModalVisible(!isModalVisible);
+              }}
+              bgColor={
+                userRole == 'Qbid Member' ? Color.blue : Color.themeColor
+              }
+              borderRadius={moderateScale(30, 0.3)}
+            />
+          </View>
+        </View>
+      </Modal>
     </ScreenBoiler>
   );
 };
@@ -313,5 +452,3 @@ const styles = ScaledSheet.create({
     justifyContent: 'space-between',
   },
 });
-
-

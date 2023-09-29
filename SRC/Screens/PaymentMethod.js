@@ -38,7 +38,7 @@ import CustomAlertModal from '../Components/CustomAlertModal';
 import navigationService from '../navigationService';
 import {setUserData} from '../Store/slices/common';
 import {setPm_Type} from '../Store/slices/auth';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -48,7 +48,10 @@ const PaymentMethod = props => {
   const user = useSelector(state => state.commonReducer.userData);
   const token = useSelector(state => state.authReducer.token);
 
-  console.log('🚀 ~ file: PaymentMethod.js:37 ~ PaymentMethod ~ user', JSON.stringify(user,null,2));
+  console.log(
+    '🚀 ~ file: PaymentMethod.js:37 ~ PaymentMethod ~ user',
+    JSON.stringify(user, null, 2),
+  );
   const dispatch = useDispatch();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -61,20 +64,20 @@ const PaymentMethod = props => {
   });
   const [alertModalVisible, setAlertModalVisible] = useState(false);
 
-  const cardName = require('../Assets/Images/otherCards.png')
-    // user?.pm_type == 'Visa'
-    //   ? require('../Assets/Images/visa.png')
-    //   : user?.pm_type.toLowerCase() == 'mastercard'
-    //   ? require('../Assets/Images/master.png')
-    //   : user?.pm_type.toLowerCase() == 'amex'
-    //   ? require('../Assets/Images/americanExpress.png')
-    //   : user?.pm_type.toLowerCase() == 'discover'
-    //   ? require('../Assets/Images/discover.png')
-    //   : user?.pm_type.toLowerCase() == 'jcb'
-    //   ? require('../Assets/Images/jcb.png')
-    //   : user?.pm_type.toLowerCase() == 'UnionPay'
-    //   ? require('../Assets/Images/unionPay.png')
-    //   : (imageUrl = require('../Assets/Images/otherCards.png'));
+  const cardName = require('../Assets/Images/otherCards.png');
+  // user?.pm_type == 'Visa'
+  //   ? require('../Assets/Images/visa.png')
+  //   : user?.pm_type.toLowerCase() == 'mastercard'
+  //   ? require('../Assets/Images/master.png')
+  //   : user?.pm_type.toLowerCase() == 'amex'
+  //   ? require('../Assets/Images/americanExpress.png')
+  //   : user?.pm_type.toLowerCase() == 'discover'
+  //   ? require('../Assets/Images/discover.png')
+  //   : user?.pm_type.toLowerCase() == 'jcb'
+  //   ? require('../Assets/Images/jcb.png')
+  //   : user?.pm_type.toLowerCase() == 'UnionPay'
+  //   ? require('../Assets/Images/unionPay.png')
+  //   : (imageUrl = require('../Assets/Images/otherCards.png'));
 
   const addCard = async () => {
     const url = 'auth/updatecard';
@@ -102,11 +105,11 @@ const PaymentMethod = props => {
     }
     if (responseData != undefined) {
       setIsLoading(false);
-      return console.log(responseData)
+      return console.log(responseData);
       const responseApi = await Post(url, responseData, apiHeader(token));
       setIsLoading(false);
       if (responseApi != undefined) {
-       console.log('response >>>>>>>', responseApi?.data);
+        console.log('response >>>>>>>', responseApi?.data);
         dispatch(setUserData(responseApi?.data?.data));
         dispatch(setPm_Type(responseApi?.data?.data?.pm_type));
 
@@ -420,32 +423,34 @@ const PaymentMethod = props => {
 
   return (
     <ScreenBoiler
-    showHeader={true}
-    statusBarBackgroundColor={
-      userRole == 'Qbid Member'
-        ? Color.themeBgColor
-        : Color.themeBgColorNegotiator
-    }
-    statusBarContentStyle={'light-content'}
-    headerColor={
-      userRole == 'Qbid Member'
-        ?Color.themeBgColor
-        : Color.themeBgColorNegotiator
-    }
-    showBack={true}
-    hideUser
-    >
-    <LinearGradient
-      style={{
-        height: windowHeight * 0.97,
-      }}
-      start={{x: 0, y: 0}}
-      end={{x: 1, y: 0}}
-      colors={
+      showHeader={true}
+      statusBarBackgroundColor={
         userRole == 'Qbid Member'
-          ?Color.themeBgColor
-          :Color.themeBgColorNegotiator
-      }>
+          ? Color.themeBgColor
+          : Color.themeBgColorNegotiator
+      }
+      statusBarContentStyle={'light-content'}
+      headerColor={
+        userRole == 'Qbid Member'
+          ? Color.themeBgColor
+          : Color.themeBgColorNegotiator
+      }
+      showBack={true}
+      hideUser>
+      <LinearGradient
+        style={{
+          height: windowHeight * 0.97,
+        }}
+        start={{x: 0, y: 0}}
+        end={{x: 1, y: 0}}
+        colors={
+          userRole == 'Qbid Member'
+            ? Color.themeBgColor
+            : Color.themeBgColorNegotiator
+        }>
+        <CustomText isBold style={styles.header1}>
+          Saved Cards
+        </CustomText>
         <ImageBackground
           source={cardName}
           resizeMode="contain"
@@ -484,7 +489,7 @@ const PaymentMethod = props => {
               //         : HandleMileStonePay(item?.id, false));
               alert('Card will be detached');
             }}
-            style={[
+            style={[ 
               styles?.addBtnShadow,
               {
                 position: 'absolute',
@@ -496,24 +501,24 @@ const PaymentMethod = props => {
               style={[styles?.cardIconContainer, styles?.addBtnShadow]}
               start={{x: 0, y: 0}}
               end={{x: 1, y: 0}}
-              colors={  userRole != 'Qbid Member'
-          ? Color.themeBgColor
-          : Color.themeBgColorNegotiator}>
-            
+              colors={
+                userRole != 'Qbid Member'
+                  ? Color.themeBgColor
+                  : Color.themeBgColorNegotiator
+              }>
               <Icon
                 as={isDelete ? MaterialCommunityIcons : AntDesign}
                 name={isDelete ? 'delete' : 'right'}
                 style={[{color: Color.white}]}
                 size={moderateScale(27, 0.6)}
               />
-          
             </LinearGradient>
           </TouchableOpacity>
         </ImageBackground>
         <TouchableOpacity
           activeOpacity={1}
           onPress={() => {
-           user?.current_plan == 'basic' ||
+            user?.current_plan == 'basic' ||
             [0, null, ''].includes(user?.card_change_limit)
               ? setAlertModalVisible(true)
               : setIsModalVisible(true);
@@ -532,9 +537,11 @@ const PaymentMethod = props => {
             style={[styles.addBtnContainer, styles?.addBtnShadow]}
             start={{x: 0, y: 0}}
             end={{x: 1, y: 0}}
-            colors={  userRole != 'Qbid Member'
-          ? Color.themeBgColor
-          : Color.themeBgColorNegotiator}>
+            colors={
+              userRole != 'Qbid Member'
+                ? Color.themeBgColor
+                : Color.themeBgColorNegotiator
+            }>
             <Icon
               as={AntDesign}
               name="plus"
@@ -543,7 +550,7 @@ const PaymentMethod = props => {
             />
           </LinearGradient>
         </TouchableOpacity>
-     </LinearGradient>
+      </LinearGradient>
 
       <Modal
         hasBackdrop={true}
@@ -610,7 +617,6 @@ const PaymentMethod = props => {
             color={'#11A44C'}
             placeholderColor={Color.themeLightGray}
             borderRadius={moderateScale(20, 0.3)}
-          
           />
           <View style={[styles.phoneView, {marginTop: moderateScale(8, 0.3)}]}>
             <TextInputWithTitle
@@ -632,7 +638,6 @@ const PaymentMethod = props => {
               color={'#11A44C'}
               placeholderColor={Color.themeLightGray}
               borderRadius={moderateScale(20, 0.3)}
-            
             />
           </View>
           <View style={[styles.phoneView, {marginTop: moderateScale(5, 0.3)}]}>
@@ -677,7 +682,6 @@ const PaymentMethod = props => {
               color={'#11A44C'}
               placeholderColor={Color.themeLightGray}
               borderRadius={moderateScale(20, 0.3)}
-             
             />
           </View>
 
@@ -902,6 +906,12 @@ const styles = ScaledSheet.create({
     borderBottomLeftRadius: moderateScale(10, 0.3),
     borderBottomRightRadius: moderateScale(10, 0.3),
   },
+  header1: {
+    color: Color.black,
+    fontSize: moderateScale(18, 0.3),
+    width: windowWidth * 0.9,
+    margin: moderateScale(20, 0.3),
+  },
   addBtnContainer: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -909,7 +919,7 @@ const styles = ScaledSheet.create({
 
     width: moderateScale(80, 0.3),
     height: moderateScale(80, 0.3),
-    marginBottom : 50,
+    marginBottom: 50,
   },
   phoneView: {
     width: windowWidth * 0.75,

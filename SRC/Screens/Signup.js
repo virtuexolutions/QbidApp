@@ -261,7 +261,7 @@ const Signup = () => {
                 borderRadius={moderateScale(25, 0.3)}
               />
 
-              <View style={styles.userTypeContainer}>
+              {/* <View style={styles.userTypeContainer}>
                 <View style={styles.innerContainer}>
                   <CustomText
                     isBold
@@ -312,7 +312,7 @@ const Signup = () => {
                       },
                     ]}></TouchableOpacity>
                 </View>
-              </View>
+              </View> */}
             </>
           )}
           <TextInputWithTitle

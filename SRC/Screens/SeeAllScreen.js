@@ -27,68 +27,40 @@ const SeeAllScreen = props => {
   console.log('🚀 ~ file: SeeAllScreen.js:6 ~ SeeAllScreen ~ type', type);
   const negotiatorsArray = [
     {
+      id:1,
       name: 'Walter A. Jones',
-      rating: 4,
-      expertiseIn: ['plumbing equipment'],
-      description:
-        'Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor',
-      image: require('../Assets/Images/man1.jpg'),
+      Title:'Lorem Ipsum dolor Amet',
+      desc:'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
     },
     {
-      name: 'jpsephine A. Suarez',
-      rating: 3,
-      expertiseIn: ['plumbing equipment', 'test3', 'test2'],
-      description:
-        'Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor',
-      image: require('../Assets/Images/man2.jpg'),
-    },
-    {
-      name: 'Ronald N. Voegele',
-      rating: 5,
-      expertiseIn: ['plumbing equipment', 'test3', 'test2'],
-      description:
-        'Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor',
-      image: require('../Assets/Images/man3.jpg'),
-    },
-    {
+      id:2,
       name: 'Walter A. Jones',
-      rating: 4,
-      expertiseIn: ['plumbing equipment', 'test3', 'test2'],
-      description:
-        'Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor',
-      image: require('../Assets/Images/man1.jpg'),
+      Title:'Lorem Ipsum dolor Amet',
+      desc:'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
     },
     {
+      id:3,
       name: 'Walter A. Jones',
-      rating: 4,
-      expertiseIn: ['plumbing equipment'],
-      description:
-        'Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor',
-      image: require('../Assets/Images/man1.jpg'),
+      Title:'Lorem Ipsum dolor Amet',
+      desc:'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
     },
     {
-      name: 'jpsephine A. Suarez',
-      rating: 3,
-      expertiseIn: ['plumbing equipment', 'test3', 'test2'],
-      description:
-        'Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor',
-      image: require('../Assets/Images/man2.jpg'),
-    },
-    {
-      name: 'Ronald N. Voegele',
-      rating: 5,
-      expertiseIn: ['plumbing equipment', 'test3', 'test2'],
-      description:
-        'Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor',
-      image: require('../Assets/Images/man3.jpg'),
-    },
-    {
+      id:4,
       name: 'Walter A. Jones',
-      rating: 4,
-      expertiseIn: ['plumbing equipment', 'test3', 'test2'],
-      description:
-        'Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor',
-      image: require('../Assets/Images/man1.jpg'),
+      Title:'Lorem Ipsum dolor Amet',
+      desc:'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
+    },
+    {
+      id:5,
+      name: 'Walter A. Jones',
+      Title:'Lorem Ipsum dolor Amet',
+      desc:'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
+    },
+    {
+      id:6,
+      name: 'Walter A. Jones',
+      Title:'Lorem Ipsum dolor Amet',
+      desc:'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
     },
   ];
   const myQoutesArray = [
@@ -305,7 +277,7 @@ const SeeAllScreen = props => {
           ListHeaderComponent={()=>{
             return(
               <CustomText style={styles.header}>
-              {type == 'negotiator' ? 'Qbid List-Negotiator' : 'My Qoutes'}
+              {type == 'negotiator' ? 'Proposal' : 'My Qoutes'}
             </CustomText>
             )
           }}

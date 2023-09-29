@@ -96,7 +96,7 @@ const Header = props => {
           <View></View>
         )}
       </View>
-      {/* <CustomImage
+      <CustomImage
         resizeMode={'contain'}
         style={{
           width: windowWidth * 0.21,
@@ -108,7 +108,7 @@ const Header = props => {
             ? require('../Assets/Images/logoSplash.png')
             : require('../Assets/Images/logoSplash2.png')
         }
-      /> */}
+      />
       {!hideUser ? (
         <TouchableOpacity
           activeOpacity={0.8}

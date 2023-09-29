@@ -22,6 +22,7 @@ import {setSelectedRole} from '../Store/slices/common';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import JobCard from '../Components/JobCard';
+import Modal from 'react-native-modal';
 
 const NegotiatorHomeScreen = () => {
   const [searchData, setSearchData] = useState('');
@@ -167,21 +168,20 @@ const NegotiatorHomeScreen = () => {
           </View>
 
           <View style={styles.recommendedContainer}>
-          
             <View style={styles.row}>
-            <CustomText isBold style={styles.heading}>
-              Recommended
-            </CustomText>
-            <CustomText
-              onPress={() => {
-                navigationService.navigate('SeeAllNegotiator', {
-                  type: 'recommended',
-                });
-              }}
-              style={styles.viewall}>
-              View all
-            </CustomText>
-          </View>
+              <CustomText isBold style={styles.heading}>
+                Recommended
+              </CustomText>
+              <CustomText
+                onPress={() => {
+                  navigationService.navigate('SeeAllNegotiator', {
+                    type: 'recommended',
+                  });
+                }}
+                style={styles.viewall}>
+                View all
+              </CustomText>
+            </View>
             <FlatList
               data={[1, 2, 3, 4, 5]}
               horizontal
@@ -190,26 +190,31 @@ const NegotiatorHomeScreen = () => {
                 paddingHorizontal: moderateScale(15, 0.3),
               }}
               renderItem={({item, index}) => {
-                return <JobCard />;
+                return (
+                  <JobCard
+                    onPress={() => {
+                      navigationService.navigate('JobDetails');
+                    }}
+                  />
+                );
               }}
             />
           </View>
           <View style={styles.recommendedContainer}>
-           
             <View style={styles.row}>
-            <CustomText isBold style={styles.heading}>
-          Working On
-            </CustomText>
-            <CustomText
-              onPress={() => {
-                navigationService.navigate('SeeAllNegotiator', {
-                  type: 'Working On',
-                });
-              }}
-              style={styles.viewall}>
-              View all
-            </CustomText>
-          </View>
+              <CustomText isBold style={styles.heading}>
+                Working On
+              </CustomText>
+              <CustomText
+                onPress={() => {
+                  navigationService.navigate('SeeAllNegotiator', {
+                    type: 'Working On',
+                  });
+                }}
+                style={styles.viewall}>
+                View all
+              </CustomText>
+            </View>
             <FlatList
               data={[1, 2, 3, 4, 5]}
               horizontal
@@ -218,26 +223,31 @@ const NegotiatorHomeScreen = () => {
                 paddingHorizontal: moderateScale(15, 0.3),
               }}
               renderItem={({item, index}) => {
-                return <JobCard />;
+                return (
+                  <JobCard
+                    onPress={() => {
+                      navigationService.navigate('JobDetails');
+                    }}
+                  />
+                );
               }}
             />
           </View>
           <View style={styles.recommendedContainer}>
-          
             <View style={styles.row}>
-            <CustomText isBold style={styles.heading}>
-            Job Requests
-            </CustomText>
-            <CustomText
-              onPress={() => {
-                navigationService.navigate('SeeAllNegotiator', {
-                  type: 'Job Requests',
-                });
-              }}
-              style={styles.viewall}>
-              View all
-            </CustomText>
-          </View>
+              <CustomText isBold style={styles.heading}>
+                Seekhing Help
+              </CustomText>
+              <CustomText
+                onPress={() => {
+                  navigationService.navigate('SeeAllNegotiator', {
+                    type: 'Job Requests',
+                  });
+                }}
+                style={styles.viewall}>
+                View all
+              </CustomText>
+            </View>
             <FlatList
               data={[1, 2, 3, 4, 5]}
               horizontal
@@ -252,28 +262,30 @@ const NegotiatorHomeScreen = () => {
           </View>
         </ScrollView>
         <CustomStatusModal
-        isModalVisible={isModalVisible}
-        setModalVisible={setIsModalVisible}
-        statusArray={[{name: 'pending'}, {name: 'onGoing'}, {name: 'completed'}]}
-        data={selectedStatus}
-        setData={
-          setSelectedStatus
-        }
-      />
-      <CustomAlertModal
-        isModalVisible={visible}
-        onClose={() => {
-          setVisible(false);
-        }}
-        onOKPress={() => {
-          setVisible(false);
-          BackHandler.exitApp();
-        }}
-        title={'Are you sure !!'}
-        message={'You Want to exit the App ?'}
-        iconType={2}
-        areYouSureAlert
-      />
+          isModalVisible={isModalVisible}
+          setModalVisible={setIsModalVisible}
+          statusArray={[
+            {name: 'pending'},
+            {name: 'onGoing'},
+            {name: 'completed'},
+          ]}
+          data={selectedStatus}
+          setData={setSelectedStatus}
+        />
+        <CustomAlertModal
+          isModalVisible={visible}
+          onClose={() => {
+            setVisible(false);
+          }}
+          onOKPress={() => {
+            setVisible(false);
+            BackHandler.exitApp();
+          }}
+          title={'Are you sure !!'}
+          message={'You Want to exit the App ?'}
+          iconType={2}
+          areYouSureAlert
+        />
       </LinearGradient>
     </ScreenBoiler>
   );

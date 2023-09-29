@@ -113,7 +113,7 @@ const Settings = () => {
           />
           <CustomButton
             isBold
-            text={'Attached Card'}
+            text={'Saved Cards'}
             textColor={Color.themeDarkGray}
             width={windowWidth * 0.9}
             height={windowHeight * 0.07}
@@ -125,6 +125,24 @@ const Settings = () => {
             // isGradient
             borderRadius={moderateScale(30, 0.3)}
           />
+          {
+             userRole == 'Qbid Member' &&
+          
+           <CustomButton
+            isBold
+            text={'milage Range'}
+            textColor={Color.themeDarkGray}
+            width={windowWidth * 0.9}
+            height={windowHeight * 0.07}
+            marginTop={moderateScale(10, 0.3)}
+            onPress={() => {
+              navigationService.navigate('MileRange');
+            }}
+            bgColor={Color.white}
+            // isGradient
+            borderRadius={moderateScale(30, 0.3)}
+          />
+}
           <CustomButton
             isBold
             text={'Subscription'}
@@ -165,7 +183,7 @@ const Settings = () => {
               navigationService.navigate('ChangePassword');
             }}
             bgColor={Color.white}
-            // isGradient
+            // isGradientp
             borderRadius={moderateScale(30, 0.3)}
           />
           <CustomButton

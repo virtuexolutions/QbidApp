@@ -100,6 +100,7 @@ const AddCard = () => {
       console.log(responseData.error);
     }
     if (responseData != undefined) {
+      userRole == 'Qbid Member' ? navigationService.navigate('MileRange', {fromLogin : true}) :
       dispatch(setUserToken({token: 'dasdawradawdawrtfeasfzs'}));
       return console.log(responseData?.token?.id);
       const responseApi = await Post(url, responseData, apiHeader(token));

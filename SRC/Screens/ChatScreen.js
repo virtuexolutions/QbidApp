@@ -188,7 +188,7 @@ const ChatScreen = () => {
                   styles.header,
                   userRole == 'Qbid Negotiator' && {color: Color.white},
                 ]}>
-                Chat Listing
+                Chats
               </CustomText>
             );
           }}

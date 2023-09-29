@@ -224,15 +224,11 @@ const styles = ScaledSheet.create({
     borderColor: Color.lightGrey,
     flexDirection: 'row',
     placeholderTextColor: Color.white,
-    // textTransform: 'capitalize',
   },
   inputBox: {
     paddingLeft: moderateScale(8, 0.6),
     borderRadius: 8,
     fontSize: moderateScale(12, 0.3),
-    // textTransform: 'capitalize',
-
-    // fontFamily: 'PlusJakartaDisplay-Regular',
     textAlign: I18nManager.isRTL ? 'right' : 'left',
     color: Color.themeLightGray,
   },

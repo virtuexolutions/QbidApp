@@ -18,17 +18,27 @@ import CustomStatusModal from '../Components/CustomStatusModal';
 import LinearGradient from 'react-native-linear-gradient';
 import {setUserToken} from '../Store/slices/auth';
 import CustomAlertModal from '../Components/CustomAlertModal';
-import { setSelectedRole } from '../Store/slices/common';
+import {setSelectedRole} from '../Store/slices/common';
+import CustomImage from '../Components/CustomImage';
+import Modal from 'react-native-modal';
+import TextInputWithTitle from '../Components/TextInputWithTitle';
+import DropDownSingleSelect from '../Components/DropDownSingleSelect';
+import CustomButton from '../Components/CustomButton';
+import ImagePickerModal from '../Components/ImagePickerModal';
 
 const HomeScreen = () => {
- 
+  const userRole = useSelector(state => state.commonReducer.selectedRole);
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   // console.log("🚀 ~ file: HomeScreen.js:20 ~ HomeScreen ~ servicesArray", servicesArray)
   const [searchData, setSearchData] = useState('');
   const [showFilter, setShowFilter] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [showMultiImageModal, setShowMultiImageModal] = useState(false);
+  const [multiImages, setMultiImages] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedView, setSelectedView] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   console.log(
     '🚀 ~ file: HomeScreen.js:27 ~ HomeScreen ~ selectedView',
     selectedView,
@@ -36,6 +46,9 @@ const HomeScreen = () => {
   const [selectedService, setSelectedService] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
   const [visible, setVisible] = useState(false);
+  const [qbidName, setQbidName] = useState('');
+  const [qbidDetail, setQbidDetail] = useState('');
+  const [qbiddetail1, setQbidDetail1] = useState('');
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', () => {
       setVisible(true);
@@ -44,36 +57,40 @@ const HomeScreen = () => {
 
   const negotiatorsArray = [
     {
+      id: 1,
       name: 'Walter A. Jones',
-      rating: 4,
-      expertiseIn: ['plumbing equipment'],
-      description:
-        'Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor',
-      image: require('../Assets/Images/man1.jpg'),
+      Title: 'Lorem Ipsum dolor Amet',
+      desc: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
     },
     {
-      name: 'jpsephine A. Suarez',
-      rating: 3,
-      expertiseIn: ['plumbing equipment', 'test3', 'test2'],
-      description:
-        'Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor',
-      image: require('../Assets/Images/man2.jpg'),
-    },
-    {
-      name: 'Ronald N. Voegele',
-      rating: 5,
-      expertiseIn: ['plumbing equipment', 'test3', 'test2'],
-      description:
-        'Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor',
-      image: require('../Assets/Images/man3.jpg'),
-    },
-    {
+      id: 2,
       name: 'Walter A. Jones',
-      rating: 4,
-      expertiseIn: ['plumbing equipment', 'test3', 'test2'],
-      description:
-        'Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor',
-      image: require('../Assets/Images/man1.jpg'),
+      Title: 'Lorem Ipsum dolor Amet',
+      desc: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
+    },
+    {
+      id: 3,
+      name: 'Walter A. Jones',
+      Title: 'Lorem Ipsum dolor Amet',
+      desc: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
+    },
+    {
+      id: 4,
+      name: 'Walter A. Jones',
+      Title: 'Lorem Ipsum dolor Amet',
+      desc: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
+    },
+    {
+      id: 5,
+      name: 'Walter A. Jones',
+      Title: 'Lorem Ipsum dolor Amet',
+      desc: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
+    },
+    {
+      id: 6,
+      name: 'Walter A. Jones',
+      Title: 'Lorem Ipsum dolor Amet',
+      desc: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
     },
   ];
   const myQoutesArray = [
@@ -144,7 +161,11 @@ const HomeScreen = () => {
     },
   ];
 
-  
+  // const QbidDetail = ['QbidDetail', 'QbidDetail', 'QbidDetail'];
+
+  const toggleModal = () => {
+    setModalVisible(!modalVisible);
+  };
 
   return (
     <ScreenBoiler
@@ -177,7 +198,7 @@ const HomeScreen = () => {
               alignItems: 'center',
             }}>
             <SearchContainer
-              width={windowWidth * 0.85}
+              width={windowWidth * 0.8}
               input
               inputStyle={{
                 height: windowHeight * 0.05,
@@ -190,7 +211,179 @@ const HomeScreen = () => {
               data={searchData}
               setData={setSearchData}
             />
-            <Icon
+
+            <View
+              style={{width: windowWidth * 0.14, height: windowHeight * 0.06}}>
+              <CustomImage
+                source={require('../Assets/Images/Group.png')}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                }}
+                resizeMode="contain"
+                onPress={() => {
+                  toggleModal();
+                }}
+              />
+            </View>
+
+            <Modal
+              isVisible={modalVisible}
+              onBackdropPress={() => {
+                setModalVisible(false);
+              }}>
+              <View
+                style={{
+                  width: windowWidth * 0.9,
+                  paddingVertical: moderateScale(10, 0.6),
+                  // height: windowHeight * 0.55,
+                  borderRadius: moderateScale(15, 0.3),
+                  backgroundColor: '#f2fce4',
+                  borderWidth: 2,
+                  borderColor: Color.themeColor,
+
+                  alignItems: 'center',
+                }}>
+                <View style={{marginTop: moderateScale(20, 0.3)}}>
+                  <CustomText
+                    isBold
+                    style={{
+                      fontSize: moderateScale(14, 0.6),
+                    }}>
+                    QBid Help
+                  </CustomText>
+                </View>
+
+                <View style={{marginTop: moderateScale(10, 0.3)}}>
+                  <TextInputWithTitle
+                    secureText={false}
+                    placeholder={'Qbid name'}
+                    setText={setQbidName}
+                    value={qbidName}
+                    viewHeight={0.07}
+                    viewWidth={0.75}
+                    inputWidth={0.68}
+                    border={1}
+                    borderColor={Color.themeColor}
+                    backgroundColor={'#FFFFFF'}
+                    marginTop={moderateScale(10, 0.6)}
+                    color={Color.themeColor}
+                    placeholderColor={Color.themeLightGray}
+                    borderRadius={moderateScale(25, 0.3)}
+                  />
+                  <DropDownSingleSelect
+                    array={servicesArray}
+                    setItem={setQbidDetail}
+                    item={qbidDetail}
+                    borderColor={Color.themeColor}
+                    borderWidth={1}
+                    backgroundColor={'white'}
+                    marginTop={moderateScale(10, 0.6)}
+                    placeholder={'Service Type'}
+                    placeholderColor={Color.themeLightGray}
+                    width={windowWidth * 0.75}
+                    dropDownHeight={windowHeight * 0.06}
+                    dropdownStyle={{
+                      width: windowWidth * 0.75,
+                    }}
+                  />
+                  <TextInputWithTitle
+                    secureText={false}
+                    placeholder={'description'}
+                    setText={setQbidDetail1}
+                    value={qbiddetail1}
+                    viewHeight={0.2}
+                    viewWidth={0.75}
+                    inputWidth={0.68}
+                    border={1}
+                    borderColor={Color.themeColor}
+                    backgroundColor={'#FFFFFF'}
+                    marginTop={moderateScale(10, 0.6)}
+                    color={Color.themeColor}
+                    placeholderColor={Color.themeLightGray}
+                    multiline={true}
+                    // borderRadius={moderateScale(25, 0.3)}
+                  />
+
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      flexWrap: 'wrap',
+                      marginRight: moderateScale(10, 0.6),
+                      width: windowWidth * 0.6,
+                      // backgroundColor: 'red',
+                      alignSelf: 'center',
+                      marginTop: moderateScale(15, 0.3),
+                      paddingHorizontal: moderateScale(10, 0.6),
+                    }}>
+                    {multiImages.map((item, index) => {
+                      return (
+                        <View
+                          style={{
+                            width: windowWidth * 0.15,
+                            height: windowHeight * 0.08,
+                            marginRight: moderateScale(10, 0.6),
+                            marginTop: moderateScale(5, 0.3),
+                          }}>
+                          <CustomImage
+                            source={{uri: item?.uri}}
+                            style={{
+                              height: '100%',
+                              width: '100%',
+                              borderRadius: moderateScale(5, 0.3),
+                            }}
+                          />
+                        </View>
+                      );
+                    })}
+                  </View>
+
+                  <CustomButton
+                    text={
+                      isLoading ? (
+                        <ActivityIndicator color={'#FFFFFF'} size={'small'} />
+                      ) : (
+                        'Upload Images'
+                      )
+                    }
+                    textColor={Color.white}
+                    width={windowWidth * 0.5}
+                    height={windowHeight * 0.06}
+                    marginTop={moderateScale(30, 0.3)}
+                    onPress={() => {
+                      multiImages?.length < 5 && setShowMultiImageModal(true);
+                    }}
+                    bgColor={Color.themeColor}
+                    borderRadius={moderateScale(30, 0.3)}
+                  />
+
+                  <CustomButton
+                    text={
+                      isLoading ? (
+                        <ActivityIndicator color={'#FFFFFF'} size={'small'} />
+                      ) : (
+                        'Submit'
+                      )
+                    }
+                    textColor={Color.white}
+                    width={windowWidth * 0.4}
+                    height={windowHeight * 0.06}
+                    marginTop={moderateScale(10, 0.3)}
+                    bgColor={
+                      userRole == 'Qbid Member' ? Color.blue : Color.themeColor
+                    }
+                    borderRadius={moderateScale(30, 0.3)}
+                  />
+
+                  <ImagePickerModal
+                    show={showMultiImageModal}
+                    setShow={setShowMultiImageModal}
+                    setMultiImages={setMultiImages}
+                  />
+                </View>
+              </View>
+            </Modal>
+            {/* <Icon
               name={'sound-mix'}
               as={Entypo}
               size={moderateScale(22, 0.3)}
@@ -199,11 +392,11 @@ const HomeScreen = () => {
                 setSelectedView('negotiator');
                 setIsModalVisible(true);
               }}
-            />
+            /> */}
           </View>
           <View style={styles.row}>
             <CustomText isBold style={styles.header}>
-              Qbid List-Negotiator
+              Proposals
             </CustomText>
             <CustomText
               onPress={() => {

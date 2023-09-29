@@ -38,6 +38,10 @@ import MyAccounts from './Screens/MyAccounts';
 import ChangePassword from './Screens/ChangePassword';
 import TermsAndConditions from './Screens/TermsAndConditions';
 import Support from './Screens/Support';
+import MileRange from './Screens/MileRange';
+import DrawerScreen from './Screens/DrawerScreen';
+
+
 
 const AppNavigator = () => {
   // const isLogin = false;
@@ -65,7 +69,9 @@ const AppNavigator = () => {
         <RootNav.Navigator
           initialRouteName={firstScreen}
           screenOptions={{headerShown: false}}>
+          <RootNav.Screen name="MileRange" component={MileRange} />
           <RootNav.Screen name="Walkthrough" component={Walkthrough} />
+          <RootNav.Screen name="DrawerScreen" component={DrawerScreen} />
           <RootNav.Screen name="LoginScreen" component={LoginScreen} />
           <RootNav.Screen name="TabNavigation" component={TabNavigation} />
           <RootNav.Screen name="QbidStatus" component={QbidStatus} />
