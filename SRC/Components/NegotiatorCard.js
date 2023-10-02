@@ -25,7 +25,8 @@ const NegotiatorCard = ({item, fromSeeAll}) => {
       <View
         style={{
           width: fromSeeAll ? windowWidth * 0.46 : windowWidth * 0.5,
-          height: windowHeight * 0.25,
+          // height: windowHeight * 0.25,
+          paddingVertical:moderateScale(10,0.6),
           backgroundColor: Color.blue,
           margin: moderateScale(5, 0.3),
           borderRadius: moderateScale(15, 0.3),
@@ -55,7 +56,7 @@ const NegotiatorCard = ({item, fromSeeAll}) => {
             style={{
               color: Color.white,
               fontSize: moderateScale(9, 0.6),
-              lineHeight: moderateScale(14, 0.3),
+              // lineHeight: moderateScale(14, 0.3),
             }}>
             {item?.desc}
           </CustomText>

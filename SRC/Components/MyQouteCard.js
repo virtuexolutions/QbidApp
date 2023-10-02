@@ -12,37 +12,44 @@ import navigationService from '../navigationService';
 
 const MyQouteCard = ({item}) => {
   return (
-    <TouchableOpacity activeOpacity={0.9} style={styles.card} onPress={()=>{
-      navigationService.navigate('JobDetails')
-    }}>
-         <View
+    <TouchableOpacity
+      activeOpacity={0.9}
+      style={styles.card}
+      onPress={() => {
+        navigationService.navigate('JobDetails');
+      }}>
+      <View
         style={{
-            position : 'absolute',
-            zIndex : 1000,
-            width: '17%',
+          position: 'absolute',
+          zIndex: 1000,
+          width: '17%',
           height: '30%',
-          top : moderateScale(10,0.3),
-        //   alignItems : 'center'
-        //   borderRadius: moderateScale(10, 0.3),
+          top: moderateScale(10, 0.3),
+          //   alignItems : 'center'
+          //   borderRadius: moderateScale(10, 0.3),
         }}>
-            <CustomText style={{
-                color : Color.white,
-                fontSize : moderateScale(9,0.3),
-                zIndex : 1000,
-                position : 'absolute',
-                textAlign : 'center',
-                top : 6 , left : 0 , right : 0 ,bottom : 0
-            }}>{item?.status}</CustomText>
+        <CustomText
+          style={{
+            color: Color.white,
+            fontSize: moderateScale(9, 0.3),
+            zIndex: 1000,
+            position: 'absolute',
+            textAlign: 'center',
+            top: 6,
+            left: 0,
+            right: 0,
+            bottom: 0,
+          }}>
+          {item?.status}
+        </CustomText>
         <CustomImage
           source={require('../Assets/Images/bedge1.png')}
           resizeMode={'stretch'}
           style={{
             width: '100%',
             height: '100%',
-            
           }}
-        
-          />
+        />
       </View>
       <View
         style={{
@@ -52,15 +59,19 @@ const MyQouteCard = ({item}) => {
           overflow: 'hidden',
         }}>
         <CustomImage
-          source={item?.status == 'pending' ? {uri : item?.image} : item?.negotiatorImage}
+          source={
+            item?.status == 'pending'
+              ? {uri: item?.image}
+              : item?.negotiatorImage
+          }
           style={{
             width: '100%',
             height: '100%',
           }}
-          onPress={()=>{
-            navigationService.navigate('JobDetails')
+          onPress={() => {
+            navigationService.navigate('JobDetails');
           }}
-          />
+        />
       </View>
       <View
         style={{
@@ -79,7 +90,7 @@ const MyQouteCard = ({item}) => {
           }}>
           {item?.qouteName}
         </CustomText>
-        
+
         <CustomText numberOfLines={1} style={styles.entity} isBold>
           Assigned To :{' '}
           {
@@ -113,7 +124,9 @@ const MyQouteCard = ({item}) => {
                 fontSize: moderateScale(12, 0.3),
                 color: Color.blue,
               }}>
-              {item?.status == 'pending' ? 'not yet' :  numeral(item?.negotiatorPrice).format('$0,0a')}
+              {item?.status == 'pending'
+                ? 'not yet'
+                : numeral(item?.negotiatorPrice).format('$0,0a')}
             </CustomText>
           }
         </CustomText>
@@ -140,7 +153,14 @@ const MyQouteCard = ({item}) => {
 
         {item?.status != 'pending' && (
           <CustomButton
-            text={ item?.status == 'onGoing' ? 'Complete' : item?.status == 'completed' && [0 , undefined].includes(item?.rating) ? 'Review' : 'Hire Again'}
+            text={
+              item?.status == 'onGoing'
+                ? 'Complete'
+                : item?.status == 'completed' &&
+                  [0, undefined].includes(item?.rating)
+                ? 'Review'
+                : 'Hire Again'
+            }
             textColor={Color.white}
             // width={windowWidth * 0.9}
             // height={windowHeight * 0.07}

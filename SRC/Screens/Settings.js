@@ -130,7 +130,7 @@ const Settings = () => {
           
            <CustomButton
             isBold
-            text={'milage Range'}
+            text={'milage Rings'}
             textColor={Color.themeDarkGray}
             width={windowWidth * 0.9}
             height={windowHeight * 0.07}

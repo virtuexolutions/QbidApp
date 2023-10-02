@@ -146,6 +146,7 @@ const MileRange = (props) => {
             borderRadius={moderateScale(30, 0.3)}
           />
           <CustomText
+           numberOfLines={2}
             style={{textAlign: 'center', marginTop: moderateScale(40, 0.3)}}>
             Lorem Ipsum is simply dummy text of the printing and typesetting
             industry. Lorem Ipsum Lorem Ipsum
