@@ -119,14 +119,18 @@ const ChatScreen = () => {
       showHeader={true}
       statusBarBackgroundColor={
         userRole == 'Qbid Member'
-          ? Color.themeBgColor
-          : Color.themeBgColorNegotiator
+        ? Color.themeBgColor
+        : userRole == 'Qbid Negotiator'
+        ? Color.themeBgColorNegotiator
+        : Color.themebgBusinessQbidder
       }
       statusBarContentStyle={'light-content'}
       headerColor={
         userRole == 'Qbid Member'
-          ? Color.themeBgColor
-          : Color.themeBgColorNegotiator
+        ? Color.themeBgColor
+        : userRole == 'Qbid Negotiator'
+        ? Color.themeBgColorNegotiator
+        : Color.themebgBusinessQbidder
       }>
       <LinearGradient
         style={{
@@ -137,8 +141,10 @@ const ChatScreen = () => {
         end={{x: 1, y: 0}}
         colors={
           userRole == 'Qbid Member'
-            ? Color.themeBgColor
-            : Color.themeBgColorNegotiator
+          ? Color.themeBgColor
+          : userRole == 'Qbid Negotiator'
+          ? Color.themeBgColorNegotiator
+          : Color.themebgBusinessQbidder
         }>
         <SearchContainer
           width={windowWidth * 0.9}

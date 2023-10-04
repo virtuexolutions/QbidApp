@@ -91,6 +91,8 @@ const NegotiatorProfile = props => {
 
   }
 
+  const userRole = useSelector(state => state.commonReducer.selectedRole);
+
 
 
  
@@ -98,7 +100,11 @@ const NegotiatorProfile = props => {
     <ScreenBoiler
       showHeader={true}
       title={'Details'}
-      statusBarBackgroundColor={Color.white}
+      statusBarBackgroundColor={ userRole == 'Qbid Member'
+      ? Color.blue
+      : userRole == 'Qbid Negotiator'
+      ? Color.themeColor
+      : Color.black}
       statusBarContentStyle={'dark-content'}
       // headerColor={Color.white}
       headerType={1}

@@ -129,14 +129,18 @@ const AddCard = () => {
       showBack={false}
       statusBarBackgroundColor={
         userRole == 'Qbid Member'
-          ? Color.themeBgColor
-          : Color.themeBgColorNegotiator
+        ? Color.themeBgColor
+        : userRole == 'Qbid Negotiator'
+        ? Color.themeBgColorNegotiator
+        : Color.themebgBusinessQbidder
       }
       statusBarContentStyle={'light-content'}
       headerColor={
         userRole == 'Qbid Member'
-          ? Color.themeBgColor
-          : Color.themeBgColorNegotiator
+        ? Color.themeBgColor
+        : userRole == 'Qbid Negotiator'
+        ? Color.themeBgColorNegotiator
+        : Color.themebgBusinessQbidder
       }
       >
      <LinearGradient
@@ -147,8 +151,10 @@ const AddCard = () => {
         end={{x: 1, y: 0}}
         colors={
           userRole == 'Qbid Member'
-            ? Color.themeBgColor
-            : Color.themeBgColorNegotiator
+        ? Color.themeBgColor
+        : userRole == 'Qbid Negotiator'
+        ? Color.themeBgColorNegotiator
+        : Color.themebgBusinessQbidder
         }>
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -158,7 +164,7 @@ const AddCard = () => {
             alignItems: 'center',
           }}>
           <Image
-            source={require('../Assets/Images/jcb.png')}
+            source={userRole == 'Business Qbidder' ? require('../Assets/Images/visa.png'):require('../Assets/Images/jcb.png')}
             resizeMode={'contain'}
             style={{
               alignSelf: 'center',
@@ -310,7 +316,11 @@ const AddCard = () => {
               height={windowHeight * 0.06}
               marginTop={moderateScale(20, 0.3)}
               onPress={addCard}
-              bgColor ={userRole == 'Qbid Member' ?  Color.blue : Color.themeColor}
+              bgColor ={userRole == 'Qbid Member'
+              ? Color.blue
+              : userRole == 'Qbid Negotiator'
+              ? Color.themeColor
+              : Color.black}
               // borderColor={Color.white}
               // borderWidth={2}
               borderRadius={moderateScale(30, 0.3)}

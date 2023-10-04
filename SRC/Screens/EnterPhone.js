@@ -20,9 +20,7 @@ import CustomButton from '../Components/CustomButton';
 import {ActivityIndicator} from 'react-native';
 import {Post} from '../Axios/AxiosInterceptorFunction';
 import CardContainer from '../Components/CardContainer';
-import { useSelector } from 'react-redux';
-
-
+import {useSelector} from 'react-redux';
 
 const EnterPhone = props => {
   const SelecteduserRole = useSelector(
@@ -63,9 +61,14 @@ const EnterPhone = props => {
     <>
       <CustomStatusBar
         backgroundColor={
-          SelecteduserRole == 'Qbid member' ? Color.blue : Color.themeColor
+          SelecteduserRole == 'Qbid Member'
+            ? Color.blue
+            : SelecteduserRole == 'Qbid Negotiator'
+            ? Color.themeColor
+            : Color.black
         }
-        barStyle={'light-content'} />
+        barStyle={'light-content'}
+      />
       <ImageBackground
         style={{
           flex: 1,
@@ -74,82 +77,93 @@ const EnterPhone = props => {
         }}
         resizeMode={'stretch'}
         source={
-          SelecteduserRole == 'Qbid member'
+          SelecteduserRole == 'Qbid Member'
             ? require('../Assets/Images/backgroundImage.png')
-            : require('../Assets/Images/backgroungNegotiator.png')
+            : SelecteduserRole == 'Qbid Negotiator'
+            ? require('../Assets/Images/backgroungNegotiator.png')
+            : require('../Assets/Images/businessQibd.png')
         }>
-       
-      
         <KeyboardAwareScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             paddingBottom: moderateScale(20, 0.3),
             alignItems: 'center',
-            justifyContent : 'center',
+            justifyContent: 'center',
             width: '100%',
-            height : windowHeight
+            height: windowHeight,
           }}>
-         
-
-          <CardContainer  style={{paddingVertical: moderateScale(30, 0.3) , alignItems : 'center'}}>
-            <CustomText isBold style={styles.txt2}>Forget Password</CustomText>
+          <CardContainer
+            style={{
+              paddingVertical: moderateScale(30, 0.3),
+              alignItems: 'center',
+            }}>
+            <CustomText isBold style={styles.txt2}>
+              Forget Password
+            </CustomText>
             <CustomText style={styles.txt3}>
-            Forgot your password ? don't worry, jsut take a simple step and create your new password!
+              Forgot your password ? don't worry, jsut take a simple step and
+              create your new password!
             </CustomText>
-            
+
             <TextInputWithTitle
+              titleText={'Enter your Email'}
+              secureText={false}
+              placeholder={'Enter your Email'}
+              setText={setPhone}
+              value={phone}
+              viewHeight={0.07}
+              viewWidth={0.75}
+              inputWidth={0.7}
+              // border={1}
+              borderColor={'#ffffff'}
+              backgroundColor={'#FFFFFF'}
+              marginTop={moderateScale(35, 0.3)}
+              color={Color.themeColor}
+              placeholderColor={Color.themeLightGray}
+              borderRadius={moderateScale(25, 0.3)}
+              elevation
+            />
+            <CustomButton
+              text={
+                isLoading ? (
+                  <ActivityIndicator color={'#FFFFFF'} size={'small'} />
+                ) : (
+                  'Submit'
+                )
+              }
+              textColor={Color.white}
+              width={windowWidth * 0.75}
+              height={windowHeight * 0.06}
+              marginTop={moderateScale(20, 0.3)}
+              onPress={() => {
+                navigationService.navigate('VerifyNumber', {
+                  phoneNumber: phone,
+                });
+              }}
+              bgColor={
+                SelecteduserRole == 'Qbid Member'
+                  ? Color.blue
+                  : SelecteduserRole == 'Qbid Negotiator'
+                  ? Color.themeColor
+                  : Color.black
+              }
+              // borderColor={Color.white}
+              // borderWidth={2}
+              borderRadius={moderateScale(30, 0.3)}
+            />
 
-            titleText={'Enter your Email'}
-            secureText={false}
-            placeholder={'Enter your Email'}
-            setText={setPhone}
-            value={phone}
-            viewHeight={0.07}
-            viewWidth={0.75}
-            inputWidth={0.7}
-            // border={1}
-            borderColor={'#ffffff'}
-            backgroundColor={'#FFFFFF'}
-            marginTop={moderateScale(35, 0.3)}
-            color={Color.themeColor}
-            placeholderColor={Color.themeLightGray}
-            borderRadius={moderateScale(25, 0.3)}
-            elevation
-          />
-          <CustomButton
-            text={
-              isLoading ? (
-                <ActivityIndicator color={'#FFFFFF'} size={'small'} />
-              ) : (
-                'Submit'
-              )
-            }
-            textColor={Color.white}
-            width={windowWidth * 0.75}
-            height={windowHeight * 0.06}
-            marginTop={moderateScale(20, 0.3)}
-            onPress={() => {
-           navigationService.navigate('VerifyNumber', {phoneNumber : phone})
-             }}
-            bgColor={ SelecteduserRole == 'Qbid member'
-            ?  Color.blue : Color.themeColor}
-            // borderColor={Color.white}
-            // borderWidth={2}
-            borderRadius={moderateScale(30, 0.3)}
-          />
+            <View style={styles.container2}>
+              <CustomText style={styles.txt5}>
+                {'Already have an account? '}
+              </CustomText>
 
-          <View style={styles.container2}>
-            <CustomText style={styles.txt5}>
-              {"Already have an account? "}
-            </CustomText>
-
-            <TouchableOpacity
-              activeOpacity={0.8}
-              style={{marginLeft: moderateScale(1,0.3)}}
-              onPress={() => navigationService.navigate('LoginScreen')}>
-              <CustomText style={styles.txt4}>{'Sign In'}</CustomText>
-            </TouchableOpacity>
-          </View>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                style={{marginLeft: moderateScale(1, 0.3)}}
+                onPress={() => navigationService.navigate('LoginScreen')}>
+                <CustomText style={styles.txt4}>{'Sign In'}</CustomText>
+              </TouchableOpacity>
+            </View>
           </CardContainer>
         </KeyboardAwareScrollView>
       </ImageBackground>
@@ -158,7 +172,6 @@ const EnterPhone = props => {
 };
 
 const styles = ScaledSheet.create({
-
   txt2: {
     color: Color.black,
     fontSize: moderateScale(25, 0.6),
@@ -171,8 +184,7 @@ const styles = ScaledSheet.create({
     marginTop: moderateScale(5, 0.3),
     lineHeight: moderateScale(17, 0.3),
   },
- 
- 
+
   phoneView: {
     width: '80%',
     paddingVertical: moderateScale(5, 0.3),

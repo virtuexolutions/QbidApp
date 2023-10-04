@@ -101,7 +101,11 @@ const VerifyNumber = props => {
     <>
       <CustomStatusBar
        backgroundColor={
-        SelecteduserRole == 'Qbid member' ? Color.blue : Color.themeColor
+        SelecteduserRole == 'Qbid Member'
+        ? Color.blue
+        : SelecteduserRole == 'Qbid Negotiator'
+        ? Color.themeColor
+        : Color.black
       }
         barStyle={'light-content'}
       />
@@ -113,9 +117,11 @@ const VerifyNumber = props => {
         }}
         resizeMode={'stretch'}
         source={
-          SelecteduserRole == 'Qbid member'
+          SelecteduserRole == 'Qbid Member'
             ? require('../Assets/Images/backgroundImage.png')
-            : require('../Assets/Images/backgroungNegotiator.png')
+            : SelecteduserRole == 'Qbid Negotiator'
+            ? require('../Assets/Images/backgroungNegotiator.png')
+            : require('../Assets/Images/businessQibd.png')
         }>
         <TouchableOpacity
           activeOpacity={0.8}
@@ -135,7 +141,11 @@ const VerifyNumber = props => {
             name={'arrowleft'}
             as={AntDesign}
             size={moderateScale(22, 0.3)}
-            color={Color.green}
+            color={ SelecteduserRole == 'Qbid Member'
+            ? Color.blue
+            : SelecteduserRole == 'Qbid Negotiator'
+            ? Color.themeColor
+            : Color.black}
             onPress={() => {
               navigationN.goBack();
             }}
@@ -225,7 +235,11 @@ const VerifyNumber = props => {
                   phone: phoneNumber,
                 });
               }}
-              bgColor={SelecteduserRole == 'Qbid member' ? Color.blue : Color.themeColor
+              bgColor={ SelecteduserRole == 'Qbid Member'
+              ? Color.blue
+              : SelecteduserRole == 'Qbid Negotiator'
+              ? Color.themeColor
+              : Color.black
               }
               borderRadius={moderateScale(30, 0.3)}
             />

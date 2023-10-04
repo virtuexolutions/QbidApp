@@ -25,6 +25,7 @@ import JobCard from '../Components/JobCard';
 import Modal from 'react-native-modal';
 
 const NegotiatorHomeScreen = () => {
+  const userRole = useSelector(state => state.commonReducer.selectedRole);
   const [searchData, setSearchData] = useState('');
   const [showFilter, setShowFilter] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -38,10 +39,18 @@ const NegotiatorHomeScreen = () => {
 
   return (
     <ScreenBoiler
-      statusBarBackgroundColor={Color.themeBgColorNegotiator}
+      statusBarBackgroundColor={ userRole == 'Qbid Member'
+      ? Color.themeBgColor
+      : userRole == 'Qbid Negotiator'
+      ? Color.themeBgColorNegotiator
+      : Color.themebgBusinessQbidder}
       statusBarContentStyle={'dark-content'}
       showHeader={true}
-      headerColor={Color.themeBgColorNegotiator}
+      headerColor={ userRole == 'Qbid Member'
+      ? Color.themeBgColor
+      : userRole == 'Qbid Negotiator'
+      ? Color.themeBgColorNegotiator
+      : Color.themebgBusinessQbidder}
       //  showBack={true}
     >
       <LinearGradient
@@ -51,7 +60,11 @@ const NegotiatorHomeScreen = () => {
         }}
         start={{x: 0, y: 0}}
         end={{x: 1, y: 0}}
-        colors={Color.themeBgColorNegotiator}>
+        colors={ userRole == 'Qbid Member'
+        ? Color.themeBgColor
+        : userRole == 'Qbid Negotiator'
+        ? Color.themeBgColorNegotiator
+        : Color.themebgBusinessQbidder}>
         <ScrollView
           showsVerticalScrollIndicator={false}
           style={styles.container}

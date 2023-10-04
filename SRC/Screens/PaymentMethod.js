@@ -427,13 +427,17 @@ const PaymentMethod = props => {
       statusBarBackgroundColor={
         userRole == 'Qbid Member'
           ? Color.themeBgColor
-          : Color.themeBgColorNegotiator
+          : userRole == 'Qbid Negotiator'
+          ? Color.themeBgColorNegotiator
+          : Color.themebgBusinessQbidder
       }
       statusBarContentStyle={'light-content'}
       headerColor={
         userRole == 'Qbid Member'
           ? Color.themeBgColor
-          : Color.themeBgColorNegotiator
+          : userRole == 'Qbid Negotiator'
+          ? Color.themeBgColorNegotiator
+          : Color.themebgBusinessQbidder
       }
       showBack={true}
       hideUser>
@@ -446,7 +450,9 @@ const PaymentMethod = props => {
         colors={
           userRole == 'Qbid Member'
             ? Color.themeBgColor
-            : Color.themeBgColorNegotiator
+            : userRole == 'Qbid Negotiator'
+            ? Color.themeBgColorNegotiator
+            : Color.themebgBusinessQbidder
         }>
         <CustomText isBold style={styles.header1}>
           Saved Cards
@@ -489,7 +495,7 @@ const PaymentMethod = props => {
               //         : HandleMileStonePay(item?.id, false));
               alert('Card will be detached');
             }}
-            style={[ 
+            style={[
               styles?.addBtnShadow,
               {
                 position: 'absolute',
@@ -502,9 +508,11 @@ const PaymentMethod = props => {
               start={{x: 0, y: 0}}
               end={{x: 1, y: 0}}
               colors={
-                userRole != 'Qbid Member'
-                  ? Color.themeBgColor
-                  : Color.themeBgColorNegotiator
+                userRole == 'Qbid Member'
+                ? Color.themeBgColorNegotiator
+                : userRole == 'Qbid Negotiator'
+                ? Color.themeBgColor
+                : ['#1b1b1b', '#3b3c36']
               }>
               <Icon
                 as={isDelete ? MaterialCommunityIcons : AntDesign}
@@ -538,9 +546,11 @@ const PaymentMethod = props => {
             start={{x: 0, y: 0}}
             end={{x: 1, y: 0}}
             colors={
-              userRole != 'Qbid Member'
+              userRole == 'Qbid Member'
+                ? Color.themeBgColorNegotiator
+                : userRole == 'Qbid Negotiator'
                 ? Color.themeBgColor
-                : Color.themeBgColorNegotiator
+                : ['#1b1b1b', '#3b3c36']
             }>
             <Icon
               as={AntDesign}
@@ -571,7 +581,11 @@ const PaymentMethod = props => {
             backgroundColor: 'white',
             alignItems: 'center',
           }}>
-          <View style={styles.header}>
+          <View style={[styles.header,{backgroundColor:userRole == 'Qbid Member'
+            ? Color.blue
+            : userRole == 'Qbid Negotiator'
+            ? Color.themeColor
+            : '#7E191B'}]}>
             <CustomText style={styles.headerText}>Add Card</CustomText>
           </View>
           <CardField
@@ -700,7 +714,11 @@ const PaymentMethod = props => {
             height={windowHeight * 0.06}
             marginTop={moderateScale(20, 0.3)}
             onPress={addCard}
-            bgColor={Color.green}
+            bgColor={ userRole == 'Qbid Member'
+            ? Color.blue
+            : userRole == 'Qbid Negotiator'
+            ? Color.themeColor
+            : Color.black}
             borderColor={Color.white}
             borderWidth={2}
             borderRadius={moderateScale(30, 0.3)}
@@ -902,7 +920,7 @@ const styles = ScaledSheet.create({
     alignItems: 'center',
     width: '100%',
     height: windowHeight * 0.06,
-    backgroundColor: Color.green,
+    // backgroundColor: Color.green,
     borderBottomLeftRadius: moderateScale(10, 0.3),
     borderBottomRightRadius: moderateScale(10, 0.3),
   },

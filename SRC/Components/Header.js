@@ -79,7 +79,11 @@ const Header = props => {
             name={'arrowleft'}
             as={AntDesign}
             size={moderateScale(22, 0.3)}
-            color={userRole == 'Qbid Member' ? '#528C00' : Color.blue}
+            color={ userRole == 'Qbid Member'
+            ? Color.blue
+            :userRole == 'Qbid Negotiator'
+            ? Color.themeColor
+            : Color.black}
             onPress={() => {
               navigationN.goBack();
             }}

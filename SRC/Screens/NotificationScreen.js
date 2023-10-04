@@ -102,14 +102,18 @@ const NotificationScreen = () => {
       showHeader={true}
       statusBarBackgroundColor={
         userRole == 'Qbid Member'
-          ? Color.themeBgColor
-          : Color.themeBgColorNegotiator
+        ? Color.themeBgColor
+        : userRole == 'Qbid Negotiator'
+        ? Color.themeBgColorNegotiator
+        : Color.themebgBusinessQbidder
       }
       statusBarContentStyle={'light-content'}
       headerColor={
         userRole == 'Qbid Member'
-          ? Color.themeBgColor
-          : Color.themeBgColorNegotiator
+      ? Color.themeBgColor
+      : userRole == 'Qbid Negotiator'
+      ? Color.themeBgColorNegotiator
+      : Color.themebgBusinessQbidder
       }>
       <LinearGradient
         style={{
@@ -119,8 +123,10 @@ const NotificationScreen = () => {
         end={{x: 1, y: 0}}
         colors={
           userRole == 'Qbid Member'
-            ? Color.themeBgColor
-            : Color.themeBgColorNegotiator
+      ? Color.themeBgColor
+      : userRole == 'Qbid Negotiator'
+      ? Color.themeBgColorNegotiator
+      : Color.themebgBusinessQbidder
         }>
         <FlatList
           data={dummyData}
