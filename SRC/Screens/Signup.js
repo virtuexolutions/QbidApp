@@ -30,17 +30,12 @@ import {setSelectedRole} from '../Store/slices/common';
 
 const Signup = () => {
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
-  const SelecteduserRole = useSelector(
-    state => state.commonReducer.selectedRole,
-  );
-  console.log(
-    '🚀 ~ file: Signup.js:33 ~ Signup ~ SelecteduserRole:',
-    SelecteduserRole,
-  );
+  const userRole = useSelector(state => state.commonReducer.selectedRole);
+  console.log('🚀 ~ file: Signup.js:33 ~ Signup ~ userRole:', userRole);
   const dispatch = useDispatch();
 
   const [image, setImage] = useState({});
-  const [userRole, setUserRole] = useState('Qbid Member');
+  const [selectedRole, setSelectedRole] = useState('Qbid Member');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [companyName, setCompanyName] = useState(''); //for negotiator
@@ -121,16 +116,20 @@ const Signup = () => {
   //     dispatch(setUserLogin(response?.data?.data?.token));
   //   }
   // };
-  const UserRoleArray = ['Qbid Negotiator', 'Qbid Member'];
+  const UserRoleArray = ['Qbid Negotiator', 'Qbid Member', 'Business Qbidder'];
   useEffect(() => {
-    dispatch(setSelectedRole(userRole));
+    dispatch(setSelectedRole(selectedRole));
   }, [userRole]);
 
   return (
     <>
       <CustomStatusBar
         backgroundColor={
-          SelecteduserRole == 'Qbid Member' ? Color.blue : Color.themeColor
+          userRole == 'Qbid Member'
+            ? Color.blue
+            : userRole == 'Qbid Negotiator'
+            ? Color.themeColor
+            : Color.black
         }
         barStyle={'light-content'}
       />
@@ -144,9 +143,11 @@ const Signup = () => {
         }}
         resizeMode={'stretch'}
         source={
-          SelecteduserRole == 'Qbid Member'
+          userRole == 'Qbid Member'
             ? require('../Assets/Images/backgroundImage.png')
-            : require('../Assets/Images/backgroungNegotiator.png')
+            : userRole == 'Qbid Negotiator'
+            ? require('../Assets/Images/backgroungNegotiator.png')
+            : require('../Assets/Images/businessQibd.png')
         }>
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -196,7 +197,7 @@ const Signup = () => {
             array={UserRoleArray}
             // backgroundColor={Color.themeColor}
             item={userRole}
-            setItem={setUserRole}
+            setItem={setSelectedRole}
             placeholder={userRole}
             width={windowWidth * 0.9}
             dropDownHeight={windowHeight * 0.06}
@@ -447,7 +448,7 @@ const Signup = () => {
             borderRadius={moderateScale(25, 0.3)}
             // marginBottom={moderateScale(10, 0.3)}
           />
-          {userRole == 'Qbid Negotiator' && (
+          {userRole != 'Qbid Member' && (
             <>
               <CustomDropDownMultiSelect
                 title={'Pick Languages'}
@@ -518,7 +519,9 @@ const Signup = () => {
                       color:
                         userRole == 'Qbid Member'
                           ? Color.blue
-                          : Color.themeColor,
+                          : userRole == 'Qbid Negotiator'
+                          ? Color.themeColor
+                          : Color.black,
                     },
                   ]}>
                   Terms And Conditions
@@ -541,7 +544,13 @@ const Signup = () => {
             onPress={() => {
               dispatch(setUserToken({token: 'dasdawradawdawrtfeasfzs'}));
             }}
-            bgColor={   userRole == 'Qbid Member' ? Color.blue : Color.themeColor}
+            bgColor={
+              userRole == 'Qbid Member'
+                ? Color.blue
+                : userRole == 'Qbid Negotiator'
+                ? Color.themeColor
+                : Color.black
+            }
             // borderColor={Color.white}
             // borderWidth={2}
             borderRadius={moderateScale(30, 0.3)}
@@ -555,12 +564,20 @@ const Signup = () => {
               activeOpacity={0.8}
               style={{marginLeft: windowWidth * 0.01}}
               onPress={() => navigationService.navigate('LoginScreen')}>
-              <CustomText style={[styles.txt4 ,  {
-                      color:
-                        userRole == 'Qbid Member'
-                          ? Color.blue
-                          : Color.themeColor,
-                    },]}>{'Sign In'}</CustomText>
+              <CustomText
+                style={[
+                  styles.txt4,
+                  {
+                    color:
+                      userRole == 'Qbid Member'
+                        ? Color.blue
+                        : userRole == 'Qbid Negotiator'
+                        ? Color.themeColor
+                        : Color.black,
+                  },
+                ]}>
+                {'Sign In'}
+              </CustomText>
             </TouchableOpacity>
           </View>
         </ScrollView>

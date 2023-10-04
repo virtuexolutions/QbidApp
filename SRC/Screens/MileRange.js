@@ -11,19 +11,21 @@ import {useDispatch, useSelector} from 'react-redux';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomButton from '../Components/CustomButton';
-import { setUserToken } from '../Store/slices/auth';
+import {setUserToken} from '../Store/slices/auth';
+// import MapView from 'react-native-maps';
+import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 
-const MileRange = (props) => {
-  const fromLogin = props?.route?.params?.fromLogin
-  console.log(fromLogin)
-  const dispatch = useDispatch()
+const MileRange = props => {
+  const fromLogin = props?.route?.params?.fromLogin;
+  console.log(fromLogin);
+  const dispatch = useDispatch();
   const DollarData = [
-    {mile: '10 Miles' ,price : 10 },
-    {mile: '20 Miles',price : 20},
-    {mile: '30 Miles',price : 30},
-    {mile: '40 Miles',price : 40},
-    {mile: '50 Miles',price : 50},
-    {mile: '60 Miles',price : 60},
+    {mile: '10 Miles', price: 10},
+    {mile: '20 Miles', price: 20},
+    {mile: '30 Miles', price: 30},
+    {mile: '40 Miles', price: 40},
+    {mile: '50 Miles', price: 50},
+    {mile: '60 Miles', price: 60},
   ];
   const [isLoading, setIsLoading] = useState(false);
   const [dollar, setDollar] = useState(10);
@@ -44,8 +46,7 @@ const MileRange = (props) => {
       }
       showHeader={true}
       showBack={fromLogin ? false : true}
-      hideUser
-      >
+      hideUser>
       <LinearGradient
         style={{
           width: windowWidth,
@@ -68,7 +69,6 @@ const MileRange = (props) => {
             Mileage Rings
           </CustomText>
         </View>
-
         <View
           style={{
             alignSelf: 'center',
@@ -77,13 +77,13 @@ const MileRange = (props) => {
             marginTop: moderateScale(30, 0.3),
           }}>
           <Slider
-          onChange={(data)=>{
-            console.log(data)
-           setDollar(data)
-          }}
-          onPointerUpCapture={()=>{
-            console.log('up')
-          }}
+            onChange={data => {
+              console.log(data);
+              setDollar(data);
+            }}
+            onPointerUpCapture={() => {
+              console.log('up');
+            }}
             w="92%"
             size="lg"
             defaultValue={10}
@@ -96,7 +96,6 @@ const MileRange = (props) => {
             <Slider.Thumb />
           </Slider>
         </View>
-
         <View
           style={{
             flexDirection: 'row',
@@ -108,7 +107,6 @@ const MileRange = (props) => {
             return <CustomText style={styles.text}>{item.mile}</CustomText>;
           })}
         </View>
-
         <View
           style={{
             alignItems: 'center',
@@ -119,8 +117,49 @@ const MileRange = (props) => {
             ${dollar}
           </CustomText>
         </View>
+        <View style={{
+          width : windowWidth * 0.95 ,
+          height : windowHeight * 0.3,
+          // backgroundColor : 'red',
+          alignSelf : 'center'
+        }}>
 
-        <View
+        {/* <MapView
+        style={{
+          width : '100%',
+          height : '100%'
+        }}
+          // provider={PROVIDER_GOOGLE}
+          region={{
+            latitude: 37.78825,
+            longitude: -122.4324,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}>
+          {/* {this.state.markers.map((marker, index) => ( */}
+          {/* <Marker
+            coordinate= {{latitude : 37.78825,longitude : -122.4324}}
+            title={'MY location'}
+            description={'here i am standing'}
+            
+          /> */}
+          {/* ))} 
+        </MapView> */}
+        <MapView
+        style={{
+          width : '100%',
+          height : '100%'
+        }}
+  initialRegion={{
+    latitude: 37.78825,
+    longitude: -122.4324,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  }}
+/>
+            </View>
+        
+        {/* <View
           style={{
             alignItems: 'center',
             width: windowWidth,
@@ -146,12 +185,12 @@ const MileRange = (props) => {
             borderRadius={moderateScale(30, 0.3)}
           />
           <CustomText
-           numberOfLines={2}
+            numberOfLines={2}
             style={{textAlign: 'center', marginTop: moderateScale(40, 0.3)}}>
             Lorem Ipsum is simply dummy text of the printing and typesetting
             industry. Lorem Ipsum Lorem Ipsum
           </CustomText>
-        </View>
+        </View> */}
       </LinearGradient>
     </ScreenBoiler>
   );
