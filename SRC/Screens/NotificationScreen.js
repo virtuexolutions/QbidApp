@@ -158,7 +158,7 @@ const NotificationScreen = () => {
                 isBold
                 style={[
                   styles.header,
-                  userRole == 'Qbid Negotiator' && {color: Color.white},
+                  userRole != 'Qbid Member' && {color: Color.white},
                 ]}>
                 Notifications
               </CustomText>

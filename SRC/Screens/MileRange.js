@@ -36,13 +36,17 @@ const MileRange = props => {
       statusBarBackgroundColor={
         userRole == 'Qbid Member'
           ? Color.themeBgColor
-          : Color.themeBgColorNegotiator
+          : userRole == 'Qbid Negotiator'
+          ? Color.themeBgColorNegotiator
+          : Color.themebgBusinessQbidder
       }
       statusBarContentStyle={'light-content'}
       headerColor={
         userRole == 'Qbid Member'
           ? Color.themeBgColor
-          : Color.themeBgColorNegotiator
+          : userRole == 'Qbid Negotiator'
+          ? Color.themeBgColorNegotiator
+          : Color.themebgBusinessQbidder
       }
       showHeader={true}
       showBack={fromLogin ? false : true}
@@ -57,7 +61,9 @@ const MileRange = props => {
         colors={
           userRole == 'Qbid Member'
             ? Color.themeBgColor
-            : Color.themeBgColorNegotiator
+            : userRole == 'Qbid Negotiator'
+            ? Color.themeBgColorNegotiator
+            : Color.themebgBusinessQbidder
         }>
         <View
           style={{
@@ -117,14 +123,14 @@ const MileRange = props => {
             ${dollar}
           </CustomText>
         </View>
-        <View style={{
-          width : windowWidth * 0.95 ,
-          height : windowHeight * 0.3,
-          // backgroundColor : 'red',
-          alignSelf : 'center'
-        }}>
-
-        {/* <MapView
+        <View
+          style={{
+            width: windowWidth * 0.95,
+            height: windowHeight * 0.3,
+            // backgroundColor : 'red',
+            alignSelf: 'center',
+          }}>
+          {/* <MapView
         style={{
           width : '100%',
           height : '100%'
@@ -145,20 +151,20 @@ const MileRange = props => {
           /> */}
           {/* ))} 
         </MapView> */}
-        <MapView
-        style={{
-          width : '100%',
-          height : '100%'
-        }}
-  initialRegion={{
-    latitude: 37.78825,
-    longitude: -122.4324,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-  }}
-/>
-            </View>
-        
+          <MapView
+            style={{
+              width: '100%',
+              height: '100%',
+            }}
+            initialRegion={{
+              latitude: 37.78825,
+              longitude: -122.4324,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+          />
+        </View>
+
         {/* <View
           style={{
             alignItems: 'center',

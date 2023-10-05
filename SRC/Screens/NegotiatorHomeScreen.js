@@ -70,7 +70,7 @@ const NegotiatorHomeScreen = () => {
           style={styles.container}
           contentContainerStyle={{
             alignItems: 'center',
-            paddingBottom: moderateScale(20, 0.3),
+            paddingBottom: moderateScale(60, 0.3),
             paddingTop: moderateScale(40, 0.3),
           }}>
           <View

@@ -87,7 +87,12 @@ const BidderDetail = ({item, photo, title, date, message}) => {
           // width : '100%',
           textAlign: 'right',
           fontSize: moderateScale(10, 0.6),
-          color: userRole == 'Qbid Member' ? Color.blue : Color.themeColor,
+          color:   userRole == 'Qbid Member'
+          ? Color.blue
+          : userRole == 'Qbid Negotiator'
+          ? Color.themeColor
+          : Color.black
+,
         }}>
         pending
       </CustomText>

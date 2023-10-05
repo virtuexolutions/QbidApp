@@ -98,7 +98,7 @@ const Settings = () => {
             style={[
               styles.text,
               {fontSize: moderateScale(17, 0.3)},
-              userRole == 'Qbid Negotiator' && {color: Color.white},
+              userRole != 'Qbid Member' && {color: Color.white},
             ]}>
             {`George D. Huntley`}
           </CustomText>

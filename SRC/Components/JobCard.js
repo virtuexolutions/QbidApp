@@ -9,9 +9,12 @@ import CustomText from './CustomText';
 import CustomButton from './CustomButton';
 import navigationService from '../navigationService';
 import Modal from 'react-native-modal';
+import { useSelector } from 'react-redux';
 
 const JobCard = ({fromSeeAll, style, onPress}) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const userRole = useSelector(state => state.commonReducer.selectedRole);
+
   return (
     <>
       <TouchableOpacity
@@ -137,7 +140,11 @@ const JobCard = ({fromSeeAll, style, onPress}) => {
           onPress={() => {
             // navigationService.navigate('JobDetails')
           }}
-          bgColor={Color.blue}
+          bgColor={ userRole == 'Qbid Member'
+          ? Color.blue
+          : userRole == 'Qbid Negotiator'
+          ? Color.themeColor
+          : Color.black}
           // borderColor={Color.white}
           // borderWidth={2}
           borderRadius={moderateScale(30, 0.3)}

@@ -46,7 +46,12 @@ const Detailcards = ({title, data, iconName, iconType , marginTop , containerSty
             name={iconName}
             as={iconType}
             size={moderateScale(15, 0.6)}
-            color={userRole == 'Qbid Member' ?  Color.blue : Color.themeColor}
+            color={  userRole == 'Qbid Member'
+            ? Color.blue
+            : userRole == 'Qbid Negotiator'
+            ? Color.themeColor
+            : Color.black
+}
             style={{
               width: '100%',
               textAlign: 'center',

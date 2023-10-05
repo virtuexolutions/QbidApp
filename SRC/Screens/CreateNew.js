@@ -82,10 +82,20 @@ const CreateNew = () => {
 
   return (
     <ScreenBoiler
-    statusBarBackgroundColor={userRole == 'Qbid Member' ?  Color.themeBgColor : Color.themeBgColorNegotiator}
+    statusBarBackgroundColor={userRole == 'Qbid Member'
+    ? Color.themeBgColor
+    : userRole == 'Qbid Negotiator'
+    ? Color.themeBgColorNegotiator
+    : Color.themebgBusinessQbidder
+}
     statusBarContentStyle={'light-content'}
    
-    headerColor={userRole == 'Qbid Member' ?  Color.themeBgColor : Color.themeBgColorNegotiator}
+    headerColor={userRole == 'Qbid Member'
+    ? Color.themeBgColor
+    : userRole == 'Qbid Negotiator'
+    ? Color.themeBgColorNegotiator
+    : Color.themebgBusinessQbidder
+}
       showHeader={true}
       //  showBack={true}
     >
@@ -98,7 +108,12 @@ const CreateNew = () => {
         }
         start={{x: 0, y: 0}}
         end={{x: 1, y: 0}}
-        colors={userRole == 'Qbid Member' ?  Color.themeBgColor : Color.themeBgColorNegotiator}>
+        colors={userRole == 'Qbid Member'
+        ? Color.themeBgColor
+        : userRole == 'Qbid Negotiator'
+        ? Color.themeBgColorNegotiator
+        : Color.themebgBusinessQbidder
+  }>
         <KeyboardAwareScrollView
           showsVerticalScrollIndicator={false}
           // style={styles.container}
@@ -327,7 +342,12 @@ const CreateNew = () => {
             onPress={() => {
             console.log('here');
              }}
-            bgColor={userRole == 'Qbid Member' ?  Color.blue : Color.themeColor}
+            bgColor={userRole == 'Qbid Member'
+            ? Color.blue
+            : userRole == 'Qbid Negotiator'
+            ? Color.themeColor
+            : Color.black
+}
             // borderColor={Color.white}
             // borderWidth={2}
             borderRadius={moderateScale(30, 0.3)}

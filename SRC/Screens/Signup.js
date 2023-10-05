@@ -180,7 +180,11 @@ const Signup = () => {
                 styles.edit,
                 {
                   backgroundColor:
-                    userRole == 'Qbid Member' ? Color.blue : Color.themeColor,
+                  userRole == 'Qbid Member'
+                  ? Color.blue
+                  : userRole == 'Qbid Negotiator'
+                  ? Color.themeColor
+                  : Color.black
                 },
               ]}>
               <Icon
