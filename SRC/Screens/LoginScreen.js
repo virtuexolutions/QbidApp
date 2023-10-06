@@ -52,13 +52,13 @@ const LoginScreen = () => {
   );
   const [baseImage, setBaseImage] = useState('');
 
-  const servicesArray = ['Qbid Negotiator', 'Qbid Member'];
+  const servicesArray = ['Qbid Negotiator', 'Qbid Member', 'Business Qbidder'];
 
   const imageRef = useRef();
   const [scale, setScale] = useState(1);
   const [previousScale, setPreviousScale] = useState(1);
   const [translateX, setTranslateX] = useState(0);
-  const [rotate , setRotate] = useState(0);
+  const [rotate, setRotate] = useState(0);
   console.log(
     '🚀 ~ file: LoginScreen.js:57 ~ LoginScreen ~ translateX:',
     translateX,
@@ -135,7 +135,12 @@ const LoginScreen = () => {
     <>
       <CustomStatusBar
         backgroundColor={
-          userRole == 'Qbid Member' ? Color.blue : Color.themeColor
+         
+          userRole == 'Qbid Member'
+            ? Color.blue
+            : userRole == 'Qbid Negotiator'
+            ? Color.themeColor
+            : Color.black
         }
         barStyle={'light-content'}
       />
@@ -151,11 +156,13 @@ const LoginScreen = () => {
         source={
           userRole == 'Qbid Member'
             ? require('../Assets/Images/backgroundImage.png')
-            : require('../Assets/Images/backgroungNegotiator.png')
-        }> 
-      <ScrollView
+            : userRole == 'Qbid Negotiator'
+            ? require('../Assets/Images/backgroungNegotiator.png')
+            : require('../Assets/Images/businessQibd.png')
+        }>
+        <ScrollView
           showsVerticalScrollIndicator={false}
-          removeClippedSubviews={true} 
+          removeClippedSubviews={true}
           contentContainerStyle={{
             alignSelf: 'center',
             alignItems: 'center',
@@ -235,7 +242,12 @@ const LoginScreen = () => {
             style={[
               styles.txt3,
               {
-                color: userRole == 'Qbid Negotiator' ? Color.white : Color.blue,
+                color:
+                  userRole == 'Qbid Member'
+                    ? Color.blue
+                    : userRole == 'Qbid Negotiator'
+                    ? Color.themeColor
+                    : Color.black,
                 marginTop: moderateScale(20, 0.3),
               },
             ]}>
@@ -260,7 +272,13 @@ const LoginScreen = () => {
               // alert('Action to be happened')
               // navigationService.navigate('HomeScreen')
             }}
-            bgColor={userRole == 'Qbid Negotiator' ? Color.themeColor  :Color.blue}
+            bgColor={
+              userRole == 'Qbid Member'
+                ? Color.blue
+                : userRole == 'Qbid Negotiator'
+                ? Color.themeColor
+                : Color.black
+            }
             // borderColor={Color.white}
             // borderWidth={2}
             borderRadius={moderateScale(30, 0.3)}
@@ -280,9 +298,11 @@ const LoginScreen = () => {
                   styles.txt4,
                   {
                     color:
-                      userRole == 'Qbid Negotiator'
-                        ? Color.themeColor
-                        : Color.purple,
+                    userRole == 'Qbid Member'
+                      ? Color.blue
+                      : userRole == 'Qbid Negotiator'
+                      ? Color.themeColor
+                      : Color.black,
                   },
                 ]}>
                 {'Sign Up'}
@@ -296,46 +316,36 @@ const LoginScreen = () => {
             }}
             style={[
               styles.txt3,
-              {color: userRole == 'Qbid Negotiator' ? Color.white : Color.blue},
+              { color:
+                userRole == 'Qbid Member'
+                  ? Color.blue
+                  : userRole == 'Qbid Negotiator'
+                  ? Color.themeColor
+                  : Color.black,},
             ]}>
             {'Quick App Tour'}
           </CustomText>
-          
-           {
-            images.map((item , index)=>{
-              return(
-              
-                <CustomImage 
-                  // source={{ uri: `data:image/png;base64,${baseImage}` }}
-                  source={{uri : item?.uri}}
+
+          {images.map((item, index) => {
+            return (
+              <CustomImage
+                // source={{ uri: `data:image/png;base64,${baseImage}` }}
+                source={{uri: item?.uri}}
                 style={{
-                  width : 100,
-                  height :  100,
-                  marginBottom : 30
+                  width: 100,
+                  height: 100,
+                  marginBottom: 30,
                 }}
                 resizeMethod={'resize'}
-                />
-              
-               
-              )
-            })
-          }
+              />
+            );
+          })}
         </ScrollView>
-     
-      
-
       </ImageBackground>
     </>
     // </ScreenBoiler>
   );
 };
-
-
-
-
-
-
-
 
 //  {/* <View style={{
 //    flex: 1,

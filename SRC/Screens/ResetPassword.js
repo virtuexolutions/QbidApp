@@ -74,7 +74,11 @@ const ResetPassword = props => {
     <>
       <CustomStatusBar
        backgroundColor={
-        SelecteduserRole == 'Qbid member' ? Color.blue : Color.themeColor
+        SelecteduserRole == 'Qbid Member'
+        ? Color.blue
+        : SelecteduserRole == 'Qbid Negotiator'
+        ? Color.themeColor
+        : Color.black
       }
         barStyle={'light-content'}
       />
@@ -86,9 +90,11 @@ const ResetPassword = props => {
         }}
         resizeMode={'stretch'}
         source={
-          SelecteduserRole == 'Qbid member'
-            ? require('../Assets/Images/backgroundImage.png')
-            : require('../Assets/Images/backgroungNegotiator.png')
+          SelecteduserRole == 'Qbid Member'
+          ? require('../Assets/Images/backgroundImage.png')
+          : SelecteduserRole == 'Qbid Negotiator'
+          ? require('../Assets/Images/backgroungNegotiator.png')
+          : require('../Assets/Images/businessQibd.png')
         }>
             <TouchableOpacity
             activeOpacity={0.8}
@@ -109,7 +115,11 @@ const ResetPassword = props => {
               name={'arrowleft'}
               as={AntDesign}
               size={moderateScale(22, 0.3)}
-              color={Color.green}
+              color={ SelecteduserRole == 'Qbid Member'
+              ? Color.blue
+              : SelecteduserRole == 'Qbid Negotiator'
+              ? Color.themeColor
+              : Color.black}
               onPress={()=>{
                 navigationN.goBack()
               }}
@@ -130,7 +140,7 @@ const ResetPassword = props => {
               alignItems: 'center',
             }}>
             <CustomText isBold style={styles.txt2}>
-              Forget Password
+              Forgot Password
             </CustomText>
             <CustomText style={styles.txt3}>
               Forgot your password ? don't worry, jsut take a simple step and
@@ -188,8 +198,11 @@ const ResetPassword = props => {
               onPress={() => {
               dispatch(setUserToken({token : 'sadasdawdadas'}))
               }}
-              bgColor={SelecteduserRole == 'Qbid member' ? Color.blue : Color.themeColor
-            }
+              bgColor={SelecteduserRole == 'Qbid Member'
+              ? Color.blue
+              : SelecteduserRole == 'Qbid Negotiator'
+              ? Color.themeColor
+              : Color.black} 
               // borderColor={Color.white}
               // borderWidth={2}
               borderRadius={moderateScale(30, 0.3)}

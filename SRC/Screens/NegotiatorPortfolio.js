@@ -70,13 +70,17 @@ const NegotiatorPortfolio = () => {
       statusBarBackgroundColor={
         userRole == 'Qbid Member'
           ? Color.themeBgColor
-          : Color.themeBgColorNegotiator
+          : userRole == 'Qbid Negotiator'
+          ? Color.themeBgColorNegotiator
+          : Color.themebgBusinessQbidder
       }
       statusBarContentStyle={'light-content'}
       headerColor={
         userRole == 'Qbid Member'
           ? Color.themeBgColor
-          : Color.themeBgColorNegotiator
+          : userRole == 'Qbid Negotiator'
+          ? Color.themeBgColorNegotiator
+          : Color.themebgBusinessQbidder
       }
       showBack={true}>
       <LinearGradient
@@ -88,7 +92,9 @@ const NegotiatorPortfolio = () => {
         colors={
           userRole == 'Qbid Member'
             ? Color.themeBgColor
-            : Color.themeBgColorNegotiator
+            : userRole == 'Qbid Negotiator'
+            ? Color.themeBgColorNegotiator
+            : Color.themebgBusinessQbidder
         }>
         {!availibility && (
           <View
@@ -152,7 +158,7 @@ const NegotiatorPortfolio = () => {
                   height: '100%',
                 }}
               />
-              {userRole == 'Qbid Negotiator' && (
+              {userRole != 'Qbid Member' && (
                 <TouchableOpacity
                   onPress={() => {
                     setimageType('cover');
@@ -201,7 +207,7 @@ const NegotiatorPortfolio = () => {
                   source={require('../Assets/Images/man1.jpg')}
                 />
               )}
-              {userRole == 'Qbid Negotiator' && (
+              {userRole != 'Qbid Member' && (
                 <TouchableOpacity
                   onPress={() => {
                     setimageType('profile');
@@ -213,7 +219,9 @@ const NegotiatorPortfolio = () => {
                       backgroundColor:
                         userRole == 'Qbid Member'
                           ? Color.blue
-                          : Color.themeColor,
+                          : userRole == 'Qbid Negotiator'
+                          ? Color.themeColor
+                          : Color.black,
                     },
                   ]}>
                   <Icon
@@ -226,7 +234,7 @@ const NegotiatorPortfolio = () => {
                 </TouchableOpacity>
               )}
             </View>
-            {userRole == 'Qbid Negotiator' && (
+            {userRole != 'Qbid Member' && (
               <TouchableOpacity
                 activeOpacity={0.9}
                 onPress={() => {
@@ -412,7 +420,9 @@ const NegotiatorPortfolio = () => {
                         backgroundColor:
                           userRole == 'Qbid Member'
                             ? Color.blue
-                            : Color.themeColor,
+                            : userRole == 'Qbid Negotiator'
+                            ? Color.themeColor
+                            : Color.black,
                       }}
                     />
                     <CustomText
@@ -456,7 +466,9 @@ const NegotiatorPortfolio = () => {
                       backgroundColor:
                         userRole == 'Qbid Member'
                           ? Color.blue
-                          : Color.themeColor,
+                          : userRole == 'Qbid Negotiator'
+                          ? Color.themeColor
+                          : Color.black,
                     }}
                   />
                   <CustomText
@@ -480,7 +492,11 @@ const NegotiatorPortfolio = () => {
               height={windowHeight * 0.07}
               marginTop={moderateScale(20, 0.3)}
               bgColor={
-                userRole == 'Qbid Member' ? Color.blue : Color.themeColor
+                userRole == 'Qbid Member'
+                ? Color.blue
+                : userRole == 'Qbid Negotiator'
+                ? Color.themeColor
+                : Color.black
               }
               borderRadius={moderateScale(30, 0.3)}
               disabled={!availibility}
@@ -517,7 +533,13 @@ const NegotiatorPortfolio = () => {
             }}
             start={{x: 0, y: 0}}
             end={{x: 1, y: 0}}
-            colors={userRole == 'Qbid Member' ?  Color.themeBgColor : Color.themeBgColorNegotiator}>
+            colors={
+              userRole == 'Qbid Member'
+              ? Color.themeBgColor
+              : userRole == 'Qbid Negotiator'
+              ? Color.themeBgColorNegotiator
+              : Color.themebgBusinessQbidder
+            }>
             <TextInputWithTitle
               title={'First Name'}
               secureText={false}
@@ -550,7 +572,7 @@ const NegotiatorPortfolio = () => {
               placeholderColor={Color.themeLightGray}
               borderRadius={moderateScale(25, 0.3)}
             />
-            {userRole == 'Qbid Negotiator' && (
+            {userRole != 'Qbid Member' && (
               <>
                 <TextInputWithTitle
                   title={'Company Name'}
@@ -721,7 +743,7 @@ const NegotiatorPortfolio = () => {
               borderRadius={moderateScale(25, 0.3)}
               // marginBottom={moderateScale(10, 0.3)}
             />
-            {userRole == 'Qbid Negotiator' && (
+            {userRole != 'Qbid Member' && (
               <>
                 <CustomDropDownMultiSelect
                   title={'Pick Languages'}
@@ -771,7 +793,11 @@ const NegotiatorPortfolio = () => {
               //   dispatch(setUserToken({token: 'dasdawradawdawrtfeasfzs'}));
               // }}
               bgColor={
-                userRole == 'Qbid Member' ? Color.blue : Color.themeColor
+                userRole == 'Qbid Member'
+                ? Color.blue
+                : userRole == 'Qbid Negotiator'
+                ? Color.themeColor
+                : Color.black
               }
               // borderColor={Color.white}
               // borderWidth={2}
@@ -881,12 +907,12 @@ const DetailContainer = ({
         width: windowWidth * 0.2,
         alignItems: 'center',
       }}>
-      {editEnable && userRole == 'Qbid Negotiator' && (
+      {editEnable && userRole != 'Qbid Member' && (
         <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={() => {
-          setEdit(!edit);
-        }}
+          activeOpacity={0.8}
+          onPress={() => {
+            setEdit(!edit);
+          }}
           style={[
             styles.edit,
             {
@@ -914,7 +940,11 @@ const DetailContainer = ({
       <Icon
         name={imageName}
         as={type}
-        color={userRole == 'Qbid Member' ? Color.blue : Color.themeColor}
+        color={ userRole == 'Qbid Member'
+            ? Color.blue
+            : userRole == 'Qbid Negotiator'
+            ? Color.themeColor
+            : Color.black}
         size={moderateScale(20, 0.6)}
       />
       <CustomText style={styles.title}>{title}</CustomText>

@@ -43,7 +43,12 @@ const ShowMoreAndShowLessText = props => {
             }}
             style={{
               fontSize: moderateScale(12, 0.6),
-              color: userRole == 'Qbid Member' ? Color.blue : Color.themeColor,
+              color:   userRole == 'Qbid Member'
+              ? Color.blue
+              : userRole == 'Qbid Negotiator'
+              ? Color.themeColor
+              : Color.black
+  ,
               textAlign : 'center'
             }}
             isRegular>

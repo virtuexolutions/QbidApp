@@ -44,13 +44,17 @@ const Settings = () => {
       statusBarBackgroundColor={
         userRole == 'Qbid Member'
           ? Color.themeBgColor
-          : Color.themeBgColorNegotiator
+          : userRole == 'Qbid Negotiator'
+          ? Color.themeBgColorNegotiator
+          : Color.themebgBusinessQbidder
       }
       statusBarContentStyle={'light-content'}
       headerColor={
         userRole == 'Qbid Member'
-          ? Color.themeBgColor
-          : Color.themeBgColorNegotiator
+        ? Color.themeBgColor
+        : userRole == 'Qbid Negotiator'
+        ? Color.themeBgColorNegotiator
+        : Color.themebgBusinessQbidder
       }>
       <LinearGradient
         style={{
@@ -60,8 +64,10 @@ const Settings = () => {
         end={{x: 1, y: 0}}
         colors={
           userRole == 'Qbid Member'
-            ? Color.themeBgColor
-            : Color.themeBgColorNegotiator
+          ? Color.themeBgColor
+          : userRole == 'Qbid Negotiator'
+          ? Color.themeBgColorNegotiator
+          : Color.themebgBusinessQbidder
         }>
         <KeyboardAwareScrollView
           showsVerticalScrollIndicator={false}
@@ -92,7 +98,7 @@ const Settings = () => {
             style={[
               styles.text,
               {fontSize: moderateScale(17, 0.3)},
-              userRole == 'Qbid Negotiator' && {color: Color.white},
+              userRole != 'Qbid Member' && {color: Color.white},
             ]}>
             {`George D. Huntley`}
           </CustomText>

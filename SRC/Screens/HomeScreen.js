@@ -369,8 +369,13 @@ const HomeScreen = () => {
                     width={windowWidth * 0.4}
                     height={windowHeight * 0.06}
                     marginTop={moderateScale(10, 0.3)}
-                    bgColor={
-                      userRole == 'Qbid Member' ? Color.blue : Color.themeColor
+                    bgColor={userRole ==
+                      'Qbid Member'
+                      ? Color.blue
+                      : userRole == 'Qbid Negotiator'
+                      ? Color.themeColor
+                      : Color.black
+          
                     }
                     borderRadius={moderateScale(30, 0.3)}
                   />

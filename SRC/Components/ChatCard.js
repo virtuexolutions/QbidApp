@@ -40,7 +40,11 @@ const ChatCard = ({name, image, lastmessage, date, unread, unreadCount}) => {
           isBold
           style={{
             fontSize: moderateScale(12, 0.3),
-            color: userRole == 'Qbid Negotiator' ? Color.black :Color.themeBlack,
+            color: userRole == 'Qbid Member'
+            ? Color.blue
+            : userRole == 'Qbid Negotiator'
+            ? Color.themeColor
+            : Color.black
           }}>
           {name}
         </CustomText>
@@ -77,7 +81,11 @@ const ChatCard = ({name, image, lastmessage, date, unread, unreadCount}) => {
             width : moderateScale(15,0.3),
             height : moderateScale(15,0.3),
             borderRadius : moderateScale(7.5 , 0.3),
-            backgroundColor : userRole == 'Qbid Member' ? Color.blue : Color.themeColor,
+            backgroundColor :  userRole == 'Qbid Member'
+            ? Color.blue
+            : userRole == 'Qbid Negotiator'
+            ? Color.themeColor
+            : Color.black,
             justifyContent : 'center',
             alignItems : 'center',
             overflow : 'hidden',

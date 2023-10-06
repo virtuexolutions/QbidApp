@@ -56,13 +56,17 @@ const TermsAndConditions = () => {
       statusBarBackgroundColor={
         userRole == 'Qbid Member'
           ? Color.themeBgColor
-          : Color.themeBgColorNegotiator
+          : userRole == 'Qbid Negotiator'
+          ? Color.themeBgColorNegotiator
+          : Color.themebgBusinessQbidder
       }
       statusBarContentStyle={'light-content'}
       headerColor={
         userRole == 'Qbid Member'
           ? Color.themeBgColor
-          : Color.themeBgColorNegotiator
+          : userRole == 'Qbid Negotiator'
+          ? Color.themeBgColorNegotiator
+          : Color.themebgBusinessQbidder
       }
       hideUser={false}
       showBack={true}>
@@ -83,10 +87,13 @@ const TermsAndConditions = () => {
           }}
           start={{x: 0, y: 0}}
           end={{x: 1, y: 0}}
-          colors={ userRole == 'Qbid Member'
-          ? Color.themeBgColor
-          : Color.themeBgColorNegotiator
-      }>
+          colors={
+            userRole == 'Qbid Member'
+              ? Color.themeBgColor
+              : userRole == 'Qbid Negotiator'
+              ? Color.themeBgColorNegotiator
+              : Color.themebgBusinessQbidder
+          }>
           {isLoading ? (
             <View style={styles.loaderView}>
               <Loader

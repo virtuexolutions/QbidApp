@@ -49,14 +49,18 @@ const JobDetails = () => {
       showBack={true}
       statusBarBackgroundColor={
         userRole == 'Qbid Member'
-          ? Color.themeBgColor
-          : Color.themeBgColorNegotiator
+        ? Color.themeBgColor
+        : userRole == 'Qbid Negotiator'
+        ? Color.themeBgColorNegotiator
+        : Color.themebgBusinessQbidder
       }
       statusBarContentStyle={'light-content'}
       headerColor={
         userRole == 'Qbid Member'
-          ? Color.themeBgColor
-          : Color.themeBgColorNegotiator
+        ? Color.themeBgColor
+        : userRole == 'Qbid Negotiator'
+        ? Color.themeBgColorNegotiator
+        : Color.themebgBusinessQbidder
       }>
       <LinearGradient
         style={{
@@ -66,14 +70,16 @@ const JobDetails = () => {
         end={{x: 1, y: 0}}
         colors={
           userRole == 'Qbid Member'
-            ? Color.themeBgColor
-            : Color.themeBgColorNegotiator
+          ? Color.themeBgColor
+          : userRole == 'Qbid Negotiator'
+          ? Color.themeBgColorNegotiator
+          : Color.themebgBusinessQbidder
         }>
         <ScrollView
           showsVerticalScrollIndicator={false}
           style={styles.sectionContainer}
           contentContainerStyle={{
-            paddingBottom: moderateScale(20, 0.6),
+            paddingBottom: moderateScale(60, 0.6),
             paddingTop: moderateScale(40, 0.6),
             paddingLeft: moderateScale(15, 0.6),
           }}>
@@ -125,7 +131,12 @@ const JobDetails = () => {
                   height: moderateScale(6, 0.6),
                   borderRadius: moderateScale(3, 0.6),
                   backgroundColor:
-                    userRole == 'Qbid Member' ? Color.blue : Color.themeColor,
+                  userRole == 'Qbid Member'
+                  ? Color.blue
+                  : userRole == 'Qbid Negotiator'
+                  ? Color.themeColor
+                  : Color.black
+      
                 }}
               />
               <CustomText
@@ -253,7 +264,12 @@ const JobDetails = () => {
                 textSecondary={'my Bid'}
                 textStyleSecondary={{
                   color:
-                    userRole == 'Qbid Member' ? Color.blue : Color.themeColor,
+                  userRole == 'Qbid Member'
+                  ? Color.blue
+                  : userRole == 'Qbid Negotiator'
+                  ? Color.themeColor
+                  : Color.black
+      
                 }}
               />
               <TextInputWithTitle
@@ -291,7 +307,12 @@ const JobDetails = () => {
                   toggleModal();
                 }}
                 bgColor={
-                  userRole == 'Qbid Member' ? Color.blue : Color.themeColor
+                  userRole == 'Qbid Member'
+                  ? Color.blue
+                  : userRole == 'Qbid Negotiator'
+                  ? Color.themeColor
+                  : Color.black
+      
                 }
                 borderRadius={moderateScale(30, 0.3)}
                 alignSelf={'flex-start'}
@@ -423,7 +444,12 @@ const JobDetails = () => {
                 setModalVisible(!isModalVisible);
               }}
               bgColor={
-                userRole == 'Qbid Member' ? Color.blue : Color.themeColor
+                userRole == 'Qbid Member'
+                ? Color.blue
+                : userRole == 'Qbid Negotiator'
+                ? Color.themeColor
+                : Color.black
+    
               }
               borderRadius={moderateScale(30, 0.3)}
             />

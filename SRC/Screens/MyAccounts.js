@@ -113,9 +113,19 @@ const MyAccounts = props => {
   return (
     <ScreenBoiler
       showHeader={true}
-      statusBarBackgroundColor={Color.themeBgColor}
+      statusBarBackgroundColor={
+        userRole == 'Qbid Member'
+              ? Color.themeBgColor
+              : userRole == 'Qbid Negotiator'
+              ? Color.themeBgColorNegotiator
+              : Color.themebgBusinessQbidder}
       statusBarContentStyle={'light-content'}
-      headerColor={Color.themeBgColor}
+      headerColor={
+        userRole == 'Qbid Member'
+              ? Color.themeBgColor
+              : userRole == 'Qbid Negotiator'
+              ? Color.themeBgColorNegotiator
+              : Color.themebgBusinessQbidder}
       hideUser={true}
       showBack={true}>
       <ScrollView
@@ -133,7 +143,12 @@ const MyAccounts = props => {
           }}
           start={{x: 0, y: 0}}
           end={{x: 1, y: 0}}
-          colors={Color.themeBgColor}>
+          colors={
+            userRole == 'Qbid Member'
+                  ? Color.themeBgColor
+                  : userRole == 'Qbid Negotiator'
+                  ? Color.themeBgColorNegotiator
+                  : Color.themebgBusinessQbidder}>
           <View>
             {Object.keys(imageObject).length > 0 ? (
               <CustomImage
@@ -163,7 +178,11 @@ const MyAccounts = props => {
                 width: moderateScale(30, 0.3),
                 height: moderateScale(30, 0.3),
                 borderRadius: moderateScale(15, 0.3),
-                backgroundColor: Color.blue,
+                backgroundColor: userRole == 'Qbid Member'
+                ? Color.blue
+                : userRole == 'Qbid Negotiator'
+                ? Color.themeColor
+                : Color.black,
                 alignItems: 'center',
                 justifyContent: 'center',
                 position: 'absolute',
@@ -323,7 +342,12 @@ const MyAccounts = props => {
             // onPress={() => {
             //   dispatch(setUserToken({token: 'dasdawradawdawrtfeasfzs'}));
             // }}
-            bgColor={Color.blue}
+            bgColor={
+              userRole == 'Qbid Member'
+            ? Color.blue
+            : userRole == 'Qbid Negotiator'
+            ? Color.themeColor
+            : Color.black}
             borderRadius={moderateScale(30, 0.3)}
           />
         </LinearGradient>

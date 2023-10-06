@@ -30,6 +30,7 @@ export default Color = {
   themeDarkGray: '#535353',
   themeLightGray: '#8D8D8D',
   themeBlack: '#3A3838',
+  themebgBusinessQbidder:['#CD5C5C', '#7E191B'],
   //gradientColors
   themeBgColor: ['#8DC73F', '#83D475','#ABE098'],
   themeBgColorNegotiator : ['#0D668E' , '#00ADEF'],

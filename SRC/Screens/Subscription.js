@@ -47,14 +47,18 @@ const Subscription = (props) => {
     showHeader={true}
     statusBarBackgroundColor={
       userRole == 'Qbid Member'
-        ? Color.themeBgColor
-        : Color.themeBgColorNegotiator
+      ? Color.themeBgColor
+      : userRole == 'Qbid Negotiator'
+      ? Color.themeBgColorNegotiator
+      : Color.themebgBusinessQbidder
     }
     statusBarContentStyle={'light-content'}
     headerColor={
       userRole == 'Qbid Member'
-        ? Color.themeBgColor
-        : Color.themeBgColorNegotiator
+      ? Color.themeBgColor
+      : userRole == 'Qbid Negotiator'
+      ? Color.themeBgColorNegotiator
+      : Color.themebgBusinessQbidder
     }
     showBack={true}
     >
@@ -76,9 +80,11 @@ const Subscription = (props) => {
            start={{x: 0, y: 0}}
            end={{x: 1, y: 0}}
            colors={
-             userRole == 'Qbid Member'
-               ? Color.themeBgColor
-               : Color.themeBgColorNegotiator
+            userRole == 'Qbid Member'
+            ? Color.themeBgColor
+            : userRole == 'Qbid Negotiator'
+            ? Color.themeBgColorNegotiator
+            : Color.themebgBusinessQbidder
            }>
         <CustomText style={styles.heading}>Get Started Today</CustomText>
         <CustomText style={styles.subheading}>

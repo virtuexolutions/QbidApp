@@ -38,7 +38,6 @@ const Support = () => {
   const [loading, setLoading] = useState(false);
   const [supportData, setSupportData] = useState();
   const [submitLoading, setSubmitLoading] = useState(false);
-  
 
   const GetSupportData = async () => {
     const url = 'auth/admin/info';
@@ -88,34 +87,39 @@ const Support = () => {
 
   return (
     <ScreenBoiler
-    showHeader={true}
-    statusBarBackgroundColor={
-      userRole == 'Qbid Member'
-        ? Color.themeBgColor
-        : Color.themeBgColorNegotiator
-    }
-    statusBarContentStyle={'light-content'}
-    headerColor={
-      userRole == 'Qbid Member'
-        ? Color.themeBgColor
-        : Color.themeBgColorNegotiator
-    }
-    showBack={true}
-    >
+      showHeader={true}
+      statusBarBackgroundColor={
+        userRole == 'Qbid Member'
+          ? Color.themeBgColor
+          : userRole == 'Qbid Negotiator'
+          ? Color.themeBgColorNegotiator
+          : Color.themebgBusinessQbidder
+      }
+      statusBarContentStyle={'light-content'}
+      headerColor={
+        userRole == 'Qbid Member'
+          ? Color.themeBgColor
+          : userRole == 'Qbid Negotiator'
+          ? Color.themeBgColorNegotiator
+          : Color.themebgBusinessQbidder
+      }
+      showBack={true}>
       <LinearGradient
         start={{x: 0, y: 0}}
         end={{x: 1, y: 0}}
         colors={
           userRole == 'Qbid Member'
             ? Color.themeBgColor
-            : Color.themeBgColorNegotiator
+            : userRole == 'Qbid Negotiator'
+            ? Color.themeBgColorNegotiator
+            : Color.themebgBusinessQbidder
         }>
         <KeyboardAwareScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             paddingBottom: moderateScale(20, 0.3),
             alignItems: 'center',
-         width: '100%',
+            width: '100%',
             height: windowHeight,
           }}>
           <CustomText style={styles.Txt1} isBold>
@@ -129,7 +133,11 @@ const Support = () => {
             }}>
             <FontAwesome
               name="phone"
-              color={userRole == 'Qbid Member' ? Color.blue : Color.themeColor}
+              color={ userRole == 'Qbid Member'
+              ? Color.blue
+              : userRole == 'Qbid Negotiator'
+              ? Color.themeColor
+              : Color.black}
               style={styles.icon1}
               size={moderateScale(22, 0.6)}
             />
@@ -149,7 +157,11 @@ const Support = () => {
             }}>
             <Entypo
               name="mail"
-              color={userRole == 'Qbid Member' ? Color.blue : Color.themeColor}
+              color={ userRole == 'Qbid Member'
+              ? Color.blue
+              : userRole == 'Qbid Negotiator'
+              ? Color.themeColor
+              : Color.black}
               style={styles.icon1}
               size={moderateScale(22, 0.6)}
             />
@@ -249,7 +261,7 @@ const Support = () => {
               borderRadius={moderateScale(10, 0.3)}
               placeholderColor={Color.black}
             />
-           <CustomButton
+            <CustomButton
               text={
                 loading ? (
                   <ActivityIndicator color={'#FFFFFF'} size={'small'} />
@@ -265,7 +277,11 @@ const Support = () => {
               //   dispatch(setUserToken({token: 'dasdawradawdawrtfeasfzs'}));
               // }}
               bgColor={
-                userRole == 'Qbid Member' ? Color.blue : Color.themeColor
+                userRole == 'Qbid Member'
+                ? Color.blue
+                : userRole == 'Qbid Negotiator'
+                ? Color.themeColor
+                : Color.black
               }
               // borderColor={Color.white}
               // borderWidth={2}
@@ -300,11 +316,10 @@ const styles = ScaledSheet.create({
   Txt: {
     fontSize: moderateScale(25, 0.3),
     color: 'black',
-  
   },
   Txt1: {
     fontSize: moderateScale(20, 0.6),
-    width : '85%' ,
+    width: '85%',
     color: Color.themeBlack,
     marginTop: moderateScale(40, 0.3),
 

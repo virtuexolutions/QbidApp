@@ -1,14 +1,13 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import { windowWidth } from '../Utillity/utils';
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import Fontisto from 'react-native-vector-icons/Fontisto'
+import {windowWidth} from '../Utillity/utils';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Fontisto from 'react-native-vector-icons/Fontisto';
 import Color from '../Assets/Utilities/Color';
-import { useSelector } from 'react-redux';
-import { moderateScale } from 'react-native-size-matters';
-import { Icon } from 'native-base';
+import {useSelector} from 'react-redux';
+import {moderateScale} from 'react-native-size-matters';
+import {Icon} from 'native-base';
 import CustomText from './CustomText';
-
 
 const MarkCheckWithText = ({
   checked,
@@ -19,12 +18,8 @@ const MarkCheckWithText = ({
   textStyleSecondary,
   textPrimary,
   textSecondary,
-
-
-
-
 }) => {
-    const userRole = useSelector(state => state.commonReducer.selectedRole);
+  const userRole = useSelector(state => state.commonReducer.selectedRole);
   return (
     <View
       style={[
@@ -49,7 +44,7 @@ const MarkCheckWithText = ({
       />
       <CustomText
         onPress={() => {
-            setChecked(!checked);
+          setChecked(!checked);
         }}
         style={[
           styles.txt3,
@@ -57,7 +52,7 @@ const MarkCheckWithText = ({
             color: Color.white,
             marginHorizontal: moderateScale(10, 0.3),
           },
-          textStylePrimary
+          textStylePrimary,
         ]}>
         {textPrimary}
         {
@@ -67,11 +62,15 @@ const MarkCheckWithText = ({
               styles.txt3,
               {
                 color:
-                  userRole == 'Qbid member' ? Color.blue : Color.themeColor,
+                  userRole == 'Qbid Member'
+                    ? Color.blue
+                    : userRole == 'Qbid Negotiator'
+                    ? Color.themeColor
+                    : Color.black,
               },
-              textStyleSecondary
+              textStyleSecondary,
             ]}>
-        {textSecondary}
+            {textSecondary}
           </CustomText>
         }
       </CustomText>

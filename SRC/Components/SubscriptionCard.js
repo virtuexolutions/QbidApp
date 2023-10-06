@@ -10,6 +10,7 @@ import {current} from '@reduxjs/toolkit';
 import CustomButton from './CustomButton';
 import {useState} from 'react';
 import {ActivityIndicator} from 'react-native';
+import { useSelector } from 'react-redux';
 
 const SubscriptionCard = ({
   featuresArray,
@@ -20,6 +21,8 @@ const SubscriptionCard = ({
   loader,
 }) => {
   // console.log(currentPlan);
+  const userRole = useSelector(state => state.commonReducer.selectedRole);
+
 
   return (
     <View
@@ -150,7 +153,11 @@ const SubscriptionCard = ({
         height={windowHeight * 0.06}
         marginTop={moderateScale(20, 0.3)}
         onPress={onPress}
-        bgColor={Color.themeColor}
+        bgColor={userRole == 'Qbid Member'
+        ? Color.blue
+        : userRole == 'Qbid Negotiator'
+        ? Color.themeColor
+        : Color.black}
         // borderColor={Color.white}
         // borderWidth={2}
         borderRadius={moderateScale(30, 0.3)}

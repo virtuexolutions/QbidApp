@@ -26,9 +26,21 @@ const CustomDropDownMultiSelect = ({min, max, item, setItem, array, title , maxH
         searchInputPlaceholderText={'Search items ...'}
         textInputProps={{autoFocus: false}}
         hideDropdown
-        tagRemoveIconColor={ userRole == 'Qbid Member' ?  Color.blue : Color.themeColor}
-        tagBorderColor={ userRole == 'Qbid Member' ?  Color.blue : Color.white}
-        tagTextColor={ userRole == 'Qbid Member' ?  Color.white : Color.white}
+        tagRemoveIconColor={  userRole == 'Qbid Member'
+        ? Color.blue
+        : userRole == 'Qbid Negotiator'
+        ? Color.white
+        : Color.black}
+        tagBorderColor={   userRole == 'Qbid Member'
+        ? Color.blue
+        : userRole == 'Qbid Negotiator'
+        ? Color.white
+        : Color.black}
+        tagTextColor={   userRole == 'Qbid Member'
+        ? Color.blue
+        : userRole == 'Qbid Negotiator'
+        ? Color.white
+        : Color.black}
         
         displayKey="name"
         uniqueKey="id"

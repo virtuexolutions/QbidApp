@@ -73,14 +73,18 @@ const ChangePassword = props => {
       showHeader={true}
       statusBarBackgroundColor={
         userRole == 'Qbid Member'
-          ? Color.themeBgColor
-          : Color.themeBgColorNegotiator
+        ? Color.themeBgColor
+        : userRole == 'Qbid Negotiator'
+        ? Color.themeBgColorNegotiator
+        : Color.themebgBusinessQbidder
       }
       statusBarContentStyle={'light-content'}
       headerColor={
         userRole == 'Qbid Member'
-          ? Color.themeBgColor
-          : Color.themeBgColorNegotiator
+        ? Color.themeBgColor
+        : userRole == 'Qbid Negotiator'
+        ? Color.themeBgColorNegotiator
+        : Color.themebgBusinessQbidder
       }
       hideUser={false}
       showBack={true}>
@@ -102,9 +106,11 @@ const ChangePassword = props => {
         }
         start={{x: 0, y: 0}}
         end={{x: 1, y: 0}}
-        colors={   userRole == 'Qbid Member'
+        colors={ userRole == 'Qbid Member'
         ? Color.themeBgColor
-        : Color.themeBgColorNegotiator}>
+        : userRole == 'Qbid Negotiator'
+        ? Color.themeBgColorNegotiator
+        : Color.themebgBusinessQbidder}>
           <CardContainer
             style={{
               paddingVertical: moderateScale(30, 0.3),
@@ -188,7 +194,11 @@ const ChangePassword = props => {
               //   dispatch(setUserToken({token: 'dasdawradawdawrtfeasfzs'}));
               // }}
               bgColor={
-                userRole == 'Qbid Member' ? Color.blue : Color.themeColor
+                userRole == 'Qbid Member'
+                ? Color.blue
+                : userRole == 'Qbid Negotiator'
+                ? Color.themeColor
+                : Color.black
               }
               // borderColor={Color.white}
               // borderWidth={2}
