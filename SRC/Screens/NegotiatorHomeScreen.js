@@ -310,23 +310,19 @@ const styles = ScaledSheet.create({
   upperContainer: {
     width: windowWidth * 0.93,
     paddingVertical: moderateScale(10, 0.6),
-    // backgroundColor : 'red',
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   percentContainer: {
     width: '49%',
-    // height: windowHeight * 0.2,
-    paddingVertical:moderateScale(10,0.6),
+    paddingVertical:moderateScale(15,0.6),
     backgroundColor: 'white',
     borderRadius: moderateScale(10, 0.6),
     paddingLeft: moderateScale(10, 0.6),
-    // backgroundColor : 'green',
-    paddingTop: moderateScale(10, 0.3),
   },
   revenueContainer: {
     width: '100%',
-    height: '50%',
+    height: '55%',
     paddingVertical:moderateScale(10,0.6),
 
     backgroundColor: 'white',

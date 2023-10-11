@@ -186,7 +186,7 @@ export default MyQouteCard;
 const styles = StyleSheet.create({
   card: {
     width: windowWidth * 0.9,
-    height: windowHeight * 0.14,
+    height: windowHeight * 0.15,
     borderRadius: moderateScale(10, 0.3),
     padding: moderateScale(5, 0.3),
     flexDirection: 'row',

@@ -71,8 +71,8 @@ const NegotiatorCard = ({item, fromSeeAll}) => {
             }
             textColor={Color.blue}
             isBold
-            width={windowWidth * 0.22}
-            height={windowHeight * 0.04}
+            width={windowWidth * 0.24}
+            height={windowHeight * 0.05}
             marginTop={moderateScale(10, 0.3)}
             onPress={() => {
               // setBidDone(true);
@@ -80,7 +80,7 @@ const NegotiatorCard = ({item, fromSeeAll}) => {
             }}
             bgColor={Color.white}
             borderRadius={moderateScale(30, 0.3)}
-            fontSize={moderateScale(10, 0.6)}
+            fontSize={moderateScale(9, 0.6)}
             alignSelf={'flex-start'}
           />
         </View>

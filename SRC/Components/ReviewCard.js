@@ -18,7 +18,7 @@ const ReviewCard = ({ item ,photo, title, date, message }) => {
         />
         <View style={{ marginLeft: moderateScale(10, 0.3) }}>
           <CustomText
-            noOfLines={2}
+            numberOfLines={2}
             style={[
               Constants.h4,
               {
@@ -59,7 +59,7 @@ const ReviewCard = ({ item ,photo, title, date, message }) => {
       >
         {item?.description}
       </CustomText>
-      <CustomText noOfLines={1} style={{
+      <CustomText numberOfLines={1} style={{
         marginTop : moderateScale(10,0.3),
         // position : 'absolute',
         // right : 0,
