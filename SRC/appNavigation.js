@@ -133,29 +133,49 @@ export const TabNavigation = () => {
             route.name === 'NegotiatorHomeScreen'
           ) {
             iconName = focused ? 'home' : 'home-outline';
-            color = focused ? Color.themeColor : Color.themeLightGray;
+            color = focused ? userRole == 'Qbid Member'
+            ? Color.blue
+            : userRole == 'Qbid Negotiator'
+            ? Color.themeColor
+            : Color.black : Color.themeLightGray;
             size = focused ? moderateScale(30, 0.3) : moderateScale(20, 0.3);
           } else if (route.name === 'ChatScreen') {
             iconName = focused
               ? 'ios-chatbubble-ellipses-sharp'
               : 'ios-chatbubble-ellipses-outline';
-            color = focused ? Color.themeColor : Color.themeLightGray;
+            color = focused ? userRole == 'Qbid Member'
+            ? Color.blue
+            : userRole == 'Qbid Negotiator'
+            ? Color.themeColor
+            : Color.black  : Color.themeLightGray;
             size = focused ? moderateScale(30, 0.3) : moderateScale(20, 0.3);
           } else if (route.name === 'NotificationScreen') {
             type = FontAwesome;
             iconName = focused ? 'bell' : 'bell-o';
 
-            color = focused ? Color.themeColor : Color.themeLightGray;
+            color = focused ? userRole == 'Qbid Member'
+            ? Color.blue
+            : userRole == 'Qbid Negotiator'
+            ? Color.themeColor
+            : Color.black  : Color.themeLightGray;
             size = focused ? moderateScale(30, 0.3) : moderateScale(20, 0.3);
           } else if (route.name === 'CreateNew') {
             type = AntDesign;
             iconName = focused ? 'Plus' : 'Plus';
 
-            color = focused ? Color.themeColor : Color.themeLightGray;
+            color = focused ?userRole == 'Qbid Member'
+            ? Color.blue
+            : userRole == 'Qbid Negotiator'
+            ? Color.themeColor
+            : Color.black  : Color.themeLightGray;
             size = focused ? moderateScale(30, 0.3) : moderateScale(20, 0.3);
           } else {
             iconName = focused ? 'settings-outline' : 'settings-sharp';
-            color = focused ? Color.themeColor : Color.themeLightGray;
+            color = focused ? userRole == 'Qbid Member'
+            ? Color.blue
+            : userRole == 'Qbid Negotiator'
+            ? Color.themeColor
+            : Color.black  : Color.themeLightGray;
             size = focused ? moderateScale(30, 0.3) : moderateScale(20, 0.3);
           }
           return route.name == 'CreateNew' ? (

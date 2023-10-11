@@ -259,6 +259,7 @@ const SeeAllScreen = props => {
             alignItems : 'center',
             // paddingHorizontal: moderateScale(15, 0.3),
             paddingVertical: moderateScale(20, 0.3),
+            paddingBottom:moderateScale(50,.6)
           }}
           renderItem={({item, index}) => {
             return type == 'negotiator' ? (
