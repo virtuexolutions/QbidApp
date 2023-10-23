@@ -115,7 +115,7 @@ const DropDownSingleSelect = ({
           ...(item !== '' && {color: Colors ? Colors : Color.themeBlack}),
           ...(backgroundColor && {
             color: `${Color.veryLightGray}`,
-            fontSize: moderateScale(14, 0.3),
+            fontSize: moderateScale(12, 0.3),
           }),
         }}
         dropdownStyle={{

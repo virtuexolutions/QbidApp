@@ -28,7 +28,7 @@ import CardContainer from '../Components/CardContainer';
 import CustomStatusBar from '../Components/CustomStatusBar';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Icon} from 'native-base';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 const VerifyNumber = props => {
   const SelecteduserRole = useSelector(
@@ -61,29 +61,21 @@ const VerifyNumber = props => {
     time == 0 && (settimerLabel('Resend Code '), settime(''));
   };
 
-  const sendOTP = async () => {
-    const url = 'password/email';
-    setIsLoading(true);
-    const response = await Post(url, {email: phoneNumber}, apiHeader());
-    setIsLoading(false);
-    if (response != undefined) {
-      Platform.OS == 'android'
-        ? ToastAndroid.show(`OTP sent to ${phoneNumber}`, ToastAndroid.SHORT)
-        : alert(`OTP sent to ${phoneNumber}`);
-    }
-  };
+  const VerifyOtp = async () => {
+    const body = {
+      email_code: code,
+    };
 
-  const VerifyOTP = async () => {
-    const url = 'password/code/check';
+    const url = 'verify';
     setIsLoading(true);
     console.log(code);
-    const response = await Post(url, {code: code}, apiHeader());
+    const response = await Post(url, body, apiHeader());
     setIsLoading(false);
     if (response != undefined) {
+     console.log('response data =>', response?.data);
       Platform.OS == 'android'
         ? ToastAndroid.show(`otp verified`, ToastAndroid.SHORT)
         : alert(`otp verified`);
-
       navigationService.navigate('ResetPassword', {phoneNumber: phoneNumber});
     }
   };
@@ -100,13 +92,13 @@ const VerifyNumber = props => {
   return (
     <>
       <CustomStatusBar
-       backgroundColor={
-        SelecteduserRole == 'Qbid Member'
-        ? Color.blue
-        : SelecteduserRole == 'Qbid Negotiator'
-        ? Color.themeColor
-        : Color.black
-      }
+        backgroundColor={
+          SelecteduserRole == 'Qbid Member'
+            ? Color.blue
+            : SelecteduserRole == 'Qbid Negotiator'
+            ? Color.themeColor
+            : Color.black
+        }
         barStyle={'light-content'}
       />
       <ImageBackground
@@ -141,11 +133,13 @@ const VerifyNumber = props => {
             name={'arrowleft'}
             as={AntDesign}
             size={moderateScale(22, 0.3)}
-            color={ SelecteduserRole == 'Qbid Member'
-            ? Color.blue
-            : SelecteduserRole == 'Qbid Negotiator'
-            ? Color.themeColor
-            : Color.black}
+            color={
+              SelecteduserRole == 'Qbid Member'
+                ? Color.blue
+                : SelecteduserRole == 'Qbid Negotiator'
+                ? Color.themeColor
+                : Color.black
+            }
             onPress={() => {
               navigationN.goBack();
             }}
@@ -231,15 +225,17 @@ const VerifyNumber = props => {
               height={windowHeight * 0.06}
               marginTop={moderateScale(20, 0.3)}
               onPress={() => {
-                navigationService.navigate('ResetPassword', {
-                  phone: phoneNumber,
-                });
+                VerifyOtp()
+                // navigationService.navigate('ResetPassword', {
+                //   phone: phoneNumber,
+                // });
               }}
-              bgColor={ SelecteduserRole == 'Qbid Member'
-              ? Color.blue
-              : SelecteduserRole == 'Qbid Negotiator'
-              ? Color.themeColor
-              : Color.black
+              bgColor={
+                SelecteduserRole == 'Qbid Member'
+                  ? Color.blue
+                  : SelecteduserRole == 'Qbid Negotiator'
+                  ? Color.themeColor
+                  : Color.black
               }
               borderRadius={moderateScale(30, 0.3)}
             />
