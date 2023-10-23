@@ -26,7 +26,9 @@ import CustomDropDown from '../Components/CustomDropDown';
 import navigationService from '../navigationService';
 import CustomDropDownMultiSelect from '../Components/CustomDropDownMultiSelect';
 import ImagePickerModal from '../Components/ImagePickerModal';
-import {setSelectedRole} from '../Store/slices/common';
+import {setSelectedRole, setUserData} from '../Store/slices/common';
+import {validateEmail} from '../Config';
+import {Post} from '../Axios/AxiosInterceptorFunction';
 
 const Signup = () => {
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
@@ -35,7 +37,8 @@ const Signup = () => {
   const dispatch = useDispatch();
 
   const [image, setImage] = useState({});
-  const [selectedRole, setSelectedRole] = useState('Qbid Member');
+  console.log('🚀 ~ file: Signup.js:40 ~ Signup ~ image:', image);
+  const [selectedRole, setselectedRole] = useState('Qbid Member');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [companyName, setCompanyName] = useState(''); //for negotiator
@@ -56,7 +59,6 @@ const Signup = () => {
   const [checked, setChecked] = useState(false);
 
   // const formData = new FormData();
-
   // const SignUp = async () => {
   //   const params = {
   //     role: userRole,
@@ -116,10 +118,87 @@ const Signup = () => {
   //     dispatch(setUserLogin(response?.data?.data?.token));
   //   }
   // };
+
+  const formData = new FormData();
+  const Register = async () => {
+    const body = {
+      first_name: firstName,
+      last_name: lastName,
+      email: email,
+      phone: contact,
+      address: address,
+      city: city,
+      state: state,
+      zip: zipCode,
+      password: password,
+      confirm_password: confirmPassword,
+      role: selectedRole,
+      // photo: image,
+    };
+
+    for (let key in body) {
+      if (body[key] == '') {
+        return Platform.OS == 'android'
+          ? ToastAndroid.show(` ${key} field is empty`, ToastAndroid.SHORT)
+          : Alert.alert(` ${key} field is empty`);
+      }
+      formData.append(key, body[key]);
+    }
+
+    if (Object.keys(image).length > 0) {
+      formData.append('photo', image);
+    }
+    
+    if (isNaN(contact)) {
+      return Platform.OS == 'android'
+        ? ToastAndroid.show('phone is not a number', ToastAndroid.SHORT)
+        : Alert.alert('phone is not a number');
+      }
+      if (!validateEmail(email)) {
+        return Platform.OS == 'android'
+        ? ToastAndroid.show('email is not validate', ToastAndroid.SHORT)
+        : Alert.alert('email is not validate');
+      }
+      if (password.length < 8) {
+        return Platform.OS == 'android'
+        ? ToastAndroid.show(
+            'Password should atleast 8 character long',
+            ToastAndroid.SHORT,
+            )
+            : Alert.alert('Password should atleast 8 character long');
+          }
+    if (password != confirmPassword) {
+      return Platform.OS == 'android'
+        ? ToastAndroid.show('Password does not match', ToastAndroid.SHORT)
+        : Alert.alert('Password does not match');
+      }
+
+      if(selectedRole == 'Business Qbidder' && (language.length == 0 || services.length == 0)){
+        return Platform.OS == 'android'
+        ? ToastAndroid.show('Do not Enter your fields', ToastAndroid.SHORT)
+        : Alert.alert('Do not Enter your fields');
+        language?.map((item, index) => formData.append(`language[${index}]`, item));
+        services?.map((item, index) => formData.append(`expertise[${index}]`, item));
+      }
+      
+      
+      const url = 'register';
+     console.log('🚀 ~ file: Signup.js:149 ~ Register ~ formData:', formData);
+     setIsLoading(true);
+     const response = await Post(url, formData, apiHeader());
+     setIsLoading(false);
+     if (response != undefined) {
+       console.log('VERIFY=========>>>>>>', response?.data?.user_info);
+       dispatch(setUserData(response?.data?.user_info))
+       dispatch(setSelectedRole(response?.data?.user_info?.role))
+       dispatch(setUserLogin(response?.data?.token))
+      }
+  };
+
   const UserRoleArray = ['Qbid Negotiator', 'Qbid Member', 'Business Qbidder'];
   useEffect(() => {
     dispatch(setSelectedRole(selectedRole));
-  }, [userRole]);
+  }, [selectedRole]);
 
   return (
     <>
@@ -180,11 +259,11 @@ const Signup = () => {
                 styles.edit,
                 {
                   backgroundColor:
-                  userRole == 'Qbid Member'
-                  ? Color.blue
-                  : userRole == 'Qbid Negotiator'
-                  ? Color.themeColor
-                  : Color.black
+                    userRole == 'Qbid Member'
+                      ? Color.blue
+                      : userRole == 'Qbid Negotiator'
+                      ? Color.themeColor
+                      : Color.black,
                 },
               ]}>
               <Icon
@@ -201,7 +280,7 @@ const Signup = () => {
             array={UserRoleArray}
             // backgroundColor={Color.themeColor}
             item={userRole}
-            setItem={setSelectedRole}
+            setItem={setselectedRole}
             placeholder={userRole}
             width={windowWidth * 0.9}
             dropDownHeight={windowHeight * 0.06}
@@ -546,7 +625,8 @@ const Signup = () => {
             height={windowHeight * 0.07}
             marginTop={moderateScale(10, 0.3)}
             onPress={() => {
-              dispatch(setUserToken({token: 'dasdawradawdawrtfeasfzs'}));
+              Register();
+              // dispatch(setUserToken({token: 'dasdawradawdawrtfeasfzs'}));
             }}
             bgColor={
               userRole == 'Qbid Member'

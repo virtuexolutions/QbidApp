@@ -19,6 +19,9 @@ import JobCard from '../Components/JobCard';
 
 const SeeAllNegotiator = props => {
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
+  const userRole = useSelector(state => state.commonReducer.selectedRole);
+
+
   const type = props?.route?.params?.type;
 
   const [searchData, setSearchData] = useState('');
@@ -226,11 +229,19 @@ const SeeAllNegotiator = props => {
   ];
   return (
     <ScreenBoiler
-      statusBarBackgroundColor={Color.themeBgColorNegotiator}
+      statusBarBackgroundColor={userRole == 'Qbid Member'
+      ? Color.themeBgColor
+      : userRole == 'Qbid Negotiator'
+      ? Color.themeBgColorNegotiator
+      : Color.themebgBusinessQbidder}
       statusBarContentStyle={'light-content'}
       showHeader={true}
       showBack={true}
-      headerColor={Color.themeBgColorNegotiator}
+      headerColor={userRole == 'Qbid Member'
+      ? Color.themeBgColor
+      : userRole == 'Qbid Negotiator'
+      ? Color.themeBgColorNegotiator
+      : Color.themebgBusinessQbidder}
       >
          <LinearGradient
         style={{
@@ -238,7 +249,11 @@ const SeeAllNegotiator = props => {
         }}
         start={{x: 0, y: 0}}
         end={{x: 1, y: 0}}
-        colors={Color.themeBgColorNegotiator}>
+        colors={userRole == 'Qbid Member'
+        ? Color.themeBgColor
+        : userRole == 'Qbid Negotiator'
+        ? Color.themeBgColorNegotiator
+        : Color.themebgBusinessQbidder}>
      
         <View
           style={{

@@ -46,65 +46,63 @@ const NegotiatorProfile = props => {
     id: 6,
     quantity: 1,
     price: 200,
-      array : [require('../Assets/Images/shoes2.jpg'),
-    require('../Assets/Images/shoes2.jpg'),
-    require('../Assets/Images/shoes2.jpg'),
-    require('../Assets/Images/shoes2.jpg')
-
+    array: [
+      require('../Assets/Images/shoes2.jpg'),
+      require('../Assets/Images/shoes2.jpg'),
+      require('../Assets/Images/shoes2.jpg'),
+      require('../Assets/Images/shoes2.jpg'),
     ],
-    description : 'Best shoes2 up so far in the market with the comfort',
-    brandName : 'Nike',
-    availbleSizes : ['8','8.5','9','9.5','10'],
-  Reviews : [
+    description: 'Best shoes2 up so far in the market with the comfort',
+    brandName: 'Nike',
+    availbleSizes: ['8', '8.5', '9', '9.5', '10'],
+    Reviews: [
       {
-        name : 'John',
-        rating : 3,
-        description : 'good Product',
-        image : require('../Assets/Images/basicman.jpg')
+        name: 'John',
+        rating: 3,
+        description: 'good Product',
+        image: require('../Assets/Images/basicman.jpg'),
       },
       {
-        name : 'John bro',
-        rating : 5,
-        description : 'Very good Product',
-        image : require('../Assets/Images/basicman.jpg')
+        name: 'John bro',
+        rating: 5,
+        description: 'Very good Product',
+        image: require('../Assets/Images/basicman.jpg'),
       },
       {
-        name : 'John bro',
-        rating : 5,
-        description : 'Very good Product',
-        image : require('../Assets/Images/basicman.jpg')
+        name: 'John bro',
+        rating: 5,
+        description: 'Very good Product',
+        image: require('../Assets/Images/basicman.jpg'),
       },
       {
-        name : 'John bro',
-        rating : 5,
-        description : 'Very good Product',
-        image : require('../Assets/Images/basicman.jpg')
+        name: 'John bro',
+        rating: 5,
+        description: 'Very good Product',
+        image: require('../Assets/Images/basicman.jpg'),
       },
       {
-        name : 'John bro',
-        rating : 5,
-        description : 'Very good Product',
-        image : require('../Assets/Images/basicman.jpg')
+        name: 'John bro',
+        rating: 5,
+        description: 'Very good Product',
+        image: require('../Assets/Images/basicman.jpg'),
       },
     ],
-    availbleColor : ['Red','Yellow','grey','pink','blue'],
-
-  }
+    availbleColor: ['Red', 'Yellow', 'grey', 'pink', 'blue'],
+  };
 
   const userRole = useSelector(state => state.commonReducer.selectedRole);
 
-
-
- 
   return (
     <ScreenBoiler
       showHeader={true}
       title={'Details'}
-      statusBarBackgroundColor={ userRole == 'Qbid Member'
-      ? Color.blue
-      : userRole == 'Qbid Negotiator'
-      ? Color.themeColor
-      : Color.black}
+      statusBarBackgroundColor={
+        userRole == 'Qbid Member'
+          ? Color.blue
+          : userRole == 'Qbid Negotiator'
+          ? Color.themeColor
+          : Color.black
+      }
       statusBarContentStyle={'dark-content'}
       // headerColor={Color.white}
       headerType={1}
@@ -138,7 +136,6 @@ const NegotiatorProfile = props => {
             }}>
             {detail?.name}
           </CustomText>
-         
         </View>
         <FlatList
           style={styles.bannerView}
@@ -223,7 +220,6 @@ const NegotiatorProfile = props => {
             }}>
             {numeral(detail?.price).format('$0,0.0')}
           </CustomText>
-        
         </View>
         <ShowMoreAndShowLessText
           style={{
@@ -274,7 +270,6 @@ const NegotiatorProfile = props => {
             }}>
             Available Sizes
           </CustomText>
-          
         </View>
         <View
           style={{
@@ -292,7 +287,6 @@ const NegotiatorProfile = props => {
             }}>
             Available Colors
           </CustomText>
-         
         </View>
         <CustomText
           isBold

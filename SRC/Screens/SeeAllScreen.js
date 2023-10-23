@@ -18,6 +18,8 @@ import LinearGradient from 'react-native-linear-gradient';
 
 const SeeAllScreen = props => {
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
+  const userRole = useSelector(state => state.commonReducer.selectedRole);
+
   const type = props?.route?.params?.type;
 
   const [searchData, setSearchData] = useState('');
@@ -197,7 +199,11 @@ const SeeAllScreen = props => {
   ];
   return (
     <ScreenBoiler
-      statusBarBackgroundColor={Color.themeBgColor}
+      statusBarBackgroundColor={userRole == 'Qbid Member'
+      ? Color.themeBgColor
+      : userRole == 'Qbid Negotiator'
+      ? Color.themeBgColorNegotiator
+      : Color.themebgBusinessQbidder}
       statusBarContentStyle={'dark-content'}
       showHeader={true}
       showBack={true}>
@@ -207,7 +213,11 @@ const SeeAllScreen = props => {
         }}
         start={{x: 0, y: 0}}
         end={{x: 1, y: 0}}
-        colors={Color.themeBgColor}>
+        colors={userRole == 'Qbid Member'
+        ? Color.themeBgColor
+        : userRole == 'Qbid Negotiator'
+        ? Color.themeBgColorNegotiator
+        : Color.themebgBusinessQbidder}>
       {/* <ScrollView
         showsVerticalScrollIndicator={false}
         style={styles.container}

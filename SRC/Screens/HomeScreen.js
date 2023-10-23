@@ -34,7 +34,7 @@ const HomeScreen = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [showMultiImageModal, setShowMultiImageModal] = useState(false);
+  const [showMultiImageModal, setShowMultiImageModal] = useState(false);  
   const [multiImages, setMultiImages] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedView, setSelectedView] = useState('');
@@ -490,13 +490,13 @@ const HomeScreen = () => {
       <CustomAlertModal
         isModalVisible={visible}
         onClose={() => {
-          setVisible(false);
+          setVisible(false); 
         }}
         onOKPress={() => {
           setVisible(false);
           BackHandler.exitApp();
-        }}
-        title={'Are you sure !!'}
+        }} 
+        title={'Are you sure !!'} 
         message={'You Want to exit the App ?'}
         iconType={2}
         areYouSureAlert

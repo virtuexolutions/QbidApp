@@ -26,7 +26,8 @@ const JobCard = ({fromSeeAll, style, onPress}) => {
           styles.joccard,
           fromSeeAll && {
             width: windowWidth * 0.46,
-            height: windowHeight * 0.22,
+            paddingVertical:moderateScale(10,0.6)
+            // height: windowHeight * 0.22,
           },
           style,
         ]}>
@@ -93,6 +94,7 @@ const JobCard = ({fromSeeAll, style, onPress}) => {
             flexDirection: 'row',
             marginTop: moderateScale(10, 0.3),
             justifyContent: 'space-between',
+            paddingHorizontal:moderateScale(2,0.6)
           }}>
           <View>
             <CustomText
@@ -131,10 +133,11 @@ const JobCard = ({fromSeeAll, style, onPress}) => {
             </CustomText>
           </View>
         </View>
+
         <CustomButton
           text={'View Details'}
           textColor={Color.white}
-          width={fromSeeAll && windowWidth * 0.18}
+          width={fromSeeAll && windowWidth * 0.19}
           height={fromSeeAll && windowHeight * 0.03}
           marginTop={moderateScale(10, 0.3)}
           onPress={() => {
@@ -149,7 +152,7 @@ const JobCard = ({fromSeeAll, style, onPress}) => {
           // borderWidth={2}
           borderRadius={moderateScale(30, 0.3)}
           alignSelf={'flex-start'}
-          fontSize={fromSeeAll ? moderateScale(8, 0.6) : moderateScale(7, 0.6)}
+          fontSize={fromSeeAll ? moderateScale(7, 0.6) : moderateScale(7, 0.6)}
         />
       </TouchableOpacity>
 
@@ -257,8 +260,9 @@ export default JobCard;
 const styles = ScaledSheet.create({
   joccard: {
     marginHorizontal: moderateScale(5, 0.6),
-    width: windowWidth * 0.315,
-    height: windowHeight * 0.2,
+    width: windowWidth * 0.37,
+    paddingVertical:moderateScale(5,0.6),
+    // height: windowHeight * 0.2,
     borderRadius: moderateScale(10, 0.6),
     backgroundColor: Color.white,
     marginTop: moderateScale(10, 0.3),

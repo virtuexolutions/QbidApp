@@ -11,7 +11,11 @@ import ScreenBoiler from '../Components/ScreenBoiler';
 import LinearGradient from 'react-native-linear-gradient';
 import Color from '../Assets/Utilities/Color';
 import {windowHeight, windowWidth} from '../Utillity/utils';
-import {moderateScale, ScaledSheet} from 'react-native-size-matters';
+import {
+  moderateScale,
+  moderateVerticalScale,
+  ScaledSheet,
+} from 'react-native-size-matters';
 import CustomImage from '../Components/CustomImage';
 import ImagePickerModal from '../Components/ImagePickerModal';
 import Constants from '../Assets/Utilities/Constants';
@@ -19,6 +23,7 @@ import RatingComponent from '../Components/RatingComponent';
 import CustomText from '../Components/CustomText';
 import {Icon} from 'native-base';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import ImageView from 'react-native-image-viewing';
 import Detailcards from '../Components/Detailcards';
@@ -27,8 +32,10 @@ import {ActivityIndicator} from 'react-native';
 import CustomModal from '../Components/CustomModal';
 import TextInputWithTitle from '../Components/TextInputWithTitle';
 import CustomDropDownMultiSelect from '../Components/CustomDropDownMultiSelect';
+import {useNavigation} from '@react-navigation/native';
 
 const NegotiatorPortfolio = () => {
+  const navigation = useNavigation();
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const [image, setImage] = useState({});
@@ -493,10 +500,10 @@ const NegotiatorPortfolio = () => {
               marginTop={moderateScale(20, 0.3)}
               bgColor={
                 userRole == 'Qbid Member'
-                ? Color.blue
-                : userRole == 'Qbid Negotiator'
-                ? Color.themeColor
-                : Color.black
+                  ? Color.blue
+                  : userRole == 'Qbid Negotiator'
+                  ? Color.themeColor
+                  : Color.black
               }
               borderRadius={moderateScale(30, 0.3)}
               disabled={!availibility}
@@ -529,17 +536,36 @@ const NegotiatorPortfolio = () => {
               // width: windowWidth,
               // height: windowHeight * 0.89,
               alignItems: 'center',
-              paddingVertical: moderateScale(30, 0.6),
+              paddingVertical: moderateScale(10, 0.6),
             }}
             start={{x: 0, y: 0}}
             end={{x: 1, y: 0}}
             colors={
               userRole == 'Qbid Member'
-              ? Color.themeBgColor
-              : userRole == 'Qbid Negotiator'
-              ? Color.themeBgColorNegotiator
-              : Color.themebgBusinessQbidder
+                ? Color.themeBgColor
+                : userRole == 'Qbid Negotiator'
+                ? Color.themeBgColorNegotiator
+                : Color.themebgBusinessQbidder
             }>
+            <TouchableOpacity
+              onPress={() => {
+                setEditProfile(false);
+              }}
+              activeOpacity={0.7}
+              style={{
+                width: windowWidth * 0.15,
+                paddingVertical: moderateScale(10, 0.6),
+                alignSelf: 'flex-start',
+              }}>
+              <Icon
+                name="arrowleft"
+                as={AntDesign}
+                style={styles.icon}
+                color={Color.white}
+                size={moderateScale(20, 0.3)}
+              />
+            </TouchableOpacity>
+
             <TextInputWithTitle
               title={'First Name'}
               secureText={false}
@@ -794,10 +820,10 @@ const NegotiatorPortfolio = () => {
               // }}
               bgColor={
                 userRole == 'Qbid Member'
-                ? Color.blue
-                : userRole == 'Qbid Negotiator'
-                ? Color.themeColor
-                : Color.black
+                  ? Color.blue
+                  : userRole == 'Qbid Negotiator'
+                  ? Color.themeColor
+                  : Color.black
               }
               // borderColor={Color.white}
               // borderWidth={2}
@@ -940,11 +966,13 @@ const DetailContainer = ({
       <Icon
         name={imageName}
         as={type}
-        color={ userRole == 'Qbid Member'
+        color={
+          userRole == 'Qbid Member'
             ? Color.blue
             : userRole == 'Qbid Negotiator'
             ? Color.themeColor
-            : Color.black}
+            : Color.black
+        }
         size={moderateScale(20, 0.6)}
       />
       <CustomText style={styles.title}>{title}</CustomText>

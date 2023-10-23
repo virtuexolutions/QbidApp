@@ -102,17 +102,48 @@ const LoginScreen = () => {
   //     });
   // };
 
-  const getImageData = async () => {
-    try {
-      console.log('image uri =========== ??', images[0]?.uri);
-      const response = await RNFetchBlob.fs.readFile(images[0]?.uri, 'base64');
-      const base64Data = response;
-      // return console.log("🚀 ~ file: LoginScreen.js:66 ~ getImageData ~ base64Data:", base64Data)
-      setBaseImage(base64Data);
-    } catch (error) {
-      console.log('Error reading image:', error);
+  const Login = async () => {
+    const body = {
+      email:email,
+      password:password,
+      // photo: image,
+    };
+
+    for (let key in body) {
+      if (body[key] == '') {
+        return Platform.OS == 'android'
+          ? ToastAndroid.show(` ${key} field is empty`, ToastAndroid.SHORT)
+          : Alert.alert(` ${key} field is empty`);
+      }
     }
+
+    if (!validateEmail(email)) {
+      return Platform.OS == 'android'
+        ? ToastAndroid.show('email is not validate', ToastAndroid.SHORT)
+        : Alert.alert('email is not validate');
+    }
+    if (password.length < 8) {
+      return Platform.OS == 'android'
+        ? ToastAndroid.show(
+            'Password should atleast 8 character long',
+            ToastAndroid.SHORT,
+          )
+        : Alert.alert('Password should atleast 8 character long');
+    }
+
+
+    const url = 'login';
+    setIsLoading(true);
+    const response = await Post(url, body, apiHeader());
+    setIsLoading(false);
+    if (response != undefined) {
+     console.log('VERIFY=========>>>>>>', response?.data?.user_info);
+      dispatch(setUserData(response?.data?.user_info))
+      dispatch(setSelectedRole(response?.data?.user_info?.role))
+      dispatch(setUserLogin(response?.data?.token))
+      }
   };
+
 
   useEffect(() => {
     dispatch(setSelectedRole(selectedRole));
@@ -135,7 +166,6 @@ const LoginScreen = () => {
     <>
       <CustomStatusBar
         backgroundColor={
-         
           userRole == 'Qbid Member'
             ? Color.blue
             : userRole == 'Qbid Negotiator'
@@ -267,7 +297,8 @@ const LoginScreen = () => {
             height={windowHeight * 0.07}
             marginTop={moderateScale(10, 0.3)}
             onPress={() => {
-              navigationService.navigate('AddCard');
+              Login()
+              // navigationService.navigate('AddCard');
               // handleLogin('Receptionist');
               // alert('Action to be happened')
               // navigationService.navigate('HomeScreen')
@@ -290,7 +321,7 @@ const LoginScreen = () => {
             </CustomText>
 
             <TouchableOpacity
-              activeOpacity={0.8}
+             activeOpacity={0.8}
               style={{marginLeft: windowWidth * 0.01}}
               onPress={() => navigationService.navigate('Signup')}>
               <CustomText
@@ -298,11 +329,11 @@ const LoginScreen = () => {
                   styles.txt4,
                   {
                     color:
-                    userRole == 'Qbid Member'
-                      ? Color.blue
-                      : userRole == 'Qbid Negotiator'
-                      ? Color.themeColor
-                      : Color.black,
+                      userRole == 'Qbid Member'
+                        ? Color.blue
+                        : userRole == 'Qbid Negotiator'
+                        ? Color.themeColor
+                        : Color.black,
                   },
                 ]}>
                 {'Sign Up'}
@@ -316,12 +347,14 @@ const LoginScreen = () => {
             }}
             style={[
               styles.txt3,
-              { color:
-                userRole == 'Qbid Member'
-                  ? Color.blue
-                  : userRole == 'Qbid Negotiator'
-                  ? Color.themeColor
-                  : Color.black,},
+              {
+                color:
+                  userRole == 'Qbid Member'
+                    ? Color.blue
+                    : userRole == 'Qbid Negotiator'
+                    ? Color.themeColor
+                    : Color.black,
+              },
             ]}>
             {'Quick App Tour'}
           </CustomText>

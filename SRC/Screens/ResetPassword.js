@@ -27,9 +27,9 @@ import {ActivityIndicator} from 'react-native';
 import {Post} from '../Axios/AxiosInterceptorFunction';
 import CardContainer from '../Components/CardContainer';
 import CustomHeader from '../Components/CustomHeader';
-import { Icon } from 'native-base';
-import { useNavigation } from '@react-navigation/native';
-import { setUserToken } from '../Store/slices/auth';
+import {Icon} from 'native-base';
+import {useNavigation} from '@react-navigation/native';
+import {setUserToken} from '../Store/slices/auth';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -40,8 +40,9 @@ const ResetPassword = props => {
   );
   const dispatch = useDispatch();
   const navigationN = useNavigation();
-  const phoneNumber = props?.route?.params?.phone;
-  const [phone, setPhone] = useState('');
+  const phoneNumber = props?.route?.params?.phoneNumber;
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   // const sendOTP = async () => {
@@ -70,16 +71,59 @@ const ResetPassword = props => {
   //   }
   // };
 
+  const PasswordReset = async () => {
+    const url = 'password/reset';
+
+    const body = {
+      email: phoneNumber,
+      password: password,
+      confirm_password: confirmPassword,
+    };
+
+    for (let key in body) {
+      if (body[key] == '') {
+        return Platform.OS == 'android'
+          ? ToastAndroid.show(`${key} field is empty`, ToastAndroid.SHORT)
+          : Alert.alert(`${key} field is empty`);
+      }
+    }
+    if (password.length < 8) {
+      return Platform.OS == 'android'
+        ? ToastAndroid.show(
+            'Password should atleast 8 character long',
+            ToastAndroid.SHORT,
+          )
+        : Alert.alert('Password should atleast 8 character long');
+    }
+    if (password != confirmPassword) {
+      return Platform.OS == 'android'
+        ? ToastAndroid.show('Password does not match', ToastAndroid.SHORT)
+        : Alert.alert('Password does not match');
+    }
+
+    setIsLoading(true);
+
+    const response = await Post(url, body, apiHeader());
+    setIsLoading(false);
+
+    if (response != undefined) {
+      console.log('RSEST DATA ======>>>>>>', response?.data);
+      Platform.OS === 'android'
+        ? ToastAndroid.show('Password Have been Reset', ToastAndroid.SHORT)
+        : Alert.alert('Password Has been Reset');
+      navigationService.navigate('LoginScreen');
+    }
+  };
   return (
     <>
       <CustomStatusBar
-       backgroundColor={
-        SelecteduserRole == 'Qbid Member'
-        ? Color.blue
-        : SelecteduserRole == 'Qbid Negotiator'
-        ? Color.themeColor
-        : Color.black
-      }
+        backgroundColor={
+          SelecteduserRole == 'Qbid Member'
+            ? Color.blue
+            : SelecteduserRole == 'Qbid Negotiator'
+            ? Color.themeColor
+            : Color.black
+        }
         barStyle={'light-content'}
       />
       <ImageBackground
@@ -91,40 +135,41 @@ const ResetPassword = props => {
         resizeMode={'stretch'}
         source={
           SelecteduserRole == 'Qbid Member'
-          ? require('../Assets/Images/backgroundImage.png')
-          : SelecteduserRole == 'Qbid Negotiator'
-          ? require('../Assets/Images/backgroungNegotiator.png')
-          : require('../Assets/Images/businessQibd.png')
+            ? require('../Assets/Images/backgroundImage.png')
+            : SelecteduserRole == 'Qbid Negotiator'
+            ? require('../Assets/Images/backgroungNegotiator.png')
+            : require('../Assets/Images/businessQibd.png')
         }>
-            <TouchableOpacity
-            activeOpacity={0.8}
+        <TouchableOpacity
+          activeOpacity={0.8}
           style={{
-            position : 'absolute',
-            top : moderateScale(20,0.3),
-            left : moderateScale(20,0.3),
+            position: 'absolute',
+            top: moderateScale(20, 0.3),
+            left: moderateScale(20, 0.3),
             height: moderateScale(30, 0.3),
             width: moderateScale(30, 0.3),
             borderRadius: moderateScale(5, 0.3),
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor:'white',
-            zIndex : 1
+            backgroundColor: 'white',
+            zIndex: 1,
           }}>
-         
-            <Icon
-              name={'arrowleft'}
-              as={AntDesign}
-              size={moderateScale(22, 0.3)}
-              color={ SelecteduserRole == 'Qbid Member'
-              ? Color.blue
-              : SelecteduserRole == 'Qbid Negotiator'
-              ? Color.themeColor
-              : Color.black}
-              onPress={()=>{
-                navigationN.goBack()
-              }}
-            />
-            </TouchableOpacity>
+          <Icon
+            name={'arrowleft'}
+            as={AntDesign}
+            size={moderateScale(22, 0.3)}
+            color={
+              SelecteduserRole == 'Qbid Member'
+                ? Color.blue
+                : SelecteduserRole == 'Qbid Negotiator'
+                ? Color.themeColor
+                : Color.black
+            }
+            onPress={() => {
+              navigationN.goBack();
+            }}
+          />
+        </TouchableOpacity>
         <KeyboardAwareScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
@@ -151,8 +196,8 @@ const ResetPassword = props => {
               titleText={'Enter New Password'}
               secureText={false}
               placeholder={'Enter New Password'}
-              setText={setPhone}
-              value={phone}
+              setText={setPassword}
+              value={password}
               viewHeight={0.07}
               viewWidth={0.75}
               inputWidth={0.7}
@@ -169,9 +214,9 @@ const ResetPassword = props => {
               titleText={'Confirm your new password'}
               secureText={false}
               placeholder={'Confirm your new password'}
-              setText={setPhone}
-              value={phone}
-              viewHeight={0.07}
+              setText={setConfirmPassword}
+              value={confirmPassword}
+              viewHeight={0.07}  
               viewWidth={0.75}
               inputWidth={0.7}
               // border={1}
@@ -196,21 +241,20 @@ const ResetPassword = props => {
               height={windowHeight * 0.06}
               marginTop={moderateScale(20, 0.3)}
               onPress={() => {
-              dispatch(setUserToken({token : 'sadasdawdadas'}))
+                PasswordReset();
+                // dispatch(setUserToken({token: 'sadasdawdadas'}));
               }}
-              bgColor={SelecteduserRole == 'Qbid Member'
-              ? Color.blue
-              : SelecteduserRole == 'Qbid Negotiator'
-              ? Color.themeColor
-              : Color.black} 
+              bgColor={
+                SelecteduserRole == 'Qbid Member'
+                  ? Color.blue
+                  : SelecteduserRole == 'Qbid Negotiator'
+                  ? Color.themeColor
+                  : Color.black
+              }
               // borderColor={Color.white}
               // borderWidth={2}
               borderRadius={moderateScale(30, 0.3)}
             />
-
-           
-             
-            
           </CardContainer>
         </KeyboardAwareScrollView>
       </ImageBackground>

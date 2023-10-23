@@ -200,9 +200,9 @@ const MyAccounts = props => {
           </View>
 
           <TextInputWithTitle
-            title={'First Name'}
+            title={'First Name'} 
             secureText={false}
-            placeholder={'First Name'}
+            placeholder={'First Name'}    
             setText={setFirstName}
             value={firstName}
             viewHeight={0.07}
