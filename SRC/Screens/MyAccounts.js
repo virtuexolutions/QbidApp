@@ -22,7 +22,7 @@ import CustomImage from '../Components/CustomImage';
 import {setUserData} from '../Store/slices/common';
 import {Patch, Post} from '../Axios/AxiosInterceptorFunction';
 import ImagePickerModal from '../Components/ImagePickerModal';
-import {formRegEx, formRegExReplacer, imageUrl} from '../Config';
+// import {formRegEx, formRegExReplacer, imageUrl} from '../Config';
 import CustomButton from '../Components/CustomButton';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -68,24 +68,30 @@ const MyAccounts = props => {
         ]
       : [require('../Assets/Images/man1.jpg')];
 
+
+
+
   const EditProfile = async () => {
     const params = {
       first_name: firstName,
       last_name: lastName,
-      phone: phone,
       email: email,
-      country: country,
+      phone: contact,
+      address: address,
+      city:city,
+      state:state,
+      zipCode:zipCode,
     };
     const formdata = new FormData();
     for (let key in params) {
       if ([undefined, '', null].includes(params[key])) {
         return Platform.OS == 'android'
           ? ToastAndroid.show(
-              `${key.replace(formRegEx, formRegExReplacer)} is empty`,
+              `${key} is empty`,
               ToastAndroid.SHORT,
             )
           : Alert.alert(
-              `${key.replace(formRegEx, formRegExReplacer)} is empty`,
+              `${key} is empty`,
             );
       }
       formdata.append(key, params[key]);
@@ -93,7 +99,7 @@ const MyAccounts = props => {
     if (Object.keys(imageObject).length > 0) {
       formdata.append('photo', imageObject);
     }
-    console.log(formdata);
+    // console.log(formdata);
 
     const url = 'auth/profile';
     setIsLoading(true);
@@ -101,7 +107,7 @@ const MyAccounts = props => {
     setIsLoading(false);
 
     if (response !== undefined) {
-      console.log('response?.data?.data?.user', response?.data);
+      // console.log('response?.data?.data?.user', response?.data);
       dispatch(setUserData(response?.data?.user_info));
 
       Platform.OS == 'android'
@@ -339,9 +345,9 @@ const MyAccounts = props => {
             width={windowWidth * 0.9}
             height={windowHeight * 0.07}
             marginTop={moderateScale(20, 0.3)}
-            // onPress={() => {
-            //   dispatch(setUserToken({token: 'dasdawradawdawrtfeasfzs'}));
-            // }}
+             onPress={() => {
+              EditProfile()
+             }}
             bgColor={
               userRole == 'Qbid Member'
             ? Color.blue

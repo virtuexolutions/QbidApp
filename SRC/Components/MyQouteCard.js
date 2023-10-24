@@ -11,12 +11,13 @@ import CustomButton from './CustomButton';
 import navigationService from '../navigationService';
 
 const MyQouteCard = ({item}) => {
+  console.log("🚀 ~ file: MyQouteCard.js:14 ~ MyQouteCard ~ item:", item)
   return (
     <TouchableOpacity
       activeOpacity={0.9}
       style={styles.card}
       onPress={() => {
-        navigationService.navigate('JobDetails');
+        navigationService.navigate('JobDetails', {item:item});
       }}>
       <View
         style={{
@@ -61,7 +62,7 @@ const MyQouteCard = ({item}) => {
         <CustomImage
           source={
             item?.status == 'pending'
-              ? {uri: item?.image}
+              ? {uri: item?.images[0]?.image}
               : item?.negotiatorImage
           }
           style={{
@@ -69,7 +70,7 @@ const MyQouteCard = ({item}) => {
             height: '100%',
           }}
           onPress={() => {
-            navigationService.navigate('JobDetails');
+            navigationService.navigate('JobDetails', {item:item});
           }}
         />
       </View>
@@ -88,7 +89,7 @@ const MyQouteCard = ({item}) => {
             fontSize: moderateScale(14, 0.3),
             width: windowWidth * 0.3,
           }}>
-          {item?.qouteName}
+          {item?.title}
         </CustomText>
 
         <CustomText numberOfLines={1} style={styles.entity} isBold>

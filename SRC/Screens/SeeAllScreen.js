@@ -21,6 +21,8 @@ const SeeAllScreen = props => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
 
   const type = props?.route?.params?.type;
+  const data = props?.route?.params?.data;
+
 
   const [searchData, setSearchData] = useState('');
   const [showSearch, setShowSearch] = useState(false);
@@ -261,7 +263,8 @@ const SeeAllScreen = props => {
         </View>
         
         <FlatList
-          data={type == 'negotiator' ? negotiatorsArray : myQoutesArray}
+          // data={type == 'negotiator' ? negotiatorsArray : myQoutesArray}
+          data={data}
           numColumns={type == 'negotiator' ? 2 : 1}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{

@@ -9,17 +9,35 @@ import navigationService from '../navigationService';
 import CustomButton from './CustomButton';
 import {useSelector} from 'react-redux';
 import Modal from 'react-native-modal';
+import { Post } from '../Axios/AxiosInterceptorFunction';
+import { ActivityIndicator } from 'react-native';
 
 const NegotiatorCard = ({item, fromSeeAll}) => {
+  const token = useSelector(state => state.authReducer.token)
   const [isLoading, setIsLoading] = useState(false);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const [isModalVisible, setIsModalVisible] = useState(false);
+
+  
+const approveRequest =async(status)=>{
+  const url = ''
+  setIsLoading(true)
+  const response = await Post(url, {status:status}, apiHeader(token))
+  setIsLoading(false)
+  
+  if(response != undefined){
+
+    // console.log("🚀 ~ file: HomeScreen.js:85 ~ approveRequest ~ response:", response?.data)
+    toggleModal();
+    
+  }
+}
 
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
 
-  console.log('Proposal', item);
+  // console.log('Proposal', item);
   return (
     <>
       <View
@@ -189,7 +207,7 @@ const NegotiatorCard = ({item, fromSeeAll}) => {
             }}>
             <CustomButton
               isBold
-              text={'Approve'}
+              text={isLoading ? <ActivityIndicator size={'small'} color={'white'}/>:'Approve'}
               textColor={Color.white}
               width={windowWidth * 0.25}
               height={windowHeight * 0.04}
@@ -198,12 +216,14 @@ const NegotiatorCard = ({item, fromSeeAll}) => {
               borderRadius={moderateScale(30, 0.3)}
               fontSize={moderateScale(11, 0.6)}
               onPress={() => {
-                toggleModal();
+                approveRequest('approve')
+
+                
               }}
             />
             <CustomButton
               isBold
-              text={'Deciline'}
+              text={isLoading ? <ActivityIndicator size={'small'} color={'white'}/>:'Approve'}
               textColor={Color.white}
               width={windowWidth * 0.25}
               height={windowHeight * 0.04}
@@ -212,7 +232,7 @@ const NegotiatorCard = ({item, fromSeeAll}) => {
               borderRadius={moderateScale(30, 0.3)}
               fontSize={moderateScale(11, 0.6)}
               onPress={() => {
-                toggleModal();
+                approveRequest('decline')
               }}
             
             />

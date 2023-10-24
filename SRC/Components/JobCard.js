@@ -10,8 +10,11 @@ import CustomButton from './CustomButton';
 import navigationService from '../navigationService';
 import Modal from 'react-native-modal';
 import { useSelector } from 'react-redux';
+import numeral from 'numeral';
 
-const JobCard = ({fromSeeAll, style, onPress}) => {
+const JobCard = ({fromSeeAll, style, onPress,item}) => {
+console.log("🚀 ~ file: JobCard.js:15 ~ JobCard ~ item:", item)
+  
   const [modalVisible, setModalVisible] = useState(false);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
 
@@ -74,7 +77,7 @@ const JobCard = ({fromSeeAll, style, onPress}) => {
                 : moderateScale(9, 0.6),
               marginLeft: moderateScale(5, 0.3),
             }}>
-            Auto Parts
+           {item?.title}
           </CustomText>
         </View>
         <CustomText
@@ -86,8 +89,7 @@ const JobCard = ({fromSeeAll, style, onPress}) => {
             color: '#575757',
             marginTop: moderateScale(5, 0.3),
           }}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum
-          dolor sit amet, consectetur adipiscing elit
+        {item?.notes}
         </CustomText>
         <View
           style={{
@@ -102,7 +104,7 @@ const JobCard = ({fromSeeAll, style, onPress}) => {
               style={{
                 fontSize: moderateScale(9, 0.6),
               }}>
-              $19.857.00
+             {numeral(item?.quoted_price).format('$0,0a')}
             </CustomText>
             <CustomText
               style={{
@@ -122,7 +124,7 @@ const JobCard = ({fromSeeAll, style, onPress}) => {
               style={{
                 fontSize: moderateScale(9, 0.6),
               }}>
-              10%
+             {`${item?.offering_percentage}%`}
             </CustomText>
             <CustomText
               style={{

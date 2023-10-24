@@ -1,4 +1,11 @@
-import {BackHandler, FlatList, StyleSheet, Text, View} from 'react-native';
+import {
+  ActivityIndicator,
+  BackHandler,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import Color from '../Assets/Utilities/Color';
@@ -23,14 +30,82 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import JobCard from '../Components/JobCard';
 import Modal from 'react-native-modal';
+import {Get} from '../Axios/AxiosInterceptorFunction';
 
 const NegotiatorHomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
+  const token = useSelector(state => state.authReducer.token);
   const [searchData, setSearchData] = useState('');
   const [showFilter, setShowFilter] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState('');
   const [visible, setVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [recommended, setRecommended] = useState([]);
+  console.log(
+    '🚀 ~ file: NegotiatorHomeScreen.js:38 ~ NegotiatorHomeScreen ~ recommended:',
+    recommended,
+  );
+  // const [workingOn, setWorkingOn] = useState([])
+  // const [seekingHelp, setseekingHelp] = useState([])
+
+  const getRecommended = async () => {
+    const url = 'auth/negotiator/quote/recommended';
+    // setIsLoading(true);
+    const response = await Get(url, token);
+    // setIsLoading(false);
+
+    if (response != undefined) {
+      console.log(
+        '🚀 ~ file: NegotiatorHomeScreen.js:50 ~ getRecommended ~ response:',
+        response?.data,
+      );
+      setRecommended(response?.data?.quote_info);
+    }
+  };
+
+  const getWorkingOn = async () => {
+    const url = 'auth/negotiator/quote/recommended';
+    setIsLoading(true);
+    const response = await Get(url, token);
+    setIsLoading(false);
+
+    if (response != undefined) {
+      // console.log("🚀 ~ file: NegotiatorHomeScreen.js:63 ~ getWorkingOn ~ response:", response)
+    }
+  };
+
+  const getSeekingHelp = async () => {
+    const url = 'auth/negotiator/quote/recommended';
+    setIsLoading(true);
+    const response = await Get(url, token);
+    setIsLoading(false);
+
+    if (response != undefined) {
+      // console.log("🚀 ~ file: NegotiatorHomeScreen.js:77 ~ getSeekingHelp ~ response:", response)
+    }
+  };
+
+  const getProposals = async () => {
+    setIsLoading(true);
+    const [a, b] = await Promise.all([
+      getRecommended(),
+      getWorkingOn(),
+      getSeekingHelp(),
+    ]);
+    setIsLoading(false);
+
+    console.log(
+      '🚀 ~ file: NegotiatorHomeScreen.js:45 ~ getProposals ~ result:',
+      a,
+    );
+  };
+
+  useEffect(() => {
+    // getRecommended();
+    getProposals();
+  }, []);
+
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', () => {
       setVisible(true);
@@ -39,18 +114,22 @@ const NegotiatorHomeScreen = () => {
 
   return (
     <ScreenBoiler
-      statusBarBackgroundColor={ userRole == 'Qbid Member'
-      ? Color.themeBgColor
-      : userRole == 'Qbid Negotiator'
-      ? Color.themeBgColorNegotiator
-      : Color.themebgBusinessQbidder}
+      statusBarBackgroundColor={
+        userRole == 'Qbid Member'
+          ? Color.themeBgColor
+          : userRole == 'Qbid Negotiator'
+          ? Color.themeBgColorNegotiator
+          : Color.themebgBusinessQbidder
+      }
       statusBarContentStyle={'dark-content'}
       showHeader={true}
-      headerColor={ userRole == 'Qbid Member'
-      ? Color.themeBgColor
-      : userRole == 'Qbid Negotiator'
-      ? Color.themeBgColorNegotiator
-      : Color.themebgBusinessQbidder}
+      headerColor={
+        userRole == 'Qbid Member'
+          ? Color.themeBgColor
+          : userRole == 'Qbid Negotiator'
+          ? Color.themeBgColorNegotiator
+          : Color.themebgBusinessQbidder
+      }
       //  showBack={true}
     >
       <LinearGradient
@@ -60,11 +139,13 @@ const NegotiatorHomeScreen = () => {
         }}
         start={{x: 0, y: 0}}
         end={{x: 1, y: 0}}
-        colors={ userRole == 'Qbid Member'
-        ? Color.themeBgColor
-        : userRole == 'Qbid Negotiator'
-        ? Color.themeBgColorNegotiator
-        : Color.themebgBusinessQbidder}>
+        colors={
+          userRole == 'Qbid Member'
+            ? Color.themeBgColor
+            : userRole == 'Qbid Negotiator'
+            ? Color.themeBgColorNegotiator
+            : Color.themebgBusinessQbidder
+        }>
         <ScrollView
           showsVerticalScrollIndicator={false}
           style={styles.container}
@@ -180,99 +261,119 @@ const NegotiatorHomeScreen = () => {
             </View>
           </View>
 
-          <View style={styles.recommendedContainer}>
-            <View style={styles.row}>
-              <CustomText isBold style={styles.heading}>
-                Recommended
-              </CustomText>
-              <CustomText
-                onPress={() => {
-                  navigationService.navigate('SeeAllNegotiator', {
-                    type: 'recommended',
-                  });
-                }}
-                style={styles.viewall}>
-                View all
-              </CustomText>
+          {isLoading ? (
+            <View
+              style={{
+                width: windowWidth,
+                height: windowHeight * 0.4,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <ActivityIndicator size={'large'} color={'white'} />
             </View>
-            <FlatList
-              data={[1, 2, 3, 4, 5]}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{
-                paddingHorizontal: moderateScale(15, 0.3),
-              }}
-              renderItem={({item, index}) => {
-                return (
-                  <JobCard
+          ) : (
+            <>
+              <View style={styles.recommendedContainer}>
+                <View style={styles.row}>
+                  <CustomText isBold style={styles.heading}>
+                    Recommended
+                  </CustomText>
+                  <CustomText
                     onPress={() => {
-                      navigationService.navigate('JobDetails');
+                      navigationService.navigate('SeeAllNegotiator', {
+                        type: 'recommended',
+                        data: recommended,
+                      });
                     }}
-                  />
-                );
-              }}
-            />
-          </View>
-          <View style={styles.recommendedContainer}>
-            <View style={styles.row}>
-              <CustomText isBold style={styles.heading}>
-                Working On
-              </CustomText>
-              <CustomText
-                onPress={() => {
-                  navigationService.navigate('SeeAllNegotiator', {
-                    type: 'Working On',
-                  });
-                }}
-                style={styles.viewall}>
-                View all
-              </CustomText>
-            </View>
-            <FlatList
-              data={[1, 2, 3, 4, 5]}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{
-                paddingHorizontal: moderateScale(15, 0.3),
-              }}
-              renderItem={({item, index}) => {
-                return (
-                  <JobCard
+                    style={styles.viewall}>
+                    View all
+                  </CustomText>
+                </View>
+
+                <FlatList
+                  data={recommended}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={{
+                    paddingHorizontal: moderateScale(15, 0.3),
+                  }}
+                  renderItem={({item, index}) => {
+                    return (
+                      <JobCard
+                        item={item}
+                        onPress={() => {
+                          navigationService.navigate('JobDetails', {item});
+                        }}
+                      />
+                    );
+                  }}
+                />
+              </View>
+              <View style={styles.recommendedContainer}>
+                <View style={styles.row}>
+                  <CustomText isBold style={styles.heading}>
+                    Working On
+                  </CustomText>
+                  <CustomText
                     onPress={() => {
-                      navigationService.navigate('JobDetails');
+                      navigationService.navigate('SeeAllNegotiator', {
+                        type: 'Working On',
+                      });
                     }}
-                  />
-                );
-              }}
-            />
-          </View>
-          <View style={styles.recommendedContainer}>
-            <View style={styles.row}>
-              <CustomText isBold style={styles.heading}>
-                Seekhing Help
-              </CustomText>
-              <CustomText
-                onPress={() => {
-                  navigationService.navigate('SeeAllNegotiator', {
-                    type: 'Job Requests',
-                  });
-                }}
-                style={styles.viewall}>
-                View all
-              </CustomText>
-            </View>
-            <FlatList
-              data={[1, 2, 3, 4, 5]}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{
-                paddingHorizontal: moderateScale(15, 0.3),
-              }}
-              renderItem={({item, index}) => {
-                return <JobCard />;
-              }}
-            />
-          </View>
+                    style={styles.viewall}>
+                    View all
+                  </CustomText>
+                </View>
+
+                <FlatList
+                  data={[1, 2, 3, 4, 5]}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={{
+                    paddingHorizontal: moderateScale(15, 0.3),
+                  }}
+                  renderItem={({item, index}) => {
+                    return (
+                      <JobCard
+                        item={item}
+                        onPress={() => {
+                          navigationService.navigate('JobDetails', {item});
+                        }}
+                      />
+                    );
+                  }}
+                />
+              </View>
+              <View style={styles.recommendedContainer}>
+                <View style={styles.row}>
+                  <CustomText isBold style={styles.heading}>
+                    Seeking Help
+                  </CustomText>
+                  <CustomText
+                    onPress={() => {
+                      navigationService.navigate('SeeAllNegotiator', {
+                        type: 'Job Requests',
+                      });
+                    }}
+                    style={styles.viewall}>
+                    View all
+                  </CustomText>
+                </View>
+
+                <FlatList
+                  data={[1, 2, 3, 4, 5]}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={{
+                    paddingHorizontal: moderateScale(15, 0.3),
+                  }}
+                  renderItem={({item, index}) => {
+                    return <JobCard />;
+                  }}
+                />
+              </View>
+            </>
+          )}
         </ScrollView>
         <CustomStatusModal
           isModalVisible={isModalVisible}
@@ -315,7 +416,7 @@ const styles = ScaledSheet.create({
   },
   percentContainer: {
     width: '49%',
-    paddingVertical:moderateScale(15,0.6),
+    paddingVertical: moderateScale(15, 0.6),
     backgroundColor: 'white',
     borderRadius: moderateScale(10, 0.6),
     paddingLeft: moderateScale(10, 0.6),
@@ -323,7 +424,7 @@ const styles = ScaledSheet.create({
   revenueContainer: {
     width: '100%',
     height: '55%',
-    paddingVertical:moderateScale(10,0.6),
+    paddingVertical: moderateScale(10, 0.6),
 
     backgroundColor: 'white',
     borderRadius: moderateScale(10, 0.6),

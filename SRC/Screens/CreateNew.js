@@ -1,9 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {
-  ActivityIndicator,
-  Linking,
-  View,
-} from 'react-native';
+import {ActivityIndicator, Linking, View} from 'react-native';
 import Color from '../Assets/Utilities/Color';
 import CustomText from '../Components/CustomText';
 import CustomImage from '../Components/CustomImage';
@@ -21,15 +17,17 @@ import LinearGradient from 'react-native-linear-gradient';
 import {FlatList} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import CustomButton from '../Components/CustomButton';
-import SendSMS from 'react-native-sms'
-import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource'
-
-
-
+import {Post} from '../Axios/AxiosInterceptorFunction';
+import {Platform} from 'react-native';
+import {ToastAndroid} from 'react-native';
+import {Alert} from 'react-native';
+import navigationService from '../navigationService';
+import {useNavigation} from '@react-navigation/native';
 
 const CreateNew = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
+  const token = useSelector(state => state.authReducer.token);
   const [qouteTitle, setQouteTitle] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
@@ -39,63 +37,103 @@ const CreateNew = () => {
   const [selectedService, setSelectedService] = useState('');
   const [description, setDescription] = useState('');
   const [multiImages, setMultiImages] = useState([]);
+  // console.log("🚀 ~ file: CreateNew.js:40 ~ CreateNew ~ multiImages:", multiImages)
   const [showMultiImageModal, setShowMultiImageModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const navigation = useNavigation();
 
-//  const someFunction=(image)=> {
-//     const image1 = `https://www.google.com/url?sa=i&url=https%3A%2F%2Fimagepakistan.net%2F&psig=AOvVaw0cHt9oEt6QhxvuG4vCcRy5&ust=1676050033407000&source=images&cd=vfe&ved=0CA8QjRxqFwoTCKin4Yf7iP0CFQAAAAAdAAAAABAE`
-//     const metadata = resolveAssetSource(image1);
-//     const url = 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fimagepakistan.net%2F&psig=AOvVaw0cHt9oEt6QhxvuG4vCcRy5&ust=1676050033407000&source=images&cd=vfe&ved=0CA8QjRxqFwoTCKin4Yf7iP0CFQAAAAAdAAAAABAE';
-//     console.log("🚀 ~ file: CreateNew.js:46 ~ someFunction ~ url", url)
- 
-//     const attachment = {
-//         url: url,
-//         iosType: 'man1.jpg',
-//         iosFilename: 'man1.jpg',
-//         androidType: 'image/*'
-//     };
- 
-//     SendSMS.send({
-//         body: 'The default body of the SMS!',
-//         recipients: ['03112048588'],
-//         successTypes: ['sent', 'queued'],
-//         allowAndroidSendWithoutReadPermission: true,
-//         attachment: attachment
-//     }, (completed, cancelled, error) => {
- 
-//         console.log('SMS Callback: completed: ' + completed + ' cancelled: ' + cancelled + 'error: ' + error);
- 
-//     });
-// }
-  
-  
-//   useEffect(() => {
-//     if(multiImages?.length > 0){
-//       console.log(multiImages[0]?.name)
-//       // Linking.openURL(`sms:03112048588?body=${multiImages[0].uri}`)
-//       someFunction(multiImages[0]?.name)
-//     }
+  const publishQuote = async () => {
+    const url = 'auth/member/quote';
+    const body = {
+      title: qouteTitle,
+      city: city,
+      state: state,
+      quoted_price: vendorQoutedPrice,
+      asking_price: askingPrice,
+      offering_percentage: offeringPercent,
+      service_preference: selectedService,
+      // vendorList: multiImages,
+      notes: description,
+    };
+
+    const formData = new FormData();
+    for (let key in body) {
+      if (body[key] == '') {
+        return Platform.OS == 'android'
+          ? ToastAndroid.show(`${key} is required`, ToastAndroid.SHORT)
+          : Alert.alert(`${key} is required`);
+      } else {
+        formData.append(key, body[key]);
+      }
+    }
+    multiImages?.map((item, index) => formData.append(`images[${index}]`, item));
+    console.log("🚀 ~ file: CreateNew.js:67 ~ publishQuote ~ formData:", formData)
+
+    setIsLoading(true);
+    const response = await Post(url, formData, apiHeader(token));
+    setIsLoading(false);
+    if (response != undefined) {
+      // console.log(
+      //   '🚀 ~ file: CreateNew.js:81 ~ publishQuote ~ response:',
+      //   response?.data,
+      // );
+      navigation.goBack();
+    }
     
-    
-//   }, [multiImages])
-  
+  };
+
+  //  const someFunction=(image)=> {
+  //     const image1 = `https://www.google.com/url?sa=i&url=https%3A%2F%2Fimagepakistan.net%2F&psig=AOvVaw0cHt9oEt6QhxvuG4vCcRy5&ust=1676050033407000&source=images&cd=vfe&ved=0CA8QjRxqFwoTCKin4Yf7iP0CFQAAAAAdAAAAABAE`
+  //     const metadata = resolveAssetSource(image1);
+  //     const url = 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fimagepakistan.net%2F&psig=AOvVaw0cHt9oEt6QhxvuG4vCcRy5&ust=1676050033407000&source=images&cd=vfe&ved=0CA8QjRxqFwoTCKin4Yf7iP0CFQAAAAAdAAAAABAE';
+  //     console.log("🚀 ~ file: CreateNew.js:46 ~ someFunction ~ url", url)
+
+  //     const attachment = {
+  //         url: url,
+  //         iosType: 'man1.jpg',
+  //         iosFilename: 'man1.jpg',
+  //         androidType: 'image/*'
+  //     };
+
+  //     SendSMS.send({
+  //         body: 'The default body of the SMS!',
+  //         recipients: ['03112048588'],
+  //         successTypes: ['sent', 'queued'],
+  //         allowAndroidSendWithoutReadPermission: true,
+  //         attachment: attachment
+  //     }, (completed, cancelled, error) => {
+
+  //         console.log('SMS Callback: completed: ' + completed + ' cancelled: ' + cancelled + 'error: ' + error);
+
+  //     });
+  // }
+
+  //   useEffect(() => {
+  //     if(multiImages?.length > 0){
+  //       console.log(multiImages[0]?.name)
+  //       // Linking.openURL(`sms:03112048588?body=${multiImages[0].uri}`)
+  //       someFunction(multiImages[0]?.name)
+  //     }
+
+  //   }, [multiImages])
 
   return (
     <ScreenBoiler
-    statusBarBackgroundColor={userRole == 'Qbid Member'
-    ? Color.themeBgColor
-    : userRole == 'Qbid Negotiator'
-    ? Color.themeBgColorNegotiator
-    : Color.themebgBusinessQbidder
-}
-    statusBarContentStyle={'light-content'}
-   
-    headerColor={userRole == 'Qbid Member'
-    ? Color.themeBgColor
-    : userRole == 'Qbid Negotiator'
-    ? Color.themeBgColorNegotiator
-    : Color.themebgBusinessQbidder
-}
+      statusBarBackgroundColor={
+        userRole == 'Qbid Member'
+          ? Color.themeBgColor
+          : userRole == 'Qbid Negotiator'
+          ? Color.themeBgColorNegotiator
+          : Color.themebgBusinessQbidder
+      }
+      statusBarContentStyle={'light-content'}
+      headerColor={
+        userRole == 'Qbid Member'
+          ? Color.themeBgColor
+          : userRole == 'Qbid Negotiator'
+          ? Color.themeBgColorNegotiator
+          : Color.themebgBusinessQbidder
+      }
       showHeader={true}
       //  showBack={true}
     >
@@ -108,12 +146,13 @@ const CreateNew = () => {
         }
         start={{x: 0, y: 0}}
         end={{x: 1, y: 0}}
-        colors={userRole == 'Qbid Member'
-        ? Color.themeBgColor
-        : userRole == 'Qbid Negotiator'
-        ? Color.themeBgColorNegotiator
-        : Color.themebgBusinessQbidder
-  }>
+        colors={
+          userRole == 'Qbid Member'
+            ? Color.themeBgColor
+            : userRole == 'Qbid Negotiator'
+            ? Color.themeBgColorNegotiator
+            : Color.themebgBusinessQbidder
+        }>
         <KeyboardAwareScrollView
           showsVerticalScrollIndicator={false}
           // style={styles.container}
@@ -123,7 +162,7 @@ const CreateNew = () => {
             paddingTop: moderateScale(40, 0.3),
           }}>
           <CustomText isBold style={styles.header}>
-           Vendor Qoutes price
+            Vendor Qoutes price
           </CustomText>
           <TextInputWithTitle
             titleText={'Qoute Title'}
@@ -247,7 +286,7 @@ const CreateNew = () => {
               {
                 fontSize: moderateScale(12, 0.3),
                 marginTop: moderateScale(10, 0.3),
-                marginLeft : moderateScale(10,0.3)
+                marginLeft: moderateScale(10, 0.3),
               },
             ]}>
             Upload vendor Qouted list
@@ -327,7 +366,7 @@ const CreateNew = () => {
             borderRadius={moderateScale(25, 0.3)}
             multiline
           />
-           <CustomButton
+          <CustomButton
             text={
               isLoading ? (
                 <ActivityIndicator color={'#FFFFFF'} size={'small'} />
@@ -340,14 +379,16 @@ const CreateNew = () => {
             height={windowHeight * 0.07}
             marginTop={moderateScale(20, 0.3)}
             onPress={() => {
-            console.log('here');
-             }}
-            bgColor={userRole == 'Qbid Member'
-            ? Color.blue
-            : userRole == 'Qbid Negotiator'
-            ? Color.themeColor
-            : Color.black
-}
+              // console.log('here');
+              publishQuote();
+            }}
+            bgColor={
+              userRole == 'Qbid Member'
+                ? Color.blue
+                : userRole == 'Qbid Negotiator'
+                ? Color.themeColor
+                : Color.black
+            }
             // borderColor={Color.white}
             // borderWidth={2}
             borderRadius={moderateScale(30, 0.3)}

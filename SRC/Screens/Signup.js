@@ -147,6 +147,10 @@ const Signup = () => {
 
     if (Object.keys(image).length > 0) {
       formData.append('photo', image);
+    }else{
+      return Platform.OS == 'android'
+      ? ToastAndroid.show(`Profile image is required`, ToastAndroid.SHORT)
+      : Alert.alert(`Profile image is required`);
     }
     
     if (isNaN(contact)) {

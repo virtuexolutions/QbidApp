@@ -1,11 +1,18 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {
+  Alert,
+  Platform,
+  StyleSheet,
+  Text,
+  ToastAndroid,
+  View,
+} from 'react-native';
 import React, {useState} from 'react';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import LinearGradient from 'react-native-linear-gradient';
 import {ScrollView} from 'react-native';
 import {moderateScale, ScaledSheet} from 'react-native-size-matters';
 import {useSelector} from 'react-redux';
-import {windowHeight, windowWidth} from '../Utillity/utils';
+import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
 import CustomImage from '../Components/CustomImage';
 import CustomText from '../Components/CustomText';
 import Color from '../Assets/Utilities/Color';
@@ -22,9 +29,19 @@ import BidderDetail from '../Components/BidderDetail';
 import Detailcards from '../Components/Detailcards';
 import Modal from 'react-native-modal';
 import DropDownSingleSelect from '../Components/DropDownSingleSelect';
+import {Post} from '../Axios/AxiosInterceptorFunction';
+import numeral from 'numeral';
 
-const JobDetails = () => {
+const JobDetails = props => {
+  const item = props?.route?.params?.item;
+  console.log('🚀 ~ file: JobDetails.js:29 ~ JobDetails ~ item:', item);
+  const user = useSelector(state => state.commonReducer.userData);
+  const UserCoverLetterArray = useSelector(
+    state => state.commonReducer.servicesArray,
+  );
+  // console.log("🚀 ~ file: JobDetails.js:31 ~ JobDetails ~ user:", user)
   const userRole = useSelector(state => state.commonReducer.selectedRole);
+  const token = useSelector(state => state.authReducer.token);
   const [checked, setChecked] = useState(false);
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -36,7 +53,40 @@ const JobDetails = () => {
   const [desc, setDesc] = useState('');
   const [coverletterRole, setCoverLetterRole] = useState('Expertise In');
 
-  const UserCoverLetterArray = ['Expertise In', 'Expertise In'];
+  // const UserCoverLetterArray = ['Expertise In', 'Expertise In'];
+
+  const bidNow = async () => {
+    const url = 'auth/negotiator/bid';
+    const body = {
+      quote_id: item?.id,
+      fullname: fullName,
+      email: Email,
+      phone: number,
+      expertise: coverletterRole,
+      coverletter: desc,
+    };
+    for (let key in body) {
+      if (body[key] == '') {
+        return Platform.OS == 'android'
+          ? ToastAndroid.show(`${key} is required`, ToastAndroid.SHORT)
+          : Alert.alert(`${key} is required`);
+      }
+    }
+    // console.log("🚀 ~ file: JobDetails.js:51 ~ bidNow ~ body:", body)
+
+    setIsLoading(true);
+    const response = await Post(url, body, apiHeader(token));
+    setIsLoading(false);
+
+    if (response != undefined) {
+      console.log(
+        '🚀 ~ file: JobDetails.js:53 ~ bidNow ~ response:',
+        response?.data,
+      );
+      setBidDone(true);
+      setModalVisible(!isModalVisible);
+    }
+  };
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -49,18 +99,18 @@ const JobDetails = () => {
       showBack={true}
       statusBarBackgroundColor={
         userRole == 'Qbid Member'
-        ? Color.themeBgColor
-        : userRole == 'Qbid Negotiator'
-        ? Color.themeBgColorNegotiator
-        : Color.themebgBusinessQbidder
+          ? Color.themeBgColor
+          : userRole == 'Qbid Negotiator'
+          ? Color.themeBgColorNegotiator
+          : Color.themebgBusinessQbidder
       }
       statusBarContentStyle={'light-content'}
       headerColor={
         userRole == 'Qbid Member'
-        ? Color.themeBgColor
-        : userRole == 'Qbid Negotiator'
-        ? Color.themeBgColorNegotiator
-        : Color.themebgBusinessQbidder
+          ? Color.themeBgColor
+          : userRole == 'Qbid Negotiator'
+          ? Color.themeBgColorNegotiator
+          : Color.themebgBusinessQbidder
       }>
       <LinearGradient
         style={{
@@ -70,10 +120,10 @@ const JobDetails = () => {
         end={{x: 1, y: 0}}
         colors={
           userRole == 'Qbid Member'
-          ? Color.themeBgColor
-          : userRole == 'Qbid Negotiator'
-          ? Color.themeBgColorNegotiator
-          : Color.themebgBusinessQbidder
+            ? Color.themeBgColor
+            : userRole == 'Qbid Negotiator'
+            ? Color.themeBgColorNegotiator
+            : Color.themebgBusinessQbidder
         }>
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -110,11 +160,13 @@ const JobDetails = () => {
               <CustomText
                 isBold
                 style={{color: Color.white, fontSize: moderateScale(17, 0.6)}}>
-                D. Huntley
+                {userRole == 'Qbid Member'
+                  ? `${user?.first_name} ${user?.last_name}`
+                  : `${item?.user_info[0]?.first_name} ${item?.user_info[0]?.last_name}`}
               </CustomText>
               <CustomText
                 style={{color: Color.white, fontSize: moderateScale(11, 0.6)}}>
-                Georgehuntley@gamil.com
+                {user?.email}
               </CustomText>
             </View>
             <View
@@ -131,12 +183,11 @@ const JobDetails = () => {
                   height: moderateScale(6, 0.6),
                   borderRadius: moderateScale(3, 0.6),
                   backgroundColor:
-                  userRole == 'Qbid Member'
-                  ? Color.blue
-                  : userRole == 'Qbid Negotiator'
-                  ? Color.themeColor
-                  : Color.black
-      
+                    userRole == 'Qbid Member'
+                      ? Color.blue
+                      : userRole == 'Qbid Negotiator'
+                      ? Color.themeColor
+                      : Color.black,
                 }}
               />
               <CustomText
@@ -145,21 +196,12 @@ const JobDetails = () => {
                   color: Color.white,
                   marginLeft: moderateScale(3, 0.3),
                 }}>
-                pending
+                {item?.status}
               </CustomText>
             </View>
           </View>
           <ShowMoreAndShowLessText minTextLength={50} style={styles.desc}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
-            sollicitudin velit in massa mollis, in consequat est tristique.
-            Quisque id gravida dui, quis fermentum orci. Pellentesque dui eros,
-            egestas aliquam dictum ac, vehicula a libero. Donec consequat,
-            libero porta ultricies eleifend, ante nulla suscipit tellus, eu
-            egestas ex dolor scelerisque velit. Suspendisse fermentum eu neque
-            in sodales. Ut venenatis nec dolor id volutpat. Integer id aliquet
-            urna. Duis mollis ullamcorper fringilla. Nam cursus tellus sit amet
-            arcu facilisis, at convallis odio scelerisque. Etiam nisi nunc,
-            efficitur sagittis ornare finibus, congue in magna.
+            {item?.notes}
           </ShowMoreAndShowLessText>
           <CustomText
             isBold
@@ -180,35 +222,35 @@ const JobDetails = () => {
               marginTop={moderateScale(10, 0.3)}
             />
             <Detailcards
-              data={'$800'}
+              data={numeral(item?.asking_price).format('$0,0a')}
               iconName={'calculator'}
               title={'Expected Qoute'}
               iconType={Entypo}
               marginTop={moderateScale(10, 0.3)}
             />
             <Detailcards
-              data={'NewYork'}
+              data={item?.city}
               iconName={'building'}
               title={'City'}
               iconType={FontAwesome}
               marginTop={moderateScale(30, 0.3)}
             />
             <Detailcards
-              data={'10%'}
+              data={`${item?.offering_percentage}%`}
               iconName={'percent'}
               title={'Offering Percent'}
               iconType={FontAwesome}
               marginTop={moderateScale(30, 0.3)}
             />
             <Detailcards
-              data={'$1000'}
+              data={numeral(item?.quoted_price).format('$0,0a')}
               iconName={'calculator'}
               title={'Vendor Qoute'}
               iconType={Entypo}
               marginTop={moderateScale(30, 0.3)}
             />
             <Detailcards
-              data={'Auto Repair'}
+              data={item?.service_preference}
               iconName={'briefcase'}
               title={'Service Type'}
               iconType={Entypo}
@@ -264,12 +306,11 @@ const JobDetails = () => {
                 textSecondary={'my Bid'}
                 textStyleSecondary={{
                   color:
-                  userRole == 'Qbid Member'
-                  ? Color.blue
-                  : userRole == 'Qbid Negotiator'
-                  ? Color.themeColor
-                  : Color.black
-      
+                    userRole == 'Qbid Member'
+                      ? Color.blue
+                      : userRole == 'Qbid Negotiator'
+                      ? Color.themeColor
+                      : Color.black,
                 }}
               />
               <TextInputWithTitle
@@ -291,13 +332,7 @@ const JobDetails = () => {
                 multiline
               />
               <CustomButton
-                text={
-                  isLoading ? (
-                    <ActivityIndicator color={'#FFFFFF'} size={'small'} />
-                  ) : (
-                    'Bid Now'
-                  )
-                }
+                text={'Bid Now'}
                 textColor={Color.white}
                 width={windowWidth * 0.92}
                 height={windowHeight * 0.07}
@@ -308,11 +343,10 @@ const JobDetails = () => {
                 }}
                 bgColor={
                   userRole == 'Qbid Member'
-                  ? Color.blue
-                  : userRole == 'Qbid Negotiator'
-                  ? Color.themeColor
-                  : Color.black
-      
+                    ? Color.blue
+                    : userRole == 'Qbid Negotiator'
+                    ? Color.themeColor
+                    : Color.black
                 }
                 borderRadius={moderateScale(30, 0.3)}
                 alignSelf={'flex-start'}
@@ -322,10 +356,11 @@ const JobDetails = () => {
         </ScrollView>
       </LinearGradient>
 
-      <Modal isVisible={isModalVisible}
-       onBackdropPress={() => {
-        setModalVisible(false)
-      }}>
+      <Modal
+        isVisible={isModalVisible}
+        onBackdropPress={() => {
+          setModalVisible(false);
+        }}>
         <View
           style={{
             width: windowWidth * 0.9,
@@ -349,7 +384,7 @@ const JobDetails = () => {
               secureText={false}
               placeholder={'Full Name'}
               setText={setFullName}
-              value={Email}
+              value={fullName}
               viewHeight={0.06}
               viewWidth={0.75}
               inputWidth={0.68}
@@ -364,8 +399,8 @@ const JobDetails = () => {
             <TextInputWithTitle
               secureText={false}
               placeholder={'Enter your Email'}
-              setText={setFullName}
-              value={fullName}
+              setText={setEmail}
+              value={Email}
               viewHeight={0.06}
               viewWidth={0.75}
               inputWidth={0.68}
@@ -440,16 +475,14 @@ const JobDetails = () => {
               height={windowHeight * 0.06}
               marginTop={moderateScale(30, 0.3)}
               onPress={() => {
-                setBidDone(true);
-                setModalVisible(!isModalVisible);
+                bidNow();
               }}
               bgColor={
                 userRole == 'Qbid Member'
-                ? Color.blue
-                : userRole == 'Qbid Negotiator'
-                ? Color.themeColor
-                : Color.black
-    
+                  ? Color.blue
+                  : userRole == 'Qbid Negotiator'
+                  ? Color.themeColor
+                  : Color.black
               }
               borderRadius={moderateScale(30, 0.3)}
             />

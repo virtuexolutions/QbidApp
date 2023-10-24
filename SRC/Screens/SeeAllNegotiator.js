@@ -16,19 +16,23 @@ import CustomStatusModal from '../Components/CustomStatusModal';
 import {useSelector} from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import JobCard from '../Components/JobCard';
+import navigationService from '../navigationService';
 
 const SeeAllNegotiator = props => {
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
 
-
   const type = props?.route?.params?.type;
+  const data = props?.route?.params?.data;
 
   const [searchData, setSearchData] = useState('');
   const [showSearch, setShowSearch] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState('');
-  console.log('🚀 ~ file: SeeAllNegotiator.js:6 ~ SeeAllNegotiator ~ type', type);
+  console.log(
+    '🚀 ~ file: SeeAllNegotiator.js:6 ~ SeeAllNegotiator ~ type',
+    type,
+  );
   const negotiatorsArray = [
     {
       name: 'Walter A. Jones',
@@ -229,39 +233,43 @@ const SeeAllNegotiator = props => {
   ];
   return (
     <ScreenBoiler
-      statusBarBackgroundColor={userRole == 'Qbid Member'
-      ? Color.themeBgColor
-      : userRole == 'Qbid Negotiator'
-      ? Color.themeBgColorNegotiator
-      : Color.themebgBusinessQbidder}
+      statusBarBackgroundColor={
+        userRole == 'Qbid Member'
+          ? Color.themeBgColor
+          : userRole == 'Qbid Negotiator'
+          ? Color.themeBgColorNegotiator
+          : Color.themebgBusinessQbidder
+      }
       statusBarContentStyle={'light-content'}
       showHeader={true}
       showBack={true}
-      headerColor={userRole == 'Qbid Member'
-      ? Color.themeBgColor
-      : userRole == 'Qbid Negotiator'
-      ? Color.themeBgColorNegotiator
-      : Color.themebgBusinessQbidder}
-      >
-         <LinearGradient
+      headerColor={
+        userRole == 'Qbid Member'
+          ? Color.themeBgColor
+          : userRole == 'Qbid Negotiator'
+          ? Color.themeBgColorNegotiator
+          : Color.themebgBusinessQbidder
+      }>
+      <LinearGradient
         style={{
           height: windowHeight * 0.96,
         }}
         start={{x: 0, y: 0}}
         end={{x: 1, y: 0}}
-        colors={userRole == 'Qbid Member'
-        ? Color.themeBgColor
-        : userRole == 'Qbid Negotiator'
-        ? Color.themeBgColorNegotiator
-        : Color.themebgBusinessQbidder}>
-     
+        colors={
+          userRole == 'Qbid Member'
+            ? Color.themeBgColor
+            : userRole == 'Qbid Negotiator'
+            ? Color.themeBgColorNegotiator
+            : Color.themebgBusinessQbidder
+        }>
         <View
           style={{
             width: windowWidth * 0.93,
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
-            alignSelf : 'center'
+            alignSelf: 'center',
           }}>
           <SearchContainer
             width={windowWidth * 0.85}
@@ -283,48 +291,51 @@ const SeeAllNegotiator = props => {
             size={moderateScale(22, 0.3)}
             color={Color.lightGrey}
             onPress={() => {
-                setIsModalVisible(true)
+              setIsModalVisible(true);
             }}
           />
         </View>
-        
+
         <FlatList
-          data={[1,2,3,4,5,6,7,8]}
+          data={data}
           numColumns={2}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
-            width : windowWidth,
-            alignItems : 'center',
+            width: windowWidth,
+            alignItems: 'center',
             // paddingHorizontal: moderateScale(15, 0.3),
             paddingTop: moderateScale(20, 0.6),
-            paddingBottom : moderateScale(40,0.6),
+            paddingBottom: moderateScale(40, 0.6),
           }}
           renderItem={({item, index}) => {
-            console.log(index % 2 == 0)
-            return(
-                <JobCard fromSeeAll={true} style={index % 2 == 0 && {marginRight : moderateScale(7,0.3)}} />
-            )
+            console.log(index % 2 == 0);
+            return (
+              <JobCard
+                fromSeeAll={true}
+                item={item}
+                style={index % 2 == 0 && {marginRight: moderateScale(7, 0.3)}}
+                onPress={() => {
+                  navigationService.navigate('JobDetails', {item});
+                }}
+              />
+            );
           }}
-          ListHeaderComponent={()=>{
-            return(
-              <CustomText style={styles.header}>
-             {type}
-            </CustomText>
-            )
+          ListHeaderComponent={() => {
+            return <CustomText style={styles.header}>{type}</CustomText>;
           }}
         />
-      {/* </ScrollView> */}
-      <CustomStatusModal
-        isModalVisible={isModalVisible}
-        setModalVisible={setIsModalVisible}
-        statusArray={
-          type == 'negotiator'
-            ? servicesArray
-            : [{name: 'pending'}, {name: 'onGoing'}, {name: 'completed'}]
-        }
-        data={selectedStatus}
-        setData={setSelectedStatus}
-      />
+        {/* </ScrollView> */}
+        <CustomStatusModal
+          isModalVisible={isModalVisible}
+          setModalVisible={setIsModalVisible}
+          statusArray={
+            type == 'negotiator'
+              ? servicesArray
+              : [{name: 'pending'}, {name: 'onGoing'}, {name: 'completed'}]
+          }
+          data={selectedStatus}
+          setData={setSelectedStatus}
+        />
       </LinearGradient>
     </ScreenBoiler>
   );
@@ -333,14 +344,10 @@ const SeeAllNegotiator = props => {
 export default SeeAllNegotiator;
 
 const styles = ScaledSheet.create({
- 
   header: {
     color: Color.white,
     fontSize: moderateScale(20, 0.3),
     fontWeight: 'bold',
     width: windowWidth * 0.9,
-
   },
-
-
 });

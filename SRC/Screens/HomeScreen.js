@@ -1,9 +1,9 @@
-import {BackHandler, FlatList, StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, BackHandler, FlatList, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import Color from '../Assets/Utilities/Color';
 import {moderateScale, ScaledSheet} from 'react-native-size-matters';
-import {windowHeight, windowWidth} from '../Utillity/utils';
+import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
 import CustomText from '../Components/CustomText';
 import BidDetailCard from '../Components/BidDetailCard';
 import {Actionsheet, Icon} from 'native-base';
@@ -25,10 +25,13 @@ import TextInputWithTitle from '../Components/TextInputWithTitle';
 import DropDownSingleSelect from '../Components/DropDownSingleSelect';
 import CustomButton from '../Components/CustomButton';
 import ImagePickerModal from '../Components/ImagePickerModal';
+import { Get, Post } from '../Axios/AxiosInterceptorFunction';
+import { useIsFocused } from '@react-navigation/native';
 
 const HomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
+  const token = useSelector(state => state.authReducer.token)
   // console.log("🚀 ~ file: HomeScreen.js:20 ~ HomeScreen ~ servicesArray", servicesArray)
   const [searchData, setSearchData] = useState('');
   const [showFilter, setShowFilter] = useState(false);
@@ -39,16 +42,54 @@ const HomeScreen = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedView, setSelectedView] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  console.log(
-    '🚀 ~ file: HomeScreen.js:27 ~ HomeScreen ~ selectedView',
-    selectedView,
-  );
+  const isFocused = useIsFocused()
+  // console.log(
+  //   '🚀 ~ file: HomeScreen.js:27 ~ HomeScreen ~ selectedView',
+  //   selectedView,
+  // );
   const [selectedService, setSelectedService] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
   const [visible, setVisible] = useState(false);
   const [qbidName, setQbidName] = useState('');
   const [qbidDetail, setQbidDetail] = useState('');
   const [qbiddetail1, setQbidDetail1] = useState('');
+  const [myQuotes, setMyQuotes] = useState([])
+
+
+const getProposals =async()=>{
+  const url ='';
+  setIsLoading(true)
+  const  response = await Get(url, token)
+  setIsLoading(false)
+  if(response != undefined){
+    // console.log("🚀 ~ file: HomeScreen.js:61 ~ getProposals ~ response:", response?.data)
+    
+  }
+
+}
+
+
+const getMyQuotes =async()=>{
+  const url ='auth/member/quote';
+  setIsLoading(true)
+  const  response = await Get(url, token)
+  setIsLoading(false)
+  if(response != undefined){
+    // console.log("🚀 ~ file: HomeScreen.js:61 ~ getProposals ~ response:", response?.data?.quote_info)
+    setMyQuotes(response?.data?.quote_info)
+  }
+}
+
+useEffect(() => {
+
+  getMyQuotes()
+
+}, [isFocused])
+
+
+
+
+
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', () => {
       setVisible(true);
@@ -93,6 +134,7 @@ const HomeScreen = () => {
       desc: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
     },
   ];
+
   const myQoutesArray = [
     {
       qouteName: 'Car parts purchasing',
@@ -414,17 +456,21 @@ const HomeScreen = () => {
             </CustomText>
           </View>
 
-          <FlatList
+        {isLoading ? <View style={{justifyContent:'center', alignItems:'center',height:windowHeight*0.2, width:windowWidth}}>
+                <ActivityIndicator size={'large'} color={'white'} />
+              </View> :  <FlatList
+
             data={negotiatorsArray}
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{
               paddingHorizontal: moderateScale(15, 0.3),
             }}
+            
             renderItem={({item, index}) => {
               return <NegotiatorCard item={item} />;
             }}
-          />
+          />}
           <View
             style={{
               borderBottomWidth: 1,
@@ -434,7 +480,7 @@ const HomeScreen = () => {
             }}
           />
           <View style={styles.row}>
-            <CustomText style={styles.header}>My Qoutes</CustomText>
+            <CustomText style={styles.header} isBold>My Quotes</CustomText>
             <View
               style={{
                 flexDirection: 'row',
@@ -444,7 +490,7 @@ const HomeScreen = () => {
               }}>
               <CustomText
                 onPress={() => {
-                  navigationService.navigate('SeeAllScreen', {type: 'qoutes'});
+                  navigationService.navigate('SeeAllScreen', {type: 'qoutes', data:myQuotes});
                 }}
                 style={styles.viewall}>
                 View all
@@ -461,17 +507,18 @@ const HomeScreen = () => {
               />
             </View>
           </View>
-          <FlatList
-            data={myQoutesArray}
+          {isLoading ?  <View style={{justifyContent:'center', alignItems:'center', width:windowWidth, height:windowHeight*0.3}}><ActivityIndicator color={'white'} size={'large'}/></View> :<FlatList
+            data={myQuotes}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{
               paddingHorizontal: moderateScale(15, 0.3),
               paddingTop: moderateScale(20, 0.3),
             }}
             renderItem={({item, index}) => {
+              // console.log("🚀 ~ file: HomeScreen.js:512 ~ HomeScreen ~ item:", item)
               return <MyQouteCard item={item} />;
             }}
-          />
+          />}
         </ScrollView>
       </LinearGradient>
       <CustomStatusModal
