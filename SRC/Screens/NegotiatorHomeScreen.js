@@ -31,11 +31,16 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import JobCard from '../Components/JobCard';
 import Modal from 'react-native-modal';
 import {Get} from '../Axios/AxiosInterceptorFunction';
+import Lottie from 'lottie-react-native';
+import {height} from 'deprecated-react-native-prop-types/DeprecatedImagePropType';
 
 const NegotiatorHomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
-  console.log("🚀 ~ file: NegotiatorHomeScreen.js:38 ~ NegotiatorHomeScreen ~ token:", token)
+  console.log(
+    '🚀 ~ file: NegotiatorHomeScreen.js:38 ~ NegotiatorHomeScreen ~ token:',
+    token,
+  );
   const [searchData, setSearchData] = useState('');
   const [showFilter, setShowFilter] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -43,8 +48,8 @@ const NegotiatorHomeScreen = () => {
   const [visible, setVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [recommended, setRecommended] = useState([]);
-  const [working ,setWorking] =useState([])
- const  [seekingHelp ,setSeekingHelp] =useState([])
+  const [working, setWorking] = useState([]);
+  const [seekingHelp, setSeekingHelp] = useState([]);
   console.log(
     '🚀 ~ file: NegotiatorHomeScreen.js:38 ~ NegotiatorHomeScreen ~ recommended:',
     recommended,
@@ -67,30 +72,31 @@ const NegotiatorHomeScreen = () => {
     }
   };
 
-  const getWorkingOn = async () =>{
-    const url ='auth/negotiator/quote/working'
-    setIsLoading(true)
-    const response = await Get(url ,token)
-    setIsLoading(false)
-    if(response != undefined)
-    setWorking(response?.data?.quote_info)
-    console.log("🚀 ~ file: NegotiatorHomeScreen.js:73 ~ getWorkingOn ~ response:", response?.data?.quote_info)
+  const getWorkingOn = async () => {
+    const url = 'auth/negotiator/quote/working';
+    setIsLoading(true);
+    const response = await Get(url, token);
+    setIsLoading(false);
+    if (response != undefined) setWorking(response?.data?.quote_info);
+    console.log(
+      '🚀 ~ file: NegotiatorHomeScreen.js:73 ~ getWorkingOn ~ response:',
+      response?.data?.quote_info,
+    );
+  };
 
-  } 
-
-
-const getSeekingHelp = async ()=>{
-  const url = 'auth/negotiator/bid_help'
-setIsLoading(true)
-const response =await Get(url ,token)
-setIsLoading(false)
-if(response != undefined){
-  console.log("🚀 ~ file: NegotiatorHomeScreen.js:88 ~ getSeekingHelp ~ response:", response?.data)
-  setSeekingHelp(response?.data?.bid_help_info)
-}
-
-}
-
+  const getSeekingHelp = async () => {
+    const url = 'auth/negotiator/bid_help';
+    setIsLoading(true);
+    const response = await Get(url, token);
+    setIsLoading(false);
+    if (response != undefined) {
+      console.log(
+        '🚀 ~ file: NegotiatorHomeScreen.js:88 ~ getSeekingHelp ~ response:',
+        response?.data,
+      );
+      setSeekingHelp(response?.data?.bid_help_info);
+    }
+  };
 
   const getProposals = async () => {
     setIsLoading(true);
@@ -111,7 +117,7 @@ if(response != undefined){
     // getRecommended();
     // getSeekingHelp();
     // getWorkingOn()
-    getProposals()
+    getProposals();
   }, []);
 
   useEffect(() => {
@@ -299,7 +305,28 @@ if(response != undefined){
                 </View>
 
                 <FlatList
+                  ListEmptyComponent={() => {
+                    return (
+                      <View
+                        style={{
+                          width: windowWidth*0.95 ,
+                          height: windowHeight * 0.18,
+                          // backgroundColor: 'green',
+                          alignItems:'center'
+                        }}>
+                        <Lottie
+                          source={require('../Assets/Images/animation3.json')}
+                          autoPlay
+                          loop
+                        />
+                        <Text style={styles.nodata}>Data not found</Text>
+                      </View>
+
+                      // <Text>hello</Text>
+                    );
+                  }}
                   data={recommended}
+                  // data={[]}
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={{
@@ -334,6 +361,26 @@ if(response != undefined){
                 </View>
 
                 <FlatList
+                  ListEmptyComponent={() => {
+                    return (
+                      <View
+                        style={{
+                          width: windowWidth*0.95 ,
+                          height: windowHeight * 0.18,
+                          // backgroundColor: 'green',
+                          alignItems:'center'
+                        }}>
+                        <Lottie
+                          source={require('../Assets/Images/animation3.json')}
+                          autoPlay
+                          loop
+                        />
+                        <Text style={styles.nodata}>Data not found</Text>
+                      </View>
+
+                      // <Text>hello</Text>
+                    );
+                  }}
                   data={working}
                   horizontal
                   showsHorizontalScrollIndicator={false}
@@ -341,7 +388,10 @@ if(response != undefined){
                     paddingHorizontal: moderateScale(15, 0.3),
                   }}
                   renderItem={({item, index}) => {
-                    console.log("🚀 ~ file: NegotiatorHomeScreen.js:343 ~ NegotiatorHomeScreen ~ item:", item)
+                    console.log(
+                      '🚀 ~ file: NegotiatorHomeScreen.js:343 ~ NegotiatorHomeScreen ~ item:',
+                      item,
+                    );
                     return (
                       <JobCard
                         item={item}
@@ -370,14 +420,35 @@ if(response != undefined){
                 </View>
 
                 <FlatList
+                    ListEmptyComponent={() => {
+                      return (
+                        <View
+                          style={{
+                            width: windowWidth*0.95 ,
+                            height: windowHeight * 0.18,
+                            // backgroundColor: 'green',
+                            alignItems:'center'
+                          }}>
+                          <Lottie
+                            source={require('../Assets/Images/animation3.json')}
+                            autoPlay
+                            loop
+                          />
+                          <Text style={styles.nodata}>Data not found</Text>
+                        </View>
+  
+                        // <Text>hello</Text>
+                      );
+                    }}
                   data={seekingHelp}
+                  // data={[]}
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={{
                     paddingHorizontal: moderateScale(15, 0.3),
                   }}
                   renderItem={({item, index}) => {
-                    return <JobCard />;
+                    return <JobCard item={item} />;
                   }}
                 />
               </View>
@@ -449,7 +520,7 @@ const styles = ScaledSheet.create({
     color: Color.white,
     marginLeft: moderateScale(15, 0.3),
     fontSize: moderateScale(20, 0.6),
-  },
+  },  
   row: {
     width: windowWidth,
     flexDirection: 'row',
@@ -461,4 +532,12 @@ const styles = ScaledSheet.create({
     fontSize: moderateScale(12, 0.3),
     color: Color.white,
   },
+  nodata:{
+    color: Color.white,
+    fontWeight:'500',
+    fontSize:18,
+    position:'absolute',
+    bottom:0,
+    // marginTop:20
+  }
 });

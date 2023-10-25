@@ -37,6 +37,8 @@ import CustomButton from '../Components/CustomButton';
 import ImagePickerModal from '../Components/ImagePickerModal';
 import {Get, Post} from '../Axios/AxiosInterceptorFunction';
 import {useIsFocused} from '@react-navigation/native';
+import Lottie from 'lottie-react-native';
+
 
 const HomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
@@ -514,7 +516,28 @@ const HomeScreen = () => {
             </View>
           ) : (
             <FlatList
+            ListEmptyComponent={() => {
+              return (
+                <View
+                  style={{
+                    width: windowWidth*0.95 ,
+                    height: windowHeight * 0.18,
+                    // backgroundColor: 'green',
+                    alignItems:'center'
+                  }}>
+                  <Lottie
+                    source={require('../Assets/Images/animation3.json')}
+                    autoPlay
+                    loop
+                  />
+                  <Text style={styles.nodata}>Data not found</Text>
+                </View>
+
+                // <Text>hello</Text>
+              );
+            }}
               data={proposals}
+              // data={[]}
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{
@@ -578,7 +601,28 @@ const HomeScreen = () => {
             </View>
           ) : (
             <FlatList
+            ListEmptyComponent={() => {
+              return (
+                <View
+                  style={{
+                    width: windowWidth*0.95 ,
+                    height: windowHeight * 0.18,
+                    // backgroundColor: 'green',
+                    alignItems:'center'
+                  }}>
+                  <Lottie
+                    source={require('../Assets/Images/animation3.json')}
+                    autoPlay
+                    loop
+                  />
+                  <Text style={styles.nodata}>Data not found</Text>
+                </View>
+
+                // <Text>hello</Text>
+              );
+            }}
               data={myQuotes}
+              // data={[]}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{
                 paddingHorizontal: moderateScale(15, 0.3),
@@ -649,6 +693,14 @@ const styles = ScaledSheet.create({
     fontSize: moderateScale(12, 0.3),
     color: Color.black,
   },
+  nodata:{
+    color: Color.white,
+    fontWeight:'500',
+    fontSize:18,
+    position:'absolute',
+    bottom:0,
+    // marginTop:20
+  }
 });
 
 {
