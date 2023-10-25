@@ -39,7 +39,7 @@ const HomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
-  // console.log("🚀 ~ file: HomeScreen.js:20 ~ HomeScreen ~ servicesArray", servicesArray)
+  console.log("🚀 ~ file: HomeScreen.js:20 ~ HomeScreen ~ servicesArray", servicesArray)
   const [searchData, setSearchData] = useState('');
   const [showFilter, setShowFilter] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -482,7 +482,7 @@ const HomeScreen = () => {
             </View>
           ) : (
             <FlatList
-              data={negotiatorsArray}
+              data={proposals}
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{
