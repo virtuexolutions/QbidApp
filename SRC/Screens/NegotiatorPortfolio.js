@@ -269,7 +269,7 @@ const NegotiatorPortfolio = () => {
             )}
             <View style={{marginLeft: moderateScale(10, 0.3)}}>
               <CustomText
-                noOfLines={2}
+                numberOfLines={2}
                 style={[
                   Constants.h4,
                   {

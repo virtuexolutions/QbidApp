@@ -1,9 +1,12 @@
 import {
   ActivityIndicator,
+  Alert,
   BackHandler,
   FlatList,
+  Platform,
   StyleSheet,
   Text,
+  ToastAndroid,
   View,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
@@ -49,6 +52,7 @@ const HomeScreen = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedView, setSelectedView] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [submitLoading, setsubmitLoading] = useState(false)
   const isFocused = useIsFocused();
   // console.log(
   //   '🚀 ~ file: HomeScreen.js:27 ~ HomeScreen ~ selectedView',
@@ -61,18 +65,60 @@ const HomeScreen = () => {
   const [qbidDetail, setQbidDetail] = useState('');
   const [qbiddetail1, setQbidDetail1] = useState('');
   const [myQuotes, setMyQuotes] = useState([]);
-  const [proposals , setProposals] =useState([])
+  const [proposals, setProposals] = useState([]);
 
   const getProposals = async () => {
     const url = 'auth/member/bid';
     setIsLoading(true);
     const response = await Get(url, token);
-    setIsLoading(false)
-    if(response != undefined){
-      console.log("🚀 ~ file: HomeScreen.js:72 ~ getProposals ~ response:", response?.data)
-      setProposals(response?.data)
+    setIsLoading(false);
+    if (response != undefined) {
+      console.log(
+        '🚀 ~ file: HomeScreen.js:72 ~ getProposals ~ response:',
+        response?.data,
+      );
+      setProposals(response?.data);
+    }
+  };
+
+  const seekHelp = async () => {
+    const url = 'auth/negotiator/bid_help';
+    const body = {
+      Qbid_name: qbidName,
+      service_type: qbidDetail,
+      description: qbiddetail1,
+    };
+    const formData = new FormData();
+    for (let key in body) {
+      if (body[key] == '') {
+        return Platform.OS == 'android'
+          ? ToastAndroid.show(`${key} is required`, ToastAndroid.SHORT)
+          : Alert.alert(`${key} is required`);
+      } else {
+        formData.append(key, body[key]);
+      }
+    }
+    if (multiImages.length == 0) {
+      return Platform.OS == 'android'
+        ? ToastAndroid.show(`Image is required`, ToastAndroid.SHORT)
+        : Alert.alert(`Image is required`);
+    } else {
+      multiImages?.map((item, index) => {
+        formData.append(`images[${index}]`, item);
+      });
     }
 
+    console.log('🚀 ~ file: HomeScreen.js:85 ~ seekHelp ~ formData:', formData);
+    setsubmitLoading(true);
+    const response = await Post(url, formData, apiHeader(token));
+    setsubmitLoading(false);
+
+    if (response != undefined) {
+      return console.log(
+        '🚀 ~ file: HomeScreen.js:91 ~ seekHelp ~ response:',
+        response?.data,
+      );
+    }
   };
 
   const getMyQuotes = async () => {
@@ -89,20 +135,9 @@ const HomeScreen = () => {
     }
   };
 
-  // const getMyQuotes =async()=>{
-  //   const url ='auth/member/quote';
-  //   setIsLoading(true)
-  //   const  response = await Get(url, token)
-  //   setIsLoading(false)
-  //   if(response != undefined){
-  //     // console.log("🚀 ~ file: HomeScreen.js:61 ~ getProposals ~ response:", response?.data?.quote_info)
-  //     setMyQuotes(response?.data?.quote_info)
-  //   }
-  // }
-
   useEffect(() => {
     getMyQuotes();
-    getProposals()
+    getProposals();
   }, [isFocused]);
 
   useEffect(() => {
@@ -396,13 +431,7 @@ const HomeScreen = () => {
                   </View>
 
                   <CustomButton
-                    text={
-                      isLoading ? (
-                        <ActivityIndicator color={'#FFFFFF'} size={'small'} />
-                      ) : (
-                        'Upload Images'
-                      )
-                    }
+                    text={'Upload Images'}
                     textColor={Color.white}
                     width={windowWidth * 0.5}
                     height={windowHeight * 0.06}
@@ -415,6 +444,9 @@ const HomeScreen = () => {
                   />
 
                   <CustomButton
+                    onPress={() => {
+                      seekHelp();
+                    }}
                     text={
                       isLoading ? (
                         <ActivityIndicator color={'#FFFFFF'} size={'small'} />

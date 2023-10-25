@@ -86,7 +86,7 @@ const response =await Get(url ,token)
 setIsLoading(false)
 if(response != undefined){
   console.log("🚀 ~ file: NegotiatorHomeScreen.js:88 ~ getSeekingHelp ~ response:", response?.data)
-  setSeekingHelp(response?.data)
+  setSeekingHelp(response?.data?.bid_help_info)
 }
 
 }
@@ -101,16 +101,17 @@ if(response != undefined){
     ]);
     setIsLoading(false);
 
-    console.log(
-      '🚀 ~ file: NegotiatorHomeScreen.js:45 ~ getProposals ~ result:',
-      a,
-    );
+    // console.log(
+    //   '🚀 ~ file: NegotiatorHomeScreen.js:45 ~ getProposals ~ result:',
+    //   a,
+    // );
   };
 
   useEffect(() => {
-    getRecommended();
-    // getProposals();
-    getWorkingOn()
+    // getRecommended();
+    // getSeekingHelp();
+    // getWorkingOn()
+    getProposals()
   }, []);
 
   useEffect(() => {
@@ -340,6 +341,7 @@ if(response != undefined){
                     paddingHorizontal: moderateScale(15, 0.3),
                   }}
                   renderItem={({item, index}) => {
+                    console.log("🚀 ~ file: NegotiatorHomeScreen.js:343 ~ NegotiatorHomeScreen ~ item:", item)
                     return (
                       <JobCard
                         item={item}
@@ -368,7 +370,7 @@ if(response != undefined){
                 </View>
 
                 <FlatList
-                  data={[1, 2, 3, 4, 5]}
+                  data={seekingHelp}
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={{
