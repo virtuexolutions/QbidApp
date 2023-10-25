@@ -124,6 +124,7 @@ const Signup = () => {
     const body = {
       first_name: firstName,
       last_name: lastName,
+      company_name: companyName,
       email: email,
       phone: contact,
       address: address,
@@ -152,38 +153,41 @@ const Signup = () => {
       ? ToastAndroid.show(`Profile image is required`, ToastAndroid.SHORT)
       : Alert.alert(`Profile image is required`);
     }
-    
+
     if (isNaN(contact)) {
       return Platform.OS == 'android'
         ? ToastAndroid.show('phone is not a number', ToastAndroid.SHORT)
         : Alert.alert('phone is not a number');
-      }
-      if (!validateEmail(email)) {
-        return Platform.OS == 'android'
+    }
+    if (!validateEmail(email)) {
+      return Platform.OS == 'android'
         ? ToastAndroid.show('email is not validate', ToastAndroid.SHORT)
         : Alert.alert('email is not validate');
-      }
-      if (password.length < 8) {
-        return Platform.OS == 'android'
+    }
+    if (password.length < 8) {
+      return Platform.OS == 'android'
         ? ToastAndroid.show(
             'Password should atleast 8 character long',
             ToastAndroid.SHORT,
-            )
-            : Alert.alert('Password should atleast 8 character long');
-          }
+          )
+        : Alert.alert('Password should atleast 8 character long');
+    }
     if (password != confirmPassword) {
       return Platform.OS == 'android'
         ? ToastAndroid.show('Password does not match', ToastAndroid.SHORT)
         : Alert.alert('Password does not match');
-      }
+    }
 
-      if(selectedRole == 'Business Qbidder' && (language.length == 0 || services.length == 0)){
-        return Platform.OS == 'android'
+    if (
+      selectedRole == 'Business Qbidder' &&
+      (language.length == 0 || services.length == 0)
+    ) {
+      return Platform.OS == 'android'
         ? ToastAndroid.show('Do not Enter your fields', ToastAndroid.SHORT)
         : Alert.alert('Do not Enter your fields');
-        language?.map((item, index) => formData.append(`language[${index}]`, item));
-        services?.map((item, index) => formData.append(`expertise[${index}]`, item));
       }
+      language?.map((item, index) => formData.append(`language[${index}]`, item));
+      services?.map((item, index) => formData.append(`expertise[${index}]`, item));
       
       
       const url = 'register';

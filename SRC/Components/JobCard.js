@@ -77,7 +77,7 @@ console.log("🚀 ~ file: JobCard.js:15 ~ JobCard ~ item:", item)
                 : moderateScale(9, 0.6),
               marginLeft: moderateScale(5, 0.3),
             }}>
-           {item?.title}
+           {item?.title ? item?.title : item?.quote_info?.title }
           </CustomText>
         </View>
         <CustomText
@@ -104,7 +104,7 @@ console.log("🚀 ~ file: JobCard.js:15 ~ JobCard ~ item:", item)
               style={{
                 fontSize: moderateScale(9, 0.6),
               }}>
-             {numeral(item?.quoted_price).format('$0,0a')}
+             {numeral(item?.quoted_price ? item?.quoted_price : item?.quote_info?.quoted_price).format('$0,0a')}
             </CustomText>
             <CustomText
               style={{
@@ -124,7 +124,7 @@ console.log("🚀 ~ file: JobCard.js:15 ~ JobCard ~ item:", item)
               style={{
                 fontSize: moderateScale(9, 0.6),
               }}>
-             {`${item?.offering_percentage}%`}
+             {`${item?.offering_percentage ? item?.offering_percentage : item?.quote_info?.offering_percentage}%`}
             </CustomText>
             <CustomText
               style={{
