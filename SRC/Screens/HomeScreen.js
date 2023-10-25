@@ -1,4 +1,4 @@
-import {ActivityIndicator, BackHandler, FlatList, StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, Alert, BackHandler, FlatList, Platform, StyleSheet, Text, ToastAndroid, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import Color from '../Assets/Utilities/Color';
@@ -56,6 +56,7 @@ const HomeScreen = () => {
   const [myQuotes, setMyQuotes] = useState([])
 
 
+
 const getProposals =async()=>{
   const url ='';
   setIsLoading(true)
@@ -66,6 +67,41 @@ const getProposals =async()=>{
     
   }
 
+}
+
+const seekHelp =async ()=>{
+  const url = 'auth/negotiator/bid_help';
+  const body = {
+    Qbid_name:qbidName,
+    service_type:qbidDetail,
+    description:qbiddetail1,
+  }
+  const formData = new FormData()
+  for(let key in body){
+    if(body[key]==''){
+      return Platform.OS == 'android' ? ToastAndroid.show(`${key} is required`, ToastAndroid.SHORT) : Alert.alert(`${key} is required`)
+      
+    }else{
+      formData.append(key, body[key])
+    }
+  }
+  if(multiImages.length ==0){
+    return Platform.OS == 'android' ? ToastAndroid.show(`Image is required`, ToastAndroid.SHORT) : Alert.alert(`Image is required`)
+
+  }else{
+
+    multiImages?.map((item, index)=>{ formData.append(`images[${index}]`, item)})
+  }
+  
+  console.log("🚀 ~ file: HomeScreen.js:85 ~ seekHelp ~ formData:", formData)
+  setIsLoading(true)
+  const response = await Post(url, formData, apiHeader(token))
+  setIsLoading(false)
+
+  if(response != undefined){
+
+    console.log("🚀 ~ file: HomeScreen.js:91 ~ seekHelp ~ response:", response)
+  }
 }
 
 
@@ -83,6 +119,7 @@ const getMyQuotes =async()=>{
 useEffect(() => {
 
   getMyQuotes()
+  // seekHelp()
 
 }, [isFocused])
 
@@ -400,6 +437,7 @@ useEffect(() => {
                   />
 
                   <CustomButton
+                  onPress={()=>{seekHelp()}}
                     text={
                       isLoading ? (
                         <ActivityIndicator color={'#FFFFFF'} size={'small'} />
