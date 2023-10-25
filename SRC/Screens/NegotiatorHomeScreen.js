@@ -35,6 +35,7 @@ import {Get} from '../Axios/AxiosInterceptorFunction';
 const NegotiatorHomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
+  console.log("🚀 ~ file: NegotiatorHomeScreen.js:38 ~ NegotiatorHomeScreen ~ token:", token)
   const [searchData, setSearchData] = useState('');
   const [showFilter, setShowFilter] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -42,6 +43,8 @@ const NegotiatorHomeScreen = () => {
   const [visible, setVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [recommended, setRecommended] = useState([]);
+  const [working ,setWorking] =useState([])
+ const  [seekingHelp ,setSeekingHelp] =useState([])
   console.log(
     '🚀 ~ file: NegotiatorHomeScreen.js:38 ~ NegotiatorHomeScreen ~ recommended:',
     recommended,
@@ -64,27 +67,30 @@ const NegotiatorHomeScreen = () => {
     }
   };
 
-  const getWorkingOn = async () => {
-    const url = 'auth/negotiator/quote/recommended';
-    setIsLoading(true);
-    const response = await Get(url, token);
-    setIsLoading(false);
+  const getWorkingOn = async () =>{
+    const url ='auth/negotiator/quote/working'
+    setIsLoading(true)
+    const response = await Get(url ,token)
+    setIsLoading(false)
+    if(response != undefined)
+    setWorking(response?.data?.quote_info)
+    console.log("🚀 ~ file: NegotiatorHomeScreen.js:73 ~ getWorkingOn ~ response:", response?.data?.quote_info)
 
-    if (response != undefined) {
-      // console.log("🚀 ~ file: NegotiatorHomeScreen.js:63 ~ getWorkingOn ~ response:", response)
-    }
-  };
+  } 
 
-  const getSeekingHelp = async () => {
-    const url = 'auth/negotiator/quote/recommended';
-    setIsLoading(true);
-    const response = await Get(url, token);
-    setIsLoading(false);
 
-    if (response != undefined) {
-      // console.log("🚀 ~ file: NegotiatorHomeScreen.js:77 ~ getSeekingHelp ~ response:", response)
-    }
-  };
+const getSeekingHelp = async ()=>{
+  const url = 'auth/negotiator/bid_help'
+setIsLoading(true)
+const response =await Get(url ,token)
+setIsLoading(false)
+if(response != undefined){
+  console.log("🚀 ~ file: NegotiatorHomeScreen.js:88 ~ getSeekingHelp ~ response:", response?.data)
+  setSeekingHelp(response?.data)
+}
+
+}
+
 
   const getProposals = async () => {
     setIsLoading(true);
@@ -102,8 +108,9 @@ const NegotiatorHomeScreen = () => {
   };
 
   useEffect(() => {
-    // getRecommended();
-    getProposals();
+    getRecommended();
+    // getProposals();
+    getWorkingOn()
   }, []);
 
   useEffect(() => {
@@ -326,7 +333,7 @@ const NegotiatorHomeScreen = () => {
                 </View>
 
                 <FlatList
-                  data={[1, 2, 3, 4, 5]}
+                  data={working}
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={{

@@ -25,24 +25,24 @@ import TextInputWithTitle from '../Components/TextInputWithTitle';
 import DropDownSingleSelect from '../Components/DropDownSingleSelect';
 import CustomButton from '../Components/CustomButton';
 import ImagePickerModal from '../Components/ImagePickerModal';
-import { Get, Post } from '../Axios/AxiosInterceptorFunction';
-import { useIsFocused } from '@react-navigation/native';
+import {Get, Post} from '../Axios/AxiosInterceptorFunction';
+import {useIsFocused} from '@react-navigation/native';
 
 const HomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
-  const token = useSelector(state => state.authReducer.token)
+  const token = useSelector(state => state.authReducer.token);
   // console.log("🚀 ~ file: HomeScreen.js:20 ~ HomeScreen ~ servicesArray", servicesArray)
   const [searchData, setSearchData] = useState('');
   const [showFilter, setShowFilter] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [showMultiImageModal, setShowMultiImageModal] = useState(false);  
+  const [showMultiImageModal, setShowMultiImageModal] = useState(false);
   const [multiImages, setMultiImages] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedView, setSelectedView] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const isFocused = useIsFocused()
+  const isFocused = useIsFocused();
   // console.log(
   //   '🚀 ~ file: HomeScreen.js:27 ~ HomeScreen ~ selectedView',
   //   selectedView,
@@ -53,21 +53,21 @@ const HomeScreen = () => {
   const [qbidName, setQbidName] = useState('');
   const [qbidDetail, setQbidDetail] = useState('');
   const [qbiddetail1, setQbidDetail1] = useState('');
-  const [myQuotes, setMyQuotes] = useState([])
+  const [myQuotes, setMyQuotes] = useState([]);
+  const [proposals , setProposals] =useState([])
 
-
-
-const getProposals =async()=>{
-  const url ='';
-  setIsLoading(true)
-  const  response = await Get(url, token)
-  setIsLoading(false)
-  if(response != undefined){
-    // console.log("🚀 ~ file: HomeScreen.js:61 ~ getProposals ~ response:", response?.data)
-    
+  const getProposals = async () => {
+    const url = 'auth/member/bid';
+    setIsLoading(true);
+    const response = await Get(url, token);
+    setIsLoading(false)
+    if(response != undefined){
+      console.log("🚀 ~ file: HomeScreen.js:72 ~ getProposals ~ response:", response?.data)
+      setProposals(response?.data)
+    }
   }
 
-}
+
 
 const seekHelp =async ()=>{
   const url = 'auth/negotiator/bid_help';
@@ -105,27 +105,31 @@ const seekHelp =async ()=>{
 }
 
 
-const getMyQuotes =async()=>{
-  const url ='auth/member/quote';
-  setIsLoading(true)
-  const  response = await Get(url, token)
-  setIsLoading(false)
-  if(response != undefined){
-    // console.log("🚀 ~ file: HomeScreen.js:61 ~ getProposals ~ response:", response?.data?.quote_info)
-    setMyQuotes(response?.data?.quote_info)
-  }
-}
-
-useEffect(() => {
-
-  getMyQuotes()
-  // seekHelp()
-
-}, [isFocused])
 
 
 
 
+
+  const getMyQuotes = async () => {
+    const url = 'auth/member/quote';
+    setIsLoading(true);
+    const response = await Get(url, token);
+    setIsLoading(false);
+    if (response != undefined) {
+      console.log(
+        '🚀 ~ file: HomeScreen.js:77 ~ getMyQuotes ~ response:',
+        response?.data?.quote_info,
+      );
+      setMyQuotes(response?.data?.quote_info);
+    }
+  };
+
+
+
+  useEffect(() => {
+    getMyQuotes();
+    getProposals()
+  }, [isFocused]);
 
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', () => {
@@ -449,13 +453,12 @@ useEffect(() => {
                     width={windowWidth * 0.4}
                     height={windowHeight * 0.06}
                     marginTop={moderateScale(10, 0.3)}
-                    bgColor={userRole ==
-                      'Qbid Member'
-                      ? Color.blue
-                      : userRole == 'Qbid Negotiator'
-                      ? Color.themeColor
-                      : Color.black
-          
+                    bgColor={
+                      userRole == 'Qbid Member'
+                        ? Color.blue
+                        : userRole == 'Qbid Negotiator'
+                        ? Color.themeColor
+                        : Color.black
                     }
                     borderRadius={moderateScale(30, 0.3)}
                   />
@@ -494,21 +497,29 @@ useEffect(() => {
             </CustomText>
           </View>
 
-        {isLoading ? <View style={{justifyContent:'center', alignItems:'center',height:windowHeight*0.2, width:windowWidth}}>
-                <ActivityIndicator size={'large'} color={'white'} />
-              </View> :  <FlatList
-
-            data={negotiatorsArray}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{
-              paddingHorizontal: moderateScale(15, 0.3),
-            }}
-            
-            renderItem={({item, index}) => {
-              return <NegotiatorCard item={item} />;
-            }}
-          />}
+          {isLoading ? (
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: windowHeight * 0.2,
+                width: windowWidth,
+              }}>
+              <ActivityIndicator size={'large'} color={'white'} />
+            </View>
+          ) : (
+            <FlatList
+              data={negotiatorsArray}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingHorizontal: moderateScale(15, 0.3),
+              }}
+              renderItem={({item, index}) => {
+                return <NegotiatorCard item={item} />;
+              }}
+            />
+          )}
           <View
             style={{
               borderBottomWidth: 1,
@@ -518,7 +529,9 @@ useEffect(() => {
             }}
           />
           <View style={styles.row}>
-            <CustomText style={styles.header} isBold>My Quotes</CustomText>
+            <CustomText style={styles.header} isBold>
+              My Quotes
+            </CustomText>
             <View
               style={{
                 flexDirection: 'row',
@@ -528,7 +541,10 @@ useEffect(() => {
               }}>
               <CustomText
                 onPress={() => {
-                  navigationService.navigate('SeeAllScreen', {type: 'qoutes', data:myQuotes});
+                  navigationService.navigate('SeeAllScreen', {
+                    type: 'qoutes',
+                    data: myQuotes,
+                  });
                 }}
                 style={styles.viewall}>
                 View all
@@ -545,18 +561,30 @@ useEffect(() => {
               />
             </View>
           </View>
-          {isLoading ?  <View style={{justifyContent:'center', alignItems:'center', width:windowWidth, height:windowHeight*0.3}}><ActivityIndicator color={'white'} size={'large'}/></View> :<FlatList
-            data={myQuotes}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{
-              paddingHorizontal: moderateScale(15, 0.3),
-              paddingTop: moderateScale(20, 0.3),
-            }}
-            renderItem={({item, index}) => {
-              // console.log("🚀 ~ file: HomeScreen.js:512 ~ HomeScreen ~ item:", item)
-              return <MyQouteCard item={item} />;
-            }}
-          />}
+          {isLoading ? (
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: windowWidth,
+                height: windowHeight * 0.3,
+              }}>
+              <ActivityIndicator color={'white'} size={'large'} />
+            </View>
+          ) : (
+            <FlatList
+              data={myQuotes}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingHorizontal: moderateScale(15, 0.3),
+                paddingTop: moderateScale(20, 0.3),
+              }}
+              renderItem={({item, index}) => {
+                // console.log("🚀 ~ file: HomeScreen.js:512 ~ HomeScreen ~ item:", item)
+                return <MyQouteCard item={item} />;
+              }}
+            />
+          )}
         </ScrollView>
       </LinearGradient>
       <CustomStatusModal
@@ -575,13 +603,13 @@ useEffect(() => {
       <CustomAlertModal
         isModalVisible={visible}
         onClose={() => {
-          setVisible(false); 
+          setVisible(false);
         }}
         onOKPress={() => {
           setVisible(false);
           BackHandler.exitApp();
-        }} 
-        title={'Are you sure !!'} 
+        }}
+        title={'Are you sure !!'}
         message={'You Want to exit the App ?'}
         iconType={2}
         areYouSureAlert

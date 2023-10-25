@@ -162,7 +162,7 @@ const JobDetails = props => {
                 style={{color: Color.white, fontSize: moderateScale(17, 0.6)}}>
                 {userRole == 'Qbid Member'
                   ? `${user?.first_name} ${user?.last_name}`
-                  : `${item?.user_info[0]?.first_name} ${item?.user_info[0]?.last_name}`}
+                  : `${item?.user_info?.first_name} ${item?.user_info?.last_name}`}
               </CustomText>
               <CustomText
                 style={{color: Color.white, fontSize: moderateScale(11, 0.6)}}>
@@ -201,7 +201,7 @@ const JobDetails = props => {
             </View>
           </View>
           <ShowMoreAndShowLessText minTextLength={50} style={styles.desc}>
-            {item?.notes}
+            {item?.notes ? item?.notes : item?.coverletter} 
           </ShowMoreAndShowLessText>
           <CustomText
             isBold

@@ -196,6 +196,7 @@ const Signup = () => {
        dispatch(setUserData(response?.data?.user_info))
        dispatch(setSelectedRole(response?.data?.user_info?.role))
        dispatch(setUserLogin(response?.data?.token))
+       dispatch(setUserToken({token:response?.data?.token}))
       }
   };
 
