@@ -15,6 +15,7 @@ import { ActivityIndicator } from 'react-native';
 const NegotiatorCard = ({item, fromSeeAll}) => {
   console.log("🚀 ~ file: NegotiatorCard.js:16 ~ NegotiatorCard ~ item:", item)
   const token = useSelector(state => state.authReducer.token)
+  console.log("🚀 ~ file: NegotiatorCard.js:18 ~ NegotiatorCard ~ token:", token)
   const [isLoading, setIsLoading] = useState(false);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const [isModalVisible, setIsModalVisible] = useState(false);

@@ -96,7 +96,7 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
                 : moderateScale(9, 0.6),
               marginLeft: moderateScale(5, 0.3),
             }}>
-            {item?.title ? item?.title : item?.quote_info?.title}
+           {item?.title ? item?.title : item?.quote_info?.title ? item?.quote_info?.title : item?.bid_name}
           </CustomText>
         </View>
         <CustomText
