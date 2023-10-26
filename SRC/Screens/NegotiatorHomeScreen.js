@@ -32,82 +32,63 @@ import JobCard from '../Components/JobCard';
 import Modal from 'react-native-modal';
 import {Get} from '../Axios/AxiosInterceptorFunction';
 import SeekingHelpCard from '../Components/SeekingHelpCard';
-import { useIsFocused } from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 import Lottie from 'lottie-react-native';
 import Card from '../Components/Card';
+import NoData from '../Components/NoData';
 
 const NegotiatorHomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
- 
+  const userData = useSelector(state => state.commonReducer.userData)
+  // console.log("🚀 ~ file: NegotiatorHomeScreen.js:43 ~ NegotiatorHomeScreen ~ userData:", userData)
+
   const [searchData, setSearchData] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState('');
   const [visible, setVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [recommended, setRecommended] = useState([]);
+  // console.log("🚀 ~ file: NegotiatorHomeScreen.js:51 ~ NegotiatorHomeScreen ~ recommended:", recommended)
   const [working, setWorking] = useState([]);
+  // console.log("🚀 ~ file: NegotiatorHomeScreen.js:52 ~ NegotiatorHomeScreen ~ working:", working)
   const [seekingHelp, setSeekingHelp] = useState([]);
- 
- 
-  const isFocused = useIsFocused()
+  // console.log("🚀 ~ file: NegotiatorHomeScreen.js:54 ~ NegotiatorHomeScreen ~ seekingHelp:", seekingHelp)
+  const isFocused = useIsFocused();
+  // console.log("🚀 ~ file: NegotiatorHomeScreen.js:56 ~ NegotiatorHomeScreen ~ isFocused:", isFocused)
 
-  const getRecommended = async () => {
-    const url = 'auth/negotiator/quote/recommended';
-    // setIsLoading(true);
-    const response = await Get(url, token);
-    // setIsLoading(false);
-
-    if (response != undefined) {
-      console.log(
-        '🚀 ~ file: NegotiatorHomeScreen.js:50 ~ getRecommended ~ response:',
-        response?.data,
-      );
-      setRecommended(response?.data?.quote_info);
-    }
-  };
-
-  const getWorkingOn = async () => {
-    const url = 'auth/negotiator/quote/working';
+  const getProposal = async () => {
     setIsLoading(true);
-    const response = await Get(url, token);
-    setIsLoading(false);
-    if (response != undefined) setWorking(response?.data?.quote_info);
-    console.log(
-      '🚀 ~ file: NegotiatorHomeScreen.js:73 ~ getWorkingOn ~ response:',
-      response?.data?.quote_info,
-    );
-  };
 
-  const getSeekingHelp = async () => {
-    const url = 'auth/negotiator/bid_help';
-    setIsLoading(true);
-    const response = await Get(url, token);
-    setIsLoading(false);
-    if (response != undefined) {
-      console.log(
-        '🚀 ~ file: NegotiatorHomeScreen.js:88 ~ getSeekingHelp ~ response:',
-        response?.data,
-      );
-      setSeekingHelp(response?.data?.bid_help_info);
-    }
-  };
-
-  const getProposals = async () => {
-    setIsLoading(true);
-    const [a, b] = await Promise.all([
-      getRecommended(),
-      getWorkingOn(),
-      getSeekingHelp(),
+    const [response1, response2, response3] = await Promise.all([
+      Get('auth/negotiator/quote/recommended', token),
+      Get('auth/negotiator/quote/working', token),
+      Get('auth/negotiator/bid_help', token),
     ]);
     setIsLoading(false);
+
+    if (response1 != undefined) {
+     console.log("🚀 ~ file: NegotiatorHomeScreen.js:66 ~ getProposal ~ response1:", response1?.data)
+     
+      ![null, undefined, ''].includes(response2?.data?.quote_info) &&
+        setRecommended(response1?.data?.quote_info?.data);
+    }
+    if (response2 != undefined) {
+      // console.log("🚀 ~ file: NegotiatorHomeScreen.js:72 ~ getProposal ~ response2:", response2?.data)
+      
+      ![null, undefined, ''].includes(response2?.data?.quote_info) &&
+        setWorking(response2?.data?.quote_info?.data);
+    }
+    if (response3 != undefined) {
+      // console.log("🚀 ~ file: NegotiatorHomeScreen.js:75 ~ getProposal ~ response3:", response3?.data)
+      
+      ![null, undefined, ''].includes(response2?.data?.quote_info) &&
+        setSeekingHelp(response3?.data?.bid_help_info?.data);
+    }
   };
 
   useEffect(() => {
-    // getRecommended();
-    // getSeekingHelp();
-    // getWorkingOn()
-    getProposals();
+    getProposal();
   }, [isFocused]);
 
   useEffect(() => {
@@ -236,7 +217,7 @@ const NegotiatorHomeScreen = () => {
                   style={{
                     fontSize: moderateScale(17, 0.6),
                   }}>
-                  $19.857.00
+               {userData?.total_earning}
                 </CustomText>
               </View>
               <View style={[styles.revenueContainer, {marginTop: '2%'}]}>
@@ -257,9 +238,9 @@ const NegotiatorHomeScreen = () => {
                   isBold
                   style={{
                     fontSize: moderateScale(17, 0.6),
-                    color: '#FF9529',
+                    color:userData?.rating <= 3 ? '#CD7F32' :userData?.rating <= 3.5 ? '#C0C0C0' : userData?.rating <= 4 ? '#FF9529' :'#e5e4e2',
                   }}>
-                  Gold
+                  {userData?.rating <= 3 ? 'Bronze' :userData?.rating <= 3.5 ? 'Silver' : userData?.rating <= 4 ? 'Gold' :'Platinum'}
                 </CustomText>
               </View>
             </View>
@@ -297,22 +278,14 @@ const NegotiatorHomeScreen = () => {
                 <FlatList
                   ListEmptyComponent={() => {
                     return (
-                      <View
+                      <NoData
                         style={{
-                          width: windowWidth*0.95 ,
+                          width: windowWidth * 0.95,
                           height: windowHeight * 0.18,
                           // backgroundColor: 'green',
-                          alignItems:'center'
-                        }}>
-                        <Lottie
-                          source={require('../Assets/Images/animation3.json')}
-                          autoPlay
-                          loop
-                        />
-                        <Text style={styles.nodata}>Data not found</Text>
-                      </View>
-
-                      // <Text>hello</Text>
+                          alignItems: 'center',
+                        }}
+                      />
                     );
                   }}
                   data={recommended}
@@ -325,6 +298,7 @@ const NegotiatorHomeScreen = () => {
                   renderItem={({item, index}) => {
                     return (
                       <JobCard
+                      key={index}
                         item={item}
                         onPress={() => {
                           navigationService.navigate('JobDetails', {item});
@@ -343,6 +317,7 @@ const NegotiatorHomeScreen = () => {
                     onPress={() => {
                       navigationService.navigate('SeeAllNegotiator', {
                         type: 'Working On',
+                        data: working,
                       });
                     }}
                     style={styles.viewall}>
@@ -353,25 +328,20 @@ const NegotiatorHomeScreen = () => {
                 <FlatList
                   ListEmptyComponent={() => {
                     return (
-                      <View
+                      <NoData
                         style={{
-                          width: windowWidth*0.95 ,
+                          width: windowWidth * 0.95,
                           height: windowHeight * 0.18,
                           // backgroundColor: 'green',
-                          alignItems:'center'
-                        }}>
-                        <Lottie
-                          source={require('../Assets/Images/animation3.json')}
-                          autoPlay
-                          loop
-                        />
-                        <Text style={styles.nodata}>Data not found</Text>
-                      </View>
+                          alignItems: 'center',
+                        }}
+                      />
 
                       // <Text>hello</Text>
                     );
                   }}
                   data={working}
+                  
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={{
@@ -384,6 +354,7 @@ const NegotiatorHomeScreen = () => {
                     );
                     return (
                       <JobCard
+                      key={index}
                         item={item}
                         onPress={() => {
                           navigationService.navigate('JobDetails', {item});
@@ -402,6 +373,7 @@ const NegotiatorHomeScreen = () => {
                     onPress={() => {
                       navigationService.navigate('SeeAllNegotiator', {
                         type: 'Job Requests',
+                        data: seekingHelp,
                       });
                     }}
                     style={styles.viewall}>
@@ -410,28 +382,19 @@ const NegotiatorHomeScreen = () => {
                 </View>
 
                 <FlatList
-                    ListEmptyComponent={() => {
-                      return (
-                        <View
-                          style={{
-                            width: windowWidth*0.95 ,
-                            height: windowHeight * 0.18,
-                            // backgroundColor: 'green',
-                            alignItems:'center'
-                          }}>
-                          <Lottie
-                            source={require('../Assets/Images/animation3.json')}
-                            autoPlay
-                            loop
-                          />
-                          <Text style={styles.nodata}>Data not found</Text>
-                        </View>
-  
-                        // <Text>hello</Text>
-                      );
-                    }}
-                  // data={seekingHelp}
-                  data={[1]}
+                  ListEmptyComponent={() => {
+                    return (
+                      <NoData
+                        style={{
+                          width: windowWidth * 0.95,
+                          height: windowHeight * 0.18,
+                          // backgroundColor: 'green',
+                          alignItems: 'center',
+                        }}
+                      />
+                    );
+                  }}
+                  data={seekingHelp.length>5 ? seekingHelp.slice(0,5) : seekingHelp}
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={{
@@ -510,7 +473,7 @@ const styles = ScaledSheet.create({
     color: Color.white,
     marginLeft: moderateScale(15, 0.3),
     fontSize: moderateScale(20, 0.6),
-  },  
+  },
   row: {
     width: windowWidth,
     flexDirection: 'row',
@@ -522,12 +485,12 @@ const styles = ScaledSheet.create({
     fontSize: moderateScale(12, 0.3),
     color: Color.white,
   },
-  nodata:{
+  nodata: {
     color: Color.white,
-    fontWeight:'500',
-    fontSize:18,
-    position:'absolute',
-    bottom:0,
+    fontWeight: '500',
+    fontSize: 18,
+    position: 'absolute',
+    bottom: 0,
     // marginTop:20
-  }
+  },
 });

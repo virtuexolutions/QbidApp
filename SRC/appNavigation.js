@@ -113,10 +113,10 @@ const AppNavigator = () => {
 
 export const TabNavigation = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
-  console.log(
-    '🚀 ~ file: appNavigation.js:83 ~ TabNavigation ~ userRole:',
-    userRole,
-  );
+  // console.log(
+  //   '🚀 ~ file: appNavigation.js:83 ~ TabNavigation ~ userRole:',
+  //   userRole,
+  // );
   const Tabs = createBottomTabNavigator();
   return (
     <Tabs.Navigator

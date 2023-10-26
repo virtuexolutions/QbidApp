@@ -28,7 +28,7 @@ const EnterPhone = props => {
     state => state.commonReducer.selectedRole,
   );
   const fromForgot = props?.route?.params?.fromForgot;
-  console.log('here=>', fromForgot);
+  // console.log('here=>', fromForgot);
   const [phone, setPhone] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -49,7 +49,7 @@ const EnterPhone = props => {
     setIsLoading(false);
 
     if (response != undefined) {
-       console.log('response data =>', response?.data);
+      //  console.log('response data =>', response?.data);
       Alert.alert(`${response?.data?.data[0]?.code}`);
       navigationService.navigate('VerifyNumber', {
         phoneNumber: `${phone}`,

@@ -11,7 +11,7 @@ import CustomButton from './CustomButton';
 import navigationService from '../navigationService';
 
 const MyQouteCard = ({item}) => {
-  console.log("🚀 ~ file: MyQouteCard.js:14 ~ MyQouteCard ~ item:", item)
+  // console.log("🚀 ~ file: MyQouteCard.js:14 ~ MyQouteCard ~ item:", item)
   return (
     <TouchableOpacity
       activeOpacity={0.9}
