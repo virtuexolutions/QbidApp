@@ -43,10 +43,10 @@ const HomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
-  console.log(
-    '🚀 ~ file: HomeScreen.js:20 ~ HomeScreen ~ servicesArray',
-    servicesArray,
-  );
+  // console.log(
+  //   '🚀 ~ file: HomeScreen.js:20 ~ HomeScreen ~ servicesArray',
+  //   servicesArray,
+  // );
   const [searchData, setSearchData] = useState('');
   const [showFilter, setShowFilter] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -77,10 +77,10 @@ const HomeScreen = () => {
     const response = await Get(url, token);
     setIsLoading(false);
     if (response != undefined) {
-      console.log(
-        '🚀 ~ file: HomeScreen.js:72 ~ getProposals ~ response:',
-        response?.data,
-      );
+      // console.log(
+      //   '🚀 ~ file: HomeScreen.js:72 ~ getProposals ~ response:',
+      //   response?.data,
+      // );
       setProposals(response?.data);
     }
   };
@@ -112,16 +112,16 @@ const HomeScreen = () => {
       });
     }
 
-    console.log('🚀 ~ file: HomeScreen.js:85 ~ seekHelp ~ formData:', formData);
+    // console.log('🚀 ~ file: HomeScreen.js:85 ~ seekHelp ~ formData:', formData);
     setsubmitLoading(true);
     const response = await Post(url, formData, apiHeader(token));
     setsubmitLoading(false);
 
     if (response != undefined) {
-      console.log(
-        '🚀 ~ file: HomeScreen.js:91 ~ seekHelp ~ response:',
-        response?.data,
-      );
+      // console.log(
+      //   '🚀 ~ file: HomeScreen.js:91 ~ seekHelp ~ response:',
+      //   response?.data,
+      // );
 
       toggleModal();
     }
@@ -133,10 +133,10 @@ const HomeScreen = () => {
     const response = await Get(url, token);
     setIsLoading(false);
     if (response != undefined) {
-      console.log(
-        '🚀 ~ file: HomeScreen.js:77 ~ getMyQuotes ~ response:',
-        response?.data,
-      );
+      // console.log(
+      //   '🚀 ~ file: HomeScreen.js:77 ~ getMyQuotes ~ response:',
+      //   response?.data,
+      // );
       setMyQuotes(response?.data?.quote_info);
     }
   };
@@ -625,7 +625,7 @@ const HomeScreen = () => {
                   // <Text>hello</Text>
                 );
               }}
-              data={myQuotes}
+              data={myQuotes?.length > 5 ? myQuotes.slice(0,5) : myQuotes }
               // data={[]}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{
@@ -646,7 +646,7 @@ const HomeScreen = () => {
         statusArray={
           selectedView == 'negotiator'
             ? servicesArray
-            : [{name: 'pending'}, {name: 'onGoing'}, {name: 'completed'}]
+            : [{name: 'Recommended'}, {name: 'Working On'}, {name: 'Seeking Help'}]
         }
         data={selectedView == 'negotiator' ? selectedService : selectedStatus}
         setData={

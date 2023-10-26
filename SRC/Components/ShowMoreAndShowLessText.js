@@ -18,7 +18,7 @@ const ShowMoreAndShowLessText = props => {
     let stringArray = children !== null ? children.split(' ') : [];
     setTextMaxLength(stringArray.length);
     if (showMore == false && textMaxLength > minTextLength) {
-      console.log('here');
+      // console.log('here');
       stringArray = stringArray.splice(0, minTextLength);
       let newString = stringArray.join().replace(/,/g, ' ');
       newString = newString + '...';

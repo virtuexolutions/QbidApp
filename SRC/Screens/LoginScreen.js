@@ -39,17 +39,17 @@ import {useRef} from 'react';
 const LoginScreen = () => {
   const dispatch = useDispatch();
   const userRole = useSelector(state => state.commonReducer.selectedRole);
-  console.log('🚀 ~ file: Color.js:4 ~ userRole:', userRole);
+  // console.log('🚀 ~ file: Color.js:4 ~ userRole:', userRole);
   const [firstSection, setFirstSection] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [selectedRole, setSelectedType] = useState('Qbid Member');
   const [images, setImages] = useState([]);
-  console.log(
-    '🚀 ~ file: LoginScreen.js:43 ~ LoginScreen ~ images:',
-    images[0]?.uri,
-  );
+  // console.log(
+  //   '🚀 ~ file: LoginScreen.js:43 ~ LoginScreen ~ images:',
+  //   images[0]?.uri,
+  // );
   const [baseImage, setBaseImage] = useState('');
 
   const servicesArray = ['Qbid Negotiator', 'Qbid Member', 'Business Qbidder'];
@@ -136,6 +136,7 @@ const LoginScreen = () => {
     const response = await Post(url, body, apiHeader());
     setIsLoading(false);
     if (response != undefined) {
+     console.log("🚀 ~ file: LoginScreen.js:139 ~ Login ~ response:", response?.data?.user_info)
       if (selectedRole == response?.data?.user_info?.role) {
         dispatch(setUserData(response?.data?.user_info));
         dispatch(setSelectedRole(response?.data?.user_info?.role));

@@ -17,6 +17,7 @@ import {useSelector} from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import JobCard from '../Components/JobCard';
 import navigationService from '../navigationService';
+import SeekingHelpCard from '../Components/SeekingHelpCard';
 
 const SeeAllNegotiator = props => {
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
@@ -309,7 +310,7 @@ const SeeAllNegotiator = props => {
           }}
           renderItem={({item, index}) => {
             console.log(index % 2 == 0);
-            return (
+            return type != 'Job Requests' ? (
               <JobCard
                 fromSeeAll={true}
                 item={item}
@@ -317,6 +318,12 @@ const SeeAllNegotiator = props => {
                 onPress={() => {
                   navigationService.navigate('JobDetails', {item});
                 }}
+              />
+            ) : (
+              <SeekingHelpCard
+                fromSeeAll={true}
+                style={index % 2 == 0 && {marginRight: moderateScale(7, 0.3)}}
+                item={item}
               />
             );
           }}

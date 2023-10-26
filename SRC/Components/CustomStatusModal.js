@@ -13,10 +13,10 @@ const CustomStatusModal = ({
   setData,
   data,
 }) => {
-  console.log(
-    '🚀 ~ file: CustomStatusModal.js:10 ~ CustomStatusModal ~ statusArray',
-    statusArray,
-  );
+  // console.log(
+  //   '🚀 ~ file: CustomStatusModal.js:10 ~ CustomStatusModal ~ statusArray',
+  //   statusArray,
+  // );
   return (
     <Modal
       isVisible={isModalVisible}

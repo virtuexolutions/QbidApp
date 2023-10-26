@@ -36,9 +36,9 @@ import {useIsFocused} from '@react-navigation/native';
 
 const JobDetails = props => {
   const item = props?.route?.params?.item;
-  console.log('🚀 ~ file: JobDetails.js:29 ~ JobDetails ~ item:', item);
+  // console.log('🚀 ~ file: JobDetails.js:29 ~ JobDetails ~ item:', item);
   const user = useSelector(state => state.commonReducer.userData);
-  console.log('🚀 ~ file: JobDetails.js:41 ~ JobDetails ~ user:', user?.id);
+  // console.log('🚀 ~ file: JobDetails.js:41 ~ JobDetails ~ user:', user?.id);
   const UserCoverLetterArray = useSelector(
     state => state.commonReducer.servicesArray,
   );
@@ -54,26 +54,26 @@ const JobDetails = props => {
   const [Email, setEmail] = useState('');
   const [number, setNumber] = useState('');
   const [desc, setDesc] = useState('');
-  console.log('🚀 ~ file: JobDetails.js:57 ~ JobDetails ~ desc:', desc);
+  // console.log('🚀 ~ file: JobDetails.js:57 ~ JobDetails ~ desc:', desc);
   const isFocused = useIsFocused();
   const [coverletterRole, setCoverLetterRole] = useState('Expertise In');
   const [userData, setUserData] = useState({});
-  console.log('🚀 ~ file: JobDetails.js:60 ~ JobDetails ~ userData:', userData);
+  // console.log('🚀 ~ file: JobDetails.js:60 ~ JobDetails ~ userData:', userData);
 
   // const UserCoverLetterArray = ['Expertise In', 'Expertise In'];
 
   const bidDetails = async () => {
-    const url = `auth/negotiator/quote/${item?.id}`;
+    const url = `auth/negotiator/quote_detail/${item?.id}`;
     setIsLoading(true);
     const response = await Get(url, token);
     setIsLoading(false);
 
     if (response != undefined) {
-      console.log(
-        '🚀 ~ file: JobDetails.js:66 ~ bidDetails ~ response:',
-        response?.data?.quote_info?.bids,
-        user?.id,
-      );
+      // console.log(
+      //   '🚀 ~ file: JobDetails.js:66 ~ bidDetails ~ response:',
+      //   response?.data?.quote_info?.bids,
+      //   user?.id,
+      // );
       const mainuserData = response?.data?.quote_info?.bids?.find(
         item => item.user_info?.id == user?.id,
       );
@@ -91,10 +91,10 @@ const JobDetails = props => {
     const response = await Post(url, {status: value}, apiHeader(token));
     setIsLoading(false);
     if (response != undefined) {
-      console.log(
-        '🚀 ~ file: BidderDetail.js:25 ~ changeStatus ~ response:',
-        response?.data,
-      );
+      // console.log(
+      //   '🚀 ~ file: BidderDetail.js:25 ~ changeStatus ~ response:',
+      //   response?.data,
+      // );
     }
   };
 
@@ -122,10 +122,10 @@ const JobDetails = props => {
     setIsLoading(false);
 
     if (response != undefined) {
-      console.log(
-        '🚀 ~ file: JobDetails.js:53 ~ bidNow ~ response:',
-        response?.data,
-      );
+      // console.log(
+      //   '🚀 ~ file: JobDetails.js:53 ~ bidNow ~ response:',
+      //   response?.data,
+      // );
       setBidDone(true);
       setModalVisible(!isModalVisible);
     }
@@ -180,306 +180,318 @@ const JobDetails = props => {
             paddingTop: moderateScale(40, 0.6),
             paddingLeft: moderateScale(15, 0.6),
           }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <View
-              style={{
-                width: moderateScale(60, 0.3),
-                height: moderateScale(50, 0.3),
-                borderRadius: moderateScale(10, 0.3),
-                overflow: 'hidden',
-              }}>
-              <CustomImage
-                source={require('../Assets/Images/dummyman1.png')}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                }}
-              />
-            </View>
-            <View
-              style={{
-                marginLeft: moderateScale(5, 0.3),
-              }}>
-              <CustomText
-                isBold
-                style={{color: Color.white, fontSize: moderateScale(17, 0.6)}}>
-                {userRole == 'Qbid Member'
-                  ? `${user?.first_name} ${user?.last_name}`
-                  : `${item?.user_info?.first_name} ${item?.user_info?.last_name}`}
-              </CustomText>
-              <CustomText
-                style={{color: Color.white, fontSize: moderateScale(11, 0.6)}}>
-                {user?.email}
-              </CustomText>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                position: 'absolute',
-                bottom: moderateScale(10, 0.3),
-                right: moderateScale(30, 0.3),
-                alignItems: 'center',
-              }}>
-              <View
-                style={{
-                  width: moderateScale(6, 0.6),
-                  height: moderateScale(6, 0.6),
-                  borderRadius: moderateScale(3, 0.6),
-                  backgroundColor:
-                    userRole == 'Qbid Member'
-                      ? Color.blue
-                      : userRole == 'Qbid Negotiator'
-                      ? Color.themeColor
-                      : Color.black,
-                }}
-              />
-              <CustomText
-                style={{
-                  fontSize: moderateScale(8, 0.6),
-                  color: Color.white,
-                  marginLeft: moderateScale(3, 0.3),
-                }}>
-                {item?.status}
-              </CustomText>
-            </View>
-          </View>
-          <ShowMoreAndShowLessText minTextLength={50} style={styles.desc}>
-            {item?.notes ? item?.notes : item?.coverletter}
-          </ShowMoreAndShowLessText>
-          <CustomText
-            isBold
-            style={{
-              color: Color.white,
-              fontSize: moderateScale(17, 0.6),
-              marginTop: moderateScale(20, 0.3),
-              // backgroundColor : 'red'
-            }}>
-            job Details
-          </CustomText>
-          <View style={styles.row}>
-            <Detailcards
-              data={'Chris'}
-              iconName={'vcard'}
-              title={'Member Name'}
-              iconType={FontAwesome}
-              marginTop={moderateScale(10, 0.3)}
-            />
-            <Detailcards
-              data={numeral(item?.asking_price).format('$0,0a')}
-              iconName={'calculator'}
-              title={'Expected Qoute'}
-              iconType={Entypo}
-              marginTop={moderateScale(10, 0.3)}
-            />
-            <Detailcards
-              data={item?.city}
-              iconName={'building'}
-              title={'City'}
-              iconType={FontAwesome}
-              marginTop={moderateScale(30, 0.3)}
-            />
-            <Detailcards
-              data={`${item?.offering_percentage}%`}
-              iconName={'percent'}
-              title={'Offering Percent'}
-              iconType={FontAwesome}
-              marginTop={moderateScale(30, 0.3)}
-            />
-            <Detailcards
-              data={numeral(item?.quoted_price).format('$0,0a')}
-              iconName={'calculator'}
-              title={'Vendor Qoute'}
-              iconType={Entypo}
-              marginTop={moderateScale(30, 0.3)}
-            />
-            <Detailcards
-              data={item?.service_preference}
-              iconName={'briefcase'}
-              title={'Service Type'}
-              iconType={Entypo}
-              marginTop={moderateScale(30, 0.3)}
-            />
-          </View>
-          {userRole == 'Qbid Member' ? (
-            <>
-              <CustomText
-                isBold
-                style={{
-                  color: Color.white,
-                  fontSize: moderateScale(17, 0.6),
-                  marginVertical: moderateScale(20, 0.3),
-                }}>
-                Applied Negotiators
-              </CustomText>
-              <FlatList
-                data={item?.bids}
-                renderItem={({item}) => {
-                  console.log(
-                    '🚀 ~ file: JobDetails.js:275 ~ JobDetails ~ item:',
-                    item,
-                  );
-                  return (
-                    <>
-                      <BidderDetail
-                        item={{
-                          image: require('../Assets/Images/man1.jpg'),
-                          name: item?.fullname,
-                          rating: 4,
-                          description: item?.coverletter,
-                          status: item?.status,
-                          id: item?.id,
-                        }}
-                      />
-                      {item?.status == 'pending' && (
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            // backgroundColor: 'black',
-                            justifyContent: 'space-between',
-                            width: windowWidth * 0.55,
-                            alignSelf: 'center',
-                            paddingVertical: moderateScale(5, 0.6),
-                            alignItems: 'center',
-                            marginBottom: moderateScale(5, 0.6),
-                          }}>
-                          <CustomButton
-                            isBold
-                            text={
-                              isLoading ? (
-                                <ActivityIndicator
-                                  color={'white'}
-                                  size={moderateScale(20, 0.6)}
-                                />
-                              ) : (
-                                'Accept'
-                              )
-                            }
-                            textColor={Color.white}
-                            width={windowWidth * 0.25}
-                            height={windowHeight * 0.04}
-                            // marginTop={moderateScale(10, 0.3)}
-                            bgColor={
-                              userRole == 'Qbid Member'
-                                ? Color.blue
-                                : userRole == 'Qbid Negotiator'
-                                ? Color.themeColor
-                                : Color.black
-                            }
-                            borderRadius={moderateScale(30, 0.3)}
-                            fontSize={moderateScale(11, 0.6)}
-                            onPress={() => {
-                              changeStatus('accept');
-                              // setModalVisible(false);
-                            }}
-                          />
-                          <CustomButton
-                            isBold
-                            text={'Decline'}
-                            textColor={Color.white}
-                            width={windowWidth * 0.25}
-                            height={windowHeight * 0.04}
-                            // marginTop={moderateScale(10, 0.3)}
-                            bgColor={
-                              userRole == 'Qbid Member'
-                                ? Color.blue
-                                : userRole == 'Qbid Negotiator'
-                                ? Color.themeColor
-                                : Color.black
-                            }
-                            borderRadius={moderateScale(30, 0.3)}
-                            fontSize={moderateScale(11, 0.6)}
-                            onPress={() => {
-                              changeStatus('reject');
-                              // setModalVisible(false);
-                            }}
-                          />
-                        </View>
-                      )}
-                    </>
-                  );
-                }}
-              />
-            </>
-          ) : userRole != 'Qbid Member' && bidDone ? (
-            <>
-              <CustomText
-                isBold
-                style={{
-                  color: Color.white,
-                  fontSize: moderateScale(17, 0.6),
-                  marginVertical: moderateScale(20, 0.3),
-                }}>
-                Your Bid Detail
-              </CustomText>
-              <BidderDetail
-                item={{
-                  image: require('../Assets/Images/man1.jpg'),
-                  name: user?.first_name,
-                  rating: 4,
-                  description: userData?.coverletter,
-                  status: item?.status,
-                  id: item?.id,
-                }}
-              />
-            </>
+          {isLoading ? (<View style={{width:windowWidth*0.95 , height:windowHeight*0.8, justifyContent:'center', alignItems:'center'}}>
+            <ActivityIndicator size={'large'} color={'white'} /></View>
           ) : (
             <>
-              <MarkCheckWithText
-                checked={checked}
-                setChecked={setChecked}
-                textPrimary={'I want to boost '}
-                textSecondary={'my Bid'}
-                textStyleSecondary={{
-                  color:
-                    userRole == 'Qbid Member'
-                      ? Color.blue
-                      : userRole == 'Qbid Negotiator'
-                      ? Color.themeColor
-                      : Color.black,
-                }}
-              />
-              <TextInputWithTitle
-                titleText={'Cover Letter'}
-                secureText={false}
-                placeholder={'Cover Letter'}
-                setText={setDescription}
-                value={description}
-                viewHeight={0.18}
-                viewWidth={0.92}
-                inputWidth={0.86}
-                // border={1}
-                borderColor={'#ffffff'}
-                backgroundColor={'#FFFFFF'}
-                marginTop={moderateScale(15, 0.3)}
-                color={Color.themeColor}
-                placeholderColor={Color.themeLightGray}
-                borderRadius={moderateScale(15, 0.3)}
-                multiline
-              />
-              <CustomButton
-                text={'Bid Now'}
-                textColor={Color.white}
-                width={windowWidth * 0.92}
-                height={windowHeight * 0.07}
-                marginTop={moderateScale(20, 0.3)}
-                onPress={() => {
-                  // setBidDone(true);
-                  toggleModal();
-                }}
-                bgColor={
-                  userRole == 'Qbid Member'
-                    ? Color.blue
-                    : userRole == 'Qbid Negotiator'
-                    ? Color.themeColor
-                    : Color.black
-                }
-                borderRadius={moderateScale(30, 0.3)}
-                alignSelf={'flex-start'}
-              />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}>
+                <View
+                  style={{
+                    width: moderateScale(60, 0.3),
+                    height: moderateScale(50, 0.3),
+                    borderRadius: moderateScale(10, 0.3),
+                    overflow: 'hidden',
+                  }}>
+                  <CustomImage
+                    source={require('../Assets/Images/dummyman1.png')}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                    }}
+                  />
+                </View>
+                <View
+                  style={{
+                    marginLeft: moderateScale(5, 0.3),
+                  }}>
+                  <CustomText
+                    isBold
+                    style={{
+                      color: Color.white,
+                      fontSize: moderateScale(17, 0.6),
+                    }}>
+                    {userRole == 'Qbid Member'
+                      ? `${user?.first_name} ${user?.last_name}`
+                      : `${item?.user_info?.first_name} ${item?.user_info?.last_name}`}
+                  </CustomText>
+                  <CustomText
+                    style={{
+                      color: Color.white,
+                      fontSize: moderateScale(11, 0.6),
+                    }}>
+                    {user?.email}
+                  </CustomText>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    position: 'absolute',
+                    bottom: moderateScale(10, 0.3),
+                    right: moderateScale(30, 0.3),
+                    alignItems: 'center',
+                  }}>
+                  <View
+                    style={{
+                      width: moderateScale(6, 0.6),
+                      height: moderateScale(6, 0.6),
+                      borderRadius: moderateScale(3, 0.6),
+                      backgroundColor:
+                        userRole == 'Qbid Member'
+                          ? Color.blue
+                          : userRole == 'Qbid Negotiator'
+                          ? Color.themeColor
+                          : Color.black,
+                    }}
+                  />
+                  <CustomText
+                    style={{
+                      fontSize: moderateScale(8, 0.6),
+                      color: Color.white,
+                      marginLeft: moderateScale(3, 0.3),
+                    }}>
+                    {item?.status}
+                  </CustomText>
+                </View>
+              </View>
+              <ShowMoreAndShowLessText minTextLength={50} style={styles.desc}>
+                {item?.notes ? item?.notes : item?.coverletter}
+              </ShowMoreAndShowLessText>
+              <CustomText
+                isBold
+                style={{
+                  color: Color.white,
+                  fontSize: moderateScale(17, 0.6),
+                  marginTop: moderateScale(20, 0.3),
+                  // backgroundColor : 'red'
+                }}>
+                job Details
+              </CustomText>
+              <View style={styles.row}>
+                <Detailcards
+                  data={'Chris'}
+                  iconName={'vcard'}
+                  title={'Member Name'}
+                  iconType={FontAwesome}
+                  marginTop={moderateScale(10, 0.3)}
+                />
+                <Detailcards
+                  data={numeral(item?.asking_price).format('$0,0a')}
+                  iconName={'calculator'}
+                  title={'Expected Qoute'}
+                  iconType={Entypo}
+                  marginTop={moderateScale(10, 0.3)}
+                />
+                <Detailcards
+                  data={item?.city}
+                  iconName={'building'}
+                  title={'City'}
+                  iconType={FontAwesome}
+                  marginTop={moderateScale(30, 0.3)}
+                />
+                <Detailcards
+                  data={`${item?.offering_percentage}%`}
+                  iconName={'percent'}
+                  title={'Offering Percent'}
+                  iconType={FontAwesome}
+                  marginTop={moderateScale(30, 0.3)}
+                />
+                <Detailcards
+                  data={numeral(item?.quoted_price).format('$0,0a')}
+                  iconName={'calculator'}
+                  title={'Vendor Qoute'}
+                  iconType={Entypo}
+                  marginTop={moderateScale(30, 0.3)}
+                />
+                <Detailcards
+                  data={item?.service_preference}
+                  iconName={'briefcase'}
+                  title={'Service Type'}
+                  iconType={Entypo}
+                  marginTop={moderateScale(30, 0.3)}
+                />
+              </View>
+              {userRole == 'Qbid Member' ? (
+                <>
+                  <CustomText
+                    isBold
+                    style={{
+                      color: Color.white,
+                      fontSize: moderateScale(17, 0.6),
+                      marginVertical: moderateScale(20, 0.3),
+                    }}>
+                    Applied Negotiators
+                  </CustomText>
+                  <FlatList
+                    data={item?.bids}
+                    renderItem={({item}) => {
+                      // console.log(
+                      //   '🚀 ~ file: JobDetails.js:275 ~ JobDetails ~ item:',
+                      //   item,
+                      // );
+                      return (
+                        <>
+                          <BidderDetail
+                            item={{
+                              image: require('../Assets/Images/man1.jpg'),
+                              name: item?.fullname,
+                              rating: 4,
+                              description: item?.coverletter,
+                              status: item?.status,
+                              id: item?.id,
+                            }}
+                          />
+                          {item?.status == 'pending' && (
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                // backgroundColor: 'black',
+                                justifyContent: 'space-between',
+                                width: windowWidth * 0.55,
+                                alignSelf: 'center',
+                                paddingVertical: moderateScale(5, 0.6),
+                                alignItems: 'center',
+                                marginBottom: moderateScale(5, 0.6),
+                              }}>
+                              <CustomButton
+                                isBold
+                                text={
+                                  isLoading ? (
+                                    <ActivityIndicator
+                                      color={'white'}
+                                      size={moderateScale(20, 0.6)}
+                                    />
+                                  ) : (
+                                    'Accept'
+                                  )
+                                }
+                                textColor={Color.white}
+                                width={windowWidth * 0.25}
+                                height={windowHeight * 0.04}
+                                // marginTop={moderateScale(10, 0.3)}
+                                bgColor={
+                                  userRole == 'Qbid Member'
+                                    ? Color.blue
+                                    : userRole == 'Qbid Negotiator'
+                                    ? Color.themeColor
+                                    : Color.black
+                                }
+                                borderRadius={moderateScale(30, 0.3)}
+                                fontSize={moderateScale(11, 0.6)}
+                                onPress={() => {
+                                  changeStatus('accept');
+                                  // setModalVisible(false);
+                                }}
+                              />
+                              <CustomButton
+                                isBold
+                                text={'Decline'}
+                                textColor={Color.white}
+                                width={windowWidth * 0.25}
+                                height={windowHeight * 0.04}
+                                // marginTop={moderateScale(10, 0.3)}
+                                bgColor={
+                                  userRole == 'Qbid Member'
+                                    ? Color.blue
+                                    : userRole == 'Qbid Negotiator'
+                                    ? Color.themeColor
+                                    : Color.black
+                                }
+                                borderRadius={moderateScale(30, 0.3)}
+                                fontSize={moderateScale(11, 0.6)}
+                                onPress={() => {
+                                  changeStatus('reject');
+                                  // setModalVisible(false);
+                                }}
+                              />
+                            </View>
+                          )}
+                        </>
+                      );
+                    }}
+                  />
+                </>
+              ) : userRole != 'Qbid Member' && bidDone ? (
+                <>
+                  <CustomText
+                    isBold
+                    style={{
+                      color: Color.white,
+                      fontSize: moderateScale(17, 0.6),
+                      marginVertical: moderateScale(20, 0.3),
+                    }}>
+                    Your Bid Detail
+                  </CustomText>
+                  <BidderDetail
+                    item={{
+                      image: require('../Assets/Images/man1.jpg'),
+                      name: user?.first_name,
+                      rating: 4,
+                      description: userData?.coverletter,
+                      status: item?.status,
+                      id: item?.id,
+                    }}
+                  />
+                </>
+              ) : (
+                <>
+                  <MarkCheckWithText
+                    checked={checked}
+                    setChecked={setChecked}
+                    textPrimary={'I want to boost '}
+                    textSecondary={'my Bid'}
+                    textStyleSecondary={{
+                      color:
+                        userRole == 'Qbid Member'
+                          ? Color.blue
+                          : userRole == 'Qbid Negotiator'
+                          ? Color.themeColor
+                          : Color.black,
+                    }}
+                  />
+                  <TextInputWithTitle
+                    titleText={'Cover Letter'}
+                    secureText={false}
+                    placeholder={'Cover Letter'}
+                    setText={setDescription}
+                    value={description}
+                    viewHeight={0.18}
+                    viewWidth={0.92}
+                    inputWidth={0.86}
+                    // border={1}
+                    borderColor={'#ffffff'}
+                    backgroundColor={'#FFFFFF'}
+                    marginTop={moderateScale(15, 0.3)}
+                    color={Color.themeColor}
+                    placeholderColor={Color.themeLightGray}
+                    borderRadius={moderateScale(15, 0.3)}
+                    multiline
+                  />
+                  <CustomButton
+                    text={'Bid Now'}
+                    textColor={Color.white}
+                    width={windowWidth * 0.92}
+                    height={windowHeight * 0.07}
+                    marginTop={moderateScale(20, 0.3)}
+                    onPress={() => {
+                      // setBidDone(true);
+                      toggleModal();
+                    }}
+                    bgColor={
+                      userRole == 'Qbid Member'
+                        ? Color.blue
+                        : userRole == 'Qbid Negotiator'
+                        ? Color.themeColor
+                        : Color.black
+                    }
+                    borderRadius={moderateScale(30, 0.3)}
+                    alignSelf={'flex-start'}
+                  />
+                </>
+              )}
             </>
           )}
         </ScrollView>

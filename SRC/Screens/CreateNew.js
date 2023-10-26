@@ -73,12 +73,22 @@ const CreateNew = () => {
       }
     }
     multiImages?.map((item, index) => formData.append(`images[${index}]`, item));
-    console.log("🚀 ~ file: CreateNew.js:67 ~ publishQuote ~ formData:", formData)
+    // console.log("🚀 ~ file: CreateNew.js:67 ~ publishQuote ~ formData:", formData)
 
     setIsLoading(true);
     const response = await Post(url, formData, apiHeader(token));
     setIsLoading(false);
     if (response != undefined) {
+
+      setCity('')
+      setAskingPrice('')
+      setDescription('')
+      setMultiImages([])
+      setOfferingPercent('')
+      setQouteTitle('')
+      setSelectedService('')
+      setVendorQoutedPrice('')
+      
       // console.log(
       //   '🚀 ~ file: CreateNew.js:81 ~ publishQuote ~ response:',
       //   response?.data,

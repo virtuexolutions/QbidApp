@@ -14,7 +14,7 @@ import numeral from 'numeral';
 import {Post} from '../Axios/AxiosInterceptorFunction';
 
 const JobCard = ({fromSeeAll, style, onPress, item}) => {
-  console.log('🚀 ~ file: JobCard.js:15 ~ JobCard ~ item:', item);
+  // console.log('🚀 ~ file: JobCard.js:15 ~ JobCard ~ item:', item);
   const token = useSelector(state => state.authReducer.token);
 
   const [loading, setLoading] = useState(false);
@@ -28,10 +28,10 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
     const response = await Post(url, {status: value}, apiHeader(token));
     setLoading(false);
     if (response != undefined) {
-      console.log(
-        '🚀 ~ file: JobCard.js:31 ~ changeStatus ~ response:',
-        response?.data,
-      );
+      // console.log(
+      //   '🚀 ~ file: JobCard.js:31 ~ changeStatus ~ response:',
+      //   response?.data,
+      // );
 
       setModalVisible(false);
     }
@@ -170,7 +170,7 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
           height={fromSeeAll && windowHeight * 0.03}
           marginTop={moderateScale(10, 0.3)}
           onPress={() => {
-            // navigationService.navigate('JobDetails')
+            onPress ? onPress() : setModalVisible(!modalVisible);
           }}
           bgColor={
             userRole == 'Qbid Member'
