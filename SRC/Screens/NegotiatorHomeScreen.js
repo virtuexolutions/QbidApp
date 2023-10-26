@@ -395,6 +395,7 @@ const NegotiatorHomeScreen = () => {
                     );
                   }}
                   data={seekingHelp.length>5 ? seekingHelp.slice(0,5) : seekingHelp}
+                  // data={1}
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={{

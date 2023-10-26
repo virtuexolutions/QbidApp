@@ -46,7 +46,7 @@ const Card = ({item}) => {
               }]}
               isBold>
                 name
-             {/* {item?} */}
+             {item?.Qbid_name}
             </CustomText>
 
             <CustomText
