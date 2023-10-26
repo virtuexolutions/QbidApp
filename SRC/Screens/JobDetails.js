@@ -1,12 +1,13 @@
 import {
   Alert,
+  FlatList,
   Platform,
   StyleSheet,
   Text,
   ToastAndroid,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import LinearGradient from 'react-native-linear-gradient';
 import {ScrollView} from 'react-native';
@@ -29,13 +30,15 @@ import BidderDetail from '../Components/BidderDetail';
 import Detailcards from '../Components/Detailcards';
 import Modal from 'react-native-modal';
 import DropDownSingleSelect from '../Components/DropDownSingleSelect';
-import {Post} from '../Axios/AxiosInterceptorFunction';
+import {Get, Post} from '../Axios/AxiosInterceptorFunction';
 import numeral from 'numeral';
+import {useIsFocused} from '@react-navigation/native';
 
 const JobDetails = props => {
   const item = props?.route?.params?.item;
   console.log('🚀 ~ file: JobDetails.js:29 ~ JobDetails ~ item:', item);
   const user = useSelector(state => state.commonReducer.userData);
+  console.log('🚀 ~ file: JobDetails.js:41 ~ JobDetails ~ user:', user?.id);
   const UserCoverLetterArray = useSelector(
     state => state.commonReducer.servicesArray,
   );
@@ -51,9 +54,49 @@ const JobDetails = props => {
   const [Email, setEmail] = useState('');
   const [number, setNumber] = useState('');
   const [desc, setDesc] = useState('');
+  console.log('🚀 ~ file: JobDetails.js:57 ~ JobDetails ~ desc:', desc);
+  const isFocused = useIsFocused();
   const [coverletterRole, setCoverLetterRole] = useState('Expertise In');
+  const [userData, setUserData] = useState({});
+  console.log('🚀 ~ file: JobDetails.js:60 ~ JobDetails ~ userData:', userData);
 
   // const UserCoverLetterArray = ['Expertise In', 'Expertise In'];
+
+  const bidDetails = async () => {
+    const url = `auth/negotiator/quote/${item?.id}`;
+    setIsLoading(true);
+    const response = await Get(url, token);
+    setIsLoading(false);
+
+    if (response != undefined) {
+      console.log(
+        '🚀 ~ file: JobDetails.js:66 ~ bidDetails ~ response:',
+        response?.data?.quote_info?.bids,
+        user?.id,
+      );
+      const mainuserData = response?.data?.quote_info?.bids?.find(
+        item => item.user_info?.id == user?.id,
+      );
+
+      if (mainuserData) {
+        setBidDone(true);
+        setUserData(mainuserData);
+      }
+    }
+  };
+
+  const changeStatus = async value => {
+    const url = `auth/member/bid/${item?.id}`;
+    setIsLoading(true);
+    const response = await Post(url, {status: value}, apiHeader(token));
+    setIsLoading(false);
+    if (response != undefined) {
+      console.log(
+        '🚀 ~ file: BidderDetail.js:25 ~ changeStatus ~ response:',
+        response?.data,
+      );
+    }
+  };
 
   const bidNow = async () => {
     const url = 'auth/negotiator/bid';
@@ -91,6 +134,10 @@ const JobDetails = props => {
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
+
+  useEffect(() => {
+    bidDetails();
+  }, [isFocused]);
 
   return (
     <ScreenBoiler
@@ -201,7 +248,7 @@ const JobDetails = props => {
             </View>
           </View>
           <ShowMoreAndShowLessText minTextLength={50} style={styles.desc}>
-            {item?.notes ? item?.notes : item?.coverletter} 
+            {item?.notes ? item?.notes : item?.coverletter}
           </ShowMoreAndShowLessText>
           <CustomText
             isBold
@@ -268,12 +315,92 @@ const JobDetails = props => {
                 }}>
                 Applied Negotiators
               </CustomText>
-              <BidderDetail
-                item={{
-                  image: require('../Assets/Images/man1.jpg'),
-                  name: 'Steve Job',
-                  rating: 4,
-                  description: 'I can really help you with this task',
+              <FlatList
+                data={item?.bids}
+                renderItem={({item}) => {
+                  console.log(
+                    '🚀 ~ file: JobDetails.js:275 ~ JobDetails ~ item:',
+                    item,
+                  );
+                  return (
+                    <>
+                      <BidderDetail
+                        item={{
+                          image: require('../Assets/Images/man1.jpg'),
+                          name: item?.fullname,
+                          rating: 4,
+                          description: item?.coverletter,
+                          status: item?.status,
+                          id: item?.id,
+                        }}
+                      />
+                      {item?.status == 'pending' && (
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            // backgroundColor: 'black',
+                            justifyContent: 'space-between',
+                            width: windowWidth * 0.55,
+                            alignSelf: 'center',
+                            paddingVertical: moderateScale(5, 0.6),
+                            alignItems: 'center',
+                            marginBottom: moderateScale(5, 0.6),
+                          }}>
+                          <CustomButton
+                            isBold
+                            text={
+                              isLoading ? (
+                                <ActivityIndicator
+                                  color={'white'}
+                                  size={moderateScale(20, 0.6)}
+                                />
+                              ) : (
+                                'Accept'
+                              )
+                            }
+                            textColor={Color.white}
+                            width={windowWidth * 0.25}
+                            height={windowHeight * 0.04}
+                            // marginTop={moderateScale(10, 0.3)}
+                            bgColor={
+                              userRole == 'Qbid Member'
+                                ? Color.blue
+                                : userRole == 'Qbid Negotiator'
+                                ? Color.themeColor
+                                : Color.black
+                            }
+                            borderRadius={moderateScale(30, 0.3)}
+                            fontSize={moderateScale(11, 0.6)}
+                            onPress={() => {
+                              changeStatus('accept');
+                              // setModalVisible(false);
+                            }}
+                          />
+                          <CustomButton
+                            isBold
+                            text={'Decline'}
+                            textColor={Color.white}
+                            width={windowWidth * 0.25}
+                            height={windowHeight * 0.04}
+                            // marginTop={moderateScale(10, 0.3)}
+                            bgColor={
+                              userRole == 'Qbid Member'
+                                ? Color.blue
+                                : userRole == 'Qbid Negotiator'
+                                ? Color.themeColor
+                                : Color.black
+                            }
+                            borderRadius={moderateScale(30, 0.3)}
+                            fontSize={moderateScale(11, 0.6)}
+                            onPress={() => {
+                              changeStatus('reject');
+                              // setModalVisible(false);
+                            }}
+                          />
+                        </View>
+                      )}
+                    </>
+                  );
                 }}
               />
             </>
@@ -291,9 +418,11 @@ const JobDetails = props => {
               <BidderDetail
                 item={{
                   image: require('../Assets/Images/man1.jpg'),
-                  name: 'Steve Job',
+                  name: user?.first_name,
                   rating: 4,
-                  description: 'I can really help you with this task',
+                  description: userData?.coverletter,
+                  status: item?.status,
+                  id: item?.id,
                 }}
               />
             </>

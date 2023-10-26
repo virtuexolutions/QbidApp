@@ -31,26 +31,24 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import JobCard from '../Components/JobCard';
 import Modal from 'react-native-modal';
 import {Get} from '../Axios/AxiosInterceptorFunction';
+import SeekingHelpCard from '../Components/SeekingHelpCard';
+import { useIsFocused } from '@react-navigation/native';
 
 const NegotiatorHomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
-  console.log("🚀 ~ file: NegotiatorHomeScreen.js:38 ~ NegotiatorHomeScreen ~ token:", token)
+ 
   const [searchData, setSearchData] = useState('');
-  const [showFilter, setShowFilter] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState('');
   const [visible, setVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [recommended, setRecommended] = useState([]);
-  const [working ,setWorking] =useState([])
- const  [seekingHelp ,setSeekingHelp] =useState([])
-  console.log(
-    '🚀 ~ file: NegotiatorHomeScreen.js:38 ~ NegotiatorHomeScreen ~ recommended:',
-    recommended,
-  );
-  // const [workingOn, setWorkingOn] = useState([])
-  // const [seekingHelp, setseekingHelp] = useState([])
+  const [working, setWorking] = useState([]);
+  const [seekingHelp, setSeekingHelp] = useState([]);
+ 
+ 
+  const isFocused = useIsFocused()
 
   const getRecommended = async () => {
     const url = 'auth/negotiator/quote/recommended';
@@ -67,30 +65,31 @@ const NegotiatorHomeScreen = () => {
     }
   };
 
-  const getWorkingOn = async () =>{
-    const url ='auth/negotiator/quote/working'
-    setIsLoading(true)
-    const response = await Get(url ,token)
-    setIsLoading(false)
-    if(response != undefined)
-    setWorking(response?.data?.quote_info)
-    console.log("🚀 ~ file: NegotiatorHomeScreen.js:73 ~ getWorkingOn ~ response:", response?.data?.quote_info)
+  const getWorkingOn = async () => {
+    const url = 'auth/negotiator/quote/working';
+    setIsLoading(true);
+    const response = await Get(url, token);
+    setIsLoading(false);
+    if (response != undefined) setWorking(response?.data?.quote_info);
+    console.log(
+      '🚀 ~ file: NegotiatorHomeScreen.js:73 ~ getWorkingOn ~ response:',
+      response?.data?.quote_info,
+    );
+  };
 
-  } 
-
-
-const getSeekingHelp = async ()=>{
-  const url = 'auth/negotiator/bid_help'
-setIsLoading(true)
-const response =await Get(url ,token)
-setIsLoading(false)
-if(response != undefined){
-  console.log("🚀 ~ file: NegotiatorHomeScreen.js:88 ~ getSeekingHelp ~ response:", response?.data)
-  setSeekingHelp(response?.data?.bid_help_info)
-}
-
-}
-
+  const getSeekingHelp = async () => {
+    const url = 'auth/negotiator/bid_help';
+    setIsLoading(true);
+    const response = await Get(url, token);
+    setIsLoading(false);
+    if (response != undefined) {
+      console.log(
+        '🚀 ~ file: NegotiatorHomeScreen.js:88 ~ getSeekingHelp ~ response:',
+        response?.data,
+      );
+      setSeekingHelp(response?.data?.bid_help_info);
+    }
+  };
 
   const getProposals = async () => {
     setIsLoading(true);
@@ -100,19 +99,14 @@ if(response != undefined){
       getSeekingHelp(),
     ]);
     setIsLoading(false);
-
-    // console.log(
-    //   '🚀 ~ file: NegotiatorHomeScreen.js:45 ~ getProposals ~ result:',
-    //   a,
-    // );
   };
 
   useEffect(() => {
     // getRecommended();
     // getSeekingHelp();
     // getWorkingOn()
-    getProposals()
-  }, []);
+    getProposals();
+  }, [isFocused]);
 
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', () => {
@@ -341,7 +335,10 @@ if(response != undefined){
                     paddingHorizontal: moderateScale(15, 0.3),
                   }}
                   renderItem={({item, index}) => {
-                    console.log("🚀 ~ file: NegotiatorHomeScreen.js:343 ~ NegotiatorHomeScreen ~ item:", item)
+                    console.log(
+                      '🚀 ~ file: NegotiatorHomeScreen.js:343 ~ NegotiatorHomeScreen ~ item:',
+                      item,
+                    );
                     return (
                       <JobCard
                         item={item}
@@ -377,7 +374,7 @@ if(response != undefined){
                     paddingHorizontal: moderateScale(15, 0.3),
                   }}
                   renderItem={({item, index}) => {
-                    return <JobCard />;
+                    return <SeekingHelpCard item={item} />;
                   }}
                 />
               </View>

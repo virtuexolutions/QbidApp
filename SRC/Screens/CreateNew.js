@@ -57,6 +57,12 @@ const CreateNew = () => {
     };
 
     const formData = new FormData();
+    if(description.length < 100){
+      return Platform.OS == 'android'
+          ? ToastAndroid.show(`Description should be greater than 100`, ToastAndroid.SHORT)
+          : Alert.alert(`Description should be greater than 100`);
+    }
+    
     for (let key in body) {
       if (body[key] == '') {
         return Platform.OS == 'android'

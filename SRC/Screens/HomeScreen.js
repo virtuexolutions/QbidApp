@@ -68,7 +68,7 @@ const HomeScreen = () => {
   const [proposals, setProposals] = useState([]);
 
   const getProposals = async () => {
-    const url = 'auth/member/bid';
+    const url = 'auth/member/bid_help';
     setIsLoading(true);
     const response = await Get(url, token);
     setIsLoading(false);
@@ -82,7 +82,7 @@ const HomeScreen = () => {
   };
 
   const seekHelp = async () => {
-    const url = 'auth/negotiator/bid_help';
+    const url = 'auth/member/bid_help';
     const body = {
       Qbid_name: qbidName,
       service_type: qbidDetail,
@@ -114,10 +114,12 @@ const HomeScreen = () => {
     setsubmitLoading(false);
 
     if (response != undefined) {
-      return console.log(
+       console.log(
         '🚀 ~ file: HomeScreen.js:91 ~ seekHelp ~ response:',
         response?.data,
       );
+
+      toggleModal()
     }
   };
 
@@ -129,7 +131,7 @@ const HomeScreen = () => {
     if (response != undefined) {
       console.log(
         '🚀 ~ file: HomeScreen.js:77 ~ getMyQuotes ~ response:',
-        response?.data?.quote_info,
+        response?.data,
       );
       setMyQuotes(response?.data?.quote_info);
     }
@@ -137,7 +139,7 @@ const HomeScreen = () => {
 
   useEffect(() => {
     getMyQuotes();
-    getProposals();
+    // getProposals();
   }, [isFocused]);
 
   useEffect(() => {
@@ -448,7 +450,7 @@ const HomeScreen = () => {
                       seekHelp();
                     }}
                     text={
-                      isLoading ? (
+                      submitLoading ? (
                         <ActivityIndicator color={'#FFFFFF'} size={'small'} />
                       ) : (
                         'Submit'
@@ -514,7 +516,7 @@ const HomeScreen = () => {
             </View>
           ) : (
             <FlatList
-              data={negotiatorsArray}
+              data={proposals}
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{

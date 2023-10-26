@@ -13,7 +13,7 @@ import {useSelector} from 'react-redux';
 import numeral from 'numeral';
 import {Post} from '../Axios/AxiosInterceptorFunction';
 
-const JobCard = ({fromSeeAll, style, onPress, item}) => {
+const SeekingHelpCard = ({fromSeeAll, style, onPress, item}) => {
   console.log('🚀 ~ file: JobCard.js:15 ~ JobCard ~ item:', item);
   const token = useSelector(state => state.authReducer.token);
 
@@ -41,7 +41,7 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
     <>
       <TouchableOpacity
         onPress={() => {
-          onPress ? onPress() : setModalVisible(!modalVisible);
+          setModalVisible(!modalVisible);
         }}
         activeOpacity={0.9}
         style={[
@@ -96,7 +96,7 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
                 : moderateScale(9, 0.6),
               marginLeft: moderateScale(5, 0.3),
             }}>
-            {item?.title ? item?.title : item?.quote_info?.title}
+           John Doe
           </CustomText>
         </View>
         <CustomText
@@ -108,62 +108,12 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
             color: '#575757',
             marginTop: moderateScale(5, 0.3),
           }}>
-          {item?.notes ? item?.notes : item?.quote_info?.notes}
+            Help Name
+          {/* {item?.notes ? item?.notes : item?.quote_info?.notes} */}
         </CustomText>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginTop: moderateScale(10, 0.3),
-            justifyContent: 'space-between',
-            paddingHorizontal: moderateScale(2, 0.6),
-          }}>
-          <View>
-            <CustomText
-              isBold
-              style={{
-                fontSize: moderateScale(9, 0.6),
-              }}>
-              {numeral(
-                item?.quoted_price
-                  ? item?.quoted_price
-                  : item?.quote_info?.quoted_price,
-              ).format('$0,0a')}
-            </CustomText>
-            <CustomText
-              style={{
-                fontSize: moderateScale(8, 0.6),
-                //  backgroundColor : 'red'
-              }}>
-              Vendor Qoute
-            </CustomText>
-          </View>
-          <View
-            style={{
-              alignItems: 'center',
-              marginRight: moderateScale(2, 0.3),
-            }}>
-            <CustomText
-              isBold
-              style={{
-                fontSize: moderateScale(9, 0.6),
-              }}>
-              {`${
-                item?.offering_percentage
-                  ? item?.offering_percentage
-                  : item?.quote_info?.offering_percentage
-              }%`}
-            </CustomText>
-            <CustomText
-              style={{
-                fontSize: moderateScale(8, 0.6),
-                //  backgroundColor : 'red'
-              }}>
-              Offering
-            </CustomText>
-          </View>
-        </View>
+       
 
-        <CustomButton
+        {/* <CustomButton
           text={'View Details'}
           textColor={Color.white}
           width={fromSeeAll && windowWidth * 0.19}
@@ -184,7 +134,7 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
           borderRadius={moderateScale(30, 0.3)}
           alignSelf={'flex-start'}
           fontSize={fromSeeAll ? moderateScale(7, 0.6) : moderateScale(7, 0.6)}
-        />
+        /> */}
       </TouchableOpacity>
 
       <Modal
@@ -288,7 +238,7 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
   );
 };
 
-export default JobCard;
+export default SeekingHelpCard;
 
 const styles = ScaledSheet.create({
   joccard: {

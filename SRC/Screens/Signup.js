@@ -124,7 +124,7 @@ const Signup = () => {
     const body = {
       first_name: firstName,
       last_name: lastName,
-      company_name: companyName,
+      // company_name: companyName,
       email: email,
       phone: contact,
       address: address,
@@ -178,16 +178,27 @@ const Signup = () => {
         : Alert.alert('Password does not match');
     }
 
+    if(selectedRole == 'Qbid Negotiator'){
+        if(companyName == ''){
+          return Platform.OS == 'android'
+          ? ToastAndroid.show('company name is not a number', ToastAndroid.SHORT)
+          : Alert.alert('company name is not a number');
+        }
+
+    }
+
     if (
-      selectedRole == 'Business Qbidder' &&
+      selectedRole != 'Qbid Member' &&
       (language.length == 0 || services.length == 0)
     ) {
       return Platform.OS == 'android'
-        ? ToastAndroid.show('Do not Enter your fields', ToastAndroid.SHORT)
-        : Alert.alert('Do not Enter your fields');
+        ? ToastAndroid.show('Languages and expertise are required', ToastAndroid.SHORT)
+        : Alert.alert('Languages and expertise are required');
+      }else{
+        
+        language?.map((item, index) => formData.append(`language[${index}]`, item));
+        services?.map((item, index) => formData.append(`expertise[${index}]`, item));
       }
-      language?.map((item, index) => formData.append(`language[${index}]`, item));
-      services?.map((item, index) => formData.append(`expertise[${index}]`, item));
       
       
       const url = 'register';

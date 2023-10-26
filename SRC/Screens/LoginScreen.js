@@ -104,8 +104,8 @@ const LoginScreen = () => {
 
   const Login = async () => {
     const body = {
-      email:email,
-      password:password,
+      email: email,
+      password: password,
       // photo: image,
     };
 
@@ -131,20 +131,25 @@ const LoginScreen = () => {
         : Alert.alert('Password should atleast 8 character long');
     }
 
-
     const url = 'login';
     setIsLoading(true);
     const response = await Post(url, body, apiHeader());
     setIsLoading(false);
     if (response != undefined) {
-     console.log('VERIFY=========>>>>>>', response?.data?.user_info);
-      dispatch(setUserData(response?.data?.user_info))
-      dispatch(setSelectedRole(response?.data?.user_info?.role))
-      dispatch(setUserLogin(response?.data?.token))
-      dispatch(setUserToken({token:response?.data?.token}))
-      }
-  };
+      if (selectedRole == response?.data?.user_info?.role) {
+        dispatch(setUserData(response?.data?.user_info));
+        dispatch(setSelectedRole(response?.data?.user_info?.role));
+        dispatch(setUserLogin(response?.data?.token));
+        dispatch(setUserToken({token: response?.data?.token}));
+      }else{
+        return Platform.OS == 'android'
+        ? ToastAndroid.show('unauthenticated', ToastAndroid.SHORT)
+        : Alert.alert('unauthenticated');
 
+      }
+      // console.log('VERIFY=========>>>>>>', response?.data?.user_info);
+    }
+  };
 
   useEffect(() => {
     dispatch(setSelectedRole(selectedRole));
@@ -298,7 +303,7 @@ const LoginScreen = () => {
             height={windowHeight * 0.07}
             marginTop={moderateScale(10, 0.3)}
             onPress={() => {
-              Login()
+              Login();
               // navigationService.navigate('AddCard');
               // handleLogin('Receptionist');
               // alert('Action to be happened')
@@ -322,7 +327,7 @@ const LoginScreen = () => {
             </CustomText>
 
             <TouchableOpacity
-             activeOpacity={0.8}
+              activeOpacity={0.8}
               style={{marginLeft: windowWidth * 0.01}}
               onPress={() => navigationService.navigate('Signup')}>
               <CustomText

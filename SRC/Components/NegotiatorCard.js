@@ -13,6 +13,7 @@ import { Post } from '../Axios/AxiosInterceptorFunction';
 import { ActivityIndicator } from 'react-native';
 
 const NegotiatorCard = ({item, fromSeeAll}) => {
+  console.log("🚀 ~ file: NegotiatorCard.js:16 ~ NegotiatorCard ~ item:", item)
   const token = useSelector(state => state.authReducer.token)
   const [isLoading, setIsLoading] = useState(false);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
@@ -57,7 +58,7 @@ const approveRequest =async(status)=>{
               color: Color.white,
               fontSize: moderateScale(17, 0.6),
             }}>
-            {item?.name}
+            {item?.name ? item?.name :item?.fullname}
           </CustomText>
           <CustomText
             numberOfLines={1}
@@ -76,7 +77,7 @@ const approveRequest =async(status)=>{
               fontSize: moderateScale(9, 0.6),
               // lineHeight: moderateScale(14, 0.3),
             }}>
-            {item?.desc}
+            {item?.desc ? item?.desc : item?.coverletter}
           </CustomText>
 
           <CustomButton
@@ -148,7 +149,7 @@ const approveRequest =async(status)=>{
               fontSize: moderateScale(15, 0.6),
               color: Color.black,
             }}>
-            Charles Berge
+          {item?.fullname}
           </CustomText>
           <CustomText
             style={{
@@ -159,7 +160,7 @@ const approveRequest =async(status)=>{
               fontSize: moderateScale(13, 0.6),
               color: Color.black,
             }}>
-            Charlesberge45@gmail.com
+         {item?.email}
           </CustomText>
           <CustomText
             style={{
@@ -170,7 +171,7 @@ const approveRequest =async(status)=>{
               fontSize: moderateScale(13, 0.6),
               color: Color.black,
             }}>
-            +321742,122,921
+            {item?.phone}
           </CustomText>
 
           <CustomText
@@ -182,7 +183,7 @@ const approveRequest =async(status)=>{
               fontSize: moderateScale(13, 0.6),
               color: Color.black,
             }}>
-            Expertise In Auto repair
+           {item?.expertise}
           </CustomText>
 
           <CustomText
@@ -195,8 +196,7 @@ const approveRequest =async(status)=>{
               fontSize: moderateScale(13, 0.6),
               color: Color.veryLightGray,
             }}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum
-            dolor sit amet, consectetur adipiscing elit
+           {item?.coverletter}
           </CustomText>
 
           <View
