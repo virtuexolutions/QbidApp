@@ -39,22 +39,12 @@ const SeeAllNegotiator = props => {
   const [selectedStatus, setSelectedStatus] = useState('');
   useState;
   const [pageNum, setpageNum] = useState(1);
-  console.log(
-    '🚀 ~ file: SeeAllNegotiator.js:39 ~ SeeAllNegotiator ~ pageNum:',
-    pageNum,
-  );
-  console.log(
-    '🚀 ~ file: SeeAllNegotiator.js:38 ~ SeeAllNegotiator ~ pageNum:',
-    pageNum,
-  );
+ 
   const [isLoading, setIsLoading] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
 
   const [newArray, setNewArray] = useState([]);
-  console.log(
-    '🚀 ~ file: SeeAllNegotiator.js:6 ~ SeeAllNegotiator ~ type',
-    type,
-  );
+ 
 
   const getData = async type1 => {
     const url =
@@ -67,10 +57,10 @@ const SeeAllNegotiator = props => {
     const response = await Get(url, token);
     type1 == 'loadMore' ? setLoadMore(false) : setIsLoading(false);
     if (response != undefined) {
-      console.log(
-        '🚀 ~ file: SeeAllNegotiator.js:67 ~ getData ~ response:',
-        response?.data,
-      );
+      // console.log(
+      //   '🚀 ~ file: SeeAllNegotiator.js:67 ~ getData ~ response:',
+      //   response?.data,
+      // );
       if (type != 'Seeking Help') {
         type1 == 'loadMore'  
           ? setNewArray(prev => [...prev, ...response?.data?.quote_info?.data])
@@ -96,7 +86,7 @@ const SeeAllNegotiator = props => {
     if (currentOffset >= maxOffset) {
       // You've reached the end of the ScrollView
       setpageNum(prev => prev + 1);
-      console.log('Reached the end of ScrollView');
+      // console.log('Reached the end of ScrollView');
     }
   };
 

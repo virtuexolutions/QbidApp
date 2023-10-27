@@ -35,14 +35,15 @@ import numeral from 'numeral';
 import {useIsFocused} from '@react-navigation/native';
 
 const JobDetails = props => {
-  const item = props?.route?.params?.item;
-  // console.log('🚀 ~ file: JobDetails.js:29 ~ JobDetails ~ item:', item);
+  const data1 = props?.route?.params?.item;
+  console.log('🚀 ~ file: JobDetails.js:29 ~ JobDetails ~ item:', data?.bids);
   const user = useSelector(state => state.commonReducer.userData);
   // console.log('🚀 ~ file: JobDetails.js:41 ~ JobDetails ~ user:', user?.id);
   const UserCoverLetterArray = useSelector(
     state => state.commonReducer.servicesArray,
   );
   // console.log("🚀 ~ file: JobDetails.js:31 ~ JobDetails ~ user:", user)
+  const [data, setData] = useState(data1)
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
   const [checked, setChecked] = useState(false);
@@ -63,7 +64,7 @@ const JobDetails = props => {
   // const UserCoverLetterArray = ['Expertise In', 'Expertise In'];
 
   const bidDetails = async () => {
-    const url = `auth/negotiator/quote_detail/${item?.id}`;
+    const url = `auth/negotiator/quote_detail/${data?.id}`;
     setIsLoading(true);
     const response = await Get(url, token);
     setIsLoading(false);
@@ -77,6 +78,7 @@ const JobDetails = props => {
       const mainuserData = response?.data?.quote_info?.bids?.find(
         item => item.user_info?.id == user?.id,
       );
+      setData(response?.data?.quote_info)
 
       if (mainuserData) {
         setBidDone(true);
@@ -86,22 +88,23 @@ const JobDetails = props => {
   };
 
   const changeStatus = async value => {
-    const url = `auth/member/bid/${item?.id}`;
+    const url = `auth/member/bid/${data?.id}`;
     setIsLoading(true);
     const response = await Post(url, {status: value}, apiHeader(token));
     setIsLoading(false);
     if (response != undefined) {
-      // console.log(
-      //   '🚀 ~ file: BidderDetail.js:25 ~ changeStatus ~ response:',
-      //   response?.data,
-      // );
+      return console.log(
+        '🚀 ~ file: BidderDetail.js:25 ~ changeStatus ~ response:',
+        response?.data,
+      );
+      bidDetails()
     }
   };
 
   const bidNow = async () => {
     const url = 'auth/negotiator/bid';
     const body = {
-      quote_id: item?.id,
+      quote_id: data?.id,
       fullname: fullName,
       email: Email,
       phone: number,
@@ -224,7 +227,7 @@ const JobDetails = props => {
                     }}>
                     {userRole == 'Qbid Member'
                       ? `${user?.first_name} ${user?.last_name}`
-                      : `${item?.user_info?.first_name} ${item?.user_info?.last_name}`}
+                      : `${data?.user_info?.first_name} ${data?.user_info?.last_name}`}
                   </CustomText>
                   <CustomText
                     style={{
@@ -261,12 +264,12 @@ const JobDetails = props => {
                       color: Color.white,
                       marginLeft: moderateScale(3, 0.3),
                     }}>
-                    {item?.status}
+                    {data?.status}
                   </CustomText>
                 </View>
               </View>
               <ShowMoreAndShowLessText minTextLength={50} style={styles.desc}>
-                {item?.notes ? item?.notes : item?.coverletter}
+                {data?.notes ? data?.notes : data?.coverletter}
               </ShowMoreAndShowLessText>
               <CustomText
                 isBold
@@ -287,35 +290,35 @@ const JobDetails = props => {
                   marginTop={moderateScale(10, 0.3)}
                 />
                 <Detailcards
-                  data={numeral(item?.asking_price).format('$0,0a')}
+                  data={numeral(data?.asking_price).format('$0,0a')}
                   iconName={'calculator'}
                   title={'Expected Qoute'}
                   iconType={Entypo}
                   marginTop={moderateScale(10, 0.3)}
                 />
                 <Detailcards
-                  data={item?.city}
+                  data={data?.city}
                   iconName={'building'}
                   title={'City'}
                   iconType={FontAwesome}
                   marginTop={moderateScale(30, 0.3)}
                 />
                 <Detailcards
-                  data={`${item?.offering_percentage}%`}
+                  data={`${data?.offering_percentage}%`}
                   iconName={'percent'}
                   title={'Offering Percent'}
                   iconType={FontAwesome}
                   marginTop={moderateScale(30, 0.3)}
                 />
                 <Detailcards
-                  data={numeral(item?.quoted_price).format('$0,0a')}
+                  data={numeral(data?.quoted_price).format('$0,0a')}
                   iconName={'calculator'}
                   title={'Vendor Qoute'}
                   iconType={Entypo}
                   marginTop={moderateScale(30, 0.3)}
                 />
                 <Detailcards
-                  data={item?.service_preference}
+                  data={data?.service_preference}
                   iconName={'briefcase'}
                   title={'Service Type'}
                   iconType={Entypo}
@@ -334,8 +337,9 @@ const JobDetails = props => {
                     Applied Negotiators
                   </CustomText>
                   <FlatList
-                    data={item?.bids}
-                    renderItem={({item}) => {
+                    data={data?.bids}
+                    contentContainerStyle={{paddingBottom:moderateScale(30,.6)}}
+                    renderItem={({item, index}) => {
                       // console.log(
                       //   '🚀 ~ file: JobDetails.js:275 ~ JobDetails ~ item:',
                       //   item,
@@ -343,6 +347,8 @@ const JobDetails = props => {
                       return (
                         <>
                           <BidderDetail
+                         
+                          
                             item={{
                               image: require('../Assets/Images/man1.jpg'),
                               name: item?.fullname,
@@ -352,8 +358,9 @@ const JobDetails = props => {
                               id: item?.id,
                             }}
                           />
-                          {item?.status == 'pending' && (
+                          {data?.status == 'pending' && (
                             <View
+                            key={index}
                               style={{
                                 flexDirection: 'row',
                                 // backgroundColor: 'black',
@@ -439,8 +446,8 @@ const JobDetails = props => {
                       name: user?.first_name,
                       rating: 4,
                       description: userData?.coverletter,
-                      status: item?.status,
-                      id: item?.id,
+                      status: data?.status,
+                      id: data?.id,
                     }}
                   />
                 </>

@@ -19,6 +19,7 @@ import { setUserLogOut } from '../Store/slices/common';
 
 const Settings = () => {
   const user = useSelector(state=> state.commonReducer.userData)
+  // console.log("🚀 ~ file: Settings.js:22 ~ Settings ~ user:", user?.photo)
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
@@ -91,7 +92,7 @@ const Settings = () => {
               onPress={() => {
                 setIsVisible(true);
               }}
-              source={user?.photo ? {uri:user?.photo}:require('../Assets/Images/man1.jpg')}
+              source={user?.photo ? {uri:user?.photo}: require('../Assets/Images/man1.jpg')}
               style={[styles.image]}
             />
           </View>
@@ -174,7 +175,7 @@ const Settings = () => {
             height={windowHeight * 0.07}
             marginTop={moderateScale(10, 0.3)}
             onPress={() => {
-              console.log('here');
+              // console.log('here');
             }}
             bgColor={Color.white}
             // isGradient

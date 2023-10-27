@@ -34,7 +34,7 @@ const SeeAllScreen = props => {
   const [selectedStatus, setSelectedStatus] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
-  console.log("🚀 ~ file: SeeAllScreen.js:37 ~ SeeAllScreen ~ loadMore:", loadMore)
+  // console.log("🚀 ~ file: SeeAllScreen.js:37 ~ SeeAllScreen ~ loadMore:", loadMore)
   const [newArray, setNewArray] = useState([]);
 
   const [pageNum, setPageNum] = useState(1);
@@ -51,7 +51,7 @@ const SeeAllScreen = props => {
     if (currentOffset >= maxOffset) {
       // You've reached the end of the ScrollView
       setPageNum(prev => prev + 1);
-      console.log('Reached the end of ScrollView');
+      // console.log('Reached the end of ScrollView');
     }
   };
 
@@ -63,27 +63,32 @@ const SeeAllScreen = props => {
     value == 'loadMore' ? setLoadMore(true) : setIsLoading(true);
     const response = await Get(url, token);
     value == 'loadMore' ? setLoadMore(false) : setIsLoading(false);
-    console.log(
-      '🚀 ~ file: SeeAllScreen.js:43 ~ getData ~ response:',
-      response?.data,
-    );
+    // console.log(
+    //   '🚀 ~ file: SeeAllScreen.js:43 ~ getData ~ response:',
+    //   response?.data,
+    // );
 
     if (response != undefined) {
-      console.log(
-        '🚀 ~ file: SeeAllScreen.js:71 ~ getData ~ response:',
-        response?.data?.quote_info?.data,
-      );
+      // console.log(
+      //   '🚀 ~ file: SeeAllScreen.js:71 ~ getData ~ response:',
+      //   response?.data?.quote_info?.data,
+      // );
 
       // setNewArray(response?.data?.quote_info?.data)
 
-      if(type == 'qoutes'){
-      //  console.log('Here')
-        value == 'loadMore' ? setNewArray(prev => [...prev, ...response?.data?.quote_info?.data]) : setNewArray(response?.data?.quote_info?.data)
-      }else{
-        value == 'loadMore' ? setNewArray(prev => [...prev, ...response?.data?.bid_help_info?.data]) : setNewArray(response?.data?.bid_help_info?.data)
+      if (type == 'qoutes') {
+        //  console.log('Here')
+        value == 'loadMore'
+          ? setNewArray(prev => [...prev, ...response?.data?.quote_info?.data])
+          : setNewArray(response?.data?.quote_info?.data);
+      } else {
+        value == 'loadMore'
+          ? setNewArray(prev => [
+              ...prev,
+              ...response?.data?.bid_help_info?.data,
+            ])
+          : setNewArray(response?.data?.bid_help_info?.data);
       }
-
-
     }
   };
 
@@ -91,11 +96,7 @@ const SeeAllScreen = props => {
     if (pageNum == 1) {
       getData();
     } else {
-     
       getData('loadMore');
-
-      
-      
     }
   }, [pageNum]);
 

@@ -69,7 +69,7 @@ const HomeScreen = () => {
   const [qbidDetail, setQbidDetail] = useState('');
   const [qbiddetail1, setQbidDetail1] = useState('');
   const [myQuotes, setMyQuotes] = useState([]);
-  // console.log("🚀 ~ file: HomeScreen.js:72 ~ HomeScreen ~ myQuotes:", myQuotes?.length)
+  console.log("🚀 ~ file: HomeScreen.js:72 ~ HomeScreen ~ myQuotes:", myQuotes[0]?.bids)
   const [proposals, setProposals] = useState([]);
   // console.log("🚀 ~ file: HomeScreen.js:73 ~ HomeScreen ~ proposals:", proposals)
 
@@ -436,7 +436,7 @@ const HomeScreen = () => {
                 paddingHorizontal: moderateScale(15, 0.3),
               }}
               renderItem={({item, index}) => {
-                return <NegotiatorCard item={item} />;
+                return <NegotiatorCard key={index} item={item} />;
               }}
             />
           )}
@@ -522,7 +522,7 @@ const HomeScreen = () => {
               }}
               renderItem={({item, index}) => {
                 // console.log("🚀 ~ file: HomeScreen.js:512 ~ HomeScreen ~ item:", item)
-                return <MyQouteCard item={item} />;
+                return <MyQouteCard item={item} key={index} />;
               }}
             />
           )}

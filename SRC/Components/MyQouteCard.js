@@ -11,7 +11,10 @@ import CustomButton from './CustomButton';
 import navigationService from '../navigationService';
 
 const MyQouteCard = ({item}) => {
-  // console.log("🚀 ~ file: MyQouteCard.js:14 ~ MyQouteCard ~ item:", item)
+  console.log("🚀 ~ file: MyQouteCard.js:14 ~ MyQouteCard ~ item:", item)
+
+  // const data = item?.bids?.find(item=> item?.status == 'accept')
+  // console.log("🚀 ~ file: MyQouteCard.js:17 ~ MyQouteCard ~ data:", data)
   return (
     <TouchableOpacity
       activeOpacity={0.9}
@@ -100,7 +103,7 @@ const MyQouteCard = ({item}) => {
                 fontSize: moderateScale(12, 0.3),
                 color: Color.themeLightGray,
               }}>
-              {item?.status == 'pending' ? 'not yet' : item?.negotiatorName}
+              {item?.status == 'pending' ? 'not yet' : item?.bids?.find(item=> item?.status == 'accept')?.fullname}
             </CustomText>
           }
         </CustomText>
@@ -113,7 +116,7 @@ const MyQouteCard = ({item}) => {
                 fontSize: moderateScale(12, 0.3),
                 color: Color.blue,
               }}>
-              {numeral(item?.vendorPrice).format('$0,0a')}
+              {numeral(item?.asking_price).format('$0,0a')}
             </CustomText>
           }
         </CustomText>
@@ -127,7 +130,7 @@ const MyQouteCard = ({item}) => {
               }}>
               {item?.status == 'pending'
                 ? 'not yet'
-                : numeral(item?.negotiatorPrice).format('$0,0a')}
+                : numeral(item?.quoted_price).format('$0,0a')}
             </CustomText>
           }
         </CustomText>

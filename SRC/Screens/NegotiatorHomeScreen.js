@@ -68,19 +68,19 @@ const NegotiatorHomeScreen = () => {
     setIsLoading(false);
 
     if (response1 != undefined) {
-     console.log("🚀 ~ file: NegotiatorHomeScreen.js:66 ~ getProposal ~ response1:", response1?.data)
+    //  console.log("🚀 ~ file: NegotiatorHomeScreen.js:66 ~ getProposal ~ response1:", response1?.data)
      
       ![null, undefined, ''].includes(response2?.data?.quote_info) &&
         setRecommended(response1?.data?.quote_info?.data);
     }
     if (response2 != undefined) {
-      console.log("🚀 ~ file: NegotiatorHomeScreen.js:72 ~ getProposal ~ response2:", response2?.data)
+      // console.log("🚀 ~ file: NegotiatorHomeScreen.js:72 ~ getProposal ~ response2:", response2?.data)
       
       ![null, undefined, ''].includes(response2?.data?.quote_info) &&
         setWorking(response2?.data?.quote_info?.data);
     }
     if (response3 != undefined) {
-      console.log("🚀 ~ file: NegotiatorHomeScreen.js:75 ~ getProposal ~ response3:", response3?.data)
+      // console.log("🚀 ~ file: NegotiatorHomeScreen.js:75 ~ getProposal ~ response3:", response3?.data)
       
       ![null, undefined, ''].includes(response2?.data?.quote_info) &&
         setSeekingHelp(response3?.data?.bid_help_info?.data);
@@ -348,10 +348,10 @@ const NegotiatorHomeScreen = () => {
                     paddingHorizontal: moderateScale(15, 0.3),
                   }}
                   renderItem={({item, index}) => {
-                    console.log(
-                      '🚀 ~ file: NegotiatorHomeScreen.js:343 ~ NegotiatorHomeScreen ~ item:',
-                      item,
-                    );
+                    // console.log(
+                    //   '🚀 ~ file: NegotiatorHomeScreen.js:343 ~ NegotiatorHomeScreen ~ item:',
+                    //   item,
+                    // );
                     return (
                       <JobCard
                       key={index}

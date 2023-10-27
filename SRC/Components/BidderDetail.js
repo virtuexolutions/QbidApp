@@ -87,25 +87,25 @@ const BidderDetail = ({item, photo, title, date, message}) => {
         {item?.description}
       </CustomText>
    
-      {userRole != 'Qbid Member' && <CustomText
+      <CustomText
         noOfLines={1}
         style={{
           //   marginTop: moderateScale(10, 0.3),
           position: 'absolute',
-          right: 5,
+          right: moderateScale(10,.6),
           top: moderateScale(10, 0.3),
           // width : '100%',
           textAlign: 'right',
           fontSize: moderateScale(10, 0.6),
           color:
-            userRole == 'Qbid Member'
-              ? Color.blue
+            userRole == 'Qbid Member' ? item?.status == 'accept' 
+              ? Color.blue: Color.red 
               : userRole == 'Qbid Negotiator'
               ? Color.themeColor
               : Color.black,
         }}>
-        {item?.status}
-      </CustomText>}
+        {item?.status== 'accept' ? 'Accepted' : 'Rejected'}
+      </CustomText>
     </View>
   );
 };

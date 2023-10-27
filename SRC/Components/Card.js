@@ -11,7 +11,7 @@ import CustomButton from './CustomButton';
 // import navigationService from '../navigationService';
 
 const Card = ({item}) => {
-  console.log('🚀 ~ file: Card.js:11 ~ Card ~ item:', item);
+  // console.log('🚀 ~ file: Card.js:11 ~ Card ~ item:', item);
   const [modalVisible, setModalVisible] = useState(false);
 
   return (

@@ -46,10 +46,10 @@ const NegotiatorPortfolio = () => {
   const [visible, setVisible] = useState(false);
   const [editProfile, setEditProfile] = useState(false);
   const [availibility, setAvailibility] = useState(false);
-  console.log(
-    '🚀 ~ file: NegotiatorPortfolio.js:38 ~ NegotiatorPortfolio ~ editProfile:',
-    editProfile,
-  );
+  // console.log(
+  //   '🚀 ~ file: NegotiatorPortfolio.js:38 ~ NegotiatorPortfolio ~ editProfile:',
+  //   editProfile,
+  // );
 
   //Edit Profile Modal
   const [firstName, setFirstName] = useState('Charles');

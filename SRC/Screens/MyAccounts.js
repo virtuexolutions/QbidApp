@@ -31,12 +31,14 @@ const MyAccounts = props => {
   const dispatch = useDispatch();
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const user = useSelector(state => state.commonReducer.userData);
+  // console.log("🚀 ~ file: MyAccounts.js:34 ~ MyAccounts ~ user:", user)
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
 
-  console.log('🚀 ~ file: MyAccounts.js:33 ~ MyAccounts ~ user:', user);
+  // console.log('🚀 ~ file: MyAccounts.js:33 ~ MyAccounts ~ user:', user);
   const token = useSelector(state => state.authReducer.token);
   const [showModal, setShowModal] = useState(false);
   const [imageObject, setImageObject] = useState({});
+  // console.log("🚀 ~ file: MyAccounts.js:40 ~ MyAccounts ~ imageObject:", imageObject)
   const [firstName, setFirstName] = useState(
     user?.first_name ? user?.first_name : '',
   );
@@ -48,6 +50,7 @@ const MyAccounts = props => {
   ); //for negotiator
   const [jobStatus, setJobStatus] = useState(''); //for negotiator
   const [email, setEmail] = useState(user?.email ? user?.email : '');
+  // console.log("🚀 ~ file: MyAccounts.js:51 ~ MyAccounts ~ email:", email)
   const [contact, setContact] = useState(user?.phone ? user?.phone : '');
   const [address, setAddress] = useState(user?.address ? user?.address : '');
   const [city, setCity] = useState(user?.city ? user?.city : '');
@@ -84,7 +87,7 @@ const MyAccounts = props => {
       last_name: lastName,
       address: address,
       phone: contact,
-      company_name: companyName,
+      // company_name: companyName,
       email: email,
       city: city,
       state: state,
@@ -104,7 +107,7 @@ const MyAccounts = props => {
     if (Object.keys(imageObject).length > 0) {
       formdata.append('photo', imageObject);
     }
-   console.log("🚀 ~ file: MyAccounts.js:106 ~ EditProfile ~ formdata:", formdata)
+  //  console.log("🚀 ~ file: MyAccounts.js:106 ~ EditProfile ~ formdata:", formdata)
     // console.log(formdata);
 
     const url = 'auth/profile';
@@ -113,7 +116,7 @@ const MyAccounts = props => {
     setIsLoading(false);
 
     if (response !== undefined) {
-      console.log("🚀 ~ file: MyAccounts.js:113 ~ EditProfile ~ response:", response?.data)
+      // console.log("🚀 ~ file: MyAccounts.js:113 ~ EditProfile ~ response:", response?.data)
       // console.log('response?.data?.data?.user', response?.data);
       dispatch(setUserData(response?.data?.user_info));
 
@@ -181,8 +184,8 @@ const MyAccounts = props => {
                 style={[styles.image]}
                 source={
                   user?.photo
-                    ? {uri: `${user?.photo}`}
-                    : require('../Assets/Images/user2.png')
+                    && {uri: `${user?.photo}`}
+                    
                 }
               />
             )}
