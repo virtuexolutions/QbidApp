@@ -69,7 +69,7 @@ const HomeScreen = () => {
   const [qbidDetail, setQbidDetail] = useState('');
   const [qbiddetail1, setQbidDetail1] = useState('');
   const [myQuotes, setMyQuotes] = useState([]);
-  // console.log("🚀 ~ file: HomeScreen.js:72 ~ HomeScreen ~ myQuotes:", myQuotes)
+  // console.log("🚀 ~ file: HomeScreen.js:72 ~ HomeScreen ~ myQuotes:", myQuotes?.length)
   const [proposals, setProposals] = useState([]);
   // console.log("🚀 ~ file: HomeScreen.js:73 ~ HomeScreen ~ proposals:", proposals)
 
@@ -388,6 +388,7 @@ const HomeScreen = () => {
               onPress={() => {
                 navigationService.navigate('SeeAllScreen', {
                   type: 'negotiator',
+                  data:proposals
                 });
               }}
               style={styles.viewall}>

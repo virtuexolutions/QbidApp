@@ -32,41 +32,38 @@ import {useNavigation} from '@react-navigation/native';
 import {setUserToken} from '../Store/slices/auth';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import LinearGradient from 'react-native-linear-gradient';
+import { setUserData } from '../Store/slices/common';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 const ChangePassword = props => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
+  const token = useSelector(state=> state.authReducer.token)
+  const navigation = useNavigation()
+
+  const dispatch = useDispatch()
 
   const [phone, setPhone] = useState('');
+  const [current_password, setCurrent_password] = useState('')
+  const [new_password, setNew_password] = useState('')
+  const [confirm_password, setConfirm_password] = useState('')
   const [isLoading, setIsLoading] = useState(false);
 
-  // const sendOTP = async () => {
-  //   const url = 'password/email';
-  //   if (['', null, undefined].includes(phone)) {
-  //     return Platform.OS == 'android'
-  //       ? ToastAndroid.show('Phone number is required', ToastAndroid.SHORT)
-  //       : alert('Phone number is required');
-  //   }
-  //   setIsLoading(true);
-  //   const response = await Post(url, {email: phone}, apiHeader());
-  //   setIsLoading(false);
-  //   if (response != undefined) {
-  //     console.log('response data =>', response?.data);
-  //     Platform.OS == 'android'
-  //       ? ToastAndroid.show(`OTP sent to ${phone}`, ToastAndroid.SHORT)
-  //       : alert(`OTP sent to ${phone}`);
-  //     fromForgot
-  //       ? navigationService.navigate('VerifyNumber', {
-  //           fromForgot: fromForgot,
-  //           phoneNumber: `${phone}`,
-  //         })
-  //       : navigationService.navigate('VerifyNumber', {
-  //           phoneNumber: `${phone}`,
-  //         });
-  //   }
-  // };
+  const ChangePassword = async ()=>{
+    const url = 'auth/change_password';
+    const body = {current_password:current_password, new_password:new_password, confirm_password: confirm_password  }
+    setIsLoading(true)
+    const response = await Post(url, body, apiHeader(token))
+    setIsLoading(false)
+    console.log("🚀 ~ file: ChangePassword.js:54 ~ ChangePassword ~ response:", response?.data)
+    if(response != undefined){
+      dispatch(setUserData(response?.data?.user_info))
+      navigation.goBack()
+    }
+  }
+
+  
 
   return (
     <ScreenBoiler
@@ -125,10 +122,10 @@ const ChangePassword = props => {
             </CustomText>
             <TextInputWithTitle
               titleText={'Current Password'}
-              secureText={false}
+              secureText={true}
               placeholder={'Current Password'}
-              setText={setPhone}
-              value={phone}
+              setText={setCurrent_password}
+              value={current_password}
               viewHeight={0.07}
               viewWidth={0.75}
               inputWidth={0.7}
@@ -144,10 +141,10 @@ const ChangePassword = props => {
 
             <TextInputWithTitle
               titleText={'Enter New Password'}
-              secureText={false}
+              secureText={true}
               placeholder={'Enter New Password'}
-              setText={setPhone}
-              value={phone}
+              setText={setNew_password}
+              value={new_password}
               viewHeight={0.07}
               viewWidth={0.75}
               inputWidth={0.7}
@@ -162,10 +159,10 @@ const ChangePassword = props => {
             />
             <TextInputWithTitle
               titleText={'Confirm your new password'}
-              secureText={false}
+              secureText={true}
               placeholder={'Confirm your new password'}
-              setText={setPhone}
-              value={phone}
+              setText={setConfirm_password}
+              value={confirm_password}
               viewHeight={0.07}
               viewWidth={0.75}
               inputWidth={0.7}
@@ -190,9 +187,9 @@ const ChangePassword = props => {
               width={windowWidth * 0.75}
               height={windowHeight * 0.06}
               marginTop={moderateScale(10, 0.3)}
-              // onPress={() => {
-              //   dispatch(setUserToken({token: 'dasdawradawdawrtfeasfzs'}));
-              // }}
+              onPress={() => {
+                ChangePassword()
+              }}
               bgColor={
                 userRole == 'Qbid Member'
                 ? Color.blue

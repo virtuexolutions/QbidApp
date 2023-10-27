@@ -26,6 +26,7 @@ const SeeAllScreen = props => {
 
   const type = props?.route?.params?.type;
   const data = props?.route?.params?.data;
+  // console.log('🚀 ~ file: SeeAllScreen.js:29 ~ SeeAllScreen ~ data:', data?.length);
 
   const [searchData, setSearchData] = useState('');
   const [showSearch, setShowSearch] = useState(false);
@@ -33,11 +34,12 @@ const SeeAllScreen = props => {
   const [selectedStatus, setSelectedStatus] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
+  console.log("🚀 ~ file: SeeAllScreen.js:37 ~ SeeAllScreen ~ loadMore:", loadMore)
   const [newArray, setNewArray] = useState([]);
-  console.log("🚀 ~ file: SeeAllScreen.js:37 ~ SeeAllScreen ~ newArray:", newArray)
+
   const [pageNum, setPageNum] = useState(1);
+  // console.log("🚀 ~ file: SeeAllScreen.js:43 ~ SeeAllScreen ~ pageNum:", pageNum)
   const scrollViewRef = useRef();
-  console.log('🚀 ~ file: SeeAllScreen.js:6 ~ SeeAllScreen ~ type', type);
 
   const handleScroll = event => {
     const currentOffset = event.nativeEvent.contentOffset.y;
@@ -67,11 +69,21 @@ const SeeAllScreen = props => {
     );
 
     if (response != undefined) {
-      if (type == 'quotes') {
-        setNewArray(prev => [...prev, ...response?.data?.quote_info?.data]);
-      } else {
-        setNewArray(prev => [...prev, ...response?.data?.bid_help_info?.data]);
+      console.log(
+        '🚀 ~ file: SeeAllScreen.js:71 ~ getData ~ response:',
+        response?.data?.quote_info?.data,
+      );
+
+      // setNewArray(response?.data?.quote_info?.data)
+
+      if(type == 'qoutes'){
+      //  console.log('Here')
+        value == 'loadMore' ? setNewArray(prev => [...prev, ...response?.data?.quote_info?.data]) : setNewArray(response?.data?.quote_info?.data)
+      }else{
+        value == 'loadMore' ? setNewArray(prev => [...prev, ...response?.data?.bid_help_info?.data]) : setNewArray(response?.data?.bid_help_info?.data)
       }
+
+
     }
   };
 
@@ -79,9 +91,13 @@ const SeeAllScreen = props => {
     if (pageNum == 1) {
       getData();
     } else {
+     
       getData('loadMore');
+
+      
+      
     }
-  }, []);
+  }, [pageNum]);
 
   return (
     <ScreenBoiler

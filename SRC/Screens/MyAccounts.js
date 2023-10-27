@@ -25,30 +25,40 @@ import ImagePickerModal from '../Components/ImagePickerModal';
 // import {formRegEx, formRegExReplacer, imageUrl} from '../Config';
 import CustomButton from '../Components/CustomButton';
 import LinearGradient from 'react-native-linear-gradient';
+import CustomDropDownMultiSelect from '../Components/CustomDropDownMultiSelect';
 
 const MyAccounts = props => {
   const dispatch = useDispatch();
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const user = useSelector(state => state.commonReducer.userData);
+  const servicesArray = useSelector(state => state.commonReducer.servicesArray);
+
+  console.log('🚀 ~ file: MyAccounts.js:33 ~ MyAccounts ~ user:', user);
   const token = useSelector(state => state.authReducer.token);
   const [showModal, setShowModal] = useState(false);
   const [imageObject, setImageObject] = useState({});
-  const [firstName, setFirstName] = useState('Charles');
-  const [lastName, setLastName] = useState(' A.Lee');
-  const [companyName, setCompanyName] = useState(''); //for negotiator
+  const [firstName, setFirstName] = useState(
+    user?.first_name ? user?.first_name : '',
+  );
+  const [lastName, setLastName] = useState(
+    user?.last_name ? user?.last_name : '',
+  );
+  const [companyName, setCompanyName] = useState(
+    user?.company_name ? user?.company_name : '',
+  ); //for negotiator
   const [jobStatus, setJobStatus] = useState(''); //for negotiator
-  const [email, setEmail] = useState('');
-  const [contact, setContact] = useState('');
-  const [address, setAddress] = useState('');
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('');
-  const [zipCode, setZipCode] = useState('');
-  const [services, setServices] = useState([
-    'Auto repair',
-    'plumbing Projects',
-    'HAVC repair/Replacement',
-  ]); //for negotiator
-  const [language, setLanguage] = useState(['English']); //for negotiator
+  const [email, setEmail] = useState(user?.email ? user?.email : '');
+  const [contact, setContact] = useState(user?.phone ? user?.phone : '');
+  const [address, setAddress] = useState(user?.address ? user?.address : '');
+  const [city, setCity] = useState(user?.city ? user?.city : '');
+  const [state, setState] = useState(user?.state ? user?.state : '');
+  const [zipCode, setZipCode] = useState(user?.zip ? `${user?.zip}` : '');
+  const [services, setServices] = useState(
+    user?.expertise ? JSON.parse(user?.expertise) : [],
+  ); //for negotiator
+  const [language, setLanguage] = useState(
+    user?.language ? JSON.parse(user?.language) : [],
+  ); //for negotiator
 
   const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -68,37 +78,33 @@ const MyAccounts = props => {
         ]
       : [require('../Assets/Images/man1.jpg')];
 
-
-
-
   const EditProfile = async () => {
     const params = {
       first_name: firstName,
       last_name: lastName,
-      email: email,
-      phone: contact,
       address: address,
-      city:city,
-      state:state,
-      zipCode:zipCode,
+      phone: contact,
+      company_name: companyName,
+      email: email,
+      city: city,
+      state: state,
+      zip: zipCode,
     };
     const formdata = new FormData();
     for (let key in params) {
       if ([undefined, '', null].includes(params[key])) {
         return Platform.OS == 'android'
-          ? ToastAndroid.show(
-              `${key} is empty`,
-              ToastAndroid.SHORT,
-            )
-          : Alert.alert(
-              `${key} is empty`,
-            );
+          ? ToastAndroid.show(`${key} is empty`, ToastAndroid.SHORT)
+          : Alert.alert(`${key} is empty`);
       }
       formdata.append(key, params[key]);
     }
+    services?.map((item, index)=> formdata.append(`expertise[${index}]`, item))
+    language?.map((item, index)=> formdata.append(`language[${index}]`, item))
     if (Object.keys(imageObject).length > 0) {
       formdata.append('photo', imageObject);
     }
+   console.log("🚀 ~ file: MyAccounts.js:106 ~ EditProfile ~ formdata:", formdata)
     // console.log(formdata);
 
     const url = 'auth/profile';
@@ -107,6 +113,7 @@ const MyAccounts = props => {
     setIsLoading(false);
 
     if (response !== undefined) {
+      console.log("🚀 ~ file: MyAccounts.js:113 ~ EditProfile ~ response:", response?.data)
       // console.log('response?.data?.data?.user', response?.data);
       dispatch(setUserData(response?.data?.user_info));
 
@@ -121,17 +128,19 @@ const MyAccounts = props => {
       showHeader={true}
       statusBarBackgroundColor={
         userRole == 'Qbid Member'
-              ? Color.themeBgColor
-              : userRole == 'Qbid Negotiator'
-              ? Color.themeBgColorNegotiator
-              : Color.themebgBusinessQbidder}
+          ? Color.themeBgColor
+          : userRole == 'Qbid Negotiator'
+          ? Color.themeBgColorNegotiator
+          : Color.themebgBusinessQbidder
+      }
       statusBarContentStyle={'light-content'}
       headerColor={
         userRole == 'Qbid Member'
-              ? Color.themeBgColor
-              : userRole == 'Qbid Negotiator'
-              ? Color.themeBgColorNegotiator
-              : Color.themebgBusinessQbidder}
+          ? Color.themeBgColor
+          : userRole == 'Qbid Negotiator'
+          ? Color.themeBgColorNegotiator
+          : Color.themebgBusinessQbidder
+      }
       hideUser={true}
       showBack={true}>
       <ScrollView
@@ -143,7 +152,6 @@ const MyAccounts = props => {
         }}>
         <LinearGradient
           style={{
-       
             alignItems: 'center',
             paddingVertical: moderateScale(30, 0.6),
           }}
@@ -151,10 +159,11 @@ const MyAccounts = props => {
           end={{x: 1, y: 0}}
           colors={
             userRole == 'Qbid Member'
-                  ? Color.themeBgColor
-                  : userRole == 'Qbid Negotiator'
-                  ? Color.themeBgColorNegotiator
-                  : Color.themebgBusinessQbidder}>
+              ? Color.themeBgColor
+              : userRole == 'Qbid Negotiator'
+              ? Color.themeBgColorNegotiator
+              : Color.themebgBusinessQbidder
+          }>
           <View>
             {Object.keys(imageObject).length > 0 ? (
               <CustomImage
@@ -184,11 +193,12 @@ const MyAccounts = props => {
                 width: moderateScale(30, 0.3),
                 height: moderateScale(30, 0.3),
                 borderRadius: moderateScale(15, 0.3),
-                backgroundColor: userRole == 'Qbid Member'
-                ? Color.blue
-                : userRole == 'Qbid Negotiator'
-                ? Color.themeColor
-                : Color.black,
+                backgroundColor:
+                  userRole == 'Qbid Member'
+                    ? Color.blue
+                    : userRole == 'Qbid Negotiator'
+                    ? Color.themeColor
+                    : Color.black,
                 alignItems: 'center',
                 justifyContent: 'center',
                 position: 'absolute',
@@ -206,9 +216,9 @@ const MyAccounts = props => {
           </View>
 
           <TextInputWithTitle
-            title={'First Name'} 
+            title={'First Name'}
             secureText={false}
-            placeholder={'First Name'}    
+            placeholder={'First Name'}
             setText={setFirstName}
             value={firstName}
             viewHeight={0.07}
@@ -286,6 +296,27 @@ const MyAccounts = props => {
             placeholderColor={Color.themeLightGray}
             borderRadius={moderateScale(25, 0.3)}
           />
+          {userRole == 'Qbid Negotiator' && (
+            <>
+              <TextInputWithTitle
+                title={'Company Name'}
+                secureText={false}
+                placeholder={'Company Name'}
+                setText={setCompanyName}
+                value={companyName}
+                viewHeight={0.07}
+                viewWidth={0.9}
+                inputWidth={0.86}
+                // border={1}
+                borderColor={'#ffffff'}
+                backgroundColor={'#FFFFFF'}
+                // marginTop={moderateScale(15, 0.3)}
+                color={Color.themeColor}
+                placeholderColor={Color.themeLightGray}
+                borderRadius={moderateScale(25, 0.3)}
+              />
+            </>
+          )}
           <TextInputWithTitle
             title={'City'}
             secureText={false}
@@ -333,6 +364,40 @@ const MyAccounts = props => {
             // marginBottom={moderateScale(10, 0.3)}
           />
 
+          {userRole != 'Qbid Member' && (
+            <>
+              <CustomDropDownMultiSelect
+                title={'Pick Languages'}
+                array={[
+                  {name: 'English', id: 'English'},
+                  {name: 'Dutch', id: 'Dutch'},
+                  {name: 'Spanish', id: 'Spanish'},
+                  {name: 'French', id: 'French'},
+                  {name: 'Portugese', id: 'Portugese'},
+                ]}
+                item={language}
+                setItem={setLanguage}
+                maxHeight={windowHeight * 0.2}
+                marginTop={moderateScale(8, 0.3)}
+                containerStyle={{
+                  width: windowWidth * 0.9,
+                  height: windowHeight * 0.07,
+                }}
+              />
+              <CustomDropDownMultiSelect
+                title={'Pick Expertise'}
+                array={servicesArray}
+                item={services}
+                setItem={setServices}
+                maxHeight={windowHeight * 0.3}
+                containerStyle={{
+                  width: windowWidth * 0.9,
+                  height: windowHeight * 0.07,
+                }}
+              />
+            </>
+          )}
+
           <CustomButton
             text={
               isLoading ? (
@@ -345,15 +410,16 @@ const MyAccounts = props => {
             width={windowWidth * 0.9}
             height={windowHeight * 0.07}
             marginTop={moderateScale(20, 0.3)}
-             onPress={() => {
-              EditProfile()
-             }}
+            onPress={() => {
+              EditProfile();
+            }}
             bgColor={
               userRole == 'Qbid Member'
-            ? Color.blue
-            : userRole == 'Qbid Negotiator'
-            ? Color.themeColor
-            : Color.black}
+                ? Color.blue
+                : userRole == 'Qbid Negotiator'
+                ? Color.themeColor
+                : Color.black
+            }
             borderRadius={moderateScale(30, 0.3)}
           />
         </LinearGradient>
