@@ -66,10 +66,10 @@ const SeekingHelpCard = ({fromSeeAll, style, onPress, item}) => {
             style={{
               width: fromSeeAll
                 ? moderateScale(50, 0.3)
-                : moderateScale(36, 0.3),
+                : moderateScale(40, 0.3),
               height: fromSeeAll
                 ? moderateScale(50, 0.3)
-                : moderateScale(36, 0.3),
+                : moderateScale(40, 0.3),
               borderRadius: fromSeeAll
                 ? moderateScale(25, 0.3)
                 : moderateScale(18, 0.3),
@@ -99,6 +99,23 @@ const SeekingHelpCard = ({fromSeeAll, style, onPress, item}) => {
            John Doe
           </CustomText>
         </View>
+        <View style={{
+          // alignItems:'center'
+          paddingLeft:80
+}}>
+  
+        <CustomText
+          numberOfLines={3}
+          style={{
+            fontSize: fromSeeAll
+              ? moderateScale(9, 0.6)
+              : moderateScale(8, 0.6),
+            color: '#575757',
+            marginTop: moderateScale(19, 0.3),
+          }}>
+           qbid title
+        </CustomText>
+
         <CustomText
           numberOfLines={3}
           style={{
@@ -108,9 +125,11 @@ const SeekingHelpCard = ({fromSeeAll, style, onPress, item}) => {
             color: '#575757',
             marginTop: moderateScale(5, 0.3),
           }}>
-            Help Name
+           description
           {/* {item?.notes ? item?.notes : item?.quote_info?.notes} */}
         </CustomText>
+        </View>
+       
        
 
         {/* <CustomButton
@@ -181,6 +200,36 @@ const SeekingHelpCard = ({fromSeeAll, style, onPress, item}) => {
               }}
             />
           </View>
+          <CustomText
+            style={{
+              width: windowWidth * 0.9,
+              textAlign: 'center',
+              marginTop: moderateScale(10, 0.3),
+              color: Color.black,
+              fontSize: moderateScale(14, 0.3),
+            }}>
+            user Name
+          </CustomText>
+          <CustomText
+            style={{
+              width: windowWidth * 0.9,
+              textAlign: 'center',
+              marginTop: moderateScale(10, 0.3),
+              color: Color.black,
+              fontSize: moderateScale(14, 0.3),
+            }}>
+            user Email
+          </CustomText>
+          <CustomText
+            style={{
+              width: windowWidth * 0.9,
+              textAlign: 'center',
+              marginTop: moderateScale(10, 0.3),
+              color: Color.black,
+              fontSize: moderateScale(14, 0.3),
+            }}>
+            description
+          </CustomText>
 
           <CustomText
             style={{
@@ -192,6 +241,7 @@ const SeekingHelpCard = ({fromSeeAll, style, onPress, item}) => {
             }}>
             Are you Sure You want to Help.?
           </CustomText>
+       
 
           <View
             style={{
@@ -243,7 +293,7 @@ export default SeekingHelpCard;
 const styles = ScaledSheet.create({
   joccard: {
     marginHorizontal: moderateScale(5, 0.6),
-    width: windowWidth * 0.37,
+    width: windowWidth * 0.7,
     paddingVertical: moderateScale(5, 0.6),
     // height: windowHeight * 0.2,
     borderRadius: moderateScale(10, 0.6),

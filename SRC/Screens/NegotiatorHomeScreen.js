@@ -34,6 +34,7 @@ import {Get} from '../Axios/AxiosInterceptorFunction';
 import SeekingHelpCard from '../Components/SeekingHelpCard';
 import {useIsFocused} from '@react-navigation/native';
 import Lottie from 'lottie-react-native';
+import Card from '../Components/Card';
 import NoData from '../Components/NoData';
 
 const NegotiatorHomeScreen = () => {
@@ -394,6 +395,7 @@ const NegotiatorHomeScreen = () => {
                     );
                   }}
                   data={seekingHelp.length>5 ? seekingHelp.slice(0,5) : seekingHelp}
+                  // data={1}
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={{
@@ -401,7 +403,7 @@ const NegotiatorHomeScreen = () => {
                     paddingBottom:moderateScale(40, .6)
                   }}
                   renderItem={({item, index}) => {
-                    return <SeekingHelpCard item={item} key={index} />;
+                    return <Card item={item} />;
                   }}
                 />
               </View>
