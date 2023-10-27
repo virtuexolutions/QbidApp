@@ -69,19 +69,26 @@ const HomeScreen = () => {
   const [qbidDetail, setQbidDetail] = useState('');
   const [qbiddetail1, setQbidDetail1] = useState('');
   const [myQuotes, setMyQuotes] = useState([]);
+  // console.log("🚀 ~ file: HomeScreen.js:72 ~ HomeScreen ~ myQuotes:", myQuotes)
   const [proposals, setProposals] = useState([]);
+  // console.log("🚀 ~ file: HomeScreen.js:73 ~ HomeScreen ~ proposals:", proposals)
 
-  const getProposals = async () => {
-    const url = 'auth/member/bid_help';
+  const getAllData = async () => {
     setIsLoading(true);
-    const response = await Get(url, token);
+    const [response1, response2] = await Promise.all([
+      Get('auth/member/bid_help', token),
+      Get('auth/member/quote', token),
+    ]);
     setIsLoading(false);
-    if (response != undefined) {
-      // console.log(
-      //   '🚀 ~ file: HomeScreen.js:72 ~ getProposals ~ response:',
-      //   response?.data,
-      // );
-      setProposals(response?.data);
+
+    if (response1 != undefined) {
+      // console.log("🚀 ~ file: HomeScreen.js:85 ~ getAllData ~ response1:", response1?.data)
+      setProposals(response1?.data?.bid_help_info?.data);
+    }
+
+    if (response2 != undefined) {
+      // console.log("🚀 ~ file: HomeScreen.js:90 ~ getAllData ~ response2:",response2?.data?.quote_info?.data?.length)
+      setMyQuotes(response2?.data?.quote_info?.data);
     }
   };
 
@@ -127,23 +134,8 @@ const HomeScreen = () => {
     }
   };
 
-  const getMyQuotes = async () => {
-    const url = 'auth/member/quote';
-    setIsLoading(true);
-    const response = await Get(url, token);
-    setIsLoading(false);
-    if (response != undefined) {
-      // console.log(
-      //   '🚀 ~ file: HomeScreen.js:77 ~ getMyQuotes ~ response:',
-      //   response?.data,
-      // );
-      setMyQuotes(response?.data?.quote_info);
-    }
-  };
-
   useEffect(() => {
-    getMyQuotes();
-    // getProposals();
+    getAllData();
   }, [isFocused]);
 
   useEffect(() => {
@@ -152,114 +144,9 @@ const HomeScreen = () => {
     });
   }, []);
 
-  const negotiatorsArray = [
-    {
-      id: 1,
-      name: 'Walter A. Jones',
-      Title: 'Lorem Ipsum dolor Amet',
-      desc: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
-    },
-    {
-      id: 2,
-      name: 'Walter A. Jones',
-      Title: 'Lorem Ipsum dolor Amet',
-      desc: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
-    },
-    {
-      id: 3,
-      name: 'Walter A. Jones',
-      Title: 'Lorem Ipsum dolor Amet',
-      desc: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
-    },
-    {
-      id: 4,
-      name: 'Walter A. Jones',
-      Title: 'Lorem Ipsum dolor Amet',
-      desc: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
-    },
-    {
-      id: 5,
-      name: 'Walter A. Jones',
-      Title: 'Lorem Ipsum dolor Amet',
-      desc: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
-    },
-    {
-      id: 6,
-      name: 'Walter A. Jones',
-      Title: 'Lorem Ipsum dolor Amet',
-      desc: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
-    },
-  ];
 
-  const myQoutesArray = [
-    {
-      qouteName: 'Car parts purchasing',
-      negotiatorName: 'john marco',
-      negotiatorImage: require('../Assets/Images/man1.jpg'),
-      number: '12345678',
-      address: 'abc street newyork , USA',
-      email: 'john@gmail.com',
-      Qbid_member_name: 'Chris',
-      Qbid_member_email: 'chrisnevins@gmail.com',
-      contact: '+1(333)111-1111',
-      image:
-        'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_960_720.jpg',
-      status: 'pending',
-      vendorPrice: 4000,
-    },
-    {
-      qouteName: 'Car parts',
-      negotiatorName: 'john marco',
-      negotiatorImage: require('../Assets/Images/man3.jpg'),
-      number: '12345678',
-      address: 'abc street newyork , USA',
-      email: 'john@gmail.com',
-      Qbid_member_name: 'Chris',
-      Qbid_member_email: 'chrisnevins@gmail.com',
-      contact: '+1(333)333-1111',
-      image:
-        'https://media.istockphoto.com/id/1021170914/photo/beautiful-landscape-in-park-with-tree-and-green-grass-field-at-morning.jpg?s=612x612&w=is&k=20&c=Qd0K-pvuKcje8CGDcJkJ3UJzHbGtGYRw8wwcbno99O4=',
-      status: 'onGoing',
-      vendorPrice: 4000,
-      negotiatorPrice: 2000,
-    },
-    {
-      qouteName: 'Car parts',
-      negotiatorName: 'john marco',
-      negotiatorImage: require('../Assets/Images/man2.jpg'),
-      number: '12345678',
-      address: 'abc street newyork , USA',
-      email: 'john@gmail.com',
-      Qbid_member_name: 'Chris',
-      Qbid_member_email: 'chrisnevins@gmail.com',
-      contact: '+1(333)111-222',
-      image:
-        'https://media.istockphoto.com/id/1216579927/photo/colorful-sunset-scenery-on-open-field.jpg?s=612x612&w=is&k=20&c=qPm0H72LjrnQ22yWKPIycy6tCQsutL230c7-Ttl8_FU=',
-      status: 'completed',
-      rating: 4,
-      vendorPrice: 4000,
-      negotiatorPrice: 2000,
-    },
-    {
-      qouteName: 'Car parts',
-      negotiatorName: 'john marco',
-      negotiatorImage: require('../Assets/Images/man1.jpg'),
-      number: '12345678',
-      address: 'abc street newyork , USA',
-      email: 'john@gmail.com',
-      Qbid_member_name: 'Chris',
-      Qbid_member_email: 'chrisnevins@gmail.com',
-      contact: '+1(333)111-222',
-      image:
-        'https://media.istockphoto.com/id/1216579927/photo/colorful-sunset-scenery-on-open-field.jpg?s=612x612&w=is&k=20&c=qPm0H72LjrnQ22yWKPIycy6tCQsutL230c7-Ttl8_FU=',
-      status: 'completed',
-      rating: 0,
-      vendorPrice: 4000,
-      negotiatorPrice: 2000,
-    },
-  ];
+  
 
-  // const QbidDetail = ['QbidDetail', 'QbidDetail', 'QbidDetail'];
 
   const toggleModal = () => {
     setModalVisible(!modalVisible);
@@ -625,7 +512,7 @@ const HomeScreen = () => {
                   // <Text>hello</Text>
                 );
               }}
-              data={myQuotes?.length > 5 ? myQuotes.slice(0,5) : myQuotes }
+              data={myQuotes?.length > 5 ? myQuotes.slice(0, 5) : myQuotes}
               // data={[]}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{
@@ -646,7 +533,11 @@ const HomeScreen = () => {
         statusArray={
           selectedView == 'negotiator'
             ? servicesArray
-            : [{name: 'Recommended'}, {name: 'Working On'}, {name: 'Seeking Help'}]
+            : [
+                {name: 'Recommended'},
+                {name: 'Working On'},
+                {name: 'Seeking Help'},
+              ]
         }
         data={selectedView == 'negotiator' ? selectedService : selectedStatus}
         setData={

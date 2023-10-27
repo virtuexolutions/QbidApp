@@ -1,5 +1,5 @@
 import {FlatList, StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import Color from '../Assets/Utilities/Color';
 import {moderateScale, ScaledSheet} from 'react-native-size-matters';
@@ -18,220 +18,104 @@ import LinearGradient from 'react-native-linear-gradient';
 import JobCard from '../Components/JobCard';
 import navigationService from '../navigationService';
 import SeekingHelpCard from '../Components/SeekingHelpCard';
+import {Socket} from 'engine.io-client';
+import {Get} from '../Axios/AxiosInterceptorFunction';
+import {useEffect} from 'react';
+import {ActivityIndicator} from 'react-native';
 
 const SeeAllNegotiator = props => {
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
+  const token = useSelector(state => state.authReducer.token);
 
   const type = props?.route?.params?.type;
   const data = props?.route?.params?.data;
+
+  const scrollViewRef = useRef();
 
   const [searchData, setSearchData] = useState('');
   const [showSearch, setShowSearch] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState('');
+  useState;
+  const [pageNum, setpageNum] = useState(1);
+  console.log(
+    '🚀 ~ file: SeeAllNegotiator.js:39 ~ SeeAllNegotiator ~ pageNum:',
+    pageNum,
+  );
+  console.log(
+    '🚀 ~ file: SeeAllNegotiator.js:38 ~ SeeAllNegotiator ~ pageNum:',
+    pageNum,
+  );
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadMore, setLoadMore] = useState(false);
+
+  const [newArray, setNewArray] = useState([]);
   console.log(
     '🚀 ~ file: SeeAllNegotiator.js:6 ~ SeeAllNegotiator ~ type',
     type,
   );
-  const negotiatorsArray = [
-    {
-      name: 'Walter A. Jones',
-      rating: 4,
-      expertiseIn: ['plumbing equipment'],
-      description:
-        'Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor',
-      image: require('../Assets/Images/man1.jpg'),
-    },
-    {
-      name: 'jpsephine A. Suarez',
-      rating: 3,
-      expertiseIn: ['plumbing equipment', 'test3', 'test2'],
-      description:
-        'Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor',
-      image: require('../Assets/Images/man2.jpg'),
-    },
-    {
-      name: 'Ronald N. Voegele',
-      rating: 5,
-      expertiseIn: ['plumbing equipment', 'test3', 'test2'],
-      description:
-        'Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor',
-      image: require('../Assets/Images/man3.jpg'),
-    },
-    {
-      name: 'Walter A. Jones',
-      rating: 4,
-      expertiseIn: ['plumbing equipment', 'test3', 'test2'],
-      description:
-        'Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor',
-      image: require('../Assets/Images/man1.jpg'),
-    },
-    {
-      name: 'Walter A. Jones',
-      rating: 4,
-      expertiseIn: ['plumbing equipment'],
-      description:
-        'Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor',
-      image: require('../Assets/Images/man1.jpg'),
-    },
-    {
-      name: 'jpsephine A. Suarez',
-      rating: 3,
-      expertiseIn: ['plumbing equipment', 'test3', 'test2'],
-      description:
-        'Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor',
-      image: require('../Assets/Images/man2.jpg'),
-    },
-    {
-      name: 'Ronald N. Voegele',
-      rating: 5,
-      expertiseIn: ['plumbing equipment', 'test3', 'test2'],
-      description:
-        'Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor',
-      image: require('../Assets/Images/man3.jpg'),
-    },
-    {
-      name: 'Walter A. Jones',
-      rating: 4,
-      expertiseIn: ['plumbing equipment', 'test3', 'test2'],
-      description:
-        'Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor',
-      image: require('../Assets/Images/man1.jpg'),
-    },
-  ];
-  const myQoutesArray = [
-    {
-      qouteName: 'Car parts purchasing',
-      negotiatorName: 'john marco',
-      negotiatorImage: require('../Assets/Images/man1.jpg'),
-      number: '12345678',
-      address: 'abc street newyork , USA',
-      email: 'john@gmail.com',
-      Qbid_member_name: 'Chris',
-      Qbid_member_email: 'chrisnevins@gmail.com',
-      contact: '+1(333)111-1111',
-      image:
-        'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_960_720.jpg',
-      status: 'pending',
-      vendorPrice: 4000,
-    },
-    {
-      qouteName: 'Car parts',
-      negotiatorName: 'john marco',
-      negotiatorImage: require('../Assets/Images/man3.jpg'),
-      number: '12345678',
-      address: 'abc street newyork , USA',
-      email: 'john@gmail.com',
-      Qbid_member_name: 'Chris',
-      Qbid_member_email: 'chrisnevins@gmail.com',
-      contact: '+1(333)333-1111',
-      image:
-        'https://media.istockphoto.com/id/1021170914/photo/beautiful-landscape-in-park-with-tree-and-green-grass-field-at-morning.jpg?s=612x612&w=is&k=20&c=Qd0K-pvuKcje8CGDcJkJ3UJzHbGtGYRw8wwcbno99O4=',
-      status: 'onGoing',
-      vendorPrice: 4000,
-      negotiatorPrice: 2000,
-    },
-    {
-      qouteName: 'Car parts',
-      negotiatorName: 'john marco',
-      negotiatorImage: require('../Assets/Images/man2.jpg'),
-      number: '12345678',
-      address: 'abc street newyork , USA',
-      email: 'john@gmail.com',
-      Qbid_member_name: 'Chris',
-      Qbid_member_email: 'chrisnevins@gmail.com',
-      contact: '+1(333)111-222',
-      image:
-        'https://media.istockphoto.com/id/1216579927/photo/colorful-sunset-scenery-on-open-field.jpg?s=612x612&w=is&k=20&c=qPm0H72LjrnQ22yWKPIycy6tCQsutL230c7-Ttl8_FU=',
-      status: 'completed',
-      rating: 4,
-      vendorPrice: 4000,
-      negotiatorPrice: 2000,
-    },
-    {
-      qouteName: 'Car parts',
-      negotiatorName: 'john marco',
-      negotiatorImage: require('../Assets/Images/man1.jpg'),
-      number: '12345678',
-      address: 'abc street newyork , USA',
-      email: 'john@gmail.com',
-      Qbid_member_name: 'Chris',
-      Qbid_member_email: 'chrisnevins@gmail.com',
-      contact: '+1(333)111-222',
-      image:
-        'https://media.istockphoto.com/id/1216579927/photo/colorful-sunset-scenery-on-open-field.jpg?s=612x612&w=is&k=20&c=qPm0H72LjrnQ22yWKPIycy6tCQsutL230c7-Ttl8_FU=',
-      status: 'completed',
-      rating: 0,
-      vendorPrice: 4000,
-      negotiatorPrice: 2000,
-    },
-    {
-      qouteName: 'Car parts purchasing',
-      negotiatorName: 'john marco',
-      negotiatorImage: require('../Assets/Images/man1.jpg'),
-      number: '12345678',
-      address: 'abc street newyork , USA',
-      email: 'john@gmail.com',
-      Qbid_member_name: 'Chris',
-      Qbid_member_email: 'chrisnevins@gmail.com',
-      contact: '+1(333)111-1111',
-      image:
-        'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_960_720.jpg',
-      status: 'pending',
-      vendorPrice: 4000,
-    },
-    {
-      qouteName: 'Car parts',
-      negotiatorName: 'john marco',
-      negotiatorImage: require('../Assets/Images/man3.jpg'),
-      number: '12345678',
-      address: 'abc street newyork , USA',
-      email: 'john@gmail.com',
-      Qbid_member_name: 'Chris',
-      Qbid_member_email: 'chrisnevins@gmail.com',
-      contact: '+1(333)333-1111',
-      image:
-        'https://media.istockphoto.com/id/1021170914/photo/beautiful-landscape-in-park-with-tree-and-green-grass-field-at-morning.jpg?s=612x612&w=is&k=20&c=Qd0K-pvuKcje8CGDcJkJ3UJzHbGtGYRw8wwcbno99O4=',
-      status: 'onGoing',
-      vendorPrice: 4000,
-      negotiatorPrice: 2000,
-    },
-    {
-      qouteName: 'Car parts',
-      negotiatorName: 'john marco',
-      negotiatorImage: require('../Assets/Images/man2.jpg'),
-      number: '12345678',
-      address: 'abc street newyork , USA',
-      email: 'john@gmail.com',
-      Qbid_member_name: 'Chris',
-      Qbid_member_email: 'chrisnevins@gmail.com',
-      contact: '+1(333)111-222',
-      image:
-        'https://media.istockphoto.com/id/1216579927/photo/colorful-sunset-scenery-on-open-field.jpg?s=612x612&w=is&k=20&c=qPm0H72LjrnQ22yWKPIycy6tCQsutL230c7-Ttl8_FU=',
-      status: 'completed',
-      rating: 4,
-      vendorPrice: 4000,
-      negotiatorPrice: 2000,
-    },
-    {
-      qouteName: 'Car parts',
-      negotiatorName: 'john marco',
-      negotiatorImage: require('../Assets/Images/man1.jpg'),
-      number: '12345678',
-      address: 'abc street newyork , USA',
-      email: 'john@gmail.com',
-      Qbid_member_name: 'Chris',
-      Qbid_member_email: 'chrisnevins@gmail.com',
-      contact: '+1(333)111-222',
-      image:
-        'https://media.istockphoto.com/id/1216579927/photo/colorful-sunset-scenery-on-open-field.jpg?s=612x612&w=is&k=20&c=qPm0H72LjrnQ22yWKPIycy6tCQsutL230c7-Ttl8_FU=',
-      status: 'completed',
-      rating: 0,
-      vendorPrice: 4000,
-      negotiatorPrice: 2000,
-    },
-  ];
+
+  const getData = async type1 => {
+    const url =
+      type == 'recommended'
+        ? `auth/negotiator/quote/recommended?page=${pageNum}`
+        : type == 'Working On'
+        ? `auth/negotiator/quote/working?page=${pageNum}`
+        : `auth/negotiator/bid_help?page=${pageNum}`;
+    type1 == 'loadMore' ? setLoadMore(true) : setIsLoading(true);
+    const response = await Get(url, token);
+    type1 == 'loadMore' ? setLoadMore(false) : setIsLoading(false);
+    if (response != undefined) {
+      console.log(
+        '🚀 ~ file: SeeAllNegotiator.js:67 ~ getData ~ response:',
+        response?.data,
+      );
+      if (type != 'Seeking Help') {
+        type1 == 'loadMore'  
+          ? setNewArray(prev => [...prev, ...response?.data?.quote_info?.data])
+          : setNewArray(response?.data?.quote_info?.data);
+      } else {
+        type1 == 'loadMore'
+          ? setNewArray(prev => [
+              ...prev,
+              ...response?.data?.bid_help_info?.data,
+            ])
+          : setNewArray(response?.data?.bid_help_info?.data);
+      }
+    }
+  };
+
+  const handleScroll = event => {
+    const currentOffset = event.nativeEvent.contentOffset.y;
+    const maxOffset =
+      event.nativeEvent.contentSize.height -
+      event.nativeEvent.layoutMeasurement.height;
+
+    // Check if you've reached the end
+    if (currentOffset >= maxOffset) {
+      // You've reached the end of the ScrollView
+      setpageNum(prev => prev + 1);
+      console.log('Reached the end of ScrollView');
+    }
+  };
+
+  useEffect(() => {
+    if (pageNum == 1) {
+      getData();
+    } else {
+      if(newArray.length == data.length){
+
+        getData('loadMore');
+      }
+    }
+
+    // return () => {
+    //   setpageNum(1);
+    //   setNewArray([]);
+    // };
+  }, [pageNum]);
+
   return (
     <ScreenBoiler
       statusBarBackgroundColor={
@@ -253,7 +137,7 @@ const SeeAllNegotiator = props => {
       }>
       <LinearGradient
         style={{
-          height: windowHeight * 0.96,
+          height: windowHeight * 0.9,
         }}
         start={{x: 0, y: 0}}
         end={{x: 1, y: 0}}
@@ -297,40 +181,72 @@ const SeeAllNegotiator = props => {
           />
         </View>
 
-        <FlatList
-          data={data}
-          numColumns={2}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            width: windowWidth,
-            alignItems: 'center',
-            // paddingHorizontal: moderateScale(15, 0.3),
-            paddingTop: moderateScale(20, 0.6),
-            paddingBottom: moderateScale(40, 0.6),
-          }}
-          renderItem={({item, index}) => {
-            console.log(index % 2 == 0);
-            return type != 'Job Requests' ? (
-              <JobCard
-                fromSeeAll={true}
-                item={item}
-                style={index % 2 == 0 && {marginRight: moderateScale(7, 0.3)}}
-                onPress={() => {
-                  navigationService.navigate('JobDetails', {item});
-                }}
-              />
-            ) : (
-              <SeekingHelpCard
-                fromSeeAll={true}
-                style={index % 2 == 0 && {marginRight: moderateScale(7, 0.3)}}
-                item={item}
-              />
-            );
-          }}
-          ListHeaderComponent={() => {
-            return <CustomText style={styles.header}>{type}</CustomText>;
-          }}
-        />
+        {isLoading ? (
+          <View
+            style={{
+              width: windowWidth,
+              height: windowHeight * 0.75,
+              alignSelf: 'center',
+              justifyContent: 'center',
+              // alignItems:'center'
+            }}>
+            <ActivityIndicator color={'white'} size={'large'} />
+          </View>
+        ) : (
+          <FlatList
+            // onEndReached={() => {
+            //   setpageNum(prev => prev + 1);
+            // }}
+            ref={scrollViewRef}
+            onScroll={handleScroll}
+            scrollEventThrottle={16}
+            data={newArray}
+            numColumns={2}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+              width: windowWidth,
+              alignItems: 'center',
+              // paddingHorizontal: moderateScale(15, 0.3),
+              paddingTop: moderateScale(20, 0.6),
+              paddingBottom: moderateScale(80, 0.6),
+            }}
+            renderItem={({item, index}) => {
+              console.log(index % 2 == 0);
+              return type != 'Job Requests' ? (
+                <JobCard
+                  fromSeeAll={true}
+                  item={item}
+                  style={index % 2 == 0 && {marginRight: moderateScale(7, 0.3)}}
+                  onPress={() => {
+                    navigationService.navigate('JobDetails', {item});
+                  }}
+                />
+              ) : (
+                <SeekingHelpCard
+                  fromSeeAll={true}
+                  style={index % 2 == 0 && {marginRight: moderateScale(7, 0.3)}}
+                  item={item}
+                />
+              );
+            }}
+            ListHeaderComponent={() => {
+              return <CustomText style={styles.header}>{type}</CustomText>;
+            }}
+            ListFooterComponent={() => {
+              return (
+                loadMore && (
+                  <View
+                    style={{
+                      alignSelf: 'center',
+                      marginTop: moderateScale(10, 0.3),
+                    }}>
+                    <ActivityIndicator size={'small'} color={'white'} />
+                  </View>
+                )
+              );
+            }}
+          />
+        )}
         {/* </ScrollView> */}
         <CustomStatusModal
           isModalVisible={isModalVisible}

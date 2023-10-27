@@ -13,7 +13,7 @@ import { Post } from '../Axios/AxiosInterceptorFunction';
 import { ActivityIndicator } from 'react-native';
 
 const NegotiatorCard = ({item, fromSeeAll}) => {
-  // console.log("🚀 ~ file: NegotiatorCard.js:16 ~ NegotiatorCard ~ item:", item)
+  // return console.log("🚀 ~ file: NegotiatorCard.js:16 ~ NegotiatorCard ~ item:", item)
   const token = useSelector(state => state.authReducer.token)
   // console.log("🚀 ~ file: NegotiatorCard.js:18 ~ NegotiatorCard ~ token:", token)
   const [isLoading, setIsLoading] = useState(false);
@@ -59,7 +59,7 @@ const approveRequest =async(status)=>{
               color: Color.white,
               fontSize: moderateScale(17, 0.6),
             }}>
-            {item?.name ? item?.name :item?.fullname}
+            {item?.bid_name }
           </CustomText>
           <CustomText
             numberOfLines={1}
@@ -78,7 +78,7 @@ const approveRequest =async(status)=>{
               fontSize: moderateScale(9, 0.6),
               // lineHeight: moderateScale(14, 0.3),
             }}>
-            {item?.desc ? item?.desc : item?.coverletter}
+            {item?.description}
           </CustomText>
 
           <CustomButton

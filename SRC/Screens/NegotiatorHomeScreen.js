@@ -73,13 +73,13 @@ const NegotiatorHomeScreen = () => {
         setRecommended(response1?.data?.quote_info?.data);
     }
     if (response2 != undefined) {
-      // console.log("🚀 ~ file: NegotiatorHomeScreen.js:72 ~ getProposal ~ response2:", response2?.data)
+      console.log("🚀 ~ file: NegotiatorHomeScreen.js:72 ~ getProposal ~ response2:", response2?.data)
       
       ![null, undefined, ''].includes(response2?.data?.quote_info) &&
         setWorking(response2?.data?.quote_info?.data);
     }
     if (response3 != undefined) {
-      // console.log("🚀 ~ file: NegotiatorHomeScreen.js:75 ~ getProposal ~ response3:", response3?.data)
+      console.log("🚀 ~ file: NegotiatorHomeScreen.js:75 ~ getProposal ~ response3:", response3?.data)
       
       ![null, undefined, ''].includes(response2?.data?.quote_info) &&
         setSeekingHelp(response3?.data?.bid_help_info?.data);
@@ -119,7 +119,7 @@ const NegotiatorHomeScreen = () => {
       <LinearGradient
         style={{
           width: windowWidth,
-          height: windowHeight * 0.89,
+          height: windowHeight * 0.9,
         }}
         start={{x: 0, y: 0}}
         end={{x: 1, y: 0}}
@@ -287,7 +287,7 @@ const NegotiatorHomeScreen = () => {
                       />
                     );
                   }}
-                  data={recommended}
+                  data={recommended.length > 5 ?  recommended?.slice(0,5): recommended}
                   // data={[]}
                   horizontal
                   showsHorizontalScrollIndicator={false}
@@ -371,7 +371,7 @@ const NegotiatorHomeScreen = () => {
                   <CustomText
                     onPress={() => {
                       navigationService.navigate('SeeAllNegotiator', {
-                        type: 'Job Requests',
+                        type: 'Seeking Help',
                         data: seekingHelp,
                       });
                     }}
@@ -398,6 +398,7 @@ const NegotiatorHomeScreen = () => {
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={{
                     paddingHorizontal: moderateScale(15, 0.3),
+                    paddingBottom:moderateScale(40, .6)
                   }}
                   renderItem={({item, index}) => {
                     return <SeekingHelpCard item={item} key={index} />;
@@ -411,9 +412,9 @@ const NegotiatorHomeScreen = () => {
           isModalVisible={isModalVisible}
           setModalVisible={setIsModalVisible}
           statusArray={[
-            {name: 'pending'},
-            {name: 'onGoing'},
-            {name: 'completed'},
+            {name: 'Recommended'},
+            {name: 'on Working'},
+            {name: 'Seeking Help'},
           ]}
           data={selectedStatus}
           setData={setSelectedStatus}

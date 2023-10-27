@@ -180,8 +180,16 @@ const JobDetails = props => {
             paddingTop: moderateScale(40, 0.6),
             paddingLeft: moderateScale(15, 0.6),
           }}>
-          {isLoading ? (<View style={{width:windowWidth*0.95 , height:windowHeight*0.8, justifyContent:'center', alignItems:'center'}}>
-            <ActivityIndicator size={'large'} color={'white'} /></View>
+          {isLoading ? (
+            <View
+              style={{
+                width: windowWidth * 0.95,
+                height: windowHeight * 0.8,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <ActivityIndicator size={'large'} color={'white'} />
+            </View>
           ) : (
             <>
               <View
