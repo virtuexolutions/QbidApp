@@ -150,7 +150,7 @@ const approveRequest =async(status)=>{
               fontSize: moderateScale(15, 0.6),
               color: Color.black,
             }}>
-          {item?.fullname}
+          {item?.bid_name}
           </CustomText>
           <CustomText
             style={{
@@ -197,7 +197,7 @@ const approveRequest =async(status)=>{
               fontSize: moderateScale(13, 0.6),
               color: Color.veryLightGray,
             }}>
-           {item?.coverletter}
+           {item?.description}
           </CustomText>
 
           <View
@@ -224,7 +224,7 @@ const approveRequest =async(status)=>{
             />
             <CustomButton
               isBold
-              text={isLoading ? <ActivityIndicator size={'small'} color={'white'}/>:'Approve'}
+              text={isLoading ? <ActivityIndicator size={'small'} color={'white'}/>:'decline'}
               textColor={Color.white}
               width={windowWidth * 0.25}
               height={windowHeight * 0.04}

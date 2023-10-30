@@ -395,12 +395,12 @@ const NegotiatorHomeScreen = () => {
                     );
                   }}
                   data={seekingHelp.length>5 ? seekingHelp.slice(0,5) : seekingHelp}
-                  // data={1}
-                  horizontal
+                  // data={[1,2,]}
+                  // horizontal
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={{
                     paddingHorizontal: moderateScale(15, 0.3),
-                    paddingBottom:moderateScale(40, .6)
+                    paddingBottom:moderateScale(40, .6),
                   }}
                   renderItem={({item, index}) => {
                     return <Card item={item} />;
@@ -475,6 +475,7 @@ const styles = ScaledSheet.create({
     color: Color.white,
     marginLeft: moderateScale(15, 0.3),
     fontSize: moderateScale(20, 0.6),
+    paddingVertical:moderateScale(10,0.3)
   },
   row: {
     width: windowWidth,
