@@ -59,8 +59,8 @@ const CreateNew = () => {
     const formData = new FormData();
     if(description.length < 100){
       return Platform.OS == 'android'
-          ? ToastAndroid.show(`Description should be greater than 100`, ToastAndroid.SHORT)
-          : Alert.alert(`Description should be greater than 100`);
+          ? ToastAndroid.show(`Description should be greater than 100 letters`, ToastAndroid.SHORT)
+          : Alert.alert(`Description should be greater than 100 letters`);
     }
     
     for (let key in body) {
@@ -86,6 +86,7 @@ const CreateNew = () => {
       setMultiImages([])
       setOfferingPercent('')
       setQouteTitle('')
+      setState('')
       setSelectedService('')
       setVendorQoutedPrice('')
       

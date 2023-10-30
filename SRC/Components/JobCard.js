@@ -14,7 +14,7 @@ import numeral from 'numeral';
 import {Post} from '../Axios/AxiosInterceptorFunction';
 
 const JobCard = ({fromSeeAll, style, onPress, item}) => {
-  // console.log('🚀 ~ file: JobCard.js:15 ~ JobCard ~? item:', item);
+  console.log('🚀 ~ file: JobCard.js:15 ~ JobCard ~? item:', item?.id);
   const token = useSelector(state => state.authReducer.token);
 
   const [loading, setLoading] = useState(false);
@@ -171,6 +171,7 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
           </View>
         </View>
 
+    
         <CustomButton
           text={'View Details'}
           textColor={Color.white}
@@ -302,7 +303,7 @@ const styles = ScaledSheet.create({
   joccard: {
     marginHorizontal: moderateScale(5, 0.6),
     width: windowWidth * 0.37,
-    paddingVertical: moderateScale(5, 0.6),
+    paddingVertical: moderateScale(10, 0.6),
     // height: windowHeight * 0.2,
     borderRadius: moderateScale(10, 0.6),
     backgroundColor: Color.white,

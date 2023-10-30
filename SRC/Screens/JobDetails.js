@@ -33,6 +33,7 @@ import DropDownSingleSelect from '../Components/DropDownSingleSelect';
 import {Get, Post} from '../Axios/AxiosInterceptorFunction';
 import numeral from 'numeral';
 import {useIsFocused} from '@react-navigation/native';
+import NoData from '../Components/NoData';
 
 const JobDetails = props => {
   const data1 = props?.route?.params?.item;
@@ -42,10 +43,11 @@ const JobDetails = props => {
   const UserCoverLetterArray = useSelector(
     state => state.commonReducer.servicesArray,
   );
-  // console.log("🚀 ~ file: JobDetails.js:31 ~ JobDetails ~ user:", user)
-  const [data, setData] = useState(data1)
+  console.log('🚀 ~ file: JobDetails.js:31 ~ JobDetails ~ user:', user);
+  const [data, setData] = useState(data1);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
+  console.log('🚀 ~ file: JobDetails.js:49 ~ JobDetails ~ token:', token);
   const [checked, setChecked] = useState(false);
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -78,7 +80,7 @@ const JobDetails = props => {
       const mainuserData = response?.data?.quote_info?.bids?.find(
         item => item.user_info?.id == user?.id,
       );
-      setData(response?.data?.quote_info)
+      setData(response?.data?.quote_info);
 
       if (mainuserData) {
         setBidDone(true);
@@ -87,8 +89,9 @@ const JobDetails = props => {
     }
   };
 
-  const changeStatus = async value => {
-    const url = `auth/member/bid/${data?.id}`;
+  const changeStatus = async (value, id) => {
+    console.log('Data id =====>>', data?.id);
+    const url = `auth/member/bid/${id}`;
     setIsLoading(true);
     const response = await Post(url, {status: value}, apiHeader(token));
     setIsLoading(false);
@@ -97,7 +100,7 @@ const JobDetails = props => {
         '🚀 ~ file: BidderDetail.js:25 ~ changeStatus ~ response:',
         response?.data,
       );
-      bidDetails()
+      bidDetails();
     }
   };
 
@@ -182,6 +185,7 @@ const JobDetails = props => {
             paddingBottom: moderateScale(60, 0.6),
             paddingTop: moderateScale(40, 0.6),
             paddingLeft: moderateScale(15, 0.6),
+            // backgroundColor:'red'
           }}>
           {isLoading ? (
             <View
@@ -225,9 +229,10 @@ const JobDetails = props => {
                       color: Color.white,
                       fontSize: moderateScale(17, 0.6),
                     }}>
-                    {userRole == 'Qbid Member'
+                    {`${user?.first_name} ${user?.last_name}`}
+                    {/* {userRole == 'Qbid Member'
                       ? `${user?.first_name} ${user?.last_name}`
-                      : `${data?.user_info?.first_name} ${data?.user_info?.last_name}`}
+                      : `${data?.user_info?.first_name} ${data?.user_info?.last_name}`} */}
                   </CustomText>
                   <CustomText
                     style={{
@@ -338,17 +343,30 @@ const JobDetails = props => {
                   </CustomText>
                   <FlatList
                     data={data?.bids}
-                    contentContainerStyle={{paddingBottom:moderateScale(30,.6)}}
+                    ListEmptyComponent={() => {
+                      return (
+                        <NoData
+                          style={{
+                            width: windowWidth * 0.95,
+                            height: windowHeight * 0.18,
+                            // backgroundColor: 'green',
+                            alignItems: 'center',
+                          }}
+                          text={'No requests yet'}
+                        />
+                      );
+                    }}
+                    contentContainerStyle={{
+                      paddingBottom: moderateScale(30, 0.6),
+                    }}
                     renderItem={({item, index}) => {
-                      // console.log(
-                      //   '🚀 ~ file: JobDetails.js:275 ~ JobDetails ~ item:',
-                      //   item,
-                      // );
+                      console.log(
+                        '🚀 ~ file: JobDetails.js:349 ~ JobDetails ~ item:',
+                        item?.id,
+                      );
                       return (
                         <>
                           <BidderDetail
-                         
-                          
                             item={{
                               image: require('../Assets/Images/man1.jpg'),
                               name: item?.fullname,
@@ -360,7 +378,7 @@ const JobDetails = props => {
                           />
                           {data?.status == 'pending' && (
                             <View
-                            key={index}
+                              key={index}
                               style={{
                                 flexDirection: 'row',
                                 // backgroundColor: 'black',
@@ -397,7 +415,7 @@ const JobDetails = props => {
                                 borderRadius={moderateScale(30, 0.3)}
                                 fontSize={moderateScale(11, 0.6)}
                                 onPress={() => {
-                                  changeStatus('accept');
+                                  changeStatus('accept', item?.id);
                                   // setModalVisible(false);
                                 }}
                               />
@@ -418,7 +436,7 @@ const JobDetails = props => {
                                 borderRadius={moderateScale(30, 0.3)}
                                 fontSize={moderateScale(11, 0.6)}
                                 onPress={() => {
-                                  changeStatus('reject');
+                                  changeStatus('reject', item?.id);
                                   // setModalVisible(false);
                                 }}
                               />
@@ -467,7 +485,7 @@ const JobDetails = props => {
                           : Color.black,
                     }}
                   />
-                  <TextInputWithTitle
+                  {/* <TextInputWithTitle
                     titleText={'Cover Letter'}
                     secureText={false}
                     placeholder={'Cover Letter'}
@@ -484,7 +502,8 @@ const JobDetails = props => {
                     placeholderColor={Color.themeLightGray}
                     borderRadius={moderateScale(15, 0.3)}
                     multiline
-                  />
+                  /> */}
+
                   <CustomButton
                     text={'Bid Now'}
                     textColor={Color.white}

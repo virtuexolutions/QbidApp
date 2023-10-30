@@ -13,12 +13,10 @@ import {Post} from '../Axios/AxiosInterceptorFunction';
 import {ActivityIndicator} from 'react-native';
 
 const BidderDetail = ({item, photo, title, date, message}) => {
-//  console.log('🚀 ~ file: BidderDetail.js:16 ~ BidderDetail ~ item:', item);
+  //  console.log('🚀 ~ file: BidderDetail.js:16 ~ BidderDetail ~ item:', item);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
   const [isLoading, setIsLoading] = useState(false);
-
- 
 
   return (
     <View
@@ -86,25 +84,29 @@ const BidderDetail = ({item, photo, title, date, message}) => {
         ]}>
         {item?.description}
       </CustomText>
-   
+
       <CustomText
         noOfLines={1}
         style={{
           //   marginTop: moderateScale(10, 0.3),
           position: 'absolute',
-          right: moderateScale(10,.6),
+          right: moderateScale(10, 0.6),
           top: moderateScale(10, 0.3),
           // width : '100%',
           textAlign: 'right',
           fontSize: moderateScale(10, 0.6),
           color:
-            userRole == 'Qbid Member' ? item?.status == 'accept' 
-              ? Color.blue: Color.red 
-              : userRole == 'Qbid Negotiator'
+            item?.status == 'accept'
               ? Color.themeColor
-              : Color.black,
+              : item?.status == 'reject'
+              ? Color.red
+              : Color.blue,
         }}>
-        {item?.status== 'accept' ? 'Accepted' : 'Rejected'}
+        {item?.status == 'accept'
+          ? 'Accepted'
+            ? item?.status == 'reject'
+            : 'Rejected'
+          : 'pending'}
       </CustomText>
     </View>
   );
@@ -120,7 +122,7 @@ const styles = ScaledSheet.create({
     backgroundColor: Color.themeColor,
     borderRadius: moderateScale(5, 0.3),
     padding: moderateScale(10, 0.3),
-    marginVertical:moderateScale(5,.6)
+    marginVertical: moderateScale(5, 0.6),
     // paddingHorizontal: moderateScale(15, 0.3),
     // marginBottom: moderateScale(20, 0.3),
   },

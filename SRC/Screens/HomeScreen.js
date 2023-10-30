@@ -513,7 +513,7 @@ const HomeScreen = () => {
                   // <Text>hello</Text>
                 );
               }}
-              data={myQuotes?.length > 5 ? myQuotes.slice(0, 5) : myQuotes}
+              data={myQuotes?.length > 5 ? myQuotes.reverse().slice(0, 5) : myQuotes.reverse()}
               // data={[]}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{

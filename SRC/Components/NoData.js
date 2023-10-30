@@ -3,7 +3,7 @@ import React from 'react';
 import Lottie from 'lottie-react-native'
 import { windowHeight, windowWidth } from '../Utillity/utils';
 
-const NoData = ({textStyle, style}) => {
+const NoData = ({textStyle, style, text}) => {
   return (
     <View
       style={style}>
@@ -12,7 +12,7 @@ const NoData = ({textStyle, style}) => {
         autoPlay
         loop
       />
-      <Text style={styles.nodata}>Data not found</Text>
+      <Text style={styles.nodata}>{text ? text : 'Data not found'}</Text>
     </View>
   );
 };
