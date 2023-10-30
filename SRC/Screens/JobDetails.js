@@ -34,22 +34,23 @@ import {Get, Post} from '../Axios/AxiosInterceptorFunction';
 import numeral from 'numeral';
 import {useIsFocused} from '@react-navigation/native';
 import NoData from '../Components/NoData';
+import { validateEmail } from '../Config';
 
 const JobDetails = props => {
   const data1 = props?.route?.params?.item;
-  console.log('🚀 ~ file: JobDetails.js:29 ~ JobDetails ~ item:', data?.bids);
+  
   const user = useSelector(state => state.commonReducer.userData);
-  // console.log('🚀 ~ file: JobDetails.js:41 ~ JobDetails ~ user:', user?.id);
+  
   const UserCoverLetterArray = useSelector(
     state => state.commonReducer.servicesArray,
   );
-  console.log('🚀 ~ file: JobDetails.js:31 ~ JobDetails ~ user:', user);
+
   const [data, setData] = useState(data1);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
   console.log('🚀 ~ file: JobDetails.js:49 ~ JobDetails ~ token:', token);
   const [checked, setChecked] = useState(false);
-  const [description, setDescription] = useState('');
+  // const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [bidDone, setBidDone] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -61,7 +62,7 @@ const JobDetails = props => {
   const isFocused = useIsFocused();
   const [coverletterRole, setCoverLetterRole] = useState('Expertise In');
   const [userData, setUserData] = useState({});
-  // console.log('🚀 ~ file: JobDetails.js:60 ~ JobDetails ~ userData:', userData);
+  console.log('🚀 ~ file: JobDetails.js:60 ~ JobDetails ~ userData:', userData);
 
   // const UserCoverLetterArray = ['Expertise In', 'Expertise In'];
 
@@ -96,7 +97,7 @@ const JobDetails = props => {
     const response = await Post(url, {status: value}, apiHeader(token));
     setIsLoading(false);
     if (response != undefined) {
-      return console.log(
+     console.log(
         '🚀 ~ file: BidderDetail.js:25 ~ changeStatus ~ response:',
         response?.data,
       );
@@ -114,6 +115,7 @@ const JobDetails = props => {
       expertise: coverletterRole,
       coverletter: desc,
     };
+
     for (let key in body) {
       if (body[key] == '') {
         return Platform.OS == 'android'
@@ -121,7 +123,30 @@ const JobDetails = props => {
           : Alert.alert(`${key} is required`);
       }
     }
-    // console.log("🚀 ~ file: JobDetails.js:51 ~ bidNow ~ body:", body)
+
+
+    if (isNaN(number)) {
+      return Platform.OS == 'android'
+        ? ToastAndroid.show('phone is not a number', ToastAndroid.SHORT)
+        : Alert.alert('phone is not a number');
+    }
+    if (!validateEmail(Email)) {
+      return Platform.OS == 'android'
+        ? ToastAndroid.show('email is not validate', ToastAndroid.SHORT)
+        : Alert.alert('email is not validate');
+    }
+   if(coverletterRole == 'Expertise In'){
+    return Platform.OS == 'android'
+    ? ToastAndroid.show('Please select any role', ToastAndroid.SHORT)
+    : Alert.alert('Please select any role');
+
+   }
+   if(desc.length < 100){
+    return Platform.OS == 'android'
+    ? ToastAndroid.show('Description should be greater than 100 letters', ToastAndroid.SHORT)
+    : Alert.alert('Please select any role');
+
+   }
 
     setIsLoading(true);
     const response = await Post(url, body, apiHeader(token));
@@ -463,7 +488,7 @@ const JobDetails = props => {
                       image: require('../Assets/Images/man1.jpg'),
                       name: user?.first_name,
                       rating: 4,
-                      description: userData?.coverletter,
+                      description: userData?.coverletter ? userData?.coverletter : desc ,
                       status: data?.status,
                       id: data?.id,
                     }}
@@ -485,24 +510,7 @@ const JobDetails = props => {
                           : Color.black,
                     }}
                   />
-                  {/* <TextInputWithTitle
-                    titleText={'Cover Letter'}
-                    secureText={false}
-                    placeholder={'Cover Letter'}
-                    setText={setDescription}
-                    value={description}
-                    viewHeight={0.18}
-                    viewWidth={0.92}
-                    inputWidth={0.86}
-                    // border={1}
-                    borderColor={'#ffffff'}
-                    backgroundColor={'#FFFFFF'}
-                    marginTop={moderateScale(15, 0.3)}
-                    color={Color.themeColor}
-                    placeholderColor={Color.themeLightGray}
-                    borderRadius={moderateScale(15, 0.3)}
-                    multiline
-                  /> */}
+              
 
                   <CustomButton
                     text={'Bid Now'}
@@ -534,6 +542,11 @@ const JobDetails = props => {
       <Modal
         isVisible={isModalVisible}
         onBackdropPress={() => {
+          setFullName('')
+          setEmail('')
+          setNumber('')
+          setCoverLetterRole('')
+          setDesc('')
           setModalVisible(false);
         }}>
         <View
@@ -627,7 +640,7 @@ const JobDetails = props => {
               value={desc}
               viewHeight={0.15}
               viewWidth={0.75}
-              inputWidth={0.5}
+              inputWidth={0.66}
               border={1}
               borderColor={Color.blue}
               backgroundColor={'#FFFFFF'}

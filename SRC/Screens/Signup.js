@@ -45,7 +45,7 @@ const Signup = () => {
   const [jobStatus, setJobStatus] = useState(''); //for negotiator
   const [email, setEmail] = useState('');
   const [contact, setContact] = useState('');
-  const [address, setAddress] = useState('');
+  const [address, setAddress] = useState('');checked
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
   const [zipCode, setZipCode] = useState('');
@@ -198,6 +198,13 @@ const Signup = () => {
         
         language?.map((item, index) => formData.append(`language[${index}]`, item));
         services?.map((item, index) => formData.append(`expertise[${index}]`, item));
+      }
+
+
+      if(!checked){
+        return Platform.OS == 'android'
+        ? ToastAndroid.show('Please accept terms and conditions', ToastAndroid.SHORT)
+        : Alert.alert('Please accept terms and conditions');
       }
       
       

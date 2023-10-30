@@ -1,6 +1,6 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
-import {windowHeight, windowWidth} from '../Utillity/utils';
+import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
 import {moderateScale} from 'react-native-size-matters';
 import RatingComponent from './RatingComponent';
 import CustomText from './CustomText';
@@ -9,18 +9,37 @@ import Color from '../Assets/Utilities/Color';
 import numeral from 'numeral';
 import CustomButton from './CustomButton';
 import navigationService from '../navigationService';
+import Modal from 'react-native-modal';
+import {useState} from 'react';
+import {Post} from '../Axios/AxiosInterceptorFunction';
+import {useSelector} from 'react-redux';
+import {ActivityIndicator} from 'react-native';
 
 const MyQouteCard = ({item}) => {
-  console.log("🚀 ~ file: MyQouteCard.js:14 ~ MyQouteCard ~ item:", item)
+  const token = useSelector(state => state.authReducer.token);
+  console.log('🚀 ~ file: MyQouteCard.js:14 ~ MyQouteCard ~ item:', item);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [cmpLoading, setCmpLoading] = useState(false);
 
-  // const data = item?.bids?.find(item=> item?.status == 'accept')
-  // console.log("🚀 ~ file: MyQouteCard.js:17 ~ MyQouteCard ~ data:", data)
+  const markCompleted = async () => {
+    const url = `auth/member/update_status/${item?.id}`;
+    setCmpLoading(true);
+    const response = await Post(url, {status: 'completed'}, apiHeader(token));
+    setCmpLoading(false);
+    if (response != undefined) {
+      console.log(
+        '🚀 ~ file: MyQouteCard.js:30 ~ markCompleted ~ response:',
+        response?.data,
+      );
+    }
+  };
+
   return (
     <TouchableOpacity
       activeOpacity={0.9}
       style={styles.card}
       onPress={() => {
-        navigationService.navigate('JobDetails', {item:item});
+        navigationService.navigate('JobDetails', {item: item});
       }}>
       <View
         style={{
@@ -73,7 +92,7 @@ const MyQouteCard = ({item}) => {
             height: '100%',
           }}
           onPress={() => {
-            navigationService.navigate('JobDetails', {item:item});
+            navigationService.navigate('JobDetails', {item: item});
           }}
         />
       </View>
@@ -103,7 +122,9 @@ const MyQouteCard = ({item}) => {
                 fontSize: moderateScale(12, 0.3),
                 color: Color.themeLightGray,
               }}>
-              {item?.status == 'pending' ? 'not yet' : item?.bids?.find(item=> item?.status == 'accept')?.fullname}
+              {item?.status == 'pending'
+                ? 'not yet'
+                : item?.bids?.find(item => item?.status == 'accept')?.fullname}
             </CustomText>
           }
         </CustomText>
@@ -158,19 +179,24 @@ const MyQouteCard = ({item}) => {
         {item?.status != 'pending' && (
           <CustomButton
             text={
-              item?.status == 'onGoing'
-                ? 'Complete'
-                : item?.status == 'completed' &&
-                  [0, undefined].includes(item?.rating)
-                ? 'Review'
-                : 'Hire Again'
+              cmpLoading ? (
+                <ActivityIndicator size={'small'} color={'white'} />
+              ) : item?.status == 'onGoing' ? (
+                'Complete'
+              ) : item?.status == 'completed' &&
+                [0, undefined].includes(item?.rating) ? (
+                'Review'
+              ) : (
+                'Hire Again'
+              )
             }
             textColor={Color.white}
             // width={windowWidth * 0.9}
             // height={windowHeight * 0.07}
             marginTop={moderateScale(2, 0.3)}
             onPress={() => {
-              alert('This Negotiator will be hired again');
+              // alert('This Negotiator will be hired again');
+              item?.status == 'onGoing' && markCompleted()
             }}
             bgColor={Color.blue}
             // borderColor={Color.white}
@@ -198,6 +224,31 @@ const styles = StyleSheet.create({
     backgroundColor: Color.white,
     marginBottom: moderateScale(10, 0.3),
     // overflow : 'hidden'
+  },
+  modalUpperView: {
+    backgroundColor: Color.themeColor,
+    width: windowWidth * 0.7,
+    minHeight: windowHeight * 0.1,
+    maxHeight: windowHeight * 0.1,
+    // borderTopLeftRadius: moderateScale(20, 0.3),
+    // borderTopRightRadius: moderateScale(20, 0.3),
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'visible',
+  },
+  modalLowerView: {
+    backgroundColor: Color.white,
+    width: windowWidth * 0.7,
+    minHeight: windowHeight * 0.225,
+    maxHeight: windowHeight * 0.325,
+    // borderBottomLeftRadius: moderateScale(20, 0.3),
+    // borderBottomRightRadius: moderateScale(20, 0.3),
+    flexDirection: 'column',
+    paddingHorizontal: moderateScale(30, 0.3),
+    // paddingVertical: moderateScale(15, 0.3),
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
   },
   entity: {
     fontSize: moderateScale(11, 0.3),
