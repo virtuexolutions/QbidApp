@@ -219,16 +219,17 @@ export default Card;
 
 const styles = StyleSheet.create({
   cardstyle: {
-    height: windowHeight * 0.17,
+    height: windowHeight * 0.15,
     width: windowWidth * 0.9,
     paddingHorizontal: 15,
     borderRadius: 15,
     paddingVertical: 7,
     overflow: 'hidden',
-    backgroundColor: 'white',
+    backgroundColor: Color.white,
+    marginVertical:moderateScale(5,0.3),
   },
   cardImage: {
-    height: windowHeight * 0.15,
+    height: windowHeight * 0.13,
     width: windowWidth * 0.24,
     overflow: 'hidden',
     borderRadius: 12,
