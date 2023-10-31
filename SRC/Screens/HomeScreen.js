@@ -48,6 +48,7 @@ const HomeScreen = () => {
   //   servicesArray,
   // );
   const [searchData, setSearchData] = useState('');
+  console.log("🚀 ~ file: HomeScreen.js:51 ~ HomeScreen ~ searchData:", searchData)
   const [showFilter, setShowFilter] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -91,6 +92,8 @@ const HomeScreen = () => {
       setMyQuotes(response2?.data?.quote_info?.data);
     }
   };
+
+
 
   const seekHelp = async () => {
     const url = 'auth/member/bid_help';
@@ -144,6 +147,8 @@ const HomeScreen = () => {
   useEffect(() => {
     getAllData();
   }, [isFocused]);
+
+  
 
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', () => {
