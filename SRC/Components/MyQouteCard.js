@@ -14,12 +14,15 @@ import {useState} from 'react';
 import {Post} from '../Axios/AxiosInterceptorFunction';
 import {useSelector} from 'react-redux';
 import {ActivityIndicator} from 'react-native';
+import RBSheet from 'react-native-raw-bottom-sheet';
+import ReviewModal from './ReviewModal';
 
 const MyQouteCard = ({item}) => {
   const token = useSelector(state => state.authReducer.token);
   console.log('🚀 ~ file: MyQouteCard.js:14 ~ MyQouteCard ~ item:', item);
   const [modalVisible, setModalVisible] = useState(false);
   const [cmpLoading, setCmpLoading] = useState(false);
+  const [ref ,setRef] =useState(null)
 
   const markCompleted = async () => {
     const url = `auth/member/update_status/${item?.id}`;
@@ -191,12 +194,11 @@ const MyQouteCard = ({item}) => {
               )
             }
             textColor={Color.white}
-            // width={windowWidth * 0.9}
-            // height={windowHeight * 0.07}
             marginTop={moderateScale(2, 0.3)}
             onPress={() => {
-              // alert('This Negotiator will be hired again');
-              item?.status == 'onGoing' && markCompleted()
+             item?.status == 'completed' && ref.open() 
+            //  console.log('first')
+              // item?.status == 'onGoing' && markCompleted()
             }}
             bgColor={Color.blue}
             // borderColor={Color.white}
@@ -207,6 +209,7 @@ const MyQouteCard = ({item}) => {
           />
         )}
       </View>
+      <ReviewModal ref={ref} setRef={setRef}/>
     </TouchableOpacity>
   );
 };

@@ -7,8 +7,11 @@ import {Icon} from 'native-base';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {TextInput} from 'react-native';
 
-const ReviewModal = () => {
-  const [ref, setRef] = useState(null);
+const ReviewModal = ({
+  ref,
+  setRef
+}) => {
+  // const [ref, setRef] = useState(null);s
   const rbRef = useRef();
   return (
    
