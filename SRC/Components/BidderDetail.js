@@ -13,7 +13,7 @@ import {Post} from '../Axios/AxiosInterceptorFunction';
 import {ActivityIndicator} from 'react-native';
 
 const BidderDetail = ({item, photo, title, date, message}) => {
-  //  console.log('🚀 ~ file: BidderDetail.js:16 ~ BidderDetail ~ item:', item);
+  console.log('🚀 ~ file: BidderDetail.js:16 ~ BidderDetail ~ item:', item);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
   const [isLoading, setIsLoading] = useState(false);
@@ -75,39 +75,46 @@ const BidderDetail = ({item, photo, title, date, message}) => {
             fontSize: moderateScale(11, 0.6),
             marginTop: moderateScale(10, 0.3),
             width: '100%',
-            // // letterSpacing  : 10,
-            // justifyContent : 'space-between'
             color: Color.white,
-
-            // color: Color.themeBlack,
           },
         ]}>
         {item?.description}
       </CustomText>
-
-      <CustomText
-        noOfLines={1}
+      <View
         style={{
-          //   marginTop: moderateScale(10, 0.3),
           position: 'absolute',
-          right: moderateScale(10, 0.6),
+          right: moderateScale(40, 0.6),
           top: moderateScale(10, 0.3),
-          // width : '100%',
-          textAlign: 'right',
-          fontSize: moderateScale(10, 0.6),
-          color:
-            item?.status == 'accept'
-              ? Color.themeColor
-              : item?.status == 'reject'
-              ? Color.red
-              : Color.blue,
+          flexDirection:'row',
+          alignItems:'center'
         }}>
-        {item?.status == 'accept'
-          ? 'Accepted'
-            ? item?.status == 'reject'
-            : 'Rejected'
-          : 'pending'}
-      </CustomText>
+        <View
+          style={{
+            width: moderateScale(6, 0.6),
+            height: moderateScale(6, 0.6),
+            borderRadius: moderateScale(3, 0.6),
+            backgroundColor:
+              userRole == 'Qbid Member'
+                ? Color.blue
+                : userRole == 'Qbid Negotiator'
+                ? Color.themeColor
+                : Color.black,
+          }}
+        />
+        <CustomText
+          style={{
+            // backgroundColor: 'orange',
+            fontSize: moderateScale(8, 0.6),
+            color: Color.white,
+            marginLeft: moderateScale(3, 0.3),
+          }}>
+          {item?.status == 'accept'
+            ? 'Accepted'
+            : item?.status == 'reject'
+            ? 'Rejected'
+            : 'pending'}
+        </CustomText>
+      </View>   
     </View>
   );
 };

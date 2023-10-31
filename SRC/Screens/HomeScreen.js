@@ -100,6 +100,12 @@ const HomeScreen = () => {
       description: qbiddetail1,
     };
     const formData = new FormData();
+    if(qbiddetail1.length < 100){
+      return Platform.OS == 'android'
+      ? ToastAndroid.show(`Description must be of 100 letters`, ToastAndroid.SHORT)
+      : Alert.alert(`Description must be of 100 letters`);
+
+    }
     for (let key in body) {
       if (body[key] == '') {
         return Platform.OS == 'android'
@@ -131,6 +137,7 @@ const HomeScreen = () => {
       // );
 
       toggleModal();
+      getAllData()
     }
   };
 
