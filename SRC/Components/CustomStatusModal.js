@@ -34,9 +34,10 @@ const CustomStatusModal = ({
         justifyContent: 'center',
       }}>
         <View style={{
-            height : windowHeight * 0.3,
+            height : windowHeight * 0.32,
+            // paddingVertical:moderateScale(20,0.6),
             // maxHeight : windowHeight * 0.5,
-            paddingVertical : moderateScale(5,0.3)
+            paddingVertical : moderateScale(10,0.3)
         }}>
 
         
@@ -59,11 +60,11 @@ const CustomStatusModal = ({
                     index + 1 == statusArray.length ? 0 : moderateScale(1),
                   borderColor: Color.themeLightGray,
                   // width: windowWidth * 0.,
-                  lineHeight: moderateScale(35, 0.3),
-                //   marginTop: moderateScale(10, 0.3),
+                  lineHeight: moderateScale(40, 0.3),
+                  // marginTop: moderateScale(10, 0.3),
                   textAlign: 'center',
                   paddingBottom: moderateScale(5, 0.3),
-                  backgroundColor : data == item?.name ? Color.themeColor : 'transparent'
+                  backgroundColor : data == item?.name ? Color.themeColor : 'transparent',
                 }}>
                 {item?.name}
               </CustomText>
@@ -81,12 +82,12 @@ const styles = ScaledSheet.create({
   statusModal: {
     alignSelf: 'center',
     height : windowHeight * 0.5,
-    width: windowWidth * 0.9,
+    width: windowWidth * 0.8,
     // paddingHorizontal: moderateScale(10, 0.3),
     backgroundColor: Color.white,
     borderRadius: moderateScale(5, 0.3),
     marginTop: moderateScale(60, 0.3),
     // borderWidth: 1,
-    borderColor: Color.green,
+    borderColor: Color.themeBlack,
   },
 });

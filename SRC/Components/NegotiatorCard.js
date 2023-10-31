@@ -200,7 +200,7 @@ const approveRequest =async(status)=>{
            {item?.description}
           </CustomText>
 
-          <View
+          {/* <View
             style={{
               width:windowWidth*0.6,
               flexDirection: 'row',
@@ -237,7 +237,7 @@ const approveRequest =async(status)=>{
               }}
             
             />
-          </View>
+          </View> */}
         </View>
       </Modal>
     </>

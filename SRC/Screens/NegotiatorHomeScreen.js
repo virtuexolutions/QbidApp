@@ -180,6 +180,9 @@ const NegotiatorHomeScreen = () => {
                         ToastAndroid.SHORT,
                       )
                     : Alert.alert('Please select any category');
+                    
+                }else{
+                  navigationService.navigate("")
                 }
               }}
               width={windowWidth * 0.85}
