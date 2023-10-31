@@ -68,7 +68,7 @@ const approveRequest =async(status)=>{
               color: Color.white,
               fontSize: moderateScale(12, 0.6),
             }}>
-            {item?.Title}
+            {item?.service_type}
           </CustomText>
           <CustomText
             numberOfLines={5}
@@ -161,9 +161,9 @@ const approveRequest =async(status)=>{
               fontSize: moderateScale(13, 0.6),
               color: Color.black,
             }}>
-         {item?.email}
+            {item?.service_type}
           </CustomText>
-          <CustomText
+          {/* <CustomText
             style={{
               width: windowWidth * 0.9,
               textAlign: 'center',
@@ -172,10 +172,11 @@ const approveRequest =async(status)=>{
               fontSize: moderateScale(13, 0.6),
               color: Color.black,
             }}>
-            {item?.phone}
-          </CustomText>
+         {item?.email}
+          </CustomText> */}
+          
 
-          <CustomText
+          {/* <CustomText
             style={{
               width: windowWidth * 0.9,
               textAlign: 'center',
@@ -185,7 +186,7 @@ const approveRequest =async(status)=>{
               color: Color.black,
             }}>
            {item?.expertise}
-          </CustomText>
+          </CustomText> */}
 
           <CustomText
             numberOfLines={3}
