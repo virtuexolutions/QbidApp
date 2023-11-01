@@ -13,7 +13,7 @@ import {Post} from '../Axios/AxiosInterceptorFunction';
 import {ActivityIndicator} from 'react-native';
 
 const BidderDetail = ({item, photo, title, date, message}) => {
-  console.log('🚀 ~ file: BidderDetail.js:16 ~ BidderDetail ~ item:', item);
+  // console.log('🚀 ~ file: BidderDetail.js:16 ~ BidderDetail ~ item:', item);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
   const [isLoading, setIsLoading] = useState(false);

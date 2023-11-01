@@ -3,16 +3,35 @@ import React, {useState} from 'react';
 import {moderateScale} from 'react-native-size-matters';
 import CustomText from './CustomText';
 import {TouchableOpacity} from 'react-native';
-import {windowHeight, windowWidth} from '../Utillity/utils';
+import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
 import CustomImage from './CustomImage';
 import Modal from 'react-native-modal';
 import CustomButton from './CustomButton';
+import { Post } from '../Axios/AxiosInterceptorFunction';
+import { useSelector } from 'react-redux';
 
 // import navigationService from '../navigationService';
 
 const Card = ({item}) => {
   // console.log('🚀 ~ file: Card.js:11 ~ Card ~ item:', item);
+  const token = useSelector(state=> state.authReducer.token)
   const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false)
+
+  const changeStatus = async value => {
+    const url = `auth/negotiator/bid_help/${item?.id}`;
+    setLoading(true);
+    const response = await Post(url, {status: value}, apiHeader(token));
+    setLoading(false);
+    if (response != undefined) {
+      // console.log(
+      //   '🚀 ~ file: JobCard.js:31 ~ changeStatus ~ response:',
+      //   response?.data,
+      // );
+
+      setModalVisible(false);
+    }
+  };
 
   return (
     <TouchableOpacity

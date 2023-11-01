@@ -17,7 +17,7 @@ import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 
 const MileRange = props => {
   const fromLogin = props?.route?.params?.fromLogin;
-  console.log(fromLogin);
+  // console.log(fromLogin);
   const dispatch = useDispatch();
   const DollarData = [
     {mile: '10 Miles', price: 10},
@@ -84,11 +84,11 @@ const MileRange = props => {
           }}>
           <Slider
             onChange={data => {
-              console.log(data);
+              // console.log(data);
               setDollar(data);
             }}
             onPointerUpCapture={() => {
-              console.log('up');
+              // console.log('up');
             }}
             w="92%"
             size="lg"

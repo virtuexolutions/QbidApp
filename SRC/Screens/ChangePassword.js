@@ -56,7 +56,7 @@ const ChangePassword = props => {
     setIsLoading(true)
     const response = await Post(url, body, apiHeader(token))
     setIsLoading(false)
-    console.log("🚀 ~ file: ChangePassword.js:54 ~ ChangePassword ~ response:", response?.data)
+    // console.log("🚀 ~ file: ChangePassword.js:54 ~ ChangePassword ~ response:", response?.data)
     if(response != undefined){
       dispatch(setUserData(response?.data?.user_info))
       navigation.goBack()

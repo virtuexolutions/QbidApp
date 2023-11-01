@@ -26,7 +26,6 @@ const SeeAllScreen = props => {
 
   const type = props?.route?.params?.type;
   const data = props?.route?.params?.data;
-  // console.log('🚀 ~ file: SeeAllScreen.js:29 ~ SeeAllScreen ~ data:', data?.length);
 
   const [searchData, setSearchData] = useState('');
   const [showSearch, setShowSearch] = useState(false);
@@ -34,11 +33,8 @@ const SeeAllScreen = props => {
   const [selectedStatus, setSelectedStatus] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
-  // console.log("🚀 ~ file: SeeAllScreen.js:37 ~ SeeAllScreen ~ loadMore:", loadMore)
   const [newArray, setNewArray] = useState([]);
-
   const [pageNum, setPageNum] = useState(1);
-  // console.log("🚀 ~ file: SeeAllScreen.js:43 ~ SeeAllScreen ~ pageNum:", pageNum)
   const scrollViewRef = useRef();
 
   const handleScroll = event => {
@@ -47,13 +43,21 @@ const SeeAllScreen = props => {
       event.nativeEvent.contentSize.height -
       event.nativeEvent.layoutMeasurement.height;
 
-    // Check if you've reached the end
     if (currentOffset >= maxOffset) {
-      // You've reached the end of the ScrollView
       setPageNum(prev => prev + 1);
-      // console.log('Reached the end of ScrollView');
     }
   };
+
+  const filterQuotes = async()=>{
+    const url = `auth/member/search_type/${selectedStatus}`
+    setIsLoading(true)
+    const response =  await Get(url, token)
+    setIsLoading(false)
+    if(response != undefined){
+      console.log("🚀 ~ file: HomeScreen.js:97 ~ filterQuotes ~ response:", response?.data)
+      setNewArray(response?.data?.quote_info)
+    }
+  }
 
   const getData = async value => {
     const url =
@@ -63,19 +67,8 @@ const SeeAllScreen = props => {
     value == 'loadMore' ? setLoadMore(true) : setIsLoading(true);
     const response = await Get(url, token);
     value == 'loadMore' ? setLoadMore(false) : setIsLoading(false);
-    // console.log(
-    //   '🚀 ~ file: SeeAllScreen.js:43 ~ getData ~ response:',
-    //   response?.data,
-    // );
-
+ 
     if (response != undefined) {
-      // console.log(
-      //   '🚀 ~ file: SeeAllScreen.js:71 ~ getData ~ response:',
-      //   response?.data?.quote_info?.data,
-      // );
-
-      // setNewArray(response?.data?.quote_info?.data)
-
       if (type == 'qoutes') {
         //  console.log('Here')
         value == 'loadMore'
@@ -99,6 +92,13 @@ const SeeAllScreen = props => {
       getData('loadMore');
     }
   }, [pageNum]);
+
+  useEffect(() => {
+    if(selectedStatus != ''){
+      filterQuotes()
+    }
+  }, [selectedStatus])
+  
 
   return (
     <ScreenBoiler
@@ -125,14 +125,7 @@ const SeeAllScreen = props => {
             ? Color.themeBgColorNegotiator
             : Color.themebgBusinessQbidder
         }>
-        {/* <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={styles.container}
-        contentContainerStyle={{
-          alignItems: 'center',
-          paddingBottom: moderateScale(20, 0.3),
-          paddingTop: moderateScale(40, 0.3),
-        }}> */}
+     
 
         <View
           style={{
@@ -168,7 +161,7 @@ const SeeAllScreen = props => {
         </View>
 
         <FlatList
-          // data={type == 'negotiator' ? negotiatorsArray : myQoutesArray}
+       
           data={newArray}
           ref={scrollViewRef}
           onScroll={handleScroll}

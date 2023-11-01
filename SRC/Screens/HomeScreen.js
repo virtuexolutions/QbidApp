@@ -59,18 +59,16 @@ const HomeScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [submitLoading, setsubmitLoading] = useState(false);
   const isFocused = useIsFocused();
-  // console.log(
-  //   '🚀 ~ file: HomeScreen.js:27 ~ HomeScreen ~ selectedView',
-  //   selectedView,
-  // );
   const [selectedService, setSelectedService] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
+  console.log("🚀 ~ file: HomeScreen.js:64 ~ HomeScreen ~ selectedStatus:", selectedStatus)
   const [visible, setVisible] = useState(false);
   const [qbidName, setQbidName] = useState('');
   const [qbidDetail, setQbidDetail] = useState('');
   const [qbiddetail1, setQbidDetail1] = useState('');
   const [myQuotes, setMyQuotes] = useState([]);
-  console.log("🚀 ~ file: HomeScreen.js:72 ~ HomeScreen ~ myQuotes:", myQuotes[0]?.bids)
+  
+  // console.log("🚀 ~ file: HomeScreen.js:72 ~ HomeScreen ~ myQuotes:", myQuotes[0]?.bids)
   const [proposals, setProposals] = useState([]);
   // console.log("🚀 ~ file: HomeScreen.js:73 ~ HomeScreen ~ proposals:", proposals)
 
@@ -93,7 +91,16 @@ const HomeScreen = () => {
     }
   };
 
-
+  const filterQuotes = async()=>{
+    const url = `auth/member/search_type/${selectedStatus}`
+    setIsLoading(true)
+    const response =  await Get(url, token)
+    setIsLoading(false)
+    if(response != undefined){
+      console.log("🚀 ~ file: HomeScreen.js:97 ~ filterQuotes ~ response:", response?.data)
+      setMyQuotes(response?.data?.quote_info)
+    }
+  }
 
   const seekHelp = async () => {
     const url = 'auth/member/bid_help';
@@ -148,17 +155,17 @@ const HomeScreen = () => {
     getAllData();
   }, [isFocused]);
 
-  
+  useEffect(() => {
+    if(selectedStatus != ''){
+      filterQuotes()
+    }
+  }, [selectedStatus]);
 
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', () => {
       setVisible(true);
     });
   }, []);
-
-
-  
-
 
   const toggleModal = () => {
     setModalVisible(!modalVisible);
@@ -184,7 +191,7 @@ const HomeScreen = () => {
           style={styles.container}
           contentContainerStyle={{
             alignItems: 'center',
-            paddingBottom: moderateScale(80, 0.3),
+            paddingBottom: moderateScale(105, 0.3),
             paddingTop: moderateScale(40, 0.3),
           }}>
           <View
@@ -547,9 +554,9 @@ const HomeScreen = () => {
           selectedView == 'negotiator'
             ? servicesArray
             : [
-                {name: 'Recommended'},
-                {name: 'Working On'},
-                {name: 'Seeking Help'},
+                {name: 'completed'},
+                {name: 'onGoing'},
+                {name: 'pending'},
               ]
         }
         data={selectedView == 'negotiator' ? selectedService : selectedStatus}

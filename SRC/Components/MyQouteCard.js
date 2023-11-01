@@ -19,10 +19,18 @@ import ReviewModal from './ReviewModal';
 
 const MyQouteCard = ({item}) => {
   const token = useSelector(state => state.authReducer.token);
-  console.log('🚀 ~ file: MyQouteCard.js:14 ~ MyQouteCard ~ item:', item);
+  // console.log('🚀 ~ file: MyQouteCard.js:14 ~ MyQouteCard ~ item:', item);
   const [modalVisible, setModalVisible] = useState(false);
   const [cmpLoading, setCmpLoading] = useState(false);
-  const [ref ,setRef] =useState(null)
+  const [ref, setRef] = useState(null);
+const [buttonName, setbuttonName] = useState(item?.status == 'onGoing' ? (
+  'Complete'
+) : item?.status == 'completed' &&
+  [0, undefined].includes(item?.rating) ? (
+  'Review'
+) : (
+  'Hire Again'
+))
 
   const markCompleted = async () => {
     const url = `auth/member/update_status/${item?.id}`;
@@ -34,6 +42,7 @@ const MyQouteCard = ({item}) => {
         '🚀 ~ file: MyQouteCard.js:30 ~ markCompleted ~ response:',
         response?.data,
       );
+      setbuttonName('Review')
     }
   };
 
@@ -85,10 +94,10 @@ const MyQouteCard = ({item}) => {
           overflow: 'hidden',
         }}>
         <CustomImage
-          source={
-            item?.status == 'pending'
-              ? {uri: item?.images[0]?.image}
-              : item?.negotiatorImage
+          source={ require('../Assets/Images/dummyman2.png')
+            // item?.status == 'pending'
+            //   ? {uri: item?.images[0]?.image}
+            //   : item?.negotiatorImage
           }
           style={{
             width: '100%',
@@ -184,32 +193,22 @@ const MyQouteCard = ({item}) => {
             text={
               cmpLoading ? (
                 <ActivityIndicator size={'small'} color={'white'} />
-              ) : item?.status == 'onGoing' ? (
-                'Complete'
-              ) : item?.status == 'completed' &&
-                [0, undefined].includes(item?.rating) ? (
-                'Review'
-              ) : (
-                'Hire Again'
-              )
+              ) : buttonName
             }
             textColor={Color.white}
             marginTop={moderateScale(2, 0.3)}
             onPress={() => {
-             item?.status == 'completed' && ref.open() 
-            //  console.log('first')
-              // item?.status == 'onGoing' && markCompleted()
+              item?.status == 'completed' && ref.open();
+              item?.status == 'onGoing' && markCompleted();
             }}
             bgColor={Color.blue}
-            // borderColor={Color.white}
-            // borderWidth={2}
             borderRadius={moderateScale(30, 0.3)}
             alignSelf={'flex-end'}
             fontSize={moderateScale(9, 0.3)}
           />
         )}
       </View>
-      <ReviewModal ref={ref} setRef={setRef}/>
+      <ReviewModal setRef={setRef} />
     </TouchableOpacity>
   );
 };

@@ -46,9 +46,10 @@ const JobDetails = props => {
   );
 
   const [data, setData] = useState(data1);
+  // console.log("🚀 ~ file: JobDetails.js:49 ~ JobDetais ~ data:", data)
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
-  console.log('🚀 ~ file: JobDetails.js:49 ~ JobDetails ~ token:', token);
+  // console.log('🚀 ~ file: JobDetails.js:49 ~ JobDetails ~ token:', token);
   const [checked, setChecked] = useState(false);
   // const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -62,7 +63,7 @@ const JobDetails = props => {
   const isFocused = useIsFocused();
   const [coverletterRole, setCoverLetterRole] = useState('Expertise In');
   const [userData, setUserData] = useState({});
-  console.log('🚀 ~ file: JobDetails.js:60 ~ JobDetails ~ userData:', userData);
+  // console.log('🚀 ~ file: JobDetails.js:60 ~ JobDetails ~ userData:', userData);
 
   // const UserCoverLetterArray = ['Expertise In', 'Expertise In'];
 
@@ -75,12 +76,12 @@ const JobDetails = props => {
     if (response != undefined) {
       // console.log(
       //   '🚀 ~ file: JobDetails.js:66 ~ bidDetails ~ response:',
-      //   response?.data?.quote_info?.bids,
-      //   user?.id,
+      //   response?.data?.quote_info,
+      //   user?.id
+        
+       
       // );
-      const mainuserData = response?.data?.quote_info?.bids?.find(
-        item => item.user_info?.id == user?.id,
-      );
+      const mainuserData = response?.data?.quote_info?.bids?.find(item => item.user_info?.id == user?.id);
       setData(response?.data?.quote_info);
 
       if (mainuserData) {
@@ -91,16 +92,16 @@ const JobDetails = props => {
   };
 
   const changeStatus = async (value, id) => {
-    console.log('Data id =====>>', data?.id);
+    // console.log('Data id =====>>', data?.id);
     const url = `auth/member/bid/${id}`;
     setIsLoading(true);
     const response = await Post(url, {status: value}, apiHeader(token));
     setIsLoading(false);
     if (response != undefined) {
-     console.log(
-        '🚀 ~ file: BidderDetail.js:25 ~ changeStatus ~ response:',
-        response?.data,
-      );
+    //  console.log(
+    //     '🚀 ~ file: BidderDetail.js:25 ~ changeStatus ~ response:',
+    //     response?.data,
+    //   );
       bidDetails();
     }
   };
@@ -207,7 +208,7 @@ const JobDetails = props => {
           showsVerticalScrollIndicator={false}
           style={styles.sectionContainer}
           contentContainerStyle={{
-            paddingBottom: moderateScale(60, 0.6),
+            paddingBottom: moderateScale(80, 0.6),
             paddingTop: moderateScale(40, 0.6),
             paddingLeft: moderateScale(15, 0.6),
             // backgroundColor:'red'
@@ -237,7 +238,9 @@ const JobDetails = props => {
                     overflow: 'hidden',
                   }}>
                   <CustomImage
-                    source={require('../Assets/Images/dummyman1.png')}
+                    source={ userRole == 'Qbid Member'
+                    ? {uri:user?.photo}
+                    : require('../Assets/Images/dummyman1.png')}
                     style={{
                       width: '100%',
                       height: '100%',
@@ -254,17 +257,19 @@ const JobDetails = props => {
                       color: Color.white,
                       fontSize: moderateScale(17, 0.6),
                     }}>
-                    {`${user?.first_name} ${user?.last_name}`}
-                    {/* {userRole == 'Qbid Member'
+                    {/* {`${user?.first_name} ${user?.last_name}`} */}
+                    {userRole == 'Qbid Member'
                       ? `${user?.first_name} ${user?.last_name}`
-                      : `${data?.user_info?.first_name} ${data?.user_info?.last_name}`} */}
+                      : `${data?.user_info?.first_name} ${data?.user_info?.last_name}`}
                   </CustomText>
                   <CustomText
                     style={{
                       color: Color.white,
                       fontSize: moderateScale(11, 0.6),
                     }}>
-                    {user?.email}
+                     {userRole == 'Qbid Member'
+                      ? `${user?.email}`
+                      : `${data?.email}`}
                   </CustomText>
                 </View>
                 <View
@@ -385,17 +390,17 @@ const JobDetails = props => {
                       paddingBottom: moderateScale(30, 0.6),
                     }}
                     renderItem={({item, index}) => {
-                      console.log(
-                        '🚀 ~ file: JobDetails.js:349 ~ JobDetails ~ item:',
-                        item?.id,
-                      );
+                      // console.log(
+                      //   '🚀 ~ file: JobDetails.js:349 ~ JobDetails ~ item:',
+                      //   item?.id,
+                      // );
                       return (
                         <>
                           <BidderDetail
                             item={{
                               image: require('../Assets/Images/man1.jpg'),
                               name: item?.fullname,
-                              rating: 4,
+                              rating: item?.rating,
                               description: item?.coverletter,
                               status: item?.status,
                               id: item?.id,
@@ -487,7 +492,7 @@ const JobDetails = props => {
                     item={{
                       image: require('../Assets/Images/man1.jpg'),
                       name: user?.first_name,
-                      rating: 4,
+                      rating: user?.rating,
                       description: userData?.coverletter ? userData?.coverletter : desc ,
                       status: data?.status,
                       id: data?.id,

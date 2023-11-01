@@ -59,10 +59,10 @@ const LoginScreen = () => {
   const [previousScale, setPreviousScale] = useState(1);
   const [translateX, setTranslateX] = useState(0);
   const [rotate, setRotate] = useState(0);
-  console.log(
-    '🚀 ~ file: LoginScreen.js:57 ~ LoginScreen ~ translateX:',
-    translateX,
-  );
+  // console.log(
+  //   '🚀 ~ file: LoginScreen.js:57 ~ LoginScreen ~ translateX:',
+  //   translateX,
+  // );
   const [translateY, setTranslateY] = useState(0);
 
   const panResponder = PanResponder.create({
@@ -136,7 +136,7 @@ const LoginScreen = () => {
     const response = await Post(url, body, apiHeader());
     setIsLoading(false);
     if (response != undefined) {
-     console.log("🚀 ~ file: LoginScreen.js:139 ~ Login ~ response:", response?.data?.user_info)
+    //  console.log("🚀 ~ file: LoginScreen.js:139 ~ Login ~ response:", response?.data?.user_info)
       if (selectedRole == response?.data?.user_info?.role) {
         dispatch(setUserData(response?.data?.user_info));
         dispatch(setSelectedRole(response?.data?.user_info?.role));

@@ -22,20 +22,7 @@ const SeekingHelpCard = ({fromSeeAll, style, onPress, item}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
 
-  const changeStatus = async value => {
-    const url = `auth/negotiator/bid_help/${item?.id}`;
-    setLoading(true);
-    const response = await Post(url, {status: value}, apiHeader(token));
-    setLoading(false);
-    if (response != undefined) {
-      // console.log(
-      //   '🚀 ~ file: JobCard.js:31 ~ changeStatus ~ response:',
-      //   response?.data,
-      // );
-
-      setModalVisible(false);
-    }
-  };
+ 
 
   return (
     <>

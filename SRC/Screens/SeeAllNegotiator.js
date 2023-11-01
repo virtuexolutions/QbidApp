@@ -3,7 +3,7 @@ import React, {useState, useRef} from 'react';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import Color from '../Assets/Utilities/Color';
 import {moderateScale, ScaledSheet} from 'react-native-size-matters';
-import {windowHeight, windowWidth} from '../Utillity/utils';
+import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
 import CustomText from '../Components/CustomText';
 import BidDetailCard from '../Components/BidDetailCard';
 import {Actionsheet, Icon} from 'native-base';
@@ -19,16 +19,19 @@ import JobCard from '../Components/JobCard';
 import navigationService from '../navigationService';
 import SeekingHelpCard from '../Components/SeekingHelpCard';
 import {Socket} from 'engine.io-client';
-import {Get} from '../Axios/AxiosInterceptorFunction';
+import {Get, Post} from '../Axios/AxiosInterceptorFunction';
 import {useEffect} from 'react';
 import {ActivityIndicator} from 'react-native';
+import Card from '../Components/Card';
 
 const SeeAllNegotiator = props => {
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
+  // console.log("🚀 ~ file: SeeAllNegotiator.js:30 ~ SeeAllNegotiator ~ token:", token)
 
   const type = props?.route?.params?.type;
+  console.log("🚀 ~ file: SeeAllNegotiator.js:33 ~ SeeAllNegotiator ~ type:", type)
   const data = props?.route?.params?.data;
 
   const scrollViewRef = useRef();
@@ -37,18 +40,35 @@ const SeeAllNegotiator = props => {
   const [showSearch, setShowSearch] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState('');
-  useState;
+  
   const [pageNum, setpageNum] = useState(1);
- 
   const [isLoading, setIsLoading] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
-
   const [newArray, setNewArray] = useState([]);
- 
+  // console.log("🚀 ~ file: SeeAllNegotiator.js:46 ~ SeeAllNegotiator ~ newArray:", newArray)
+
+  const searchQuotes = async () => {
+    const url = `auth/negotiator/search/${type}`;
+    const body = {search: searchData, status: type};
+
+    // console.log('🚀 ~ file: HomeScreen.js:99 ~ searchQuotes ~ body:', body);
+    setIsLoading(true);
+    const response = await Post(url, body, apiHeader(token));
+    setIsLoading(false);
+    if (response != undefined) {
+      console.log(
+        '🚀 ~ file: HomeScreen.js:99 ~ searchQuotes ~ response:',
+        response?.data,
+      );
+  
+        setNewArray(response?.data?.quote_info?.data);
+      
+    }
+  };
 
   const getData = async type1 => {
     const url =
-      type == 'recommended'
+      type == 'Recommended'
         ? `auth/negotiator/quote/recommended?page=${pageNum}`
         : type == 'Working On'
         ? `auth/negotiator/quote/working?page=${pageNum}`
@@ -57,12 +77,12 @@ const SeeAllNegotiator = props => {
     const response = await Get(url, token);
     type1 == 'loadMore' ? setLoadMore(false) : setIsLoading(false);
     if (response != undefined) {
-      // console.log(
-      //   '🚀 ~ file: SeeAllNegotiator.js:67 ~ getData ~ response:',
-      //   response?.data,
-      // );
+      console.log(
+        '🚀 ~ file: SeeAllNegotiator.js:67 ~ getData ~ response:',
+        response?.data,
+      );
       if (type != 'Seeking Help') {
-        type1 == 'loadMore'  
+        type1 == 'loadMore'
           ? setNewArray(prev => [...prev, ...response?.data?.quote_info?.data])
           : setNewArray(response?.data?.quote_info?.data);
       } else {
@@ -91,11 +111,14 @@ const SeeAllNegotiator = props => {
   };
 
   useEffect(() => {
+    searchQuotes();
+  }, [searchData]);
+
+  useEffect(() => {
     if (pageNum == 1) {
       getData();
     } else {
-      if(newArray.length == data.length){
-
+      if (newArray.length == data.length) {
         getData('loadMore');
       }
     }
@@ -138,11 +161,13 @@ const SeeAllNegotiator = props => {
             ? Color.themeBgColorNegotiator
             : Color.themebgBusinessQbidder
         }>
+    
         <View
           style={{
             width: windowWidth * 0.93,
+            // backgroundColor: 'red',
             flexDirection: 'row',
-            justifyContent: 'space-between',
+            justifyContent: 'center',
             alignItems: 'center',
             alignSelf: 'center',
           }}>
@@ -154,21 +179,25 @@ const SeeAllNegotiator = props => {
             }}
             style={{
               height: windowHeight * 0.06,
+              // marginRight:moderateScale(10,.6),
+              // alignSelf:'center',
               marginBottom: moderateScale(10, 0.3),
               borderRadius: moderateScale(5, 0.3),
             }}
             data={searchData}
             setData={setSearchData}
           />
-          <Icon
-            name={'sound-mix'}
-            as={Entypo}
-            size={moderateScale(22, 0.3)}
-            color={Color.lightGrey}
-            onPress={() => {
-              setIsModalVisible(true);
-            }}
-          />
+          {/* {type != 'working on' && (
+            <Icon
+              name={'sound-mix'}
+              as={Entypo}
+              size={moderateScale(22, 0.3)}
+              color={Color.lightGrey}
+              onPress={() => {
+                setIsModalVisible(true);
+              }}
+            />
+          )} */}
         </View>
 
         {isLoading ? (
@@ -191,7 +220,7 @@ const SeeAllNegotiator = props => {
             onScroll={handleScroll}
             scrollEventThrottle={16}
             data={newArray}
-            numColumns={2}
+            numColumns={type != 'Seeking Help' ? 2: 1}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{
               width: windowWidth,
@@ -201,9 +230,11 @@ const SeeAllNegotiator = props => {
               paddingBottom: moderateScale(80, 0.6),
             }}
             renderItem={({item, index}) => {
+              // console.log("🚀 ~ file: SeeAllNegotiator.js:230 ~ SeeAllNegotiator ~ item:", item)
               console.log(index % 2 == 0);
-              return type != 'Job Requests' ? (
+              return type != 'Seeking Help' ? (
                 <JobCard
+                key={index}
                   fromSeeAll={true}
                   item={item}
                   style={index % 2 == 0 && {marginRight: moderateScale(7, 0.3)}}
@@ -212,11 +243,7 @@ const SeeAllNegotiator = props => {
                   }}
                 />
               ) : (
-                <SeekingHelpCard
-                  fromSeeAll={true}
-                  style={index % 2 == 0 && {marginRight: moderateScale(7, 0.3)}}
-                  item={item}
-                />
+                <Card item={item} />
               );
             }}
             ListHeaderComponent={() => {
