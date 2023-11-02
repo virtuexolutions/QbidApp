@@ -154,6 +154,11 @@ const Signup = () => {
       : Alert.alert(`Profile image is required`);
     }
 
+    if (isNaN(zipCode)) {
+      return Platform.OS == 'android'
+        ? ToastAndroid.show('zipCode is not a number', ToastAndroid.SHORT)
+        : Alert.alert('zipCode is not a number');
+    }
     if (isNaN(contact)) {
       return Platform.OS == 'android'
         ? ToastAndroid.show('phone is not a number', ToastAndroid.SHORT)

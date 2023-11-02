@@ -39,6 +39,7 @@ import {Get, Post} from '../Axios/AxiosInterceptorFunction';
 import {useIsFocused} from '@react-navigation/native';
 import Lottie from 'lottie-react-native';
 import NoData from '../Components/NoData';
+import VendorCards from '../Components/VendorCards';
 
 const HomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
@@ -54,12 +55,12 @@ const HomeScreen = () => {
   const [visible, setVisible] = useState(false);
   const [myQuotes, setMyQuotes] = useState([]);
   const [proposals, setProposals] = useState([]);
-  const [modalVisible1, setModalVisible1] = useState(false)
-  const [modalVisible2, setModalVisible2] = useState(false)
-  const [modalVisible3, setModalVisible3] = useState(false)
-  const [selectedData1, setSelectedData1] = useState('')
-  const [selectedData2, setSelectedData2] = useState('')
-  const [selectedData3, setSelectedData3] = useState('')
+  const [modalVisible1, setModalVisible1] = useState(false);
+  const [modalVisible2, setModalVisible2] = useState(false);
+  const [modalVisible3, setModalVisible3] = useState(false);
+  const [selectedData1, setSelectedData1] = useState('');
+  const [selectedData2, setSelectedData2] = useState('');
+  const [selectedData3, setSelectedData3] = useState('');
 
   const getAllData = async () => {
     setIsLoading(true);
@@ -69,10 +70,15 @@ const HomeScreen = () => {
     ]);
     setIsLoading(false);
     if (response1 != undefined) {
+      console.log(
+        '🚀 ~ file: HomeScreen.js:85 ~ getAllData ~ response1:',
+        response1?.data,
+      );
       setProposals(response1?.data?.bid_help_info?.data);
     }
     if (response2 != undefined) {
       setMyQuotes(response2?.data?.quote_info?.data);
+      // return console.log("🚀 ~ file: HomeScreen.js:90 ~ getAllData ~ response2:", response2?.data?.quote_info?.data)
     }
   };
 
@@ -82,11 +88,15 @@ const HomeScreen = () => {
     const response = await Get(url, token);
     setIsLoading(false);
     if (response != undefined) {
+      console.log(
+        '🚀 ~ file: HomeScreen.js:97 ~ filterQuotes ~ response:',
+        response?.data,
+      );
       setMyQuotes(response?.data?.quote_info);
     }
   };
 
-  
+ 
 
   useEffect(() => {
     getAllData();
@@ -104,9 +114,23 @@ const HomeScreen = () => {
     });
   }, []);
 
-  // const toggleModal = () => {
-  //   setModalVisible(!modalVisible);
-  // };
+ 
+  const demyarray = [
+    {
+      image: require('../Assets/Images/man2.jpg'),
+      title: 'walter A. Jones',
+      subtitle: 'jbhdfghjdgfh',
+      description:
+        'kjadfhajkhdfjkhabvdmnabvnbanvbakeyrjaehjhityuireykdnvm,nvm,nacvhfghfjafbghfpwieroweihhr',
+    },
+    {
+      image: require('../Assets/Images/man2.jpg'),
+      title: 'walter A. Jones',
+      subtitle: 'jbhdfghjdgfh',
+      description:
+        'kjadfhajkhdfjkhabvdmnabvnbanvbakeyrjaehjhityuireykdnvm,nvm,nacvhfghfjafbghfpwieroweihhr',
+    },
+  ];
 
   return (
     <ScreenBoiler
@@ -135,9 +159,6 @@ const HomeScreen = () => {
             style={{
               width: windowWidth * 0.93,
               flexDirection: 'row',
-              // backgroundColor:'green',
-              // justifyContent:'center',
-              paddingHorizontal: moderateScale(10, 0.6),
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
@@ -155,25 +176,29 @@ const HomeScreen = () => {
               data={searchData}
               setData={setSearchData}
             />
-            <Icon
-              name={'sound-mix'}
-              as={Entypo}
-              size={moderateScale(22, 0.3)}
-              color={Color.white}
-              onPress={() => {
-                setModalVisible1(true);
-              }}
-            />   
+             <Icon
+                name={'sound-mix'}
+                as={Entypo}
+                size={moderateScale(15, 0.3)}
+                color={Color.themeDarkGray}
+                onPress={() => {
+                setModalVisible1(true)
+                }}
+              />
+
+            
+
+          
           </View>
           <View style={styles.row}>
             <CustomText isBold style={styles.header}>
-              Proposals
+              negotiator
             </CustomText>
             <CustomText
               onPress={() => {
                 navigationService.navigate('SeeAllScreen', {
                   type: 'negotiator',
-                  data:proposals
+                  data: proposals,
                 });
               }}
               style={styles.viewall}>
@@ -185,8 +210,7 @@ const HomeScreen = () => {
                 size={moderateScale(15, 0.3)}
                 color={Color.themeDarkGray}
                 onPress={() => {
-                  // setSelectedView('myqoutes');
-                  setModalVisible3(true);
+                setModalVisible2(true)
                 }}
               />
           </View>
@@ -205,29 +229,29 @@ const HomeScreen = () => {
             <FlatList
               ListEmptyComponent={() => {
                 return (
-                 <NoData 
-                 style={{
-                  height:windowHeight*0.2,
-                  width : windowWidth*0.5,
-                  alignItems:'center'
-                 }}
-                 
-                 />
+                  <NoData
+                    style={{
+                      height: windowHeight * 0.2,
+                      width: windowWidth * 0.5,
+                      alignItems: 'center',
+                    }}
+                  />
                 );
               }}
-              data={[]}
-              // data={[]}
+              // data={proposals}
+              data={demyarray}
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{
                 paddingHorizontal: moderateScale(15, 0.3),
+                paddingTop: moderateScale(10, 0.3),
               }}
               renderItem={({item, index}) => {
-                return <NegotiatorCard key={index} item={item} />;
+                return <VendorCards item={item} />;
+                // return <NegotiatorCard key={index} item={item} />;
               }}
             />
           )}
-
           <View
             style={{
               borderBottomWidth: 1,
@@ -263,8 +287,7 @@ const HomeScreen = () => {
                 size={moderateScale(15, 0.3)}
                 color={Color.themeDarkGray}
                 onPress={() => {
-                  // setSelectedView('myqoutes');
-                  setModalVisible3(true);
+                setModalVisible3(true)
                 }}
               />
             </View>
@@ -438,217 +461,3 @@ const styles = ScaledSheet.create({
       }}
       /> */
 }
-
-{
-  /* <View style={styles.row}>
-            <CustomText isBold style={styles.header}>
-              Proposals
-            </CustomText>
-            <CustomText
-              onPress={() => {
-                navigationService.navigate('SeeAllScreen', {
-                  type: 'negotiator',
-                  data:proposals
-                });
-              }}
-              style={styles.viewall}>
-              View all
-            </CustomText>
-          </View>
-
-          {isLoading ? (
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: windowHeight * 0.2,
-                width: windowWidth,
-              }}>
-              <ActivityIndicator size={'large'} color={'white'} />
-            </View>
-          ) : (
-            <FlatList
-              ListEmptyComponent={() => {
-                return (
-                 <NoData 
-                 style={{
-                  height:windowHeight*0.2,
-                  width : windowWidth*0.5,
-                  alignItems:'center'
-                 }}
-                 
-                 />
-                );
-              }}
-              data={proposals}
-              // data={[]}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{
-                paddingHorizontal: moderateScale(15, 0.3),
-              }}
-              renderItem={({item, index}) => {
-                return <NegotiatorCard key={index} item={item} />;
-              }}
-            />
-          )} */
-}
-
-
-{/* <Modal
-              isVisible={modalVisible}
-              onBackdropPress={() => {
-                setModalVisible(false);
-              }}>
-              <View
-                style={{
-                  width: windowWidth * 0.9,
-                  paddingVertical: moderateScale(10, 0.6),
-                  // height: windowHeight * 0.55,
-                  borderRadius: moderateScale(15, 0.3),
-                  backgroundColor: '#f2fce4',
-                  borderWidth: 2,
-                  borderColor: Color.themeColor,
-
-                  alignItems: 'center',
-                }}>
-                <View style={{marginTop: moderateScale(20, 0.3)}}>
-                  <CustomText
-                    isBold
-                    style={{
-                      fontSize: moderateScale(14, 0.6),
-                    }}>
-                    QBid Help
-                  </CustomText>
-                </View>
-
-                <View style={{marginTop: moderateScale(10, 0.3)}}>
-                  <TextInputWithTitle
-                    secureText={false}
-                    placeholder={'Qbid name'}
-                    setText={setQbidName}
-                    value={qbidName}
-                    viewHeight={0.07}
-                    viewWidth={0.75}
-                    inputWidth={0.68}
-                    border={1}
-                    borderColor={Color.themeColor}
-                    backgroundColor={'#FFFFFF'}
-                    marginTop={moderateScale(10, 0.6)}
-                    color={Color.themeColor}
-                    placeholderColor={Color.themeLightGray}
-                    borderRadius={moderateScale(25, 0.3)}
-                  />
-                  <DropDownSingleSelect
-                    array={servicesArray}
-                    setItem={setQbidDetail}
-                    item={qbidDetail}
-                    borderColor={Color.themeColor}
-                    borderWidth={1}
-                    backgroundColor={'white'}
-                    marginTop={moderateScale(10, 0.6)}
-                    placeholder={'Service Type'}
-                    placeholderColor={Color.themeLightGray}
-                    width={windowWidth * 0.75}
-                    dropDownHeight={windowHeight * 0.06}
-                    dropdownStyle={{
-                      width: windowWidth * 0.75,
-                    }}
-                  />
-                  <TextInputWithTitle
-                    secureText={false}
-                    placeholder={'description'}
-                    setText={setQbidDetail1}
-                    value={qbiddetail1}
-                    viewHeight={0.2}
-                    viewWidth={0.75}
-                    inputWidth={0.68}
-                    border={1}
-                    borderColor={Color.themeColor}
-                    backgroundColor={'#FFFFFF'}
-                    marginTop={moderateScale(10, 0.6)}
-                    color={Color.themeColor}
-                    placeholderColor={Color.themeLightGray}
-                    multiline={true}
-                    // borderRadius={moderateScale(25, 0.3)}
-                  />
-
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      flexWrap: 'wrap',
-                      marginRight: moderateScale(10, 0.6),
-                      width: windowWidth * 0.6,
-                      // backgroundColor: 'red',
-                      alignSelf: 'center',
-                      marginTop: moderateScale(15, 0.3),
-                      paddingHorizontal: moderateScale(10, 0.6),
-                    }}>
-                    {multiImages.map((item, index) => {
-                      return (
-                        <View
-                          style={{
-                            width: windowWidth * 0.15,
-                            height: windowHeight * 0.08,
-                            marginRight: moderateScale(10, 0.6),
-                            marginTop: moderateScale(5, 0.3),
-                          }}>
-                          <CustomImage
-                            source={{uri: item?.uri}}
-                            style={{
-                              height: '100%',
-                              width: '100%',
-                              borderRadius: moderateScale(5, 0.3),
-                            }}
-                          />
-                        </View>
-                      );
-                    })}
-                  </View>
-
-                  <CustomButton
-                    text={'Upload Images'}
-                    textColor={Color.white}
-                    width={windowWidth * 0.5}
-                    height={windowHeight * 0.06}
-                    marginTop={moderateScale(30, 0.3)}
-                    onPress={() => {
-                      multiImages?.length < 5 && setShowMultiImageModal(true);
-                    }}
-                    bgColor={Color.themeColor}
-                    borderRadius={moderateScale(30, 0.3)}
-                  />
-
-                  <CustomButton
-                    onPress={() => {
-                      seekHelp();
-                    }}
-                    text={
-                      submitLoading ? (
-                        <ActivityIndicator color={'#FFFFFF'} size={'small'} />
-                      ) : (
-                        'Submit'
-                      )
-                    }
-                    textColor={Color.white}
-                    width={windowWidth * 0.4}
-                    height={windowHeight * 0.06}
-                    marginTop={moderateScale(10, 0.3)}
-                    bgColor={
-                      userRole == 'Qbid Member'
-                        ? Color.blue
-                        : userRole == 'Qbid Negotiator'
-                        ? Color.themeColor
-                        : Color.black
-                    }
-                    borderRadius={moderateScale(30, 0.3)}
-                  />
-
-                  <ImagePickerModal
-                    show={showMultiImageModal}
-                    setShow={setShowMultiImageModal}
-                    setMultiImages={setMultiImages}
-                  />
-                </View>
-              </View>
-            </Modal> */}
