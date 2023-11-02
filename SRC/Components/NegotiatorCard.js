@@ -13,7 +13,7 @@ import { Post } from '../Axios/AxiosInterceptorFunction';
 import { ActivityIndicator } from 'react-native';
 
 const NegotiatorCard = ({item, fromSeeAll}) => {
-  // return console.log("🚀 ~ file: NegotiatorCard.js:16 ~ NegotiatorCard ~ item:", item)
+  console.log("🚀 ~ file: NegotiatorCard.js:16 ~ NegotiatorCard ~ item:", item)
   const token = useSelector(state => state.authReducer.token)
   // console.log("🚀 ~ file: NegotiatorCard.js:18 ~ NegotiatorCard ~ token:", token)
   const [isLoading, setIsLoading] = useState(false);
@@ -68,7 +68,7 @@ const approveRequest =async(status)=>{
               color: Color.white,
               fontSize: moderateScale(12, 0.6),
             }}>
-            {item?.Title}
+            {item?.service_type}
           </CustomText>
           <CustomText
             numberOfLines={5}
@@ -146,7 +146,7 @@ const approveRequest =async(status)=>{
               width: windowWidth * 0.9,
               textAlign: 'center',
               paddingHorizontal: moderateScale(30, 0.6),
-              marginTop: moderateScale(20, 0.3),
+              marginTop: moderateScale(10, 0.3),
               fontSize: moderateScale(15, 0.6),
               color: Color.black,
             }}>
@@ -161,9 +161,9 @@ const approveRequest =async(status)=>{
               fontSize: moderateScale(13, 0.6),
               color: Color.black,
             }}>
-         {item?.email}
+            {item?.service_type}
           </CustomText>
-          <CustomText
+          {/* <CustomText
             style={{
               width: windowWidth * 0.9,
               textAlign: 'center',
@@ -172,10 +172,11 @@ const approveRequest =async(status)=>{
               fontSize: moderateScale(13, 0.6),
               color: Color.black,
             }}>
-            {item?.phone}
-          </CustomText>
+         {item?.email}
+          </CustomText> */}
+          
 
-          <CustomText
+          {/* <CustomText
             style={{
               width: windowWidth * 0.9,
               textAlign: 'center',
@@ -185,10 +186,10 @@ const approveRequest =async(status)=>{
               color: Color.black,
             }}>
            {item?.expertise}
-          </CustomText>
+          </CustomText> */}
 
           <CustomText
-            numberOfLines={3}
+            numberOfLines={1}
             style={{
               width: windowWidth * 0.9,
               textAlign: 'center',
@@ -199,7 +200,57 @@ const approveRequest =async(status)=>{
             }}>
            {item?.description}
           </CustomText>
+         
 
+   <CustomText
+            style={{
+              width: windowWidth * 0.9,
+              textAlign: 'center',
+              paddingHorizontal: moderateScale(30, 0.6),
+              marginTop: moderateScale(10, 0.3),
+              fontSize: moderateScale(13, 0.6),
+              color: Color.black,
+            }}>
+           {item?.negotiator_info?.first_name}
+          </CustomText>
+          <CustomText
+            style={{
+              width: windowWidth * 0.9,
+              textAlign: 'center',
+              paddingHorizontal: moderateScale(30, 0.6),
+              marginTop: moderateScale(10, 0.3),
+              fontSize: moderateScale(13, 0.6),
+              color: Color.black,
+            }}>
+           {item?.negotiator_info?.email}
+          </CustomText>
+          <CustomText
+            style={{
+              width: windowWidth * 0.9,
+              textAlign: 'center',
+              paddingHorizontal: moderateScale(30, 0.6),
+              marginTop: moderateScale(10, 0.3),
+              fontSize: moderateScale(13, 0.6),
+              color: Color.black,
+            }}>
+           {item?.negotiator_info?.company_name}
+          </CustomText>
+  
+
+          <CustomButton
+          text={'contact negotiator'}
+          textColor={Color.white}
+          width={windowWidth * 0.35}
+          height={windowHeight * 0.05}
+          marginTop={moderateScale(5, 0.3)}
+          // onPress={() => }
+          bgColor={Color.blue}
+          borderRadius={moderateScale(30, 0.3)}
+          fontSize={moderateScale(12, 0.3)}
+
+        />
+        
+          
           {/* <View
             style={{
               width:windowWidth*0.6,

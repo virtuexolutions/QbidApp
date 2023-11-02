@@ -18,6 +18,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {useEffect} from 'react';
 import {Get} from '../Axios/AxiosInterceptorFunction';
 import {ActivityIndicator} from 'react-native';
+import NoData from '../Components/NoData';
 
 const SeeAllScreen = props => {
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
@@ -161,8 +162,29 @@ const SeeAllScreen = props => {
         </View>
 
         <FlatList
-       
+        ListEmptyComponent={()=>{
+          return(
+              <View style={{
+                alignItems:'center',
+                justifyContent:'center',
+                // backgroundColor:'red',
+                height:windowHeight*0.5
+              }}>
+                <NoData 
+                style={{
+                  width: windowWidth * 0.95,
+                  height: windowHeight * 0.3,
+                  // backgroundColor: 'green',
+                  alignItems: 'center',
+                  justifyContent:'center'
+                }}
+                />
+              </View>
+            )
+          }}
+          // data={type == 'negotiator' ? negotiatorsArray : myQoutesArray}
           data={newArray}
+          // data={[]}
           ref={scrollViewRef}
           onScroll={handleScroll}
           scrollEventThrottle={16}

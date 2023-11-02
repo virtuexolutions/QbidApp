@@ -38,17 +38,19 @@ import ImagePickerModal from '../Components/ImagePickerModal';
 import {Get, Post} from '../Axios/AxiosInterceptorFunction';
 import {useIsFocused} from '@react-navigation/native';
 import Lottie from 'lottie-react-native';
+import NoData from '../Components/NoData';
 
 const HomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
+  console.log("🚀 ~ file: HomeScreen.js:47 ~ HomeScreen ~ token:", token)
   // console.log(
   //   '🚀 ~ file: HomeScreen.js:20 ~ HomeScreen ~ servicesArray',
   //   servicesArray,
   // );
   const [searchData, setSearchData] = useState('');
-  console.log("🚀 ~ file: HomeScreen.js:51 ~ HomeScreen ~ searchData:", searchData)
+  // console.log("🚀 ~ file: HomeScreen.js:51 ~ HomeScreen ~ searchData:", searchData)
   const [showFilter, setShowFilter] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -70,26 +72,26 @@ const HomeScreen = () => {
   
   // console.log("🚀 ~ file: HomeScreen.js:72 ~ HomeScreen ~ myQuotes:", myQuotes[0]?.bids)
   const [proposals, setProposals] = useState([]);
-  // console.log("🚀 ~ file: HomeScreen.js:73 ~ HomeScreen ~ proposals:", proposals)
+  console.log("🚀 ~ file: HomeScreen.js:73 ~ HomeScreen ~ proposals:", proposals)
 
-  const getAllData = async () => {
-    setIsLoading(true);
-    const [response1, response2] = await Promise.all([
-      Get('auth/member/bid_help', token),
-      Get('auth/member/quote', token),
-    ]);
-    setIsLoading(false);
+ const getAllData =async()=>{
+setIsLoading(true)
+const  [response1 ,response2] =await Promise.all([
+  Get('auth/member/bid_help' ,token),
+  Get('auth/member/quote' ,token)
+])
+setIsLoading(false)
+if(response1 != undefined){
+   console.log("🚀 ~ file: HomeScreen.js:85 ~ getAllData ~ response1:", response1?.data)
+  setProposals(response1?.data?.bid_help_info?.data)
+}
+if(response2 != undefined){
+  setMyQuotes(response2?.data?.quote_info?.data)
+  // return console.log("🚀 ~ file: HomeScreen.js:90 ~ getAllData ~ response2:", response2?.data?.quote_info?.data)
+}
 
-    if (response1 != undefined) {
-      // console.log("🚀 ~ file: HomeScreen.js:85 ~ getAllData ~ response1:", response1?.data)
-      setProposals(response1?.data?.bid_help_info?.data);
-    }
 
-    if (response2 != undefined) {
-      // console.log("🚀 ~ file: HomeScreen.js:90 ~ getAllData ~ response2:",response2?.data?.quote_info?.data?.length)
-      setMyQuotes(response2?.data?.quote_info?.data);
-    }
-  };
+ }
 
   const filterQuotes = async()=>{
     const url = `auth/member/search_type/${selectedStatus}`
@@ -429,22 +431,14 @@ const HomeScreen = () => {
             <FlatList
               ListEmptyComponent={() => {
                 return (
-                  <View
-                    style={{
-                      width: windowWidth * 0.95,
-                      height: windowHeight * 0.18,
-                      // backgroundColor: 'green',
-                      alignItems: 'center',
-                    }}>
-                    <Lottie
-                      source={require('../Assets/Images/animation3.json')}
-                      autoPlay
-                      loop
-                    />
-                    <Text style={styles.nodata}>Data not found</Text>
-                  </View>
-
-                  // <Text>hello</Text>
+                 <NoData 
+                 style={{
+                  height:windowHeight*0.2,
+                  width : windowWidth*0.5,
+                  alignItems:'center'
+                 }}
+                 
+                 />
                 );
               }}
               data={proposals}
@@ -512,26 +506,18 @@ const HomeScreen = () => {
             </View>
           ) : (
             <FlatList
-              ListEmptyComponent={() => {
-                return (
-                  <View
-                    style={{
-                      width: windowWidth * 0.95,
-                      height: windowHeight * 0.18,
-                      // backgroundColor: 'green',
-                      alignItems: 'center',
-                    }}>
-                    <Lottie
-                      source={require('../Assets/Images/animation3.json')}
-                      autoPlay
-                      loop
-                    />
-                    <Text style={styles.nodata}>Data not found</Text>
-                  </View>
-
-                  // <Text>hello</Text>
-                );
-              }}
+            ListEmptyComponent={() => {
+              return (
+               <NoData 
+               style={{
+                height:windowHeight*0.2,
+                width : windowWidth*0.5,
+                alignItems:'center'
+               }}
+               
+               />
+              );
+            }}
               data={myQuotes?.length > 5 ? myQuotes.reverse().slice(0, 5) : myQuotes.reverse()}
               // data={[]}
               showsVerticalScrollIndicator={false}

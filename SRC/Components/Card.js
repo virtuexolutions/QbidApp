@@ -15,6 +15,7 @@ import { useSelector } from 'react-redux';
 const Card = ({item}) => {
   // console.log('🚀 ~ file: Card.js:11 ~ Card ~ item:', item);
   const token = useSelector(state=> state.authReducer.token)
+  console.log('🚀 ~ file: Card.js:11 ~ Card ~ item:', item);
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false)
 
@@ -49,7 +50,10 @@ const Card = ({item}) => {
               height: '100%',
               width: '100%',
             }}
-            source={require('../Assets/Images/man1.jpg')}
+            source={
+              item?.user_info?.photo
+              ? {uri: item?.user_info?.photo}
+              : require('../Assets/Images/man1.jpg')}
           />
         </View>
 
@@ -110,7 +114,8 @@ const Card = ({item}) => {
               overflow: 'hidden',
             }}>
             <CustomImage
-              source={require('../Assets/Images/Avatar2.jpg')}
+              source={
+               require('../Assets/Images/Avatar2.jpg')}
               resizeMode="cover"
               style={{
                 height: '100%',
