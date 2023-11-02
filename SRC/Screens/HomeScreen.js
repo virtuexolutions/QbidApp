@@ -15,12 +15,10 @@ import Color from '../Assets/Utilities/Color';
 import {moderateScale, ScaledSheet} from 'react-native-size-matters';
 import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
 import CustomText from '../Components/CustomText';
-import BidDetailCard from '../Components/BidDetailCard';
 import {Actionsheet, Icon} from 'native-base';
 import {ScrollView} from 'react-native';
 import SearchContainer from '../Components/SearchContainer';
 import Entypo from 'react-native-vector-icons/Entypo';
-import NegotiatorCard from '../Components/NegotiatorCard';
 import MyQouteCard from '../Components/MyQouteCard';
 import navigationService from '../navigationService';
 import {useDispatch, useSelector} from 'react-redux';
@@ -28,16 +26,8 @@ import CustomStatusModal from '../Components/CustomStatusModal';
 import LinearGradient from 'react-native-linear-gradient';
 import {setUserToken} from '../Store/slices/auth';
 import CustomAlertModal from '../Components/CustomAlertModal';
-import {setSelectedRole} from '../Store/slices/common';
-import CustomImage from '../Components/CustomImage';
-import Modal from 'react-native-modal';
-import TextInputWithTitle from '../Components/TextInputWithTitle';
-import DropDownSingleSelect from '../Components/DropDownSingleSelect';
-import CustomButton from '../Components/CustomButton';
-import ImagePickerModal from '../Components/ImagePickerModal';
 import {Get, Post} from '../Axios/AxiosInterceptorFunction';
 import {useIsFocused} from '@react-navigation/native';
-import Lottie from 'lottie-react-native';
 import NoData from '../Components/NoData';
 import VendorCards from '../Components/VendorCards';
 
@@ -59,8 +49,20 @@ const HomeScreen = () => {
   const [modalVisible2, setModalVisible2] = useState(false);
   const [modalVisible3, setModalVisible3] = useState(false);
   const [selectedData1, setSelectedData1] = useState('');
+  console.log(
+    '🚀 ~ file: HomeScreen.js:52 ~ HomeScreen ~ selectedData1:',
+    selectedData1,
+  );
   const [selectedData2, setSelectedData2] = useState('');
+  console.log(
+    '🚀 ~ file: HomeScreen.js:54 ~ HomeScreen ~ selectedData2:',
+    selectedData2,
+  );
   const [selectedData3, setSelectedData3] = useState('');
+  console.log(
+    '🚀 ~ file: HomeScreen.js:56 ~ HomeScreen ~ selectedData3:',
+    selectedData3,
+  );
 
   const getAllData = async () => {
     setIsLoading(true);
@@ -96,8 +98,6 @@ const HomeScreen = () => {
     }
   };
 
- 
-
   useEffect(() => {
     getAllData();
   }, [isFocused]);
@@ -114,7 +114,6 @@ const HomeScreen = () => {
     });
   }, []);
 
- 
   const demyarray = [
     {
       image: require('../Assets/Images/man2.jpg'),
@@ -160,11 +159,25 @@ const HomeScreen = () => {
               width: windowWidth * 0.93,
               flexDirection: 'row',
               justifyContent: 'space-between',
+              paddingHorizontal:moderateScale(10,.6),
               alignItems: 'center',
             }}>
             <SearchContainer
+              onPress={() => {
+                if (selectedData1 == '') {
+                  // return Platform.OS == 'android'
+                  //   ? ToastAndroid.show(
+                  //       'please select any category',
+                  //       ToastAndroid.SHORT,
+                  //     )
+                  //   :
+                     Alert.alert('Please select any category');
+                } else {
+                  navigationService.navigate('SeeAllScreen',{type:selectedData1});
+                }
+              }}
               width={windowWidth * 0.8}
-              input
+              // input
               inputStyle={{
                 height: windowHeight * 0.05,
               }}
@@ -176,19 +189,15 @@ const HomeScreen = () => {
               data={searchData}
               setData={setSearchData}
             />
-             <Icon
-                name={'sound-mix'}
-                as={Entypo}
-                size={moderateScale(15, 0.3)}
-                color={Color.themeDarkGray}
-                onPress={() => {
-                setModalVisible1(true)
-                }}
-              />
-
-            
-
-          
+            <Icon
+              name={'sound-mix'}
+              as={Entypo}
+              size={moderateScale(18  , 0.3)}
+              color={Color.themeDarkGray}
+              onPress={() => {
+                setModalVisible1(true);
+              }}
+            />
           </View>
           <View style={styles.row}>
             <CustomText isBold style={styles.header}>
@@ -205,14 +214,14 @@ const HomeScreen = () => {
               View all
             </CustomText>
             <Icon
-                name={'sound-mix'}
-                as={Entypo}
-                size={moderateScale(15, 0.3)}
-                color={Color.themeDarkGray}
-                onPress={() => {
-                setModalVisible2(true)
-                }}
-              />
+              name={'sound-mix'}
+              as={Entypo}
+              size={moderateScale(15, 0.3)}
+              color={Color.themeDarkGray}
+              onPress={() => {
+                setModalVisible2(true);
+              }}
+            />
           </View>
 
           {isLoading ? (
@@ -287,7 +296,7 @@ const HomeScreen = () => {
                 size={moderateScale(15, 0.3)}
                 color={Color.themeDarkGray}
                 onPress={() => {
-                setModalVisible3(true)
+                  setModalVisible3(true);
                 }}
               />
             </View>
@@ -338,23 +347,30 @@ const HomeScreen = () => {
         isModalVisible={modalVisible1}
         setModalVisible={setModalVisible1}
         statusArray={[{name: 'negotiators'}, {name: 'Quotes'}]}
-        data={selectedStatus}
-        setData={setSelectedStatus}
-      /> 
+        data={selectedData1}
+        setData={setSelectedData1}
+        text={'category'}
+      />
       <CustomStatusModal
-      isModalVisible={modalVisible2}
-      setModalVisible={setModalVisible2}
-      statusArray={[{name: 'Level 5'}, {name: 'level 4'}, {name: 'level 3'}]}
-      data={selectedStatus}
-      setData={setSelectedStatus}
-    />
-    <CustomStatusModal
-      isModalVisible={modalVisible3}
-      setModalVisible={setModalVisible3}
-      statusArray={[{name: 'Completed'}, {name: 'Pending'}, {name:'onGoing'}]}
-      data={selectedStatus}
-      setData={setSelectedStatus}
-    />
+        isModalVisible={modalVisible2}
+        setModalVisible={setModalVisible2}
+        statusArray={[{name: 'Level 5'}, {name: 'level 4'}, {name: 'level 3'}]}
+        data={selectedData2}
+        setData={setSelectedData2}
+        text={'filter negotiator level'}
+      />
+      <CustomStatusModal
+        isModalVisible={modalVisible3}
+        setModalVisible={setModalVisible3}
+        statusArray={[
+          {name: 'Completed'},
+          {name: 'Pending'},
+          {name: 'onGoing'},
+        ]}
+        data={selectedData3}
+        setData={setSelectedData3}
+        text={'filter by quote status'}
+      />
       <CustomAlertModal
         isModalVisible={visible}
         onClose={() => {

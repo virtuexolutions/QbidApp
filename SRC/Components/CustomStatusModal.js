@@ -11,12 +11,9 @@ const CustomStatusModal = ({
   setModalVisible,
   statusArray,
   setData,
+  text,
   data,
 }) => {
-  // console.log(
-  //   '🚀 ~ file: CustomStatusModal.js:10 ~ CustomStatusModal ~ statusArray',
-  //   statusArray,
-  // );
   return (
     <Modal
       isVisible={isModalVisible}
@@ -24,53 +21,72 @@ const CustomStatusModal = ({
       onBackdropPress={() => {
         setModalVisible(false);
       }}
-    //   animationIn={'fadeIn'}
-    //   animationOut={'fadeOut'}
-    //   animationInTiming={700}
-    //   animationOutTiming={700}
       backdropOpacity={0.7}
-      style={{
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
-        <View style={{
-            height : windowHeight * 0.32,
+      style={
+        {
+          // alignItems: 'center',
+          // justifyContent: 'center',
+        }
+      }>
+      <View
+        style={
+          {
+            // height: windowHeight * 0.32,
             // paddingVertical:moderateScale(20,0.6),
             // maxHeight : windowHeight * 0.5,
-            paddingVertical : moderateScale(10,0.3)
-        }}>
+            // paddingVertical: moderateScale(10, 0.3),
+          }
+        }>
+        <ScrollView
+          style={styles.statusModal}
+          contentContainerStyle={
+            {
+              // paddingTop: moderateScale(15, 0.3),
+            }
+          }>
+          <View
+            style={{
+              backgroundColor: Color.themeColor,
+              paddingVertical: moderateScale(10, 0.6),
+              borderTopLeftRadius: moderateScale(5, 0.6),
+              borderTopRightRadius: moderateScale(5, 0.6),
+            }}>
+            <CustomText
+              style={{
+                fontSize: moderateScale(15, 0.6),
+                textAlign: 'center',
 
-        
-      <ScrollView
-        style={styles.statusModal}
-        contentContainerStyle={{
-          paddingTop: moderateScale(15, 0.3),
-        }}>
-        {statusArray &&
-          statusArray.map((item, index) => {
-            return (
-              <CustomText
-              key={index}
-                onPress={() => {
-                  setData(item?.name);
-                  setModalVisible(false);
-                }}
-                style={{
-                  borderBottomWidth:
-                    index + 1 == statusArray.length ? 0 : moderateScale(1),
-                  borderColor: Color.themeLightGray,
-                  // width: windowWidth * 0.,
-                  lineHeight: moderateScale(40, 0.3),
-                  // marginTop: moderateScale(10, 0.3),
-                  textAlign: 'center',
-                  paddingBottom: moderateScale(5, 0.3),
-                  backgroundColor : data == item?.name ? Color.themeColor : 'transparent',
-                }}>
-                {item?.name}
-              </CustomText>
-            );
-          })}
-      </ScrollView>
+                color: 'white',
+              }}>
+              {text}
+            </CustomText>
+          </View>
+          {statusArray &&
+            statusArray.map((item, index) => {
+              return (
+                <CustomText
+                  key={index}
+                  onPress={() => {
+                    setData(item?.name);
+                    setModalVisible(false);
+                  }}
+                  style={{
+                    borderBottomWidth:
+                      index + 1 == statusArray.length ? 0 : moderateScale(1),
+                    borderColor: Color.themeLightGray,
+                    // width: windowWidth * 0.,
+                    lineHeight: moderateScale(40, 0.3),
+                    // marginTop: moderateScale(10, 0.3),
+                    textAlign: 'center',
+                    paddingBottom: moderateScale(5, 0.3),
+                    backgroundColor:
+                      'transparent',
+                  }}>
+                  {item?.name}
+                </CustomText>
+              );
+            })}
+        </ScrollView>
       </View>
     </Modal>
   );
@@ -81,12 +97,13 @@ export default CustomStatusModal;
 const styles = ScaledSheet.create({
   statusModal: {
     alignSelf: 'center',
-    height : windowHeight * 0.5,
+    // height : windowHeight * 0.5,
     width: windowWidth * 0.8,
     // paddingHorizontal: moderateScale(10, 0.3),
     backgroundColor: Color.white,
     borderRadius: moderateScale(5, 0.3),
-    marginTop: moderateScale(60, 0.3),
+    overflow: 'hidden',
+    // marginTop: moderateScale(60, 0.3),
     // borderWidth: 1,
     borderColor: Color.themeBlack,
   },
