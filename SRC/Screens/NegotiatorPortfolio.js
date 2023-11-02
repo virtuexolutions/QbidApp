@@ -36,6 +36,8 @@ import {useNavigation} from '@react-navigation/native';
 
 const NegotiatorPortfolio = () => {
   const navigation = useNavigation();
+  const  userdata =useSelector(state => state.commonReducer.userData)
+  console.log("🚀 ~ file: NegotiatorPortfolio.js:40 ~ NegotiatorPortfolio ~ userdata:", userdata)
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const [image, setImage] = useState({});
@@ -52,22 +54,18 @@ const NegotiatorPortfolio = () => {
   // );
 
   //Edit Profile Modal
-  const [firstName, setFirstName] = useState('Charles');
-  const [lastName, setLastName] = useState(' A.Lee');
-  const [companyName, setCompanyName] = useState(''); //for negotiator
-  const [jobStatus, setJobStatus] = useState(''); //for negotiator
-  const [email, setEmail] = useState('');
-  const [contact, setContact] = useState('');
-  const [address, setAddress] = useState('');
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('');
-  const [zipCode, setZipCode] = useState('');
-  const [services, setServices] = useState([
-    'Auto repair',
-    'plumbing Projects',
-    'HAVC repair/Replacement',
-  ]); //for negotiator
-  const [language, setLanguage] = useState(['English']); //for negotiator
+  const [firstName, setFirstName] = useState(userdata?.first_name ? userdata?.first_name : '' );
+  const [lastName, setLastName] = useState(userdata?.last_name ? userdata?.last_name :'' ) ;
+  const [companyName, setCompanyName] = useState(userdata?.company_name ? userdata?.company_name :'' ); //for negotiator
+  const [jobStatus, setJobStatus] = useState(userdata?.status ?userdata?.status :''); //for negotiator
+  const [email, setEmail] = useState(userdata?.email ? userdata?.email :'');
+  const [contact, setContact] = useState(userdata?.phone ? userdata?.phone :'');
+  const [address, setAddress] = useState(userdata?.address ? userdata?.address :'');
+  const [city, setCity] = useState(userdata?.city ? userdata?.city :'');
+  const [state, setState] = useState(userdata?.state ? userdata?.state :'');
+  const [zipCode, setZipCode] = useState(userdata?.zip ? userdata?.zip : '');
+  const [services, setServices] = useState(userdata?.expertise ? JSON.parse(userdata?.expertise) :[]); //for negotiator
+  const [language, setLanguage] = useState(userdata?.language ? JSON.parse(userdata?.language)  : []); //for negotiator
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -289,7 +287,7 @@ const NegotiatorPortfolio = () => {
               </CustomText>
               <RatingComponent
                 disable={true}
-                rating={4.2}
+                rating={userdata?.rating}
                 starColor={'#ffa534'}
                 starStyle={{
                   marginRight: moderateScale(1, 0.3),
@@ -323,7 +321,7 @@ const NegotiatorPortfolio = () => {
               <DetailContainer
                 imageName={'dollar'}
                 type={FontAwesome}
-                subtitle={'$10k+'}
+                subtitle={userdata?.total_earning}
                 title={'Total earning'}
               />
             </View>
@@ -354,7 +352,7 @@ const NegotiatorPortfolio = () => {
                 flexWrap: 'wrap',
               }}>
               <Detailcards
-                data={'john@gmail.com'}
+                data={userdata?.email}
                 iconName={'envelope'}
                 title={'Email'}
                 iconType={FontAwesome}
@@ -365,7 +363,7 @@ const NegotiatorPortfolio = () => {
                 marginTop={moderateScale(10, 0.3)}
               />
               <Detailcards
-                data={'(+1)-1111111'}
+                data={userdata?.phone}
                 iconName={'phone'}
                 title={'Contact'}
                 iconType={FontAwesome}
@@ -376,7 +374,7 @@ const NegotiatorPortfolio = () => {
                 }}
               />
               <Detailcards
-                data={'xyz office'}
+                data={userdata?.company_name}
                 iconName={'building'}
                 title={'Company name'}
                 iconType={FontAwesome}
@@ -408,7 +406,7 @@ const NegotiatorPortfolio = () => {
               }}>
               Expertise
             </CustomText>
-            {['HAVC repair/Replacement', 'Handyman Projects'].map(
+            {JSON.parse(userdata?.expertise).map(
               (x, index) => {
                 return (
                   <View
@@ -455,7 +453,7 @@ const NegotiatorPortfolio = () => {
               }}>
               Languages
             </CustomText>
-            {['English', 'Portugese', 'French'].map((x, index) => {
+            {JSON.parse(userdata?.language).map((x, index) => {
               return (
                 <View
                   style={{

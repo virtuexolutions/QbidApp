@@ -55,14 +55,17 @@ const CreateNew = () => {
       // vendorList: multiImages,
       notes: description,
     };
+    const body2 = {
+      quoted_price: vendorQoutedPrice,
+      asking_price: askingPrice,
+      offering_percentage: offeringPercent,
+    }
 
     const formData = new FormData();
-    if(description.length < 100){
-      return Platform.OS == 'android'
-          ? ToastAndroid.show(`Description should be greater than 100 letters`, ToastAndroid.SHORT)
-          : Alert.alert(`Description should be greater than 100 letters`);
-    }
     
+ 
+    
+  
     for (let key in body) {
       if (body[key] == '') {
         return Platform.OS == 'android'
@@ -71,6 +74,18 @@ const CreateNew = () => {
       } else {
         formData.append(key, body[key]);
       }
+    }
+    for(let key in body2){
+      if(isNaN(body2[key])){
+        return Platform.OS == 'android'
+        ?ToastAndroid.show(`${key}is not a number` ,ToastAndroid.SHORT )
+        :Alert.alert(`${key} is not a number `)
+      }
+    }
+    if(description.length < 100){
+      return Platform.OS == 'android'
+          ? ToastAndroid.show(`Description should be greater than 100 letters`, ToastAndroid.SHORT)
+          : Alert.alert(`Description should be greater than 100 letters`);
     }
     multiImages?.map((item, index) => formData.append(`images[${index}]`, item));
     // console.log("🚀 ~ file: CreateNew.js:67 ~ publishQuote ~ formData:", formData)
@@ -373,7 +388,7 @@ const CreateNew = () => {
             value={description}
             viewHeight={0.2}
             viewWidth={0.9}
-            inputWidth={0.86}
+            inputWidth={0.8}
             // border={1}
             borderColor={'#ffffff'}
             backgroundColor={'#FFFFFF'}

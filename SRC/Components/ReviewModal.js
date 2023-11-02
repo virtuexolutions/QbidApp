@@ -22,6 +22,7 @@ const ReviewModal = ({ref, setRef}) => {
 
   const sendReview = async() =>{
 const url = 'auth/review'
+body
 setLoading(true)
 const response = await Post(url, body , apiHeader(token))
 setLoading(false)
