@@ -385,7 +385,13 @@ const NegotiatorPortfolio = () => {
                 }}
               />
               <Detailcards
-                data={'Gold'}
+                data={userdata?.rating <= 3
+                  ? 'Bronze'
+                  : userdata?.rating <= 3.5
+                  ? 'Silver'
+                  : userdata?.rating <= 4
+                  ? 'Gold'
+                  : 'Platinum'}
                 iconName={'trophy'}
                 title={'Qbid Level'}
                 iconType={FontAwesome}

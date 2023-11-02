@@ -21,10 +21,11 @@ import Color from '../Assets/Utilities/Color';
 import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import {useSelector} from 'react-redux';
-import {useIsFocused} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import CustomButton from '../Components/CustomButton';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import LinearGradient from 'react-native-linear-gradient';
+import {validateEmail} from '../Config';
 
 const Support = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
@@ -38,6 +39,7 @@ const Support = () => {
   const [loading, setLoading] = useState(false);
   const [supportData, setSupportData] = useState();
   const [submitLoading, setSubmitLoading] = useState(false);
+  const navigation = useNavigation()
 
   const GetSupportData = async () => {
     const url = 'auth/admin/info';
@@ -49,16 +51,18 @@ const Support = () => {
       setSupportData(response?.data?.data);
     }
   };
-  // useEffect(() => {
-  //   GetSupportData();
-  //   // setFullName('');
-  //   // setPhone('');
-  //   // setEmail('');
-  //   // setSubject('');
-  //   // setMessage('');
-  // }, [isFocused]);
+  useEffect(() => {
+    // GetSupportData();
+    return () => {
+      setFullName('');
+      setPhone('');
+      setEmail('');
+      setSubject('');
+      setMessage('');
+    };
+  }, [isFocused]);
   const sendQuestion = async () => {
-    const url = 'auth/contact/submit';
+    const url = 'auth/support';
     const body = {
       name: fullName,
       phone: phone,
@@ -69,19 +73,38 @@ const Support = () => {
     for (let key in body) {
       if (body[key] === '') {
         return Platform.OS == 'android'
-          ? ToastAndroid.show(`${key}  is required`, ToastAndroid.SHORT)
-          : alert(`${key}  is required`);
+          ? ToastAndroid.show(`${key} cannot be empty`, ToastAndroid.SHORT)
+          : alert(`${key} cannot be empty`);
       }
     }
-    setSubmitLoading(true);
+    if (isNaN(phone) || phone.length < 10) {
+      return Platform.OS == 'android'
+      ? ToastAndroid.show(`phone number in not valid`, ToastAndroid.SHORT)
+      : alert(`phone number in not valid`);
+    }
+    if (!validateEmail(email)) {
+      return Platform.OS == 'android'
+      ? ToastAndroid.show(`please enter a valid email`, ToastAndroid.SHORT)
+      : alert(`please enter a valid email`);
+    }
+    if (message.length < 50) {
+      return Platform.OS == 'android'
+      ? ToastAndroid.show(`Description is too short`, ToastAndroid.SHORT)
+      : alert(`Description is too short`);
+    }
+    
+    console.log("🚀 ~ file: Support.js:72 ~ sendQuestion ~ body:", body)
+    setLoading(true);
 
     const response = await Post(url, body, apiHeader(token));
-    setSubmitLoading(false);
+    setLoading(false);
     if (response != undefined) {
+      console.log("🚀 ~ file: Support.js:98 ~ sendQuestion ~ response:", response?.data)
       Platform.OS == 'android'
-        ? ToastAndroid.show('Sent Successfully', ToastAndroid.SHORT)
-        : alert('Sent Successfully');
-      navigationService.navigate('HomeScreen');
+        ? ToastAndroid.show('Your query sent Successfully', ToastAndroid.SHORT)
+        : alert('Your query sent Successfully');
+        navigation.goBack()
+      // navigationService.navigate('HomeScreen');
     }
   };
 
@@ -117,10 +140,10 @@ const Support = () => {
         <KeyboardAwareScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
-            paddingBottom: moderateScale(20, 0.3),
+            paddingBottom: moderateScale(120, 0.3),
             alignItems: 'center',
             width: '100%',
-            height: windowHeight,
+            // height: windowHeight,
           }}>
           <CustomText style={styles.Txt1} isBold>
             {'Contact Us'}
@@ -133,11 +156,13 @@ const Support = () => {
             }}>
             <FontAwesome
               name="phone"
-              color={ userRole == 'Qbid Member'
-              ? Color.blue
-              : userRole == 'Qbid Negotiator'
-              ? Color.themeColor
-              : Color.black}
+              color={
+                userRole == 'Qbid Member'
+                  ? Color.blue
+                  : userRole == 'Qbid Negotiator'
+                  ? Color.themeColor
+                  : Color.black
+              }
               style={styles.icon1}
               size={moderateScale(22, 0.6)}
             />
@@ -157,11 +182,13 @@ const Support = () => {
             }}>
             <Entypo
               name="mail"
-              color={ userRole == 'Qbid Member'
-              ? Color.blue
-              : userRole == 'Qbid Negotiator'
-              ? Color.themeColor
-              : Color.black}
+              color={
+                userRole == 'Qbid Member'
+                  ? Color.blue
+                  : userRole == 'Qbid Negotiator'
+                  ? Color.themeColor
+                  : Color.black
+              }
               style={styles.icon1}
               size={moderateScale(22, 0.6)}
             />
@@ -180,7 +207,7 @@ const Support = () => {
           </CustomText>
           <View style={{justifyContent: 'center', alignItems: 'center'}}>
             <TextInputWithTitle
-              titleText={'Your Name'}
+              title={'Your Name'}
               secureText={false}
               placeholder={'Your Name'}
               setText={setFullName}
@@ -190,12 +217,12 @@ const Support = () => {
               inputWidth={0.8}
               border={1}
               borderColor={Color.themeLightGray}
-              placeholderColor={Color.black}
-              marginTop={moderateScale(15, 0.3)}
+              placeholderColor={Color.veryLightGray}
+              // marginTop={moderateScale(10, 0.3)}
               backgroundColor={'#F5F5F5'}
             />
             <TextInputWithTitle
-              titleText={'Phone'}
+              title={'Phone'}
               secureText={false}
               placeholder={'Phone'}
               keyboardType={'numeric'}
@@ -205,13 +232,14 @@ const Support = () => {
               viewWidth={0.85}
               inputWidth={0.8}
               border={1}
-              placeholderColor={Color.black}
+              placeholderColor={Color.veryLightGray}
               borderColor={Color.themeLightGray}
               backgroundColor={'#F5F5F5'}
-              marginTop={moderateScale(15, 0.3)}
+              // marginTop={moderateScale(10, 0.3)}
             />
 
             <TextInputWithTitle
+              title={'Email'}
               titleText={'Email'}
               secureText={false}
               placeholder={'Email'}
@@ -220,14 +248,14 @@ const Support = () => {
               viewHeight={0.06}
               viewWidth={0.85}
               inputWidth={0.8}
-              marginTop={moderateScale(15, 0.3)}
+              // marginTop={moderateScale(10, 0.3)}
               border={1}
-              placeholderColor={Color.black}
+              placeholderColor={Color.veryLightGray}
               borderColor={Color.themeLightGray}
               backgroundColor={'#F5F5F5'}
             />
             <TextInputWithTitle
-              titleText={'Subject'}
+              title={'Subject'}
               secureText={false}
               placeholder={'Subject'}
               setText={setSubject}
@@ -235,53 +263,54 @@ const Support = () => {
               viewHeight={0.07}
               viewWidth={0.85}
               inputWidth={0.8}
-              marginTop={moderateScale(15, 0.3)}
+              // marginTop={moderateScale(10, 0.3)}
               border={1}
-              placeholderColor={Color.black}
+              placeholderColor={Color.veryLightGray}
               borderColor={Color.themeLightGray}
               backgroundColor={'#F5F5F5'}
             />
 
             <TextInputWithTitle
-              titleText={'Enter Description'}
+              title={'Description'}
               secureText={false}
               placeholder={'Enter Description'}
               setText={setMessage}
               value={message}
               viewHeight={0.15}
               viewWidth={0.85}
-              inputWidth={0.7}
+              inputWidth={0.75}
               inputHeight={0.1}
               border={1}
               borderColor={Color.themeLightGray}
               backgroundColor={'#F5F5F5'}
-              marginTop={moderateScale(20, 0.3)}
+              // marginTop={moderateScale(10, 0.3)}
               multiline={true}
               inputStyle={{textAlign: 'vertical'}}
               borderRadius={moderateScale(10, 0.3)}
-              placeholderColor={Color.black}
+              placeholderColor={Color.veryLightGray}
             />
             <CustomButton
               text={
                 loading ? (
                   <ActivityIndicator color={'#FFFFFF'} size={'small'} />
                 ) : (
-                  'Reset'
+                  'Send'
                 )
               }
+              fontSize={moderateScale(16,.6)}
               textColor={Color.white}
               width={windowWidth * 0.85}
               height={windowHeight * 0.06}
               marginTop={moderateScale(20, 0.3)}
-              // onPress={() => {
-              //   dispatch(setUserToken({token: 'dasdawradawdawrtfeasfzs'}));
-              // }}
+              onPress={() => {
+                sendQuestion();
+              }}
               bgColor={
                 userRole == 'Qbid Member'
-                ? Color.blue
-                : userRole == 'Qbid Negotiator'
-                ? Color.themeColor
-                : Color.black
+                  ? Color.blue
+                  : userRole == 'Qbid Negotiator'
+                  ? Color.themeColor
+                  : Color.black
               }
               // borderColor={Color.white}
               // borderWidth={2}

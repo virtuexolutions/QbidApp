@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, TouchableOpacity, FlatList, Platform, ToastAndroid, Alert} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity,  FlatList, Platform, ToastAndroid, Alert} from 'react-native';
 import React, {useRef, useState} from 'react';
 import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -13,37 +13,47 @@ import TextInputWithTitle from './TextInputWithTitle';
 import {Post} from '../Axios/AxiosInterceptorFunction';
 import {useSelector} from 'react-redux';
 import CustomButton from './CustomButton';
+import { ActivityIndicator } from 'react-native';
 
-const ReviewModal = ({ setRef}) => {
+const ReviewModal = ({setRef,rbRef, item}) => {
+  console.log("🚀 ~ file: ReviewModal.js:18 ~ ReviewModal ~ item:", item)
   const token = useSelector(state => state.authReducer.token);
   // console.log('🚀 ~ file: ReviewModal.js:17 ~ ReviewModal ~ token:', token);
-  const rbRef = useRef();
-  const [loading, setLoading] = useState();
-  const [review, setReview] = useState();
-  const [rating, setRating] = useState();
+  const [loading, setLoading] = useState(false);
+  const [review, setReview] = useState('');
+  const [rating, setRating] = useState(0);
 
   const sendReview = async () => {
     const url = 'auth/review';
     const body = {rating: rating, quote_id: item?.id, text: review};
-    for(let key in body){
-      if(body[key]==''){
-        return Platform.OS == 'android' ? ToastAndroid.show(`${key} is required`, ToastAndroid.SHORT): Alert.alert(`${key} is required`) 
+    for (let key in body) {
+      if (body[key] == '') {
+        return Platform.OS == 'android'
+          ? ToastAndroid.show(`${key} is required`, ToastAndroid.SHORT)
+          : Alert.alert(`${key} is required`);
       }
     }
     setLoading(true);
     const response = await Post(url, body, apiHeader(token));
     setLoading(false);
-    if (response == !undefined) {
-      console.log("🚀 ~ file: ReviewModal.js:31 ~ sendReview ~ response:", response?.data)
-      // console.log('first');
+    if (response?.data?.success) {
+      console.log(
+        '🚀 ~ file: ReviewModal.js:31 ~ sendReview ~ response:',
+        response?.data,
+      );
+      Platform.OS == 'android'? ToastAndroid.show('Review sent',ToastAndroid.SHORT) : Alert.alert('Review sent')
+        rbRef.close()
     }
   };
 
   return (
     <RBSheet
+    closeOnDragDown={true}
       ref={ref => setRef(ref)}
       height={450}
+      dragFromTopOnly={true}
       openDuration={250}
+      // closeOnPressMask={true}
       customStyles={{
         container: {
           borderTopRightRadius: 25,
@@ -71,11 +81,11 @@ const ReviewModal = ({ setRef}) => {
             paddingVertical: 20,
           }}>
           <AirbnbRating
-           reviews={[ "OK", "Good", "Very Good", "Wow", "Amazing", ]}
+            reviews={['OK', 'Good', 'Very Good', 'Wow', 'Amazing']}
             count={5}
             defaultRating={0}
             onFinishRating={rating => {
-              setRating(rating)
+              setRating(rating);
               // console.log('Rating====>>>>', rating);
             }}
           />
@@ -106,23 +116,19 @@ const ReviewModal = ({ setRef}) => {
           placeholderColor={Color.themeLightGray}
           borderRadius={moderateScale(25, 0.3)}
         />
-        
-             <CustomButton
-            text={
-             'send Review'
-            }
-            textColor={Color.white}
-            marginTop={moderateScale(2, 0.3)}
-            onPress={() => {
-             sendReview()
-            }}
-            bgColor={Color.blue}
-            borderRadius={moderateScale(30, 0.3)}
-            alignSelf={'flex-end'}
-            fontSize={moderateScale(9, 0.3)}
-          />
-          
-       
+
+        <CustomButton
+          text={loading ? <ActivityIndicator size={'small'}  color={'white'}/>:'send review'}
+          textColor={Color.white}
+          width={windowWidth * 0.55}
+          height={windowHeight * 0.08}
+          marginTop={moderateScale(15, 0.3)}
+          onPress={() => {sendReview()}}
+          bgColor={Color.themeColor}
+          borderRadius={moderateScale(30, 0.3)}
+          fontSize={moderateScale(15, 0.3)}
+          // marginTop={moderateScale(10,.3)}
+        />
       </View>
     </RBSheet>
   );

@@ -10,10 +10,7 @@ import CustomButton from './CustomButton';
 import { Post } from '../Axios/AxiosInterceptorFunction';
 import { useSelector } from 'react-redux';
 
-// import navigationService from '../navigationService';
-
 const Card = ({item}) => {
-  // console.log('🚀 ~ file: Card.js:11 ~ Card ~ item:', item);
   const token = useSelector(state=> state.authReducer.token)
   console.log('🚀 ~ file: Card.js:11 ~ Card ~ item:', item);
   const [modalVisible, setModalVisible] = useState(false);
@@ -25,11 +22,6 @@ const Card = ({item}) => {
     const response = await Post(url, {status: value}, apiHeader(token));
     setLoading(false);
     if (response != undefined) {
-      // console.log(
-      //   '🚀 ~ file: JobCard.js:31 ~ changeStatus ~ response:',
-      //   response?.data,
-      // );
-
       setModalVisible(false);
     }
   };
@@ -88,7 +80,6 @@ const Card = ({item}) => {
             width: windowWidth * 0.75,
             paddingVertical: moderateScale(20, 0.6),
             alignSelf: 'center',
-            // height: windowHeight * 0.35,
             borderRadius: moderateScale(15, 0.3),
             backgroundColor: Color.white,
             borderWidth: 2,
@@ -123,6 +114,7 @@ const Card = ({item}) => {
               }}
             />
           </View>
+          
           <CustomText
             style={{
               width: windowWidth * 0.9,
@@ -182,7 +174,6 @@ const Card = ({item}) => {
             kgflsdgkkrfgkrdfeojrieorfuioedprfu'wrueowoperjweorjikejfk
           </CustomText>
 
-          
           <CustomText
             style={{
               width: windowWidth * 0.9,
@@ -214,7 +205,6 @@ const Card = ({item}) => {
               fontSize={moderateScale(11, 0.6)}
               onPress={() => {
                 changeStatus('accept');
-                // setModalVisible(false);
               }}
             />
             <CustomButton
@@ -229,7 +219,6 @@ const Card = ({item}) => {
               fontSize={moderateScale(11, 0.6)}
               onPress={() => {
                 changeStatus('reject');
-                // setModalVisible(false);
               }}
             />
           </View>

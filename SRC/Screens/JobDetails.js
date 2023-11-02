@@ -74,13 +74,7 @@ const JobDetails = props => {
     setIsLoading(false);
 
     if (response != undefined) {
-      // console.log(
-      //   '🚀 ~ file: JobDetails.js:66 ~ bidDetails ~ response:',
-      //   response?.data?.quote_info,
-      //   user?.id
-        
-       
-      // );
+   
       const mainuserData = response?.data?.quote_info?.bids?.find(item => item.user_info?.id == user?.id);
       setData(response?.data?.quote_info);
 
@@ -92,16 +86,12 @@ const JobDetails = props => {
   };
 
   const changeStatus = async (value, id) => {
-    // console.log('Data id =====>>', data?.id);
     const url = `auth/member/bid/${id}`;
     setIsLoading(true);
     const response = await Post(url, {status: value}, apiHeader(token));
     setIsLoading(false);
     if (response != undefined) {
-    //  console.log(
-    //     '🚀 ~ file: BidderDetail.js:25 ~ changeStatus ~ response:',
-    //     response?.data,
-    //   );
+    
       bidDetails();
     }
   };
@@ -124,7 +114,6 @@ const JobDetails = props => {
           : Alert.alert(`${key} is required`);
       }
     }
-
 
     if (isNaN(number)) {
       return Platform.OS == 'android'
@@ -269,7 +258,7 @@ const JobDetails = props => {
                     }}>
                      {userRole == 'Qbid Member'
                       ? `${user?.email}`
-                      : `${data?.email}`}
+                      : `${data?.user_info?.email}`}
                   </CustomText>
                 </View>
                 <View

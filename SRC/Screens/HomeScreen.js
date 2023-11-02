@@ -44,122 +44,57 @@ const HomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
-  console.log("🚀 ~ file: HomeScreen.js:47 ~ HomeScreen ~ token:", token)
-  // console.log(
-  //   '🚀 ~ file: HomeScreen.js:20 ~ HomeScreen ~ servicesArray',
-  //   servicesArray,
-  // );
+
   const [searchData, setSearchData] = useState('');
-  // console.log("🚀 ~ file: HomeScreen.js:51 ~ HomeScreen ~ searchData:", searchData)
-  const [showFilter, setShowFilter] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
   const [showMultiImageModal, setShowMultiImageModal] = useState(false);
   const [multiImages, setMultiImages] = useState([]);
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedView, setSelectedView] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [submitLoading, setsubmitLoading] = useState(false);
   const isFocused = useIsFocused();
-  const [selectedService, setSelectedService] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
-  console.log("🚀 ~ file: HomeScreen.js:64 ~ HomeScreen ~ selectedStatus:", selectedStatus)
   const [visible, setVisible] = useState(false);
-  const [qbidName, setQbidName] = useState('');
-  const [qbidDetail, setQbidDetail] = useState('');
-  const [qbiddetail1, setQbidDetail1] = useState('');
   const [myQuotes, setMyQuotes] = useState([]);
-  
-  // console.log("🚀 ~ file: HomeScreen.js:72 ~ HomeScreen ~ myQuotes:", myQuotes[0]?.bids)
   const [proposals, setProposals] = useState([]);
-  console.log("🚀 ~ file: HomeScreen.js:73 ~ HomeScreen ~ proposals:", proposals)
+  const [modalVisible1, setModalVisible1] = useState(false)
+  const [modalVisible2, setModalVisible2] = useState(false)
+  const [modalVisible3, setModalVisible3] = useState(false)
+  const [selectedData1, setSelectedData1] = useState('')
+  const [selectedData2, setSelectedData2] = useState('')
+  const [selectedData3, setSelectedData3] = useState('')
 
- const getAllData =async()=>{
-setIsLoading(true)
-const  [response1 ,response2] =await Promise.all([
-  Get('auth/member/bid_help' ,token),
-  Get('auth/member/quote' ,token)
-])
-setIsLoading(false)
-if(response1 != undefined){
-   console.log("🚀 ~ file: HomeScreen.js:85 ~ getAllData ~ response1:", response1?.data)
-  setProposals(response1?.data?.bid_help_info?.data)
-}
-if(response2 != undefined){
-  setMyQuotes(response2?.data?.quote_info?.data)
-  // return console.log("🚀 ~ file: HomeScreen.js:90 ~ getAllData ~ response2:", response2?.data?.quote_info?.data)
-}
-
-
- }
-
-  const filterQuotes = async()=>{
-    const url = `auth/member/search_type/${selectedStatus}`
-    setIsLoading(true)
-    const response =  await Get(url, token)
-    setIsLoading(false)
-    if(response != undefined){
-      console.log("🚀 ~ file: HomeScreen.js:97 ~ filterQuotes ~ response:", response?.data)
-      setMyQuotes(response?.data?.quote_info)
+  const getAllData = async () => {
+    setIsLoading(true);
+    const [response1, response2] = await Promise.all([
+      Get('auth/member/bid_help', token),
+      Get('auth/member/quote', token),
+    ]);
+    setIsLoading(false);
+    if (response1 != undefined) {
+      setProposals(response1?.data?.bid_help_info?.data);
     }
-  }
-
-  const seekHelp = async () => {
-    const url = 'auth/member/bid_help';
-    const body = {
-      Qbid_name: qbidName,
-      service_type: qbidDetail,
-      description: qbiddetail1,
-    };
-    const formData = new FormData();
-    if(qbiddetail1.length < 100){
-      return Platform.OS == 'android'
-      ? ToastAndroid.show(`Description must be of 100 letters`, ToastAndroid.SHORT)
-      : Alert.alert(`Description must be of 100 letters`);
-
-    }
-    for (let key in body) {
-      if (body[key] == '') {
-        return Platform.OS == 'android'
-          ? ToastAndroid.show(`${key} is required`, ToastAndroid.SHORT)
-          : Alert.alert(`${key} is required`);
-      } else {
-        formData.append(key, body[key]);
-      }
-    }
-    if (multiImages.length == 0) {
-      return Platform.OS == 'android'
-        ? ToastAndroid.show(`Image is required`, ToastAndroid.SHORT)
-        : Alert.alert(`Image is required`);
-    } else {
-      multiImages?.map((item, index) => {
-        formData.append(`images[${index}]`, item);
-      });
-    }
-
-    // console.log('🚀 ~ file: HomeScreen.js:85 ~ seekHelp ~ formData:', formData);
-    setsubmitLoading(true);
-    const response = await Post(url, formData, apiHeader(token));
-    setsubmitLoading(false);
-
-    if (response != undefined) {
-      // console.log(
-      //   '🚀 ~ file: HomeScreen.js:91 ~ seekHelp ~ response:',
-      //   response?.data,
-      // );
-
-      toggleModal();
-      getAllData()
+    if (response2 != undefined) {
+      setMyQuotes(response2?.data?.quote_info?.data);
     }
   };
+
+  const filterQuotes = async () => {
+    const url = `auth/member/search_type/${selectedStatus}`;
+    setIsLoading(true);
+    const response = await Get(url, token);
+    setIsLoading(false);
+    if (response != undefined) {
+      setMyQuotes(response?.data?.quote_info);
+    }
+  };
+
+  
 
   useEffect(() => {
     getAllData();
   }, [isFocused]);
 
   useEffect(() => {
-    if(selectedStatus != ''){
-      filterQuotes()
+    if (selectedStatus != '') {
+      filterQuotes();
     }
   }, [selectedStatus]);
 
@@ -169,9 +104,9 @@ if(response2 != undefined){
     });
   }, []);
 
-  const toggleModal = () => {
-    setModalVisible(!modalVisible);
-  };
+  // const toggleModal = () => {
+  //   setModalVisible(!modalVisible);
+  // };
 
   return (
     <ScreenBoiler
@@ -200,6 +135,9 @@ if(response2 != undefined){
             style={{
               width: windowWidth * 0.93,
               flexDirection: 'row',
+              // backgroundColor:'green',
+              // justifyContent:'center',
+              paddingHorizontal: moderateScale(10, 0.6),
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
@@ -217,23 +155,347 @@ if(response2 != undefined){
               data={searchData}
               setData={setSearchData}
             />
-
-            <View
-              style={{width: windowWidth * 0.14, height: windowHeight * 0.06}}>
-              <CustomImage
-                source={require('../Assets/Images/Group.png')}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                }}
-                resizeMode="contain"
+            <Icon
+              name={'sound-mix'}
+              as={Entypo}
+              size={moderateScale(22, 0.3)}
+              color={Color.white}
+              onPress={() => {
+                setModalVisible1(true);
+              }}
+            />   
+          </View>
+          <View style={styles.row}>
+            <CustomText isBold style={styles.header}>
+              Proposals
+            </CustomText>
+            <CustomText
+              onPress={() => {
+                navigationService.navigate('SeeAllScreen', {
+                  type: 'negotiator',
+                  data:proposals
+                });
+              }}
+              style={styles.viewall}>
+              View all
+            </CustomText>
+            <Icon
+                name={'sound-mix'}
+                as={Entypo}
+                size={moderateScale(15, 0.3)}
+                color={Color.themeDarkGray}
                 onPress={() => {
-                  toggleModal();
+                  // setSelectedView('myqoutes');
+                  setModalVisible3(true);
+                }}
+              />
+          </View>
+
+          {isLoading ? (
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: windowHeight * 0.2,
+                width: windowWidth,
+              }}>
+              <ActivityIndicator size={'large'} color={'white'} />
+            </View>
+          ) : (
+            <FlatList
+              ListEmptyComponent={() => {
+                return (
+                 <NoData 
+                 style={{
+                  height:windowHeight*0.2,
+                  width : windowWidth*0.5,
+                  alignItems:'center'
+                 }}
+                 
+                 />
+                );
+              }}
+              data={[]}
+              // data={[]}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingHorizontal: moderateScale(15, 0.3),
+              }}
+              renderItem={({item, index}) => {
+                return <NegotiatorCard key={index} item={item} />;
+              }}
+            />
+          )}
+
+          <View
+            style={{
+              borderBottomWidth: 1,
+              borderColor: Color.lightGrey,
+              width: '95%',
+              marginTop: moderateScale(20, 0.3),
+            }}
+          />
+          <View style={styles.row}>
+            <CustomText style={styles.header} isBold>
+              My Quotes
+            </CustomText>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                width: windowWidth * 0.2,
+                marginRight: moderateScale(5, 0.3),
+              }}>
+              <CustomText
+                onPress={() => {
+                  navigationService.navigate('SeeAllScreen', {
+                    type: 'qoutes',
+                    data: myQuotes,
+                  });
+                }}
+                style={styles.viewall}>
+                View all
+              </CustomText>
+              <Icon
+                name={'sound-mix'}
+                as={Entypo}
+                size={moderateScale(15, 0.3)}
+                color={Color.themeDarkGray}
+                onPress={() => {
+                  // setSelectedView('myqoutes');
+                  setModalVisible3(true);
                 }}
               />
             </View>
+          </View>
+          {isLoading ? (
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: windowWidth,
+                height: windowHeight * 0.3,
+              }}>
+              <ActivityIndicator color={'white'} size={'large'} />
+            </View>
+          ) : (
+            <FlatList
+              ListEmptyComponent={() => {
+                return (
+                  <NoData
+                    style={{
+                      height: windowHeight * 0.2,
+                      width: windowWidth * 0.5,
+                      alignItems: 'center',
+                    }}
+                  />
+                );
+              }}
+              data={
+                myQuotes?.length > 5
+                  ? myQuotes.reverse().slice(0, 5)
+                  : myQuotes.reverse()
+              }
+              // data={[]}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingHorizontal: moderateScale(15, 0.3),
+                paddingTop: moderateScale(20, 0.3),
+              }}
+              renderItem={({item, index}) => {
+                // console.log("🚀 ~ file: HomeScreen.js:512 ~ HomeScreen ~ item:", item)
+                return <MyQouteCard item={item} key={index} />;
+              }}
+            />
+          )}
+        </ScrollView>
+      </LinearGradient>
+      <CustomStatusModal
+        isModalVisible={modalVisible1}
+        setModalVisible={setModalVisible1}
+        statusArray={[{name: 'negotiators'}, {name: 'Quotes'}]}
+        data={selectedStatus}
+        setData={setSelectedStatus}
+      /> 
+      <CustomStatusModal
+      isModalVisible={modalVisible2}
+      setModalVisible={setModalVisible2}
+      statusArray={[{name: 'Level 5'}, {name: 'level 4'}, {name: 'level 3'}]}
+      data={selectedStatus}
+      setData={setSelectedStatus}
+    />
+    <CustomStatusModal
+      isModalVisible={modalVisible3}
+      setModalVisible={setModalVisible3}
+      statusArray={[{name: 'Completed'}, {name: 'Pending'}, {name:'onGoing'}]}
+      data={selectedStatus}
+      setData={setSelectedStatus}
+    />
+      <CustomAlertModal
+        isModalVisible={visible}
+        onClose={() => {
+          setVisible(false);
+        }}
+        onOKPress={() => {
+          setVisible(false);
+          BackHandler.exitApp();
+        }}
+        title={'Are you sure !!'}
+        message={'You Want to exit the App ?'}
+        iconType={2}
+        areYouSureAlert
+      />
+    </ScreenBoiler>
+  );
+};
 
-            <Modal
+export default HomeScreen;
+
+const styles = ScaledSheet.create({
+  container: {
+    // height : windowHeight * 0.85,
+    width: windowWidth,
+    // backgroundColor: Color.themeColor,
+  },
+  header: {
+    color: Color.black,
+    fontSize: moderateScale(16, 0.3),
+
+    width: windowWidth * 0.6,
+  },
+  row: {
+    width: windowWidth,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: moderateScale(15, 0.3),
+    marginTop: moderateScale(15, 0.3),
+  },
+  viewall: {
+    fontSize: moderateScale(12, 0.3),
+    color: Color.black,
+  },
+  nodata: {
+    color: Color.white,
+    fontWeight: '500',
+    fontSize: 18,
+    position: 'absolute',
+    bottom: 0,
+    // marginTop:20
+  },
+});
+
+{
+  /* <FlatList
+      data={[{
+        companyName : 'ABC company',
+        fullName : 'john marco',
+        number : '12345678',
+        address : 'abc street newyork , USA',
+        email : 'john@gmail.com',
+        Qbid_member_name : 'Chris',
+        Qbid_member_email : 'chrisnevins@gmail.com',
+        contact : '+1(333)111-1111',
+        image : 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_960_720.jpg'
+      },
+      {
+        companyName : 'ABC company',
+        fullName : 'john marco',
+        number : '12345678',
+        address : 'abc street newyork , USA',
+        email : 'john@gmail.com',
+        Qbid_member_name : 'Chris',
+        Qbid_member_email : 'chrisnevins@gmail.com',
+        contact : '+1(333)333-1111',
+        image : 'https://media.istockphoto.com/id/1021170914/photo/beautiful-landscape-in-park-with-tree-and-green-grass-field-at-morning.jpg?s=612x612&w=is&k=20&c=Qd0K-pvuKcje8CGDcJkJ3UJzHbGtGYRw8wwcbno99O4='
+
+      },
+      {
+        companyName : 'ABC company',
+        fullName : 'john marco',
+        number : '12345678',
+        address : 'abc street newyork , USA',
+        email : 'john@gmail.com',
+        Qbid_member_name : 'Chris',
+        Qbid_member_email : 'chrisnevins@gmail.com',
+        contact : '+1(333)111-222',
+        image : 'https://media.istockphoto.com/id/1216579927/photo/colorful-sunset-scenery-on-open-field.jpg?s=612x612&w=is&k=20&c=qPm0H72LjrnQ22yWKPIycy6tCQsutL230c7-Ttl8_FU='
+
+
+      },
+    ]}
+      showsVerticalScrollIndicator ={false}
+      contentContainerStyle={{
+        paddingTop : moderateScale(20,0.3),
+        paddingBottom : moderateScale(50,0.3),
+
+      }}
+      renderItem={({item , index})=>{
+        return(
+          <BidDetailCard item={item} />
+        )
+      }}
+      /> */
+}
+
+{
+  /* <View style={styles.row}>
+            <CustomText isBold style={styles.header}>
+              Proposals
+            </CustomText>
+            <CustomText
+              onPress={() => {
+                navigationService.navigate('SeeAllScreen', {
+                  type: 'negotiator',
+                  data:proposals
+                });
+              }}
+              style={styles.viewall}>
+              View all
+            </CustomText>
+          </View>
+
+          {isLoading ? (
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: windowHeight * 0.2,
+                width: windowWidth,
+              }}>
+              <ActivityIndicator size={'large'} color={'white'} />
+            </View>
+          ) : (
+            <FlatList
+              ListEmptyComponent={() => {
+                return (
+                 <NoData 
+                 style={{
+                  height:windowHeight*0.2,
+                  width : windowWidth*0.5,
+                  alignItems:'center'
+                 }}
+                 
+                 />
+                );
+              }}
+              data={proposals}
+              // data={[]}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingHorizontal: moderateScale(15, 0.3),
+              }}
+              renderItem={({item, index}) => {
+                return <NegotiatorCard key={index} item={item} />;
+              }}
+            />
+          )} */
+}
+
+
+{/* <Modal
               isVisible={modalVisible}
               onBackdropPress={() => {
                 setModalVisible(false);
@@ -389,270 +651,4 @@ if(response2 != undefined){
                   />
                 </View>
               </View>
-            </Modal>
-            {/* <Icon
-              name={'sound-mix'}
-              as={Entypo}
-              size={moderateScale(22, 0.3)}
-              color={Color.themeDarkGray}
-              onPress={() => {
-                setSelectedView('negotiator');
-                setIsModalVisible(true);
-              }}
-            /> */}
-          </View>
-          <View style={styles.row}>
-            <CustomText isBold style={styles.header}>
-              Proposals
-            </CustomText>
-            <CustomText
-              onPress={() => {
-                navigationService.navigate('SeeAllScreen', {
-                  type: 'negotiator',
-                  data:proposals
-                });
-              }}
-              style={styles.viewall}>
-              View all
-            </CustomText>
-          </View>
-
-          {isLoading ? (
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: windowHeight * 0.2,
-                width: windowWidth,
-              }}>
-              <ActivityIndicator size={'large'} color={'white'} />
-            </View>
-          ) : (
-            <FlatList
-              ListEmptyComponent={() => {
-                return (
-                 <NoData 
-                 style={{
-                  height:windowHeight*0.2,
-                  width : windowWidth*0.5,
-                  alignItems:'center'
-                 }}
-                 
-                 />
-                );
-              }}
-              data={proposals}
-              // data={[]}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{
-                paddingHorizontal: moderateScale(15, 0.3),
-              }}
-              renderItem={({item, index}) => {
-                return <NegotiatorCard key={index} item={item} />;
-              }}
-            />
-          )}
-          <View
-            style={{
-              borderBottomWidth: 1,
-              borderColor: Color.lightGrey,
-              width: '95%',
-              marginTop: moderateScale(20, 0.3),
-            }}
-          />
-          <View style={styles.row}>
-            <CustomText style={styles.header} isBold>
-              My Quotes
-            </CustomText>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                width: windowWidth * 0.2,
-                marginRight: moderateScale(5, 0.3),
-              }}>
-              <CustomText
-                onPress={() => {
-                  navigationService.navigate('SeeAllScreen', {
-                    type: 'qoutes',
-                    data: myQuotes,
-                  });
-                }}
-                style={styles.viewall}>
-                View all
-              </CustomText>
-              <Icon
-                name={'sound-mix'}
-                as={Entypo}
-                size={moderateScale(15, 0.3)}
-                color={Color.themeDarkGray}
-                onPress={() => {
-                  setSelectedView('myqoutes');
-                  setIsModalVisible(true);
-                }}
-              />
-            </View>
-          </View>
-          {isLoading ? (
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                width: windowWidth,
-                height: windowHeight * 0.3,
-              }}>
-              <ActivityIndicator color={'white'} size={'large'} />
-            </View>
-          ) : (
-            <FlatList
-            ListEmptyComponent={() => {
-              return (
-               <NoData 
-               style={{
-                height:windowHeight*0.2,
-                width : windowWidth*0.5,
-                alignItems:'center'
-               }}
-               
-               />
-              );
-            }}
-              data={myQuotes?.length > 5 ? myQuotes.reverse().slice(0, 5) : myQuotes.reverse()}
-              // data={[]}
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={{
-                paddingHorizontal: moderateScale(15, 0.3),
-                paddingTop: moderateScale(20, 0.3),
-              }}
-              renderItem={({item, index}) => {
-                // console.log("🚀 ~ file: HomeScreen.js:512 ~ HomeScreen ~ item:", item)
-                return <MyQouteCard item={item} key={index} />;
-              }}
-            />
-          )}
-        </ScrollView>
-      </LinearGradient>
-      <CustomStatusModal
-        isModalVisible={isModalVisible}
-        setModalVisible={setIsModalVisible}
-        statusArray={
-          selectedView == 'negotiator'
-            ? servicesArray
-            : [
-                {name: 'completed'},
-                {name: 'onGoing'},
-                {name: 'pending'},
-              ]
-        }
-        data={selectedView == 'negotiator' ? selectedService : selectedStatus}
-        setData={
-          selectedView == 'negotiator' ? setSelectedService : setSelectedStatus
-        }
-      />
-      <CustomAlertModal
-        isModalVisible={visible}
-        onClose={() => {
-          setVisible(false);
-        }}
-        onOKPress={() => {
-          setVisible(false);
-          BackHandler.exitApp();
-        }}
-        title={'Are you sure !!'}
-        message={'You Want to exit the App ?'}
-        iconType={2}
-        areYouSureAlert
-      />
-    </ScreenBoiler>
-  );
-};
-
-export default HomeScreen;
-
-const styles = ScaledSheet.create({
-  container: {
-    // height : windowHeight * 0.85,
-    width: windowWidth,
-    // backgroundColor: Color.themeColor,
-  },
-  header: {
-    color: Color.black,
-    fontSize: moderateScale(16, 0.3),
-
-    width: windowWidth * 0.6,
-  },
-  row: {
-    width: windowWidth,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: moderateScale(15, 0.3),
-    marginTop: moderateScale(15, 0.3),
-  },
-  viewall: {
-    fontSize: moderateScale(12, 0.3),
-    color: Color.black,
-  },
-  nodata: {
-    color: Color.white,
-    fontWeight: '500',
-    fontSize: 18,
-    position: 'absolute',
-    bottom: 0,
-    // marginTop:20
-  },
-});
-
-{
-  /* <FlatList
-      data={[{
-        companyName : 'ABC company',
-        fullName : 'john marco',
-        number : '12345678',
-        address : 'abc street newyork , USA',
-        email : 'john@gmail.com',
-        Qbid_member_name : 'Chris',
-        Qbid_member_email : 'chrisnevins@gmail.com',
-        contact : '+1(333)111-1111',
-        image : 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_960_720.jpg'
-      },
-      {
-        companyName : 'ABC company',
-        fullName : 'john marco',
-        number : '12345678',
-        address : 'abc street newyork , USA',
-        email : 'john@gmail.com',
-        Qbid_member_name : 'Chris',
-        Qbid_member_email : 'chrisnevins@gmail.com',
-        contact : '+1(333)333-1111',
-        image : 'https://media.istockphoto.com/id/1021170914/photo/beautiful-landscape-in-park-with-tree-and-green-grass-field-at-morning.jpg?s=612x612&w=is&k=20&c=Qd0K-pvuKcje8CGDcJkJ3UJzHbGtGYRw8wwcbno99O4='
-
-      },
-      {
-        companyName : 'ABC company',
-        fullName : 'john marco',
-        number : '12345678',
-        address : 'abc street newyork , USA',
-        email : 'john@gmail.com',
-        Qbid_member_name : 'Chris',
-        Qbid_member_email : 'chrisnevins@gmail.com',
-        contact : '+1(333)111-222',
-        image : 'https://media.istockphoto.com/id/1216579927/photo/colorful-sunset-scenery-on-open-field.jpg?s=612x612&w=is&k=20&c=qPm0H72LjrnQ22yWKPIycy6tCQsutL230c7-Ttl8_FU='
-
-
-      },
-    ]}
-      showsVerticalScrollIndicator ={false}
-      contentContainerStyle={{
-        paddingTop : moderateScale(20,0.3),
-        paddingBottom : moderateScale(50,0.3),
-
-      }}
-      renderItem={({item , index})=>{
-        return(
-          <BidDetailCard item={item} />
-        )
-      }}
-      /> */
-}
+            </Modal> */}

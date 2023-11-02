@@ -72,19 +72,16 @@ const NegotiatorHomeScreen = () => {
     setIsLoading(false);
 
     if (response1 != undefined) {
-      //  console.log("🚀 ~ file: NegotiatorHomeScreen.js:66 ~ getProposal ~ response1:", response1?.data)
 
       ![null, undefined, ''].includes(response2?.data?.quote_info) &&
         setRecommended(response1?.data?.quote_info?.data);
     }
     if (response2 != undefined) {
-      // console.log("🚀 ~ file: NegotiatorHomeScreen.js:72 ~ getProposal ~ response2:", response2?.data)
 
       ![null, undefined, ''].includes(response2?.data?.quote_info) &&
         setWorking(response2?.data?.quote_info?.data);
     }
     if (response3 != undefined) {
-      // console.log("🚀 ~ file: NegotiatorHomeScreen.js:75 ~ getProposal ~ response3:", response3?.data)
 
       ![null, undefined, ''].includes(response2?.data?.quote_info) &&
         setSeekingHelp(response3?.data?.bid_help_info?.data);
@@ -121,7 +118,6 @@ const NegotiatorHomeScreen = () => {
           ? Color.themeBgColorNegotiator
           : Color.themebgBusinessQbidder
       }
-      //  showBack={true}
     >
       <LinearGradient
         style={{
@@ -142,7 +138,7 @@ const NegotiatorHomeScreen = () => {
           style={styles.container}
           contentContainerStyle={{
             alignItems: 'center',
-            paddingBottom: moderateScale(60, 0.3),
+            paddingBottom: moderateScale(80, 0.3),
             paddingTop: moderateScale(40, 0.3),
           }}>
           <View
@@ -407,7 +403,7 @@ const NegotiatorHomeScreen = () => {
                   }}
                 />
               </View>
-              <View style={styles.recommendedContainer}>
+              {/* <View style={styles.recommendedContainer}>
                 <View style={styles.row}>
                   <CustomText isBold style={styles.heading}>
                     Seeking Help
@@ -453,7 +449,7 @@ const NegotiatorHomeScreen = () => {
                     return <Card item={item} key={index} />;
                   }}
                 />
-              </View>
+              </View> */}
             </>
           )}
         </ScrollView>

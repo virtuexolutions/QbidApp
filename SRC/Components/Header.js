@@ -79,11 +79,13 @@ const Header = props => {
             name={'arrowleft'}
             as={AntDesign}
             size={moderateScale(22, 0.3)}
-            color={ userRole == 'Qbid Member'
-            ? Color.blue
-            :userRole == 'Qbid Negotiator'
-            ? Color.themeColor
-            : Color.black}
+            color={
+              userRole == 'Qbid Member'
+                ? Color.blue
+                : userRole == 'Qbid Negotiator'
+                ? Color.themeColor
+                : Color.black
+            }
             onPress={() => {
               navigationN.goBack();
             }}
@@ -117,7 +119,9 @@ const Header = props => {
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={() => {
-            navigationN.navigate('MyAccounts');
+            userRole == 'Qbid Member'
+              ? navigationN.navigate('MyAccounts')
+              : navigationN.navigate('NegotiatorPortfolio');
           }}
           style={{
             width: moderateScale(40, 0.3),
@@ -128,7 +132,9 @@ const Header = props => {
           }}>
           <CustomImage
             onPress={() => {
-              navigationN.navigate('MyAccounts');
+              userRole == 'Qbid Member'
+                ? navigationN.navigate('MyAccounts')
+                : navigationN.navigate('NegotiatorPortfolio');
             }}
             source={
               user?.photo

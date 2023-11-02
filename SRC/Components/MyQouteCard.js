@@ -30,13 +30,13 @@ const MyQouteCard = ({item}) => {
   // console.log('🚀 ~ file: MyQouteCard.js:14 ~ MyQouteCard ~ item:', item);
   const [modalVisible, setModalVisible] = useState(false);
   const [cmpLoading, setCmpLoading] = useState(false);
-  const [ref, setRef] = useState(null);
+  const [rbRef, setRbRef] = useState(null);
   const [buttonName, setbuttonName] = useState(
     item?.status == 'onGoing'
       ? 'Complete'
       : item?.status == 'completed' && [0, undefined].includes(item?.rating)
       ? 'Review'
-      : 'Hire Again',
+      : '',
   );
 
   const markCompleted = async () => {
@@ -211,7 +211,7 @@ const MyQouteCard = ({item}) => {
             textColor={Color.white}
             marginTop={moderateScale(2, 0.3)}
             onPress={() => {
-              item?.status == 'completed' && ref.open();
+              item?.status == 'completed' && rbRef.open();
               item?.status == 'onGoing' && markCompleted();
             }}
             bgColor={Color.blue}
@@ -221,7 +221,7 @@ const MyQouteCard = ({item}) => {
           />
         )}
       </View>
-      <ReviewModal setRef={setRef} />
+      <ReviewModal setRef={setRbRef} item={item} rbRef={rbRef} />
     </TouchableOpacity>
   );
 };

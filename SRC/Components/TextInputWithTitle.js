@@ -230,7 +230,7 @@ const styles = ScaledSheet.create({
     borderRadius: 8,
     fontSize: moderateScale(12, 0.3),
     textAlign: I18nManager.isRTL ? 'right' : 'left',
-    color: Color.themeLightGray,
+    color: Color.black,
   },
 });
 export default TextInputWithTitle;
