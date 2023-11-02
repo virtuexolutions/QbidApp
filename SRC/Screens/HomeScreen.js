@@ -173,7 +173,7 @@ if(response2 != undefined){
   const toggleModal = () => {
     setModalVisible(!modalVisible);
   };
-  const demyarray =[
+  const dummyarray =[
     {
       image:require('../Assets/Images/man2.jpg'),
     title:'walter A. Jones',
@@ -457,7 +457,7 @@ if(response2 != undefined){
                 );
               }}
               // data={proposals}
-              data={demyarray}
+              data={dummyarray}
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{

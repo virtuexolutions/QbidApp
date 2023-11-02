@@ -94,19 +94,19 @@ const NegotiatorPortfolio = () => {
       name:'john',
       image: require('../Assets/Images/man1.jpg'),
       comment: 'hello every one',
-      time: '3:00',
+     
     },
     {
       name:'john',
       image: require('../Assets/Images/man1.jpg'),
       comment: 'hhfjshdfjhskdfhjkshd',
-      time: '3:00',
+    
     },
     {
       name:'john',
       image: require('../Assets/Images/man1.jpg'),
       comment: 'hello eltjikrejti reauthu ierterhtrtvery one',
-      time: '3:00',
+      
     },
   ];
   return (
