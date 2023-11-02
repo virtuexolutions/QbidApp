@@ -1,4 +1,12 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Alert,
+  Platform,
+  StyleSheet,
+  Text,
+  ToastAndroid,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
 import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
 import {moderateScale} from 'react-native-size-matters';
@@ -23,14 +31,13 @@ const MyQouteCard = ({item}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [cmpLoading, setCmpLoading] = useState(false);
   const [ref, setRef] = useState(null);
-const [buttonName, setbuttonName] = useState(item?.status == 'onGoing' ? (
-  'Complete'
-) : item?.status == 'completed' &&
-  [0, undefined].includes(item?.rating) ? (
-  'Review'
-) : (
-  'Hire Again'
-))
+  const [buttonName, setbuttonName] = useState(
+    item?.status == 'onGoing'
+      ? 'Complete'
+      : item?.status == 'completed' && [0, undefined].includes(item?.rating)
+      ? 'Review'
+      : 'Hire Again',
+  );
 
   const markCompleted = async () => {
     const url = `auth/member/update_status/${item?.id}`;
@@ -42,7 +49,10 @@ const [buttonName, setbuttonName] = useState(item?.status == 'onGoing' ? (
         '🚀 ~ file: MyQouteCard.js:30 ~ markCompleted ~ response:',
         response?.data,
       );
-      setbuttonName('Review')
+      Platform.OS == 'android'
+        ? ToastAndroid.show('Order has been completed', ToastAndroid.SHORT)
+        : Alert.alert('Order has been completed');
+      setbuttonName('Review');
     }
   };
 
@@ -94,7 +104,8 @@ const [buttonName, setbuttonName] = useState(item?.status == 'onGoing' ? (
           overflow: 'hidden',
         }}>
         <CustomImage
-          source={ require('../Assets/Images/dummyman2.png')
+          source={
+            require('../Assets/Images/dummyman2.png')
             // item?.status == 'pending'
             //   ? {uri: item?.images[0]?.image}
             //   : item?.negotiatorImage
@@ -193,7 +204,9 @@ const [buttonName, setbuttonName] = useState(item?.status == 'onGoing' ? (
             text={
               cmpLoading ? (
                 <ActivityIndicator size={'small'} color={'white'} />
-              ) : buttonName
+              ) : (
+                buttonName
+              )
             }
             textColor={Color.white}
             marginTop={moderateScale(2, 0.3)}

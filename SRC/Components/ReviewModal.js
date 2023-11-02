@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, TouchableOpacity, FlatList} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, FlatList, Platform, ToastAndroid, Alert} from 'react-native';
 import React, {useRef, useState} from 'react';
 import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -12,6 +12,7 @@ import {AirbnbRating} from 'react-native-ratings';
 import TextInputWithTitle from './TextInputWithTitle';
 import {Post} from '../Axios/AxiosInterceptorFunction';
 import {useSelector} from 'react-redux';
+import CustomButton from './CustomButton';
 
 const ReviewModal = ({ setRef}) => {
   const token = useSelector(state => state.authReducer.token);
@@ -24,10 +25,16 @@ const ReviewModal = ({ setRef}) => {
   const sendReview = async () => {
     const url = 'auth/review';
     const body = {rating: rating, quote_id: item?.id, text: review};
+    for(let key in body){
+      if(body[key]==''){
+        return Platform.OS == 'android' ? ToastAndroid.show(`${key} is required`, ToastAndroid.SHORT): Alert.alert(`${key} is required`) 
+      }
+    }
     setLoading(true);
     const response = await Post(url, body, apiHeader(token));
     setLoading(false);
     if (response == !undefined) {
+      console.log("🚀 ~ file: ReviewModal.js:31 ~ sendReview ~ response:", response?.data)
       // console.log('first');
     }
   };
@@ -64,6 +71,7 @@ const ReviewModal = ({ setRef}) => {
             paddingVertical: 20,
           }}>
           <AirbnbRating
+           reviews={[ "OK", "Good", "Very Good", "Wow", "Amazing", ]}
             count={5}
             defaultRating={0}
             onFinishRating={rating => {
@@ -98,19 +106,23 @@ const ReviewModal = ({ setRef}) => {
           placeholderColor={Color.themeLightGray}
           borderRadius={moderateScale(25, 0.3)}
         />
-        <TouchableOpacity
-          // onPress={()=>
-          // }
-          style={{
-            backgroundColor: Color.themeColor,
-            width: windowWidth * 0.7,
-            padding: moderateScale(20, 0.3),
-            borderRadius: moderateScale(30, 0.3),
-            alignItems: 'center',
-            marginVertical: 30,
-          }}>
-          <CustomText style={styles.btnText}>Send review</CustomText>
-        </TouchableOpacity>
+        
+             <CustomButton
+            text={
+             'send Review'
+            }
+            textColor={Color.white}
+            marginTop={moderateScale(2, 0.3)}
+            onPress={() => {
+             sendReview()
+            }}
+            bgColor={Color.blue}
+            borderRadius={moderateScale(30, 0.3)}
+            alignSelf={'flex-end'}
+            fontSize={moderateScale(9, 0.3)}
+          />
+          
+       
       </View>
     </RBSheet>
   );

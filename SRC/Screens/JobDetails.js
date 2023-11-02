@@ -390,10 +390,10 @@ const JobDetails = props => {
                       paddingBottom: moderateScale(30, 0.6),
                     }}
                     renderItem={({item, index}) => {
-                      // console.log(
-                      //   '🚀 ~ file: JobDetails.js:349 ~ JobDetails ~ item:',
-                      //   item?.id,
-                      // );
+                      console.log(
+                        '🚀 ~ file: JobDetails.js:349 ~ JobDetails ~ item:',
+                        item?.status,
+                      );
                       return (
                         <>
                           <BidderDetail
@@ -406,7 +406,7 @@ const JobDetails = props => {
                               id: item?.id,
                             }}
                           />
-                          {data?.status == 'pending' && (
+                          {data?.status == 'pending' && item?.status =='pending' && (
                             <View
                               key={index}
                               style={{
