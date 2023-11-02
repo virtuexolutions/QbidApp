@@ -67,7 +67,7 @@ const AppNavigator = () => {
     return (
       <NavigationContainer ref={navigationService.navigationRef}>
         <RootNav.Navigator
-          initialRouteName={'Signup'}
+          initialRouteName={firstScreen}
           screenOptions={{headerShown: false}}>
           <RootNav.Screen name="MileRange" component={MileRange} />
           <RootNav.Screen name="Walkthrough" component={Walkthrough} />

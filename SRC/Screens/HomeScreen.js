@@ -39,6 +39,7 @@ import {Get, Post} from '../Axios/AxiosInterceptorFunction';
 import {useIsFocused} from '@react-navigation/native';
 import Lottie from 'lottie-react-native';
 import NoData from '../Components/NoData';
+import VendorCards from '../Components/VendorCards';
 
 const HomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
@@ -172,6 +173,20 @@ if(response2 != undefined){
   const toggleModal = () => {
     setModalVisible(!modalVisible);
   };
+  const demyarray =[
+    {
+      image:require('../Assets/Images/man2.jpg'),
+    title:'walter A. Jones',
+    subtitle:'jbhdfghjdgfh',
+    description:'kjadfhajkhdfjkhabvdmnabvnbanvbakeyrjaehjhityuireykdnvm,nvm,nacvhfghfjafbghfpwieroweihhr'
+    },
+    {
+      image:require('../Assets/Images/man2.jpg'),
+    title:'walter A. Jones',
+    subtitle:'jbhdfghjdgfh',
+    description:'kjadfhajkhdfjkhabvdmnabvnbanvbakeyrjaehjhityuireykdnvm,nvm,nacvhfghfjafbghfpwieroweihhr'
+    }
+  ]
 
   return (
     <ScreenBoiler
@@ -403,7 +418,7 @@ if(response2 != undefined){
           </View>
           <View style={styles.row}>
             <CustomText isBold style={styles.header}>
-              Proposals
+              negotiator
             </CustomText>
             <CustomText
               onPress={() => {
@@ -441,15 +456,17 @@ if(response2 != undefined){
                  />
                 );
               }}
-              data={proposals}
-              // data={[]}
+              // data={proposals}
+              data={demyarray}
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{
                 paddingHorizontal: moderateScale(15, 0.3),
+                paddingTop:moderateScale(10,0.3)
               }}
               renderItem={({item, index}) => {
-                return <NegotiatorCard key={index} item={item} />;
+               return  <VendorCards item={item}/>
+                // return <NegotiatorCard key={index} item={item} />;
               }}
             />
           )}
