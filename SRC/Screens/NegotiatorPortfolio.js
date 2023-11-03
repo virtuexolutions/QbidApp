@@ -1,11 +1,15 @@
 import {
+  FlatList,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
+  Platform,
   View,
+  Alert,
+  ToastAndroid,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import LinearGradient from 'react-native-linear-gradient';
@@ -35,21 +39,23 @@ import CustomDropDownMultiSelect from '../Components/CustomDropDownMultiSelect';
 import {useNavigation} from '@react-navigation/native';
 import {AirbnbRating} from 'react-native-ratings';
 import moment from 'moment';
-import {Post} from '../Axios/AxiosInterceptorFunction';
-import {Platform} from 'react-native';
-import {ToastAndroid} from 'react-native';
-import {Alert} from 'react-native';
 
-const NegotiatorPortfolio = () => {
+import {Post, Get} from '../Axios/AxiosInterceptorFunction';
+
+const NegotiatorPortfolio = props => {
+  const fromSearch = props?.route?.params?.fromSearch;
+  const item = props?.route?.params?.item;
+  console.log(
+    '🚀 ~ file: NegotiatorPortfolio.js:44 ~ NegotiatorPortfolio ~ item:',
+    item,
+  );
   const navigation = useNavigation();
   const userdata = useSelector(state => state.commonReducer.userData);
-  console.log(
-    '🚀 ~ file: NegotiatorPortfolio.js:40 ~ NegotiatorPortfolio ~ userdata:',
-    userdata,
-  );
+
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
-  const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
+
+  const userRole = useSelector(state => state.commonReducer.selectedRole);
   const [image, setImage] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [coverPhoto, setCoverPhoto] = useState({});
@@ -60,25 +66,77 @@ const NegotiatorPortfolio = () => {
   const [availibility, setAvailibility] = useState(false);
 
   const [firstName, setFirstName] = useState(
-    userdata?.first_name ? userdata?.first_name : '',
+    fromSearch
+      ? item?.first_name
+        ? item?.first_name
+        : 'not available'
+      : userdata?.first_name
+      ? userdata?.first_name
+      : '',
   );
   const [lastName, setLastName] = useState(
-    userdata?.last_name ? userdata?.last_name : '',
+    fromSearch
+      ? item?.last_name
+        ? item?.last_name
+        : 'not availble'
+      : userdata?.last_name
+      ? userdata?.last_name
+      : '',
   );
   const [companyName, setCompanyName] = useState(
-    userdata?.company_name ? userdata?.company_name : '',
+    fromSearch
+      ? item?.company_name
+        ? item?.company_name
+        : 'not available'
+      : userdata?.company_name
+      ? userdata?.company_name
+      : '',
   );
   const [jobStatus, setJobStatus] = useState(
-    userdata?.status ? userdata?.status : '',
+    fromSearch
+      ? item?.job_status
+        ? item?.job_status
+        : 'not available'
+      : userdata?.status
+      ? userdata?.status
+      : '',
+  ); //for negotiator
+  const [email, setEmail] = useState(
+    fromSearch
+      ? item?.email
+        ? item?.emial
+        : 'not available'
+      : userdata?.email
+      ? userdata?.email
+      : '',
   );
-  const [email, setEmail] = useState(userdata?.email ? userdata?.email : '');
   const [contact, setContact] = useState(
-    userdata?.phone ? userdata?.phone : '',
+    fromSearch
+      ? item?.phone
+        ? item?.phone
+        : 'not available'
+      : userdata?.phone
+      ? userdata?.phone
+      : '',
   );
   const [address, setAddress] = useState(
-    userdata?.address ? userdata?.address : '',
+    fromSearch
+      ? item?.address
+        ? item?.address
+        : 'not available'
+      : userdata?.address
+      ? userdata?.address
+      : '',
   );
-  const [city, setCity] = useState(userdata?.city ? userdata?.city : '');
+  const [city, setCity] = useState(
+    fromSearch
+      ? item?.city
+        ? item?.city
+        : 'not availble'
+      : userdata?.city
+      ? userdata?.city
+      : '',
+  );
   const [state, setState] = useState(userdata?.state ? userdata?.state : '');
   const [zipCode, setZipCode] = useState(userdata?.zip ? userdata?.zip : '');
   const [services, setServices] = useState(
@@ -89,6 +147,7 @@ const NegotiatorPortfolio = () => {
   );
 
   const [isLoading, setIsLoading] = useState(false);
+  const [review, setReview] = useState('');
 
   const updateProfile = async () => {
     const url = 'auth/negotiator/profile_update';
@@ -117,16 +176,25 @@ const NegotiatorPortfolio = () => {
         : Alert.alert(`Enter a valid zipcode`);
     }
 
-    console.log(
-      '🚀 ~ file: NegotiatorPortfolio.js:107 ~ updateProfile ~ body:',
-      body,
-    );
     setIsLoading(true);
     const response = await Post(url, body, apiHeader(token));
     setIsLoading(false);
     if (response?.data?.success) {
-      
-      setEditProfile(false)
+      setEditProfile(false);
+    }
+  };
+
+  const reviews = async () => {
+    const url = 'auth/review';
+    setIsLoading(true);
+    const response = await Get('auth/review', token);
+    console.log(
+      '🚀 ~ file: NegotiatorPortfolio.js:105 ~ reviews ~ response:',
+      response?.data,
+    );
+    setIsLoading(false);
+    if (response != undefined) {
+      setReview();
     }
   };
 
@@ -135,21 +203,22 @@ const NegotiatorPortfolio = () => {
       name: 'john',
       image: require('../Assets/Images/man1.jpg'),
       comment: 'hello every one',
-      time: '3:00',
     },
     {
       name: 'john',
       image: require('../Assets/Images/man1.jpg'),
       comment: 'hhfjshdfjhskdfhjkshd',
-      time: '3:00',
     },
     {
       name: 'john',
       image: require('../Assets/Images/man1.jpg'),
       comment: 'hello eltjikrejti reauthu ierterhtrtvery one',
-      time: '3:00',
     },
   ];
+  useEffect(() => {
+    reviews();
+  }, []);
+
   return (
     <ScreenBoiler
       showHeader={true}
@@ -396,7 +465,9 @@ const NegotiatorPortfolio = () => {
               <DetailContainer
                 imageName={'briefcase'}
                 type={Entypo}
-                subtitle={userdata?.numb_jobs_done ?userdata?.numb_jobs_done : 0 }
+                subtitle={
+                  userdata?.numb_jobs_done ? userdata?.numb_jobs_done : 0
+                }
                 title={'Jobs'}
               />
               <DetailContainer
@@ -491,45 +562,46 @@ const NegotiatorPortfolio = () => {
                 color: Color.black,
                 fontSize: moderateScale(17, 0.6),
                 textTransform: 'uppercase',
-                marginTop: moderateScale(10, 0.6),
+                // marginTop: moderateScale(10, 0.6),
               }}>
               Expertise
             </CustomText>
-            {JSON.parse(userdata?.expertise).map((x, index) => {
-              return (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    width: '100%',
-                    alignItems: 'center',
-                    marginTop: moderateScale(7, 0.3),
-                    paddingLeft: moderateScale(15, 0.6),
-                  }}>
+            {userdata?.expertise &&
+              JSON.parse(userdata?.expertise).map((x, index) => {
+                return (
                   <View
                     style={{
-                      width: moderateScale(7, 0.6),
-                      height: moderateScale(7, 0.6),
-                      borderRadius: moderateScale(3.5, 0.6),
-                      backgroundColor:
-                        userRole == 'Qbid Member'
-                          ? Color.blue
-                          : userRole == 'Qbid Negotiator'
-                          ? Color.themeColor
-                          : Color.black,
-                    }}
-                  />
-                  <CustomText
-                    numberOfLines={2}
-                    style={{
-                      fontSize: moderateScale(11, 0.6),
-                      color: Color.black,
-                      marginLeft: moderateScale(3, 0.3),
+                      flexDirection: 'row',
+                      width: '100%',
+                      alignItems: 'center',
+                      marginTop: moderateScale(7, 0.3),
+                      paddingLeft: moderateScale(15, 0.6),
                     }}>
-                    {x}
-                  </CustomText>
-                </View>
-              );
-            })}
+                    <View
+                      style={{
+                        width: moderateScale(7, 0.6),
+                        height: moderateScale(7, 0.6),
+                        borderRadius: moderateScale(3.5, 0.6),
+                        backgroundColor:
+                          userRole == 'Qbid Member'
+                            ? Color.blue
+                            : userRole == 'Qbid Negotiator'
+                            ? Color.themeColor
+                            : Color.black,
+                      }}
+                    />
+                    <CustomText
+                      numberOfLines={2}
+                      style={{
+                        fontSize: moderateScale(11, 0.6),
+                        color: Color.black,
+                        marginLeft: moderateScale(3, 0.3),
+                      }}>
+                      {x}
+                    </CustomText>
+                  </View>
+                );
+              })}
             <CustomText
               isBold
               style={{
@@ -540,41 +612,42 @@ const NegotiatorPortfolio = () => {
               }}>
               Languages
             </CustomText>
-            {JSON.parse(userdata?.language).map((x, index) => {
-              return (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    width: '100%',
-                    alignItems: 'center',
-                    marginTop: moderateScale(7, 0.3),
-                    paddingLeft: moderateScale(15, 0.6),
-                  }}>
+            {userdata?.language &&
+              JSON.parse(userdata?.language).map((x, index) => {
+                return (
                   <View
                     style={{
-                      width: moderateScale(7, 0.6),
-                      height: moderateScale(7, 0.6),
-                      borderRadius: moderateScale(3.5, 0.6),
-                      backgroundColor:
-                        userRole == 'Qbid Member'
-                          ? Color.blue
-                          : userRole == 'Qbid Negotiator'
-                          ? Color.themeColor
-                          : Color.black,
-                    }}
-                  />
-                  <CustomText
-                    numberOfLines={2}
-                    style={{
-                      fontSize: moderateScale(11, 0.6),
-                      color: Color.black,
-                      marginLeft: moderateScale(3, 0.3),
+                      flexDirection: 'row',
+                      width: '100%',
+                      alignItems: 'center',
+                      marginTop: moderateScale(7, 0.3),
+                      paddingLeft: moderateScale(15, 0.6),
                     }}>
-                    {x}
-                  </CustomText>
-                </View>
-              );
-            })}
+                    <View
+                      style={{
+                        width: moderateScale(7, 0.6),
+                        height: moderateScale(7, 0.6),
+                        borderRadius: moderateScale(3.5, 0.6),
+                        backgroundColor:
+                          userRole == 'Qbid Member'
+                            ? Color.blue
+                            : userRole == 'Qbid Negotiator'
+                            ? Color.themeColor
+                            : Color.black,
+                      }}
+                    />
+                    <CustomText
+                      numberOfLines={2}
+                      style={{
+                        fontSize: moderateScale(11, 0.6),
+                        color: Color.black,
+                        marginLeft: moderateScale(3, 0.3),
+                      }}>
+                      {x}
+                    </CustomText>
+                  </View>
+                );
+              })}
             <CustomText
               isBold
               style={{
@@ -585,64 +658,74 @@ const NegotiatorPortfolio = () => {
               }}>
               reviews
             </CustomText>
-
-            {dummydata.map((item, index) => {
-              return (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    marginVertical: moderateScale(10, 0.3),
-                    paddingHorizontal: moderateScale(10, 0.3),
-                    // backgroundColor:'red'
-                  }}>
+            <FlatList
+              data={dummydata}
+              renderItem={({item, index}) => {
+                return (
                   <View
                     style={{
-                      height: windowHeight * 0.06,
-                      width: windowHeight * 0.06,
-                      borderRadius: (windowHeight * 0.06) / 2,
-                      overflow: 'hidden',
-                    }}>
-                    <CustomImage
-                      style={{
-                        height: '100%',
-                        width: '100%',
-                      }}
-                      source={item?.image}
-                    />
-                  </View>
-                  <View
-                    style={{
+                      flexDirection: 'row',
+                      marginVertical: moderateScale(10, 0.3),
                       paddingHorizontal: moderateScale(10, 0.3),
+                      // backgroundColor:'red'
                     }}>
-                    <CustomText
-                      isBold
+                    <View
                       style={{
-                        color: Color.black,
-                        fontSize: moderateScale(13, 0.6),
-                        textTransform: 'uppercase',
+                        height: windowHeight * 0.06,
+                        width: windowHeight * 0.06,
+                        borderRadius: (windowHeight * 0.06) / 2,
+                        overflow: 'hidden',
                       }}>
-                      {item?.name}
-                    </CustomText>
-                    <CustomText
+                      <CustomImage
+                        style={{
+                          height: '100%',
+                          width: '100%',
+                        }}
+                        source={item?.image}
+                      />
+                    </View>
+                    <View
                       style={{
-                        color: Color.black,
-                        fontSize: moderateScale(12, 0.6),
-                        width: windowWidth * 0.75,
+                        paddingHorizontal: moderateScale(10, 0.3),
                       }}>
-                      {item?.comment}
-                    </CustomText>
-                    <CustomText
-                      style={{
-                        color: Color.Grey,
-                        fontSize: moderateScale(12, 0.6),
-                        width: windowWidth * 0.75,
-                      }}>
-                      {moment().format('MMM Do, YYYY')}
-                    </CustomText>
+                      <CustomText
+                        isBold
+                        style={{
+                          color: Color.black,
+                          fontSize: moderateScale(13, 0.6),
+                          textTransform: 'uppercase',
+                        }}>
+                        {item?.name}
+                      </CustomText>
+                      <CustomText
+                        style={{
+                          color: Color.black,
+                          fontSize: moderateScale(12, 0.6),
+                          width: windowWidth * 0.75,
+                        }}>
+                        {item?.comment}
+                      </CustomText>
+                      <CustomText
+                        style={{
+                          color: Color.Grey,
+                          fontSize: moderateScale(12, 0.6),
+                          width: windowWidth * 0.75,
+                        }}>
+                        {moment().format('MMM Do, YYYY')}
+                      </CustomText>
+                    </View>
                   </View>
-                </View>
+                );
+              }}
+            />
+            {/* 
+            {reviews?.map((item, index) => {
+              return (
+                
+                 
+                
               );
-            })}
+            })} */}
           </View>
           {userRole == 'Qbid Member' && (
             <CustomButton

@@ -35,7 +35,6 @@ const HomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
-
   const [searchData, setSearchData] = useState('');
   const [showMultiImageModal, setShowMultiImageModal] = useState(false);
   const [multiImages, setMultiImages] = useState([]);
@@ -49,6 +48,7 @@ const HomeScreen = () => {
   const [modalVisible2, setModalVisible2] = useState(false);
   const [modalVisible3, setModalVisible3] = useState(false);
   const [selectedData1, setSelectedData1] = useState('');
+  const [negotiator, setNegotiator] = useState([])
   console.log(
     '🚀 ~ file: HomeScreen.js:52 ~ HomeScreen ~ selectedData1:',
     selectedData1,
@@ -97,6 +97,19 @@ const HomeScreen = () => {
       setMyQuotes(response?.data?.quote_info);
     }
   };
+  const vendor =async() => {
+    const url = 'auth/member/negotiator'
+    setIsLoading(true)
+    const response =await Get('auth/member/negotiator' ,token)
+    setIsLoading(false)
+    if(response != undefined){
+      console.log("🚀 ~ file: VendorCards.js:23 ~ vendor ~ response:", response?.data)
+      setNegotiator(response?.data?.negotitator_info)
+    }
+  }
+  useEffect(() => {
+    vendor()
+  }, [])
 
   useEffect(() => {
     getAllData();
@@ -114,22 +127,23 @@ const HomeScreen = () => {
     });
   }, []);
 
-  const demyarray = [
-    {
-      image: require('../Assets/Images/man2.jpg'),
-      title: 'walter A. Jones',
-      subtitle: 'jbhdfghjdgfh',
-      description:
-        'kjadfhajkhdfjkhabvdmnabvnbanvbakeyrjaehjhityuireykdnvm,nvm,nacvhfghfjafbghfpwieroweihhr',
-    },
-    {
-      image: require('../Assets/Images/man2.jpg'),
-      title: 'walter A. Jones',
-      subtitle: 'jbhdfghjdgfh',
-      description:
-        'kjadfhajkhdfjkhabvdmnabvnbanvbakeyrjaehjhityuireykdnvm,nvm,nacvhfghfjafbghfpwieroweihhr',
-    },
-  ];
+  const toggleModal = () => {
+    setModalVisible(!modalVisible);
+  };
+  // const dummyarray =[
+  //   {
+  //     image:require('../Assets/Images/man2.jpg'),
+  //   title:'walter A. Jones',
+  //   subtitle:'jbhdfghjdgfh',
+  //   description:'kjadfhajkhdfjkhabvdmnabvnbanvbakeyrjaehjhityuireykdnvm,nvm,nacvhfghfjafbghfpwieroweihhr'
+  //   },
+  //   {
+  //     image:require('../Assets/Images/man2.jpg'),
+  //   title:'walter A. Jones',
+  //   subtitle:'jbhdfghjdgfh',
+  //   description:'kjadfhajkhdfjkhabvdmnabvnbanvbakeyrjaehjhityuireykdnvm,nvm,nacvhfghfjafbghfpwieroweihhr'
+  //   }
+  // ]
 
   return (
     <ScreenBoiler
@@ -248,7 +262,8 @@ const HomeScreen = () => {
                 );
               }}
               // data={proposals}
-              data={demyarray}
+              // data={dummyarray}
+              data={negotiator}
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{
