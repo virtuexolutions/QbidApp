@@ -92,7 +92,7 @@ const Settings = () => {
               onPress={() => {
                 setIsVisible(true);
               }}
-              source={user?.photo ? {uri:user?.photo}: require('../Assets/Images/man1.jpg')}
+              source={{uri:user?.photo}}
               style={[styles.image]}
             />
           </View>
@@ -103,7 +103,7 @@ const Settings = () => {
               {fontSize: moderateScale(17, 0.3)},
               userRole != 'Qbid Member' && {color: Color.white},
             ]}>
-            {`George D. Huntley`}
+            {`${user?.first_name} ${user?.last_name}`}
           </CustomText>
           <CustomButton
             isBold

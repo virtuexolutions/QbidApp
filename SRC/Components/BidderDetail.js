@@ -13,7 +13,7 @@ import {Post} from '../Axios/AxiosInterceptorFunction';
 import {ActivityIndicator} from 'react-native';
 
 const BidderDetail = ({item, photo, title, date, message}) => {
-  // console.log('🚀 ~ file: BidderDetail.js:16 ~ BidderDetail ~ item:', item);
+  console.log('🚀 ~ file: BidderDetail.js:16 ~ BidderDetail ~ item:', item);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
   const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +33,14 @@ const BidderDetail = ({item, photo, title, date, message}) => {
             },
       ]}>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <Image source={item?.image} style={styles.image} />
+        <Image
+          source={
+            item?.image
+              ? {uri: item?.image}
+              : require('../Assets/Images/dummyman1.png')
+          }
+          style={styles.image}
+        />
         <View style={{marginLeft: moderateScale(10, 0.3)}}>
           <CustomText
             noOfLines={2}
@@ -52,7 +59,7 @@ const BidderDetail = ({item, photo, title, date, message}) => {
                     borderColor: Color.lightGrey,
                   },
             ]}>
-            {item?.name}
+            {item?.name}sdsdff
           </CustomText>
           <RatingComponent
             disable={true}
@@ -85,8 +92,8 @@ const BidderDetail = ({item, photo, title, date, message}) => {
           position: 'absolute',
           right: moderateScale(40, 0.6),
           top: moderateScale(10, 0.3),
-          flexDirection:'row',
-          alignItems:'center'
+          flexDirection: 'row',
+          alignItems: 'center',
         }}>
         <View
           style={{
@@ -114,7 +121,7 @@ const BidderDetail = ({item, photo, title, date, message}) => {
             ? 'Rejected'
             : 'pending'}
         </CustomText>
-      </View>   
+      </View>
     </View>
   );
 };

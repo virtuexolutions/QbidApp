@@ -147,7 +147,7 @@ const Header = props => {
               height: '100%',
             }}
           />
-          {/* )} */}
+        
         </TouchableOpacity>
       ) : (
         <View

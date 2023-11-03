@@ -49,20 +49,11 @@ const HomeScreen = () => {
   const [modalVisible3, setModalVisible3] = useState(false);
   const [selectedData1, setSelectedData1] = useState('');
   const [negotiator, setNegotiator] = useState([])
-  console.log(
-    '🚀 ~ file: HomeScreen.js:52 ~ HomeScreen ~ selectedData1:',
-    selectedData1,
-  );
+ 
   const [selectedData2, setSelectedData2] = useState('');
-  console.log(
-    '🚀 ~ file: HomeScreen.js:54 ~ HomeScreen ~ selectedData2:',
-    selectedData2,
-  );
+
   const [selectedData3, setSelectedData3] = useState('');
-  console.log(
-    '🚀 ~ file: HomeScreen.js:56 ~ HomeScreen ~ selectedData3:',
-    selectedData3,
-  );
+ 
 
   const getAllData = async () => {
     setIsLoading(true);
@@ -72,10 +63,7 @@ const HomeScreen = () => {
     ]);
     setIsLoading(false);
     if (response1 != undefined) {
-      console.log(
-        '🚀 ~ file: HomeScreen.js:85 ~ getAllData ~ response1:',
-        response1?.data,
-      );
+     
       setProposals(response1?.data?.bid_help_info?.data);
     }
     if (response2 != undefined) {
@@ -90,10 +78,7 @@ const HomeScreen = () => {
     const response = await Get(url, token);
     setIsLoading(false);
     if (response != undefined) {
-      console.log(
-        '🚀 ~ file: HomeScreen.js:97 ~ filterQuotes ~ response:',
-        response?.data,
-      );
+    
       setMyQuotes(response?.data?.quote_info);
     }
   };
@@ -103,7 +88,6 @@ const HomeScreen = () => {
     const response =await Get('auth/member/negotiator' ,token)
     setIsLoading(false)
     if(response != undefined){
-      console.log("🚀 ~ file: VendorCards.js:23 ~ vendor ~ response:", response?.data)
       setNegotiator(response?.data?.negotitator_info)
     }
   }
@@ -221,21 +205,13 @@ const HomeScreen = () => {
               onPress={() => {
                 navigationService.navigate('SeeAllScreen', {
                   type: 'negotiator',
-                  data: proposals,
+                  data: negotiator,
                 });
               }}
               style={styles.viewall}>
               View all
             </CustomText>
-            <Icon
-              name={'sound-mix'}
-              as={Entypo}
-              size={moderateScale(15, 0.3)}
-              color={Color.themeDarkGray}
-              onPress={() => {
-                setModalVisible2(true);
-              }}
-            />
+           
           </View>
 
           {isLoading ? (
@@ -292,8 +268,9 @@ const HomeScreen = () => {
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                width: windowWidth * 0.2,
-                marginRight: moderateScale(5, 0.3),
+                // width: windowWidth * 0.2,
+                // backgroundColor:'red',
+                // marginRight: moderateScale(5, 0.3),
               }}>
               <CustomText
                 onPress={() => {
@@ -305,15 +282,7 @@ const HomeScreen = () => {
                 style={styles.viewall}>
                 View all
               </CustomText>
-              <Icon
-                name={'sound-mix'}
-                as={Entypo}
-                size={moderateScale(15, 0.3)}
-                color={Color.themeDarkGray}
-                onPress={() => {
-                  setModalVisible3(true);
-                }}
-              />
+            
             </View>
           </View>
           {isLoading ? (

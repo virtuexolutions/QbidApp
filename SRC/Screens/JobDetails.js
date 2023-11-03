@@ -35,6 +35,7 @@ import numeral from 'numeral';
 import {useIsFocused} from '@react-navigation/native';
 import NoData from '../Components/NoData';
 import {validateEmail} from '../Config';
+import ImageView from 'react-native-image-viewing';
 
 const JobDetails = props => {
   const data1 = props?.route?.params?.item;
@@ -44,7 +45,7 @@ const JobDetails = props => {
   );
 
   const [data, setData] = useState(data1);
-  console.log('🚀 ~ file: JobDetails.js:47 ~ JobDetails ~ data:', data);
+  // console.log('🚀 ~ file: JobDetails.js:47 ~ JobDetails ~ data:', data);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
   const [checked, setChecked] = useState(false);
@@ -58,6 +59,22 @@ const JobDetails = props => {
   const isFocused = useIsFocused();
   const [coverletterRole, setCoverLetterRole] = useState('Expertise In');
   const [userData, setUserData] = useState({});
+  const [imageModalVisible, setImageModalVisible] = useState(false);
+
+  // const images = data?.images.map(item=>{} )
+  const [finalImagesArray, setFinalImagesArray] = useState([]);
+  console.log("🚀 ~ file: JobDetails.js:66 ~ JobDetails ~ finalImagesArray:", finalImagesArray)
+
+  
+
+  const images = [
+    {
+      uri: 'https://avatars2.githubusercontent.com/u/7970947?v=3&s=460',
+      // uri: item?.photo,
+    },
+    {},
+    {},
+  ];
 
   const bidDetails = async () => {
     const url = `auth/negotiator/quote_detail/${data?.id}`;
@@ -66,14 +83,21 @@ const JobDetails = props => {
     setIsLoading(false);
 
     if (response != undefined) {
+      console.log("🚀 ~ file: JobDetails.js:86 ~ bidDetails ~ response:", response?.data?.quote_info)
       const mainuserData = response?.data?.quote_info?.bids?.find(
         item => item.user_info?.id == user?.id,
       );
-      setData(response?.data?.quote_info);
+      response?.data?.quote_info?.images.map(item => {
+        return setFinalImagesArray(prev => [...prev,{uri: item?.image}]);
+      });
 
+      setData(response?.data?.quote_info);
       if (mainuserData) {
+       
+        
         setBidDone(true);
         setUserData(mainuserData);
+        
       }
     }
   };
@@ -124,10 +148,7 @@ const JobDetails = props => {
     }
     if (desc.length < 100) {
       return Platform.OS == 'android'
-        ? ToastAndroid.show(
-            'Description is too short',
-            ToastAndroid.SHORT,
-          )
+        ? ToastAndroid.show('Description is too short', ToastAndroid.SHORT)
         : Alert.alert('Description is too short');
     }
 
@@ -147,7 +168,10 @@ const JobDetails = props => {
 
   useEffect(() => {
     bidDetails();
+    
   }, [isFocused]);
+
+  
 
   return (
     <ScreenBoiler
@@ -217,8 +241,8 @@ const JobDetails = props => {
                   }}>
                   <CustomImage
                     source={
-                      userRole == 'Qbid Member'
-                        ? {uri: user?.photo}
+                      data?.images
+                        ? {uri: data?.images[0]?.image}
                         : require('../Assets/Images/dummyman1.png')
                     }
                     style={{
@@ -281,6 +305,26 @@ const JobDetails = props => {
               <ShowMoreAndShowLessText minTextLength={50} style={styles.desc}>
                 {data?.notes ? data?.notes : data?.coverletter}
               </ShowMoreAndShowLessText>
+              <CustomText
+                onPress={() => {
+                  // console.log('Here=====>>>>');
+                  if(finalImagesArray.length>0){
+
+                    setImageModalVisible(true);
+                  }else{
+                    return Platform.OS == 'android' ?  ToastAndroid.show('No attachments', ToastAndroid.SHORT) : Alert.alert('No Attachments')
+                  }
+                }}
+                isBold
+                style={{
+                  color: Color.blue,
+                  fontSize: moderateScale(12, 0.6),
+                  marginTop: moderateScale(10, 0.3),
+                  
+                  // backgroundColor : 'red'
+                }}>
+                Attachments...
+              </CustomText>
               <CustomText
                 isBold
                 style={{
@@ -360,7 +404,8 @@ const JobDetails = props => {
                       }}>
                       <CustomImage
                         source={
-                          data?.user_info?.photo ? {uri:data?.user_info?.photo}
+                          data?.user_info?.photo
+                            ? {uri: data?.user_info?.photo}
                             : require('../Assets/Images/dummyman1.png')
                         }
                         style={{
@@ -453,15 +498,15 @@ const JobDetails = props => {
                       paddingBottom: moderateScale(30, 0.6),
                     }}
                     renderItem={({item, index}) => {
-                      console.log(
-                        '🚀 ~ file: JobDetails.js:349 ~ JobDetails ~ item:',
-                        item?.status,
+                    console.log(
+                        '🚀 ~ file: JobDetails.js:349 ~ JobDetails ~ item: details',
+                        item
                       );
                       return (
                         <>
                           <BidderDetail
                             item={{
-                              image: require('../Assets/Images/man1.jpg'),
+                              image: item?.user_info?.photo ,
                               name: item?.fullname,
                               rating: item?.rating,
                               description: item?.coverletter,
@@ -608,6 +653,13 @@ const JobDetails = props => {
           )}
         </ScrollView>
       </LinearGradient>
+
+      <ImageView
+        images={finalImagesArray}
+        imageIndex={0}
+        visible={imageModalVisible}
+        onRequestClose={() => setImageModalVisible(false)}
+      />
 
       <Modal
         isVisible={isModalVisible}

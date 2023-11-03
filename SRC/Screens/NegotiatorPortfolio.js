@@ -10,7 +10,7 @@ import {
   ToastAndroid,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import LinearGradient from 'react-native-linear-gradient';
 import Color from '../Assets/Utilities/Color';
@@ -41,20 +41,15 @@ import {AirbnbRating} from 'react-native-ratings';
 import moment from 'moment';
 
 import {Post, Get} from '../Axios/AxiosInterceptorFunction';
+import {setUserData} from '../Store/slices/common';
 
 const NegotiatorPortfolio = props => {
   const fromSearch = props?.route?.params?.fromSearch;
   const item = props?.route?.params?.item;
-  console.log(
-    '🚀 ~ file: NegotiatorPortfolio.js:44 ~ NegotiatorPortfolio ~ item:',
-    item,
-  );
   const navigation = useNavigation();
   const userdata = useSelector(state => state.commonReducer.userData);
-
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
-
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const [image, setImage] = useState({});
   const [showModal, setShowModal] = useState(false);
@@ -64,69 +59,28 @@ const NegotiatorPortfolio = props => {
   const [visible, setVisible] = useState(false);
   const [editProfile, setEditProfile] = useState(false);
   const [availibility, setAvailibility] = useState(false);
+  const dispatch = useDispatch();
 
   const [firstName, setFirstName] = useState(
-    fromSearch
-      ? item?.first_name
-        ? item?.first_name
-        : 'not available'
-      : userdata?.first_name
-      ? userdata?.first_name
-      : '',
+    fromSearch ? item?.first_name : userdata?.first_name,
   );
   const [lastName, setLastName] = useState(
-    fromSearch
-      ? item?.last_name
-        ? item?.last_name
-        : 'not availble'
-      : userdata?.last_name
-      ? userdata?.last_name
-      : '',
+    fromSearch ? item?.last_name : userdata?.last_name,
   );
   const [companyName, setCompanyName] = useState(
-    fromSearch
-      ? item?.company_name
-        ? item?.company_name
-        : 'not available'
-      : userdata?.company_name
-      ? userdata?.company_name
-      : '',
+    fromSearch ? item?.company_name : userdata?.company_name,
   );
   const [jobStatus, setJobStatus] = useState(
-    fromSearch
-      ? item?.job_status
-        ? item?.job_status
-        : 'not available'
-      : userdata?.status
-      ? userdata?.status
-      : '',
-  ); //for negotiator
+    fromSearch ? item?.job_status : userdata?.status,
+  );
   const [email, setEmail] = useState(
-    fromSearch
-      ? item?.email
-        ? item?.emial
-        : 'not available'
-      : userdata?.email
-      ? userdata?.email
-      : '',
+    fromSearch ? item?.email : userdata?.email,
   );
   const [contact, setContact] = useState(
-    fromSearch
-      ? item?.phone
-        ? item?.phone
-        : 'not available'
-      : userdata?.phone
-      ? userdata?.phone
-      : '',
+    fromSearch ? item?.phone : userdata?.phone,
   );
   const [address, setAddress] = useState(
-    fromSearch
-      ? item?.address
-        ? item?.address
-        : 'not available'
-      : userdata?.address
-      ? userdata?.address
-      : '',
+    fromSearch ? item?.address : userdata?.address,
   );
   const [city, setCity] = useState(
     fromSearch
@@ -188,10 +142,10 @@ const NegotiatorPortfolio = props => {
     const url = 'auth/review';
     setIsLoading(true);
     const response = await Get('auth/review', token);
-    console.log(
-      '🚀 ~ file: NegotiatorPortfolio.js:105 ~ reviews ~ response:',
-      response?.data,
-    );
+    // console.log(
+    //   '🚀 ~ file: NegotiatorPortfolio.js:105 ~ reviews ~ response:',
+    //   response?.data,
+    // );
     setIsLoading(false);
     if (response != undefined) {
       setReview();
@@ -215,9 +169,47 @@ const NegotiatorPortfolio = props => {
       comment: 'hello eltjikrejti reauthu ierterhtrtvery one',
     },
   ];
+
+  const changeProfileImage = async (type, body, key) => {
+    const url = `auth/negotiator/${type}`;
+    const formData = new FormData();
+    formData.append(key, body);
+    // const body= {}
+    setIsLoading(true);
+    const response = await Post(url, formData, apiHeader(token));
+    setIsLoading(false);
+    console.log('formData====>>>>', body);
+
+    if (response != undefined) {
+      console.log(
+        '🚀 ~ file: NegotiatorPortfolio.js:227 ~ changeProfileImage ~ response:',
+        response?.data,
+      );
+      dispatch(setUserData(response?.data?.user));
+      Platform.OS == 'android'
+        ? ToastAndroid.show(`${type} updated successfully`, ToastAndroid.SHORT)
+        : Alert.alert(`${type} updated successfully`);
+    }
+  };
+
   useEffect(() => {
     reviews();
   }, []);
+
+  useEffect(() => {
+    if (imageType == 'profile') {
+      // console.log(Object.keys(image));
+      if (Object.keys(image).length > 0) {
+        console.log('Image type=====');
+        changeProfileImage('photo_update', image,'photo');
+      }
+    } else {
+      // console.log('updateing cover image==========');
+      if (Object.keys(coverPhoto).length > 0) {
+        changeProfileImage('coverphoto_update', coverPhoto, 'coverphoto');
+      }
+    }
+  }, [image, coverPhoto]);
 
   return (
     <ScreenBoiler
@@ -297,16 +289,18 @@ const NegotiatorPortfolio = props => {
               <CustomImage
                 onPress={() => {
                   setImageToShow([
-                    Object.keys(coverPhoto).length > 0
-                      ? {uri: coverPhoto?.uri}
+                    userdata?.coverphoto
+                      ? {uri: userdata?.coverphoto}
                       : require('../Assets/Images/coverPhoto.jpg'),
                   ]);
                   setVisible(true);
                 }}
                 source={
-                  Object.keys(coverPhoto).length > 0
-                    ? {uri: coverPhoto?.uri}
-                    : require('../Assets/Images/coverPhoto.jpg')
+                  userRole != 'Qbid Member'
+                    ? Object.keys(coverPhoto).length > 0
+                      ? {uri: coverPhoto?.uri}
+                      : {uri: userdata?.coverphoto}
+                    : {uri: item?.coverphoto}
                 }
                 style={{
                   width: '100%',
@@ -343,25 +337,26 @@ const NegotiatorPortfolio = props => {
                 marginLeft: moderateScale(15, 0.3),
                 width: windowWidth * 0.25,
               }}>
-              {Object.keys(image).length > 0 ? (
-                <CustomImage
-                  onPress={() => {
-                    setImageToShow([{uri: coverPhoto?.uri}]);
-                    setVisible(true);
-                  }}
-                  source={{uri: image?.uri}}
-                  style={styles.image}
-                />
-              ) : (
-                <CustomImage
-                  onPress={() => {
-                    setImageToShow([require('../Assets/Images/man1.jpg')]);
-                    setVisible(true);
-                  }}
-                  style={styles.image}
-                  source={require('../Assets/Images/man1.jpg')}
-                />
-              )}
+              <CustomImage
+                onPress={() => {
+                  setImageToShow([
+                    userdata?.photo
+                      ? {uri: userdata?.photo}
+                      : require('../Assets/Images/coverPhoto.jpg'),
+                  ]);
+                  setVisible(true);
+                }}
+                source={
+                  // userRole != 'Qbid Member'
+                  //   ? Object.keys(image).length > 0
+                  //     ? {uri: image?.uri}
+                  //     : {uri: userdata?.photo}
+                  //   : {uri: item?.photo}
+                  {uri: userdata?.photo}
+                }
+                style={styles.image}
+              />
+
               {userRole != 'Qbid Member' && (
                 <TouchableOpacity
                   onPress={() => {

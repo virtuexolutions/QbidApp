@@ -50,56 +50,56 @@ const SeeAllScreen = props => {
     }
   };
 
-  const filterQuotes = async()=>{
-    const url = `auth/member/search_type/${selectedStatus}`
-    setIsLoading(true)
-    const response =  await Get(url, token)
-    setIsLoading(false)
-    if(response != undefined){
-      console.log("🚀 ~ file: HomeScreen.js:97 ~ filterQuotes ~ response:", response?.data)
-      setNewArray(response?.data?.quote_info)
-    }
-  }
+  // const filterQuotes = async()=>{
+  //   const url = `auth/member/search_type/${selectedStatus}`
+  //   setIsLoading(true)
+  //   const response =  await Get(url, token)
+  //   setIsLoading(false)
+  //   if(response != undefined){
+  //     console.log("🚀 ~ file: HomeScreen.js:97 ~ filterQuotes ~ response:", response?.data)
+  //     setNewArray(response?.data?.quote_info)
+  //   }
+  // }
 
-  const getData = async value => {
-    const url =
-      type == 'qoutes'
-        ? `auth/member/quote?page=${pageNum}`
-        : `auth/member/bid_help?page=${pageNum}`;
-    value == 'loadMore' ? setLoadMore(true) : setIsLoading(true);
-    const response = await Get(url, token);
-    value == 'loadMore' ? setLoadMore(false) : setIsLoading(false);
+  // const getData = async value => {
+  //   const url =
+  //     type == 'qoutes'
+  //       ? `auth/member/quote?page=${pageNum}`
+  //       : `auth/member/bid_help?page=${pageNum}`;
+  //   value == 'loadMore' ? setLoadMore(true) : setIsLoading(true);
+  //   const response = await Get(url, token);
+  //   value == 'loadMore' ? setLoadMore(false) : setIsLoading(false);
  
-    if (response != undefined) {
-      if (type == 'qoutes') {
-        //  console.log('Here')
-        value == 'loadMore'
-          ? setNewArray(prev => [...prev, ...response?.data?.quote_info?.data])
-          : setNewArray(response?.data?.quote_info?.data);
-      } else {
-        value == 'loadMore'
-          ? setNewArray(prev => [
-              ...prev,
-              ...response?.data?.bid_help_info?.data,
-            ])
-          : setNewArray(response?.data?.bid_help_info?.data);
-      }
-    }
-  };
+  //   if (response != undefined) {
+  //     if (type == 'qoutes') {
+  //       //  console.log('Here')
+  //       value == 'loadMore'
+  //         ? setNewArray(prev => [...prev, ...response?.data?.quote_info?.data])
+  //         : setNewArray(response?.data?.quote_info?.data);
+  //     } else {
+  //       value == 'loadMore'
+  //         ? setNewArray(prev => [
+  //             ...prev,
+  //             ...response?.data?.bid_help_info?.data,
+  //           ])
+  //         : setNewArray(response?.data?.bid_help_info?.data);
+  //     }
+  //   }
+  // };
 
-  useEffect(() => {
-    if (pageNum == 1) {
-      getData();
-    } else {
-      getData('loadMore');
-    }
-  }, [pageNum]);
+  // useEffect(() => {
+  //   if (pageNum == 1) {
+  //     getData();
+  //   } else {
+  //     getData('loadMore');
+  //   }
+  // }, [pageNum]);
 
-  useEffect(() => {
-    if(selectedStatus != ''){
-      filterQuotes()
-    }
-  }, [selectedStatus])
+  // useEffect(() => {
+  //   if(selectedStatus != ''){
+  //     filterQuotes()
+  //   }
+  // }, [selectedStatus])
   
 
   return (
@@ -127,8 +127,7 @@ const SeeAllScreen = props => {
             ? Color.themeBgColorNegotiator
             : Color.themebgBusinessQbidder
         }>
-     
-
+    
         <View
           style={{
             width: windowWidth * 0.93,
@@ -184,7 +183,7 @@ const SeeAllScreen = props => {
             )
           }}
           // data={type == 'negotiator' ? negotiatorsArray : myQoutesArray}
-          data={newArray}
+          data={data}
           // data={[]}
           ref={scrollViewRef}
           onScroll={handleScroll}

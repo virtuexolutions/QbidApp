@@ -31,14 +31,15 @@ const MyAccounts = props => {
   const dispatch = useDispatch();
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const user = useSelector(state => state.commonReducer.userData);
-  // console.log("🚀 ~ file: MyAccounts.js:34 ~ MyAccounts ~ user:", user)
+  console.log("🚀 ~ file: MyAccounts.js:34 ~ MyAccounts ~ user:", user)
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
-
-  // console.log('🚀 ~ file: MyAccounts.js:33 ~ MyAccounts ~ user:', user);
   const token = useSelector(state => state.authReducer.token);
   const [showModal, setShowModal] = useState(false);
   const [imageObject, setImageObject] = useState({});
-  // console.log("🚀 ~ file: MyAccounts.js:40 ~ MyAccounts ~ imageObject:", imageObject)
+  console.log(
+    '🚀 ~ file: MyAccounts.js:40 ~ MyAccounts ~ imageObject:',
+    imageObject,
+  );
   const [firstName, setFirstName] = useState(
     user?.first_name ? user?.first_name : '',
   );
@@ -47,10 +48,9 @@ const MyAccounts = props => {
   );
   const [companyName, setCompanyName] = useState(
     user?.company_name ? user?.company_name : '',
-  ); //for negotiator
-  const [jobStatus, setJobStatus] = useState(''); //for negotiator
+  );
+  const [jobStatus, setJobStatus] = useState('');
   const [email, setEmail] = useState(user?.email ? user?.email : '');
-  // console.log("🚀 ~ file: MyAccounts.js:51 ~ MyAccounts ~ email:", email)
   const [contact, setContact] = useState(user?.phone ? user?.phone : '');
   const [address, setAddress] = useState(user?.address ? user?.address : '');
   const [city, setCity] = useState(user?.city ? user?.city : '');
@@ -102,13 +102,13 @@ const MyAccounts = props => {
       }
       formdata.append(key, params[key]);
     }
-    services?.map((item, index)=> formdata.append(`expertise[${index}]`, item))
-    language?.map((item, index)=> formdata.append(`language[${index}]`, item))
+    services?.map((item, index) =>
+      formdata.append(`expertise[${index}]`, item),
+    );
+    language?.map((item, index) => formdata.append(`language[${index}]`, item));
     if (Object.keys(imageObject).length > 0) {
       formdata.append('photo', imageObject);
     }
-  //  console.log("🚀 ~ file: MyAccounts.js:106 ~ EditProfile ~ formdata:", formdata)
-    // console.log(formdata);
 
     const url = 'auth/profile';
     setIsLoading(true);
@@ -168,27 +168,17 @@ const MyAccounts = props => {
               : Color.themebgBusinessQbidder
           }>
           <View>
-            {Object.keys(imageObject).length > 0 ? (
-              <CustomImage
-                onPress={() => {
-                  setIsVisible(true);
-                }}
-                source={{uri: imageObject?.uri}}
-                style={[styles.image]}
-              />
-            ) : (
-              <CustomImage
-                onPress={() => {
-                  setIsVisible(true);
-                }}
-                style={[styles.image]}
-                source={
-                  user?.photo
-                    && {uri: `${user?.photo}`}
-                    
-                }
-              />
-            )}
+            <CustomImage
+              onPress={() => {
+                setIsVisible(true);
+              }}
+              source={
+                Object.keys(imageObject).length > 0
+                  ? {uri: imageObject?.uri}
+                  : {uri: user?.photo}
+              }
+              style={[styles.image]}
+            />
 
             <TouchableOpacity
               activeOpacity={0.9}
