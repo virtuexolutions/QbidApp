@@ -177,7 +177,7 @@ const HomeScreen = () => {
                 }
               }}
               width={windowWidth * 0.8}
-              // input
+         
               inputStyle={{
                 height: windowHeight * 0.05,
               }}
@@ -346,7 +346,7 @@ const HomeScreen = () => {
       <CustomStatusModal
         isModalVisible={modalVisible1}
         setModalVisible={setModalVisible1}
-        statusArray={[{name: 'negotiators'}, {name: 'Quotes'}]}
+        statusArray={[{name: 'negotiator'}, {name: 'qoutes'}]}
         data={selectedData1}
         setData={setSelectedData1}
         text={'category'}
@@ -360,7 +360,7 @@ const HomeScreen = () => {
         text={'filter negotiator level'}
       />
       <CustomStatusModal
-        isModalVisible={modalVisible3}
+      isModalVisible={modalVisible3}
         setModalVisible={setModalVisible3}
         statusArray={[
           {name: 'Completed'},

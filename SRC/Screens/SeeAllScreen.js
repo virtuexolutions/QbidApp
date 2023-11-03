@@ -19,6 +19,7 @@ import {useEffect} from 'react';
 import {Get} from '../Axios/AxiosInterceptorFunction';
 import {ActivityIndicator} from 'react-native';
 import NoData from '../Components/NoData';
+import VendorCards from '../Components/VendorCards';
 
 const SeeAllScreen = props => {
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
@@ -199,14 +200,7 @@ const SeeAllScreen = props => {
           }}
           renderItem={({item, index}) => {
             return type == 'negotiator' ? (
-              <NegotiatorCard
-                item={item}
-                containerStyle={{
-                  width: windowWidth * 0.45,
-                  height: windowHeight * 0.28,
-                }}
-                fromSeeAll={true}
-              />
+              <VendorCards item={item} />
             ) : (
               <MyQouteCard item={item} />
             );
@@ -214,7 +208,7 @@ const SeeAllScreen = props => {
           ListHeaderComponent={() => {
             return (
               <CustomText style={styles.header}>
-                {type == 'negotiator' ? 'Proposal' : 'My Qoutes'}
+               {type}
               </CustomText>
             );
           }}
@@ -253,5 +247,6 @@ const styles = ScaledSheet.create({
     fontSize: moderateScale(16, 0.3),
     fontWeight: 'bold',
     width: windowWidth * 0.9,
+    marginBottom:moderateScale(10,.6)
   },
 });

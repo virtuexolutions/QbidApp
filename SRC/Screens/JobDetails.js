@@ -34,24 +34,20 @@ import {Get, Post} from '../Axios/AxiosInterceptorFunction';
 import numeral from 'numeral';
 import {useIsFocused} from '@react-navigation/native';
 import NoData from '../Components/NoData';
-import { validateEmail } from '../Config';
+import {validateEmail} from '../Config';
 
 const JobDetails = props => {
   const data1 = props?.route?.params?.item;
-  
   const user = useSelector(state => state.commonReducer.userData);
-  
   const UserCoverLetterArray = useSelector(
     state => state.commonReducer.servicesArray,
   );
 
   const [data, setData] = useState(data1);
-  // console.log("🚀 ~ file: JobDetails.js:49 ~ JobDetais ~ data:", data)
+  console.log('🚀 ~ file: JobDetails.js:47 ~ JobDetails ~ data:', data);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
-  // console.log('🚀 ~ file: JobDetails.js:49 ~ JobDetails ~ token:', token);
   const [checked, setChecked] = useState(false);
-  // const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [bidDone, setBidDone] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -59,13 +55,9 @@ const JobDetails = props => {
   const [Email, setEmail] = useState('');
   const [number, setNumber] = useState('');
   const [desc, setDesc] = useState('');
-  // console.log('🚀 ~ file: JobDetails.js:57 ~ JobDetails ~ desc:', desc);
   const isFocused = useIsFocused();
   const [coverletterRole, setCoverLetterRole] = useState('Expertise In');
   const [userData, setUserData] = useState({});
-  // console.log('🚀 ~ file: JobDetails.js:60 ~ JobDetails ~ userData:', userData);
-
-  // const UserCoverLetterArray = ['Expertise In', 'Expertise In'];
 
   const bidDetails = async () => {
     const url = `auth/negotiator/quote_detail/${data?.id}`;
@@ -74,8 +66,9 @@ const JobDetails = props => {
     setIsLoading(false);
 
     if (response != undefined) {
-   
-      const mainuserData = response?.data?.quote_info?.bids?.find(item => item.user_info?.id == user?.id);
+      const mainuserData = response?.data?.quote_info?.bids?.find(
+        item => item.user_info?.id == user?.id,
+      );
       setData(response?.data?.quote_info);
 
       if (mainuserData) {
@@ -91,7 +84,6 @@ const JobDetails = props => {
     const response = await Post(url, {status: value}, apiHeader(token));
     setIsLoading(false);
     if (response != undefined) {
-    
       bidDetails();
     }
   };
@@ -125,28 +117,25 @@ const JobDetails = props => {
         ? ToastAndroid.show('email is not validate', ToastAndroid.SHORT)
         : Alert.alert('email is not validate');
     }
-   if(coverletterRole == 'Expertise In'){
-    return Platform.OS == 'android'
-    ? ToastAndroid.show('Please select any role', ToastAndroid.SHORT)
-    : Alert.alert('Please select any role');
-
-   }
-   if(desc.length < 100){
-    return Platform.OS == 'android'
-    ? ToastAndroid.show('Description should be greater than 100 letters', ToastAndroid.SHORT)
-    : Alert.alert('Please select any role');
-
-   }
+    if (coverletterRole == 'Expertise In') {
+      return Platform.OS == 'android'
+        ? ToastAndroid.show('Please select any role', ToastAndroid.SHORT)
+        : Alert.alert('Please select any role');
+    }
+    if (desc.length < 100) {
+      return Platform.OS == 'android'
+        ? ToastAndroid.show(
+            'Description is too short',
+            ToastAndroid.SHORT,
+          )
+        : Alert.alert('Description is too short');
+    }
 
     setIsLoading(true);
     const response = await Post(url, body, apiHeader(token));
     setIsLoading(false);
 
     if (response != undefined) {
-      // console.log(
-      //   '🚀 ~ file: JobDetails.js:53 ~ bidNow ~ response:',
-      //   response?.data,
-      // );
       setBidDone(true);
       setModalVisible(!isModalVisible);
     }
@@ -227,9 +216,11 @@ const JobDetails = props => {
                     overflow: 'hidden',
                   }}>
                   <CustomImage
-                    source={ userRole == 'Qbid Member'
-                    ? {uri:user?.photo}
-                    : require('../Assets/Images/dummyman1.png')}
+                    source={
+                      userRole == 'Qbid Member'
+                        ? {uri: user?.photo}
+                        : require('../Assets/Images/dummyman1.png')
+                    }
                     style={{
                       width: '100%',
                       height: '100%',
@@ -246,19 +237,14 @@ const JobDetails = props => {
                       color: Color.white,
                       fontSize: moderateScale(17, 0.6),
                     }}>
-                    {/* {`${user?.first_name} ${user?.last_name}`} */}
-                    {userRole == 'Qbid Member'
-                      ? `${user?.first_name} ${user?.last_name}`
-                      : `${data?.user_info?.first_name} ${data?.user_info?.last_name}`}
+                    {data?.title}
                   </CustomText>
                   <CustomText
                     style={{
                       color: Color.white,
                       fontSize: moderateScale(11, 0.6),
                     }}>
-                     {userRole == 'Qbid Member'
-                      ? `${user?.email}`
-                      : `${data?.user_info?.email}`}
+                    {data?.service_preference}
                   </CustomText>
                 </View>
                 <View
@@ -349,6 +335,94 @@ const JobDetails = props => {
                   marginTop={moderateScale(30, 0.3)}
                 />
               </View>
+              {userRole != 'Qbid Member' && (
+                <>
+                  <CustomText
+                    isBold
+                    style={{
+                      color: Color.white,
+                      fontSize: moderateScale(17, 0.6),
+                      marginVertical: moderateScale(10, 0.3),
+                    }}>
+                    User Details
+                  </CustomText>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                    }}>
+                    <View
+                      style={{
+                        width: moderateScale(60, 0.3),
+                        height: moderateScale(50, 0.3),
+                        borderRadius: moderateScale(10, 0.3),
+                        overflow: 'hidden',
+                      }}>
+                      <CustomImage
+                        source={
+                          data?.user_info?.photo ? {uri:data?.user_info?.photo}
+                            : require('../Assets/Images/dummyman1.png')
+                        }
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                        }}
+                      />
+                    </View>
+                    <View
+                      style={{
+                        marginLeft: moderateScale(5, 0.3),
+                      }}>
+                      <CustomText
+                        isBold
+                        style={{
+                          color: Color.white,
+                          fontSize: moderateScale(17, 0.6),
+                        }}>
+                        {`${data?.user_info?.first_name} ${data?.user_info?.last_name}`}
+                      </CustomText>
+                      <CustomText
+                        style={{
+                          color: Color.white,
+                          fontSize: moderateScale(11, 0.6),
+                        }}>
+                        {data?.user_info?.email}
+                      </CustomText>
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        position: 'absolute',
+                        bottom: moderateScale(10, 0.3),
+                        right: moderateScale(30, 0.3),
+                        alignItems: 'center',
+                      }}>
+                      <View
+                        style={{
+                          width: moderateScale(6, 0.6),
+                          height: moderateScale(6, 0.6),
+                          borderRadius: moderateScale(3, 0.6),
+                          backgroundColor:
+                            userRole == 'Qbid Member'
+                              ? Color.blue
+                              : userRole == 'Qbid Negotiator'
+                              ? Color.themeColor
+                              : Color.black,
+                        }}
+                      />
+                      <CustomText
+                        style={{
+                          fontSize: moderateScale(8, 0.6),
+                          color: Color.white,
+                          marginLeft: moderateScale(3, 0.3),
+                        }}>
+                        {data?.status}
+                      </CustomText>
+                    </View>
+                  </View>
+                </>
+              )}
+
               {userRole == 'Qbid Member' ? (
                 <>
                   <CustomText
@@ -395,72 +469,73 @@ const JobDetails = props => {
                               id: item?.id,
                             }}
                           />
-                          {data?.status == 'pending' && item?.status =='pending' && (
-                            <View
-                              key={index}
-                              style={{
-                                flexDirection: 'row',
-                                // backgroundColor: 'black',
-                                justifyContent: 'space-between',
-                                width: windowWidth * 0.55,
-                                alignSelf: 'center',
-                                paddingVertical: moderateScale(5, 0.6),
-                                alignItems: 'center',
-                                marginBottom: moderateScale(5, 0.6),
-                              }}>
-                              <CustomButton
-                                isBold
-                                text={
-                                  isLoading ? (
-                                    <ActivityIndicator
-                                      color={'white'}
-                                      size={moderateScale(20, 0.6)}
-                                    />
-                                  ) : (
-                                    'Accept'
-                                  )
-                                }
-                                textColor={Color.white}
-                                width={windowWidth * 0.25}
-                                height={windowHeight * 0.04}
-                                // marginTop={moderateScale(10, 0.3)}
-                                bgColor={
-                                  userRole == 'Qbid Member'
-                                    ? Color.blue
-                                    : userRole == 'Qbid Negotiator'
-                                    ? Color.themeColor
-                                    : Color.black
-                                }
-                                borderRadius={moderateScale(30, 0.3)}
-                                fontSize={moderateScale(11, 0.6)}
-                                onPress={() => {
-                                  changeStatus('accept', item?.id);
-                                  // setModalVisible(false);
-                                }}
-                              />
-                              <CustomButton
-                                isBold
-                                text={'Decline'}
-                                textColor={Color.white}
-                                width={windowWidth * 0.25}
-                                height={windowHeight * 0.04}
-                                // marginTop={moderateScale(10, 0.3)}
-                                bgColor={
-                                  userRole == 'Qbid Member'
-                                    ? Color.blue
-                                    : userRole == 'Qbid Negotiator'
-                                    ? Color.themeColor
-                                    : Color.black
-                                }
-                                borderRadius={moderateScale(30, 0.3)}
-                                fontSize={moderateScale(11, 0.6)}
-                                onPress={() => {
-                                  changeStatus('reject', item?.id);
-                                  // setModalVisible(false);
-                                }}
-                              />
-                            </View>
-                          )}
+                          {data?.status == 'pending' &&
+                            item?.status == 'pending' && (
+                              <View
+                                key={index}
+                                style={{
+                                  flexDirection: 'row',
+                                  // backgroundColor: 'black',
+                                  justifyContent: 'space-between',
+                                  width: windowWidth * 0.55,
+                                  alignSelf: 'center',
+                                  paddingVertical: moderateScale(5, 0.6),
+                                  alignItems: 'center',
+                                  marginBottom: moderateScale(5, 0.6),
+                                }}>
+                                <CustomButton
+                                  isBold
+                                  text={
+                                    isLoading ? (
+                                      <ActivityIndicator
+                                        color={'white'}
+                                        size={moderateScale(20, 0.6)}
+                                      />
+                                    ) : (
+                                      'Accept'
+                                    )
+                                  }
+                                  textColor={Color.white}
+                                  width={windowWidth * 0.25}
+                                  height={windowHeight * 0.04}
+                                  // marginTop={moderateScale(10, 0.3)}
+                                  bgColor={
+                                    userRole == 'Qbid Member'
+                                      ? Color.blue
+                                      : userRole == 'Qbid Negotiator'
+                                      ? Color.themeColor
+                                      : Color.black
+                                  }
+                                  borderRadius={moderateScale(30, 0.3)}
+                                  fontSize={moderateScale(11, 0.6)}
+                                  onPress={() => {
+                                    changeStatus('accept', item?.id);
+                                    // setModalVisible(false);
+                                  }}
+                                />
+                                <CustomButton
+                                  isBold
+                                  text={'Decline'}
+                                  textColor={Color.white}
+                                  width={windowWidth * 0.25}
+                                  height={windowHeight * 0.04}
+                                  // marginTop={moderateScale(10, 0.3)}
+                                  bgColor={
+                                    userRole == 'Qbid Member'
+                                      ? Color.blue
+                                      : userRole == 'Qbid Negotiator'
+                                      ? Color.themeColor
+                                      : Color.black
+                                  }
+                                  borderRadius={moderateScale(30, 0.3)}
+                                  fontSize={moderateScale(11, 0.6)}
+                                  onPress={() => {
+                                    changeStatus('reject', item?.id);
+                                    // setModalVisible(false);
+                                  }}
+                                />
+                              </View>
+                            )}
                         </>
                       );
                     }}
@@ -482,7 +557,9 @@ const JobDetails = props => {
                       image: require('../Assets/Images/man1.jpg'),
                       name: user?.first_name,
                       rating: user?.rating,
-                      description: userData?.coverletter ? userData?.coverletter : desc ,
+                      description: userData?.coverletter
+                        ? userData?.coverletter
+                        : desc,
                       status: data?.status,
                       id: data?.id,
                     }}
@@ -504,7 +581,6 @@ const JobDetails = props => {
                           : Color.black,
                     }}
                   />
-              
 
                   <CustomButton
                     text={'Bid Now'}
@@ -536,11 +612,11 @@ const JobDetails = props => {
       <Modal
         isVisible={isModalVisible}
         onBackdropPress={() => {
-          setFullName('')
-          setEmail('')
-          setNumber('')
-          setCoverLetterRole('')
-          setDesc('')
+          setFullName('');
+          setEmail('');
+          setNumber('');
+          setCoverLetterRole('');
+          setDesc('');
           setModalVisible(false);
         }}>
         <View

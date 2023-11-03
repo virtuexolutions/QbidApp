@@ -10,7 +10,7 @@ import {useSelector} from 'react-redux';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import LinearGradient from 'react-native-linear-gradient';
 import Color from '../Assets/Utilities/Color';
-import {windowHeight, windowWidth} from '../Utillity/utils';
+import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
 import {
   moderateScale,
   moderateVerticalScale,
@@ -35,6 +35,10 @@ import CustomDropDownMultiSelect from '../Components/CustomDropDownMultiSelect';
 import {useNavigation} from '@react-navigation/native';
 import {AirbnbRating} from 'react-native-ratings';
 import moment from 'moment';
+import {Post} from '../Axios/AxiosInterceptorFunction';
+import {Platform} from 'react-native';
+import {ToastAndroid} from 'react-native';
+import {Alert} from 'react-native';
 
 const NegotiatorPortfolio = () => {
   const navigation = useNavigation();
@@ -45,6 +49,7 @@ const NegotiatorPortfolio = () => {
   );
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
+  const token = useSelector(state => state.authReducer.token);
   const [image, setImage] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [coverPhoto, setCoverPhoto] = useState({});
@@ -53,12 +58,7 @@ const NegotiatorPortfolio = () => {
   const [visible, setVisible] = useState(false);
   const [editProfile, setEditProfile] = useState(false);
   const [availibility, setAvailibility] = useState(false);
-  // console.log(
-  //   '🚀 ~ file: NegotiatorPortfolio.js:38 ~ NegotiatorPortfolio ~ editProfile:',
-  //   editProfile,
-  // );
 
-  //Edit Profile Modal
   const [firstName, setFirstName] = useState(
     userdata?.first_name ? userdata?.first_name : '',
   );
@@ -67,10 +67,10 @@ const NegotiatorPortfolio = () => {
   );
   const [companyName, setCompanyName] = useState(
     userdata?.company_name ? userdata?.company_name : '',
-  ); //for negotiator
+  );
   const [jobStatus, setJobStatus] = useState(
     userdata?.status ? userdata?.status : '',
-  ); //for negotiator
+  );
   const [email, setEmail] = useState(userdata?.email ? userdata?.email : '');
   const [contact, setContact] = useState(
     userdata?.phone ? userdata?.phone : '',
@@ -83,27 +83,68 @@ const NegotiatorPortfolio = () => {
   const [zipCode, setZipCode] = useState(userdata?.zip ? userdata?.zip : '');
   const [services, setServices] = useState(
     userdata?.expertise ? JSON.parse(userdata?.expertise) : [],
-  ); //for negotiator
+  );
   const [language, setLanguage] = useState(
     userdata?.language ? JSON.parse(userdata?.language) : [],
-  ); //for negotiator
+  );
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const updateProfile = async () => {
+    const url = 'auth/negotiator/profile_update';
+    const body = {
+      first_name: firstName,
+      last_name: lastName,
+      company_name: companyName,
+      status: jobStatus,
+      address: address,
+      city: city,
+      state: state,
+      zip: zipCode,
+      expertise: services,
+      language: language,
+    };
+    for (let key in body) {
+      if (body[key] == '') {
+        return Platform.OS == 'android'
+          ? ToastAndroid.show(`${key} cannot be empty`, ToastAndroid.SHORT)
+          : Alert.alert(`${key} cannot be empty`);
+      }
+    }
+    if (isNaN(zipCode)) {
+      return Platform.OS == 'android'
+        ? ToastAndroid.show(`enter a valid zipcode`, ToastAndroid.SHORT)
+        : Alert.alert(`Enter a valid zipcode`);
+    }
+
+    console.log(
+      '🚀 ~ file: NegotiatorPortfolio.js:107 ~ updateProfile ~ body:',
+      body,
+    );
+    setIsLoading(true);
+    const response = await Post(url, body, apiHeader(token));
+    setIsLoading(false);
+    if (response?.data?.success) {
+      
+      setEditProfile(false)
+    }
+  };
+
   const dummydata = [
     {
-      name:'john',
+      name: 'john',
       image: require('../Assets/Images/man1.jpg'),
       comment: 'hello every one',
       time: '3:00',
     },
     {
-      name:'john',
+      name: 'john',
       image: require('../Assets/Images/man1.jpg'),
       comment: 'hhfjshdfjhskdfhjkshd',
       time: '3:00',
     },
     {
-      name:'john',
+      name: 'john',
       image: require('../Assets/Images/man1.jpg'),
       comment: 'hello eltjikrejti reauthu ierterhtrtvery one',
       time: '3:00',
@@ -355,7 +396,7 @@ const NegotiatorPortfolio = () => {
               <DetailContainer
                 imageName={'briefcase'}
                 type={Entypo}
-                subtitle={'20'}
+                subtitle={userdata?.numb_jobs_done ?userdata?.numb_jobs_done : 0 }
                 title={'Jobs'}
               />
               <DetailContainer
@@ -425,13 +466,15 @@ const NegotiatorPortfolio = () => {
                 }}
               />
               <Detailcards
-                data={userdata?.rating <= 3
-                  ? 'Bronze'
-                  : userdata?.rating <= 3.5
-                  ? 'Silver'
-                  : userdata?.rating <= 4
-                  ? 'Gold'
-                  : 'Platinum'}
+                data={
+                  userdata?.rating <= 3
+                    ? 'Bronze'
+                    : userdata?.rating <= 3.5
+                    ? 'Silver'
+                    : userdata?.rating <= 4
+                    ? 'Gold'
+                    : 'Platinum'
+                }
                 iconName={'trophy'}
                 title={'Qbid Level'}
                 iconType={FontAwesome}
@@ -545,61 +588,59 @@ const NegotiatorPortfolio = () => {
 
             {dummydata.map((item, index) => {
               return (
-                
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    marginVertical: moderateScale(10, 0.3),
+                    paddingHorizontal: moderateScale(10, 0.3),
+                    // backgroundColor:'red'
+                  }}>
                   <View
                     style={{
-                      flexDirection: 'row',
-                      marginVertical:moderateScale(10,0.3),
-                      paddingHorizontal:moderateScale(10,0.3)
-                      // backgroundColor:'red'
+                      height: windowHeight * 0.06,
+                      width: windowHeight * 0.06,
+                      borderRadius: (windowHeight * 0.06) / 2,
+                      overflow: 'hidden',
                     }}>
-                    <View style={{
-                    height:windowHeight*0.06,
-                    width: windowHeight* 0.06,
-                    borderRadius:windowHeight * 0.06/2,
-                    overflow:'hidden'
-                    }}>
-                      <CustomImage style={{
-                        height:'100%',
-                        width:'100%'
-                      }} source={item?.image} />
-                    </View>
-                    <View style={{
-                    paddingHorizontal:moderateScale(10,0.3),
-                  
-                    }}>
-
-                    <CustomText
-                    isBold
-                    style={{
-                      color: Color.black,
-                      fontSize: moderateScale(13, 0.6),
-                      textTransform: 'uppercase',
-                      
-                    }}>
-                    {item?.name}
-                  </CustomText>
-                  <CustomText
-                    style={{
-                      color: Color.black,
-                      fontSize: moderateScale(12, 0.6),
-                      width:windowWidth*0.75
-                     
-                    }}>
-                    {item?.comment}
-                  </CustomText>
-                  <CustomText
-                    style={{
-                      color: Color.Grey,
-                      fontSize: moderateScale(12, 0.6),
-                      width:windowWidth*0.75
-                     
-                    }}>
-                    {moment().format('MMM Do, YYYY')}
-                  </CustomText>
-                    </View>
+                    <CustomImage
+                      style={{
+                        height: '100%',
+                        width: '100%',
+                      }}
+                      source={item?.image}
+                    />
                   </View>
-                
+                  <View
+                    style={{
+                      paddingHorizontal: moderateScale(10, 0.3),
+                    }}>
+                    <CustomText
+                      isBold
+                      style={{
+                        color: Color.black,
+                        fontSize: moderateScale(13, 0.6),
+                        textTransform: 'uppercase',
+                      }}>
+                      {item?.name}
+                    </CustomText>
+                    <CustomText
+                      style={{
+                        color: Color.black,
+                        fontSize: moderateScale(12, 0.6),
+                        width: windowWidth * 0.75,
+                      }}>
+                      {item?.comment}
+                    </CustomText>
+                    <CustomText
+                      style={{
+                        color: Color.Grey,
+                        fontSize: moderateScale(12, 0.6),
+                        width: windowWidth * 0.75,
+                      }}>
+                      {moment().format('MMM Do, YYYY')}
+                    </CustomText>
+                  </View>
+                </View>
               );
             })}
           </View>
@@ -796,9 +837,10 @@ const NegotiatorPortfolio = () => {
               viewHeight={0.06}
               viewWidth={0.8}
               inputWidth={0.78}
+              disable
               // border={1}
               borderColor={'#ffffff'}
-              backgroundColor={'#FFFFFF'}
+              backgroundColor={Color.veryLightGray}
               color={Color.themeColor}
               placeholderColor={Color.themeLightGray}
               borderRadius={moderateScale(25, 0.3)}
@@ -812,9 +854,10 @@ const NegotiatorPortfolio = () => {
               viewHeight={0.06}
               viewWidth={0.8}
               inputWidth={0.78}
+              disable
               // border={1}
               borderColor={'#ffffff'}
-              backgroundColor={'#FFFFFF'}
+              backgroundColor={Color.veryLightGray}
               color={Color.themeColor}
               placeholderColor={Color.themeLightGray}
               borderRadius={moderateScale(25, 0.3)}
@@ -927,9 +970,9 @@ const NegotiatorPortfolio = () => {
               width={windowWidth * 0.8}
               height={windowHeight * 0.07}
               marginTop={moderateScale(10, 0.3)}
-              // onPress={() => {
-              //   dispatch(setUserToken({token: 'dasdawradawdawrtfeasfzs'}));
-              // }}
+              onPress={() => {
+                updateProfile();
+              }}
               bgColor={
                 userRole == 'Qbid Member'
                   ? Color.blue
