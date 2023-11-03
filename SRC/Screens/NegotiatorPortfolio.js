@@ -1,11 +1,12 @@
 import {
+  FlatList,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import LinearGradient from 'react-native-linear-gradient';
@@ -35,8 +36,12 @@ import CustomDropDownMultiSelect from '../Components/CustomDropDownMultiSelect';
 import {useNavigation} from '@react-navigation/native';
 import {AirbnbRating} from 'react-native-ratings';
 import moment from 'moment';
+import {Get} from '../Axios/AxiosInterceptorFunction';
 
-const NegotiatorPortfolio = () => {
+const NegotiatorPortfolio = (props) => {
+  const fromSearch =props?.route?.params?.fromSearch
+  const item = props?.route?.params?.item
+  console.log("🚀 ~ file: NegotiatorPortfolio.js:44 ~ NegotiatorPortfolio ~ item:", item)
   const navigation = useNavigation();
   const userdata = useSelector(state => state.commonReducer.userData);
   console.log(
@@ -44,6 +49,11 @@ const NegotiatorPortfolio = () => {
     userdata,
   );
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
+  const token = useSelector(state => state.authReducer.token);
+  console.log(
+    '🚀 ~ file: NegotiatorPortfolio.js:49 ~ NegotiatorPortfolio ~ token:',
+    token,
+  );
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const [image, setImage] = useState({});
   const [showModal, setShowModal] = useState(false);
@@ -60,25 +70,35 @@ const NegotiatorPortfolio = () => {
 
   //Edit Profile Modal
   const [firstName, setFirstName] = useState(
-    userdata?.first_name ? userdata?.first_name : '',
+     fromSearch ? item?.first_name ?  item?.first_name:'not available':
+    userdata?.first_name ? userdata?.first_name : ''
   );
   const [lastName, setLastName] = useState(
+    fromSearch ? item?.last_name ?item?.last_name :'not availble':
     userdata?.last_name ? userdata?.last_name : '',
   );
   const [companyName, setCompanyName] = useState(
+    fromSearch ? item?.company_name? item?.company_name :'not available':
     userdata?.company_name ? userdata?.company_name : '',
   ); //for negotiator
   const [jobStatus, setJobStatus] = useState(
+    fromSearch ? item?.job_status ? item?.job_status :'not available':
     userdata?.status ? userdata?.status : '',
   ); //for negotiator
-  const [email, setEmail] = useState(userdata?.email ? userdata?.email : '');
+  const [email, setEmail] = useState(
+    fromSearch ? item?.email ? item?.emial :'not available' :
+    userdata?.email ? userdata?.email : '');
   const [contact, setContact] = useState(
+    fromSearch ? item?.phone ? item?.phone :'not available' :
     userdata?.phone ? userdata?.phone : '',
   );
   const [address, setAddress] = useState(
+    fromSearch ? item?.address ? item?.address :'not available':
     userdata?.address ? userdata?.address : '',
   );
-  const [city, setCity] = useState(userdata?.city ? userdata?.city : '');
+  const [city, setCity] = useState( 
+    fromSearch ? item?.city ? item?.city :'not availble' : 
+    userdata?.city ? userdata?.city : '');
   const [state, setState] = useState(userdata?.state ? userdata?.state : '');
   const [zipCode, setZipCode] = useState(userdata?.zip ? userdata?.zip : '');
   const [services, setServices] = useState(
@@ -89,26 +109,40 @@ const NegotiatorPortfolio = () => {
   ); //for negotiator
 
   const [isLoading, setIsLoading] = useState(false);
+  const [review, setReview] = useState('');
+
+  const reviews = async () => {
+    const url = 'auth/review';
+    setIsLoading(true);
+    const response = await Get('auth/review', token);
+    console.log("🚀 ~ file: NegotiatorPortfolio.js:105 ~ reviews ~ response:", response?.data)
+    setIsLoading(false);
+    if (response != undefined) {
+      setReview();
+    }
+  };
+
   const dummydata = [
     {
-      name:'john',
+      name: 'john',
       image: require('../Assets/Images/man1.jpg'),
       comment: 'hello every one',
-     
     },
     {
-      name:'john',
+      name: 'john',
       image: require('../Assets/Images/man1.jpg'),
       comment: 'hhfjshdfjhskdfhjkshd',
-    
     },
     {
-      name:'john',
+      name: 'john',
       image: require('../Assets/Images/man1.jpg'),
       comment: 'hello eltjikrejti reauthu ierterhtrtvery one',
-      
     },
   ];
+  useEffect(() => {
+    reviews()
+  }, [])
+  
   return (
     <ScreenBoiler
       showHeader={true}
@@ -442,11 +476,11 @@ const NegotiatorPortfolio = () => {
                 color: Color.black,
                 fontSize: moderateScale(17, 0.6),
                 textTransform: 'uppercase',
-                marginTop: moderateScale(10, 0.6),
+                // marginTop: moderateScale(10, 0.6),
               }}>
               Expertise
             </CustomText>
-            {JSON.parse(userdata?.expertise).map((x, index) => {
+            { userdata?.expertise && JSON.parse(userdata?.expertise).map((x, index) => {
               return (
                 <View
                   style={{
@@ -491,7 +525,7 @@ const NegotiatorPortfolio = () => {
               }}>
               Languages
             </CustomText>
-            {JSON.parse(userdata?.language).map((x, index) => {
+            { userdata?.language && JSON.parse(userdata?.language).map((x, index) => {
               return (
                 <View
                   style={{
@@ -536,66 +570,73 @@ const NegotiatorPortfolio = () => {
               }}>
               reviews
             </CustomText>
-
-            {dummydata.map((item, index) => {
-              return (
-                
+            <FlatList
+              data={dummydata} 
+              renderItem={({item, index}) => {
+                return (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    marginVertical: moderateScale(10, 0.3),
+                    paddingHorizontal: moderateScale(10, 0.3),
+                    // backgroundColor:'red'
+                  }}>
                   <View
                     style={{
-                      flexDirection: 'row',
-                      marginVertical:moderateScale(10,0.3),
-                      paddingHorizontal:moderateScale(10,0.3)
-                      // backgroundColor:'red'
+                      height: windowHeight * 0.06,
+                      width: windowHeight * 0.06,
+                      borderRadius: (windowHeight * 0.06) / 2,
+                      overflow: 'hidden',
                     }}>
-                    <View style={{
-                    height:windowHeight*0.06,
-                    width: windowHeight* 0.06,
-                    borderRadius:windowHeight * 0.06/2,
-                    overflow:'hidden'
-                    }}>
-                      <CustomImage style={{
-                        height:'100%',
-                        width:'100%'
-                      }} source={item?.image} />
-                    </View>
-                    <View style={{
-                    paddingHorizontal:moderateScale(10,0.3),
-                  
-                    }}>
-
-                    <CustomText
-                    isBold
-                    style={{
-                      color: Color.black,
-                      fontSize: moderateScale(13, 0.6),
-                      textTransform: 'uppercase',
-                      
-                    }}>
-                    {item?.name}
-                  </CustomText>
-                  <CustomText
-                    style={{
-                      color: Color.black,
-                      fontSize: moderateScale(12, 0.6),
-                      width:windowWidth*0.75
-                     
-                    }}>
-                    {item?.comment}
-                  </CustomText>
-                  <CustomText
-                    style={{
-                      color: Color.Grey,
-                      fontSize: moderateScale(12, 0.6),
-                      width:windowWidth*0.75
-                     
-                    }}>
-                    {moment().format('MMM Do, YYYY')}
-                  </CustomText>
-                    </View>
+                    <CustomImage
+                      style={{
+                        height: '100%',
+                        width: '100%',
+                      }}
+                      source={item?.image}
+                    />
                   </View>
+                  <View
+                    style={{
+                      paddingHorizontal: moderateScale(10, 0.3),
+                    }}>
+                    <CustomText
+                      isBold
+                      style={{
+                        color: Color.black,
+                        fontSize: moderateScale(13, 0.6),
+                        textTransform: 'uppercase',
+                      }}>
+                      {item?.name}
+                    </CustomText>
+                    <CustomText
+                      style={{
+                        color: Color.black,
+                        fontSize: moderateScale(12, 0.6),
+                        width: windowWidth * 0.75,
+                      }}>
+                      {item?.comment}
+                    </CustomText>
+                    <CustomText
+                      style={{
+                        color: Color.Grey,
+                        fontSize: moderateScale(12, 0.6),
+                        width: windowWidth * 0.75,
+                      }}>
+                      {moment().format('MMM Do, YYYY')}
+                    </CustomText>
+                  </View>
+                </View>
+   ) }}
+            />
+            {/* 
+            {reviews?.map((item, index) => {
+              return (
+                
+                 
                 
               );
-            })}
+            })} */}
           </View>
           {userRole == 'Qbid Member' && (
             <CustomButton

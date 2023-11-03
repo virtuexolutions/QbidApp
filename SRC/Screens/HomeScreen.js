@@ -45,7 +45,7 @@ const HomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
-  console.log("🚀 ~ file: HomeScreen.js:47 ~ HomeScreen ~ token:", token)
+  // console.log("🚀 ~ file: HomeScreen.js:47 ~ HomeScreen ~ token:", token)
   // console.log(
   //   '🚀 ~ file: HomeScreen.js:20 ~ HomeScreen ~ servicesArray',
   //   servicesArray,
@@ -64,16 +64,18 @@ const HomeScreen = () => {
   const isFocused = useIsFocused();
   const [selectedService, setSelectedService] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
-  console.log("🚀 ~ file: HomeScreen.js:64 ~ HomeScreen ~ selectedStatus:", selectedStatus)
+  // console.log("🚀 ~ file: HomeScreen.js:64 ~ HomeScreen ~ selectedStatus:", selectedStatus)
   const [visible, setVisible] = useState(false);
   const [qbidName, setQbidName] = useState('');
   const [qbidDetail, setQbidDetail] = useState('');
   const [qbiddetail1, setQbidDetail1] = useState('');
   const [myQuotes, setMyQuotes] = useState([]);
+  const [negotiator ,setNegotiator] = useState([])
+  console.log("🚀 ~ file: HomeScreen.js:74 ~ HomeScreen ~ negotiator:", negotiator)
   
   // console.log("🚀 ~ file: HomeScreen.js:72 ~ HomeScreen ~ myQuotes:", myQuotes[0]?.bids)
   const [proposals, setProposals] = useState([]);
-  console.log("🚀 ~ file: HomeScreen.js:73 ~ HomeScreen ~ proposals:", proposals)
+  // console.log("🚀 ~ file: HomeScreen.js:73 ~ HomeScreen ~ proposals:", proposals)
 
  const getAllData =async()=>{
 setIsLoading(true)
@@ -83,7 +85,7 @@ const  [response1 ,response2] =await Promise.all([
 ])
 setIsLoading(false)
 if(response1 != undefined){
-   console.log("🚀 ~ file: HomeScreen.js:85 ~ getAllData ~ response1:", response1?.data)
+  //  console.log("🚀 ~ file: HomeScreen.js:85 ~ getAllData ~ response1:", response1?.data)
   setProposals(response1?.data?.bid_help_info?.data)
 }
 if(response2 != undefined){
@@ -100,7 +102,7 @@ if(response2 != undefined){
     const response =  await Get(url, token)
     setIsLoading(false)
     if(response != undefined){
-      console.log("🚀 ~ file: HomeScreen.js:97 ~ filterQuotes ~ response:", response?.data)
+      // console.log("🚀 ~ file: HomeScreen.js:97 ~ filterQuotes ~ response:", response?.data)
       setMyQuotes(response?.data?.quote_info)
     }
   }
@@ -153,6 +155,19 @@ if(response2 != undefined){
       getAllData()
     }
   };
+  const vendor =async() => {
+    const url = 'auth/member/negotiator'
+    setIsLoading(true)
+    const response =await Get('auth/member/negotiator' ,token)
+    setIsLoading(false)
+    if(response != undefined){
+      console.log("🚀 ~ file: VendorCards.js:23 ~ vendor ~ response:", response?.data)
+      setNegotiator(response?.data?.negotitator_info)
+    }
+  }
+  useEffect(() => {
+    vendor()
+  }, [])
 
   useEffect(() => {
     getAllData();
@@ -173,20 +188,20 @@ if(response2 != undefined){
   const toggleModal = () => {
     setModalVisible(!modalVisible);
   };
-  const dummyarray =[
-    {
-      image:require('../Assets/Images/man2.jpg'),
-    title:'walter A. Jones',
-    subtitle:'jbhdfghjdgfh',
-    description:'kjadfhajkhdfjkhabvdmnabvnbanvbakeyrjaehjhityuireykdnvm,nvm,nacvhfghfjafbghfpwieroweihhr'
-    },
-    {
-      image:require('../Assets/Images/man2.jpg'),
-    title:'walter A. Jones',
-    subtitle:'jbhdfghjdgfh',
-    description:'kjadfhajkhdfjkhabvdmnabvnbanvbakeyrjaehjhityuireykdnvm,nvm,nacvhfghfjafbghfpwieroweihhr'
-    }
-  ]
+  // const dummyarray =[
+  //   {
+  //     image:require('../Assets/Images/man2.jpg'),
+  //   title:'walter A. Jones',
+  //   subtitle:'jbhdfghjdgfh',
+  //   description:'kjadfhajkhdfjkhabvdmnabvnbanvbakeyrjaehjhityuireykdnvm,nvm,nacvhfghfjafbghfpwieroweihhr'
+  //   },
+  //   {
+  //     image:require('../Assets/Images/man2.jpg'),
+  //   title:'walter A. Jones',
+  //   subtitle:'jbhdfghjdgfh',
+  //   description:'kjadfhajkhdfjkhabvdmnabvnbanvbakeyrjaehjhityuireykdnvm,nvm,nacvhfghfjafbghfpwieroweihhr'
+  //   }
+  // ]
 
   return (
     <ScreenBoiler
@@ -457,7 +472,8 @@ if(response2 != undefined){
                 );
               }}
               // data={proposals}
-              data={dummyarray}
+              // data={dummyarray}
+              data={negotiator}
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{
