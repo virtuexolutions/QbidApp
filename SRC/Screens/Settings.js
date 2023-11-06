@@ -169,12 +169,13 @@ const Settings = () => {
           />
           <CustomButton
             isBold
-            text={'My Quotes'}
+            text={'your jobes'}
             textColor={Color.themeDarkGray}
             width={windowWidth * 0.9}
             height={windowHeight * 0.07}
             marginTop={moderateScale(10, 0.3)}
             onPress={() => {
+              navigationService.navigate('YourJobes')
               // console.log('here');
             }}
             bgColor={Color.white}

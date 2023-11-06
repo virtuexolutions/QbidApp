@@ -20,6 +20,7 @@ import {Get} from '../Axios/AxiosInterceptorFunction';
 import {ActivityIndicator} from 'react-native';
 import NoData from '../Components/NoData';
 import VendorCards from '../Components/VendorCards';
+import CustomStatusModal1 from '../Components/CustomStatusModal1';
 
 const SeeAllScreen = props => {
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
@@ -38,6 +39,8 @@ const SeeAllScreen = props => {
   const [newArray, setNewArray] = useState([]);
   const [pageNum, setPageNum] = useState(1);
   const scrollViewRef = useRef();
+  const [filterVisible, setFilterVisible] = useState(false);
+  const [selectFilters, setSelectFilters] = useState([]);
 
   const handleScroll = event => {
     const currentOffset = event.nativeEvent.contentOffset.y;
@@ -69,7 +72,7 @@ const SeeAllScreen = props => {
   //   value == 'loadMore' ? setLoadMore(true) : setIsLoading(true);
   //   const response = await Get(url, token);
   //   value == 'loadMore' ? setLoadMore(false) : setIsLoading(false);
- 
+
   //   if (response != undefined) {
   //     if (type == 'qoutes') {
   //       //  console.log('Here')
@@ -100,7 +103,6 @@ const SeeAllScreen = props => {
   //     filterQuotes()
   //   }
   // }, [selectedStatus])
-  
 
   return (
     <ScreenBoiler
@@ -127,7 +129,6 @@ const SeeAllScreen = props => {
             ? Color.themeBgColorNegotiator
             : Color.themebgBusinessQbidder
         }>
-    
         <View
           style={{
             width: windowWidth * 0.93,
@@ -156,31 +157,32 @@ const SeeAllScreen = props => {
             size={moderateScale(22, 0.3)}
             color={Color.lightGrey}
             onPress={() => {
-              setIsModalVisible(true);
+              setFilterVisible(true);
             }}
           />
         </View>
 
         <FlatList
-        ListEmptyComponent={()=>{
-          return(
-              <View style={{
-                alignItems:'center',
-                justifyContent:'center',
-                // backgroundColor:'red',
-                height:windowHeight*0.5
-              }}>
-                <NoData 
+          ListEmptyComponent={() => {
+            return (
+              <View
                 style={{
-                  width: windowWidth * 0.95,
-                  height: windowHeight * 0.3,
-                  // backgroundColor: 'green',
                   alignItems: 'center',
-                  justifyContent:'center'
-                }}
+                  justifyContent: 'center',
+                  // backgroundColor:'red',
+                  height: windowHeight * 0.5,
+                }}>
+                <NoData
+                  style={{
+                    width: windowWidth * 0.95,
+                    height: windowHeight * 0.3,
+                    // backgroundColor: 'green',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
                 />
               </View>
-            )
+            );
           }}
           // data={type == 'negotiator' ? negotiatorsArray : myQoutesArray}
           data={data}
@@ -205,11 +207,7 @@ const SeeAllScreen = props => {
             );
           }}
           ListHeaderComponent={() => {
-            return (
-              <CustomText style={styles.header}>
-               {type}
-              </CustomText>
-            );
+            return <CustomText style={styles.header}>{type}</CustomText>;
           }}
           ListFooterComponent={() => {
             return (
@@ -222,7 +220,7 @@ const SeeAllScreen = props => {
           }}
         />
         {/* </ScrollView> */}
-        <CustomStatusModal
+        {/* <CustomStatusModal
           isModalVisible={isModalVisible}
           setModalVisible={setIsModalVisible}
           statusArray={
@@ -232,6 +230,12 @@ const SeeAllScreen = props => {
           }
           data={selectedStatus}
           setData={setSelectedStatus}
+        /> */}
+        <CustomStatusModal1
+          isModalVisible={filterVisible}
+          setModalVisible={setFilterVisible}
+          data={selectFilters}
+          setData={setSelectFilters}
         />
       </LinearGradient>
     </ScreenBoiler>
@@ -246,6 +250,6 @@ const styles = ScaledSheet.create({
     fontSize: moderateScale(16, 0.3),
     fontWeight: 'bold',
     width: windowWidth * 0.9,
-    marginBottom:moderateScale(10,.6)
+    marginBottom: moderateScale(10, 0.6),
   },
 });

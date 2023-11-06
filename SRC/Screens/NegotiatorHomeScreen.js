@@ -324,11 +324,11 @@ const NegotiatorHomeScreen = () => {
                       />
                     );
                   }}
-                  data={
-                    recommended.length > 5
-                      ? recommended?.slice(0, 5)
-                      : recommended
-                  }
+                  // data={
+                  //   recommended.length > 5
+                  //     ? recommended?.slice(0, 5)
+                  //     : recommended
+                  // }
                   // data={[]}
                   horizontal
                   showsHorizontalScrollIndicator={false}

@@ -328,7 +328,7 @@ const HomeScreen = () => {
           )}
         </ScrollView>
       </LinearGradient>
-      <CustomStatusModal1
+      <CustomStatusModal
         isModalVisible={modalVisible1}
         setModalVisible={setModalVisible1}
         statusArray={[{name: 'negotiator'}, {name: 'qoutes'}]}

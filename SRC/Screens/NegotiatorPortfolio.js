@@ -76,6 +76,7 @@ const NegotiatorPortfolio = props => {
   const [email, setEmail] = useState(
     fromSearch ? item?.email : userdata?.email,
   );
+  console.log("🚀 ~ file: NegotiatorPortfolio.js:113 ~ NegotiatorPortfolio ~ email:", email)
   const [contact, setContact] = useState(
     fromSearch ? item?.phone : userdata?.phone,
   );
@@ -91,12 +92,19 @@ const NegotiatorPortfolio = props => {
       ? userdata?.city
       : '',
   );
-  const [state, setState] = useState(userdata?.state ? userdata?.state : '');
-  const [zipCode, setZipCode] = useState(userdata?.zip ? userdata?.zip : '');
+  const [state, setState] = useState(
+    fromSearch ? item?.state ? item?.state  :'not availble' :
+    userdata?.state ? userdata?.state : '');
+  const [zipCode, setZipCode] = useState(
+    fromSearch ? item?.zip ? item?.zip : 'not availble' :
+    userdata?.zip ? userdata?.zip : '');
   const [services, setServices] = useState(
-    userdata?.expertise ? JSON.parse(userdata?.expertise) : [],
+    fromSearch ? item?.expertise ? JSON.parse(item?.expertise) :[] :
+    userdata?.expertise ? JSON.parse(
+      userdata?.expertise) : [],
   );
   const [language, setLanguage] = useState(
+    fromSearch ? item?.language ? JSON.parse(item?.language) :[] :
     userdata?.language ? JSON.parse(userdata?.language) : [],
   );
 
@@ -142,13 +150,14 @@ const NegotiatorPortfolio = props => {
     const url = 'auth/review';
     setIsLoading(true);
     const response = await Get('auth/review', token);
-    // console.log(
-    //   '🚀 ~ file: NegotiatorPortfolio.js:105 ~ reviews ~ response:',
-    //   response?.data,
-    // );
+   return  console.log(
+      '🚀 ~ file: NegotiatorPortfolio.js:105 ~ reviews ~ response:',
+      response?.data?.review
+      
+    );
     setIsLoading(false);
     if (response != undefined) {
-      setReview();
+      setReview(response?.data?.review);
     }
   };
 
@@ -432,7 +441,9 @@ const NegotiatorPortfolio = props => {
               </CustomText>
               <RatingComponent
                 disable={true}
-                rating={userdata?.rating}
+                rating={ 
+                  fromSearch ? item?.rating : 
+                  userdata?.rating}
                 starColor={'#ffa534'}
                 starStyle={{
                   marginRight: moderateScale(1, 0.3),
@@ -461,6 +472,7 @@ const NegotiatorPortfolio = props => {
                 imageName={'briefcase'}
                 type={Entypo}
                 subtitle={
+                  fromSearch ?item?.numb_jobs_done ?  item?.numb_jobs_done :'' : 
                   userdata?.numb_jobs_done ? userdata?.numb_jobs_done : 0
                 }
                 title={'Jobs'}
@@ -468,7 +480,9 @@ const NegotiatorPortfolio = props => {
               <DetailContainer
                 imageName={'dollar'}
                 type={FontAwesome}
-                subtitle={userdata?.total_earning}
+                subtitle={
+                  fromSearch ? item?.total_earning :
+                  userdata?.total_earning}
                 title={'Total earning'}
               />
             </View>
@@ -499,7 +513,7 @@ const NegotiatorPortfolio = props => {
                 flexWrap: 'wrap',
               }}>
               <Detailcards
-                data={userdata?.email}
+                data={email}
                 iconName={'envelope'}
                 title={'Email'}
                 iconType={FontAwesome}
@@ -510,7 +524,9 @@ const NegotiatorPortfolio = props => {
                 marginTop={moderateScale(10, 0.3)}
               />
               <Detailcards
-                data={userdata?.phone}
+                data={
+                  fromSearch ? item?.phone ? item?.phone  : 'not availble' :
+                  userdata?.phone}
                 iconName={'phone'}
                 title={'Contact'}
                 iconType={FontAwesome}
@@ -521,7 +537,9 @@ const NegotiatorPortfolio = props => {
                 }}
               />
               <Detailcards
-                data={userdata?.company_name}
+                data={
+                  fromSearch ? item?.company_name ?  item?.company_name  : 'not availble':
+                  userdata?.company_name}
                 iconName={'building'}
                 title={'Company name'}
                 iconType={FontAwesome}
@@ -533,6 +551,7 @@ const NegotiatorPortfolio = props => {
               />
               <Detailcards
                 data={
+                  fromSearch ? item?.designation ? item?.designation : 'not available':
                   userdata?.rating <= 3
                     ? 'Bronze'
                     : userdata?.rating <= 3.5
@@ -561,8 +580,8 @@ const NegotiatorPortfolio = props => {
               }}>
               Expertise
             </CustomText>
-            {userdata?.expertise &&
-              JSON.parse(userdata?.expertise).map((x, index) => {
+            {
+            services?.map((x, index) => {
                 return (
                   <View
                     style={{
@@ -607,8 +626,8 @@ const NegotiatorPortfolio = props => {
               }}>
               Languages
             </CustomText>
-            {userdata?.language &&
-              JSON.parse(userdata?.language).map((x, index) => {
+            {
+            language?.map((x, index) => {
                 return (
                   <View
                     style={{
@@ -654,7 +673,8 @@ const NegotiatorPortfolio = props => {
               reviews
             </CustomText>
             <FlatList
-              data={dummydata}
+              // data={dummydata}
+              data={review}
               renderItem={({item, index}) => {
                 return (
                   <View
@@ -676,7 +696,7 @@ const NegotiatorPortfolio = props => {
                           height: '100%',
                           width: '100%',
                         }}
-                        source={item?.image}
+                        source={{uri :item?.user_info?.photo}}
                       />
                     </View>
                     <View
@@ -690,7 +710,7 @@ const NegotiatorPortfolio = props => {
                           fontSize: moderateScale(13, 0.6),
                           textTransform: 'uppercase',
                         }}>
-                        {item?.name}
+                        {item?.user_info?.first_name}
                       </CustomText>
                       <CustomText
                         style={{
@@ -698,7 +718,7 @@ const NegotiatorPortfolio = props => {
                           fontSize: moderateScale(12, 0.6),
                           width: windowWidth * 0.75,
                         }}>
-                        {item?.comment}
+                        {item?.text}
                       </CustomText>
                       <CustomText
                         style={{
