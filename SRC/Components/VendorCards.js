@@ -11,23 +11,27 @@ import {useSelector} from 'react-redux';
 import {useState} from 'react';
 import {useEffect} from 'react';
 import {Get} from '../Axios/AxiosInterceptorFunction';
-import { TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {TouchableOpacity} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
 const VendorCards = ({item}) => {
-  console.log("🚀 ~ file: VendorCards.js:18 ~ VendorCards ~ item:", item)
-  const navigation =useNavigation()
+  console.log('🚀 ~ file: VendorCards.js:18 ~ VendorCards ~ item:', item);
+  const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
   const token = useSelector(state => state.authReducer.token);
 
   return (
     <TouchableOpacity
-    onPress={()=> navigation.navigate('NegotiatorPortfolio' ,  {fromSearch :true , item:item})}
+      onPress={() =>
+        navigation.navigate('NegotiatorPortfolio', {
+          fromSearch: true,
+          item: item,
+        })
+      }
       style={styles.mainContainer}>
-      <View
-        style={styles.imageConatiner}>
+      <View style={styles.imageConatiner}>
         <CustomImage
-          source={{uri:item?.photo}}
+          source={{uri: item?.photo}}
           style={{
             height: '100%',
             width: '100%',
@@ -41,20 +45,31 @@ const VendorCards = ({item}) => {
       <CustomText style={styles.decription} isBold>
         {item?.email}
       </CustomText>
-      <View
-        style={styles.view1}>
-        <Icon name="star" as={AntDesign} size={13} color="black" />
+      <View style={styles.view1}>
+        <Icon
+          name="star"
+          as={AntDesign}
+          size={13}
+          color={
+            item?.rating <= 3
+              ? '#CD7F32'
+              : item?.rating <= 3.5
+              ? '#C0C0C0'
+              : item?.rating <= 4
+              ? '#FF9529'
+              : '#e5e4e2'
+          }
+        />
         <CustomText
           style={{
             fontSize: moderateScale(13),
           }}>
-         {`${item?.rating ? item?.rating : 0 }/5`}
+          {`${item?.rating ? item?.rating : 0}/5`}
         </CustomText>
       </View>
       {/* <CustomText numberOfLines={2} style={styles.decription}>
         {item?.description}
       </CustomText> */}
-      
     </TouchableOpacity>
   );
 };
@@ -62,15 +77,15 @@ const VendorCards = ({item}) => {
 export default VendorCards;
 
 const styles = StyleSheet.create({
-  mainContainer:{
+  mainContainer: {
     height: windowHeight * 0.24,
     backgroundColor: '#fff',
     width: windowWidth * 0.39,
     borderRadius: 20,
     marginHorizontal: 10,
-    marginVertical:moderateScale(5,.3),
+    marginVertical: moderateScale(7, 0.3),
   },
-  imageConatiner:{
+  imageConatiner: {
     height: windowHeight * 0.13,
     width: windowWidth * 0.39,
     borderTopRightRadius: 20,
@@ -81,7 +96,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
     paddingTop: 10,
-    width:windowWidth*0.37
+    width: windowWidth * 0.37,
   },
   decription: {
     fontSize: 10,
@@ -91,12 +106,12 @@ const styles = StyleSheet.create({
     width: windowWidth * 0.37,
     color: Color.darkGray,
   },
-  view1:{
+  view1: {
     // paddingHorizontal:20,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
     // paddingTop:2,
     // backgroundColor:'red'
-  }
+  },
 });
