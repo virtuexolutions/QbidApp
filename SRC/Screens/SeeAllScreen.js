@@ -227,8 +227,8 @@ const SeeAllScreen = props => {
           setModalVisible={setIsModalVisible}
           statusArray={
             type == 'negotiator'
-              ? servicesArray
-              : [{name: 'pending'}, {name: 'onGoing'}, {name: 'completed'}]
+            ? servicesArray
+            : [{name: 'pending'}, {name: 'onGoing'}, {name: 'completed'}]
           }
           data={selectedStatus}
           setData={setSelectedStatus}

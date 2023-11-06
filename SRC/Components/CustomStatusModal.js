@@ -29,14 +29,11 @@ const CustomStatusModal = ({
         }
       }>
       <View
-        style={
-          {
-            // height: windowHeight * 0.32,
-            // paddingVertical:moderateScale(20,0.6),
-            // maxHeight : windowHeight * 0.5,
-            // paddingVertical: moderateScale(10, 0.3),
-          }
-        }>
+        style={{
+          // paddingVertical:moderateScale(20,0.6),
+          // maxHeight : windowHeight * 0.5,
+          // paddingVertical: moderateScale(10, 0.3),
+        }}>
         <ScrollView
           style={styles.statusModal}
           contentContainerStyle={
@@ -79,8 +76,7 @@ const CustomStatusModal = ({
                     // marginTop: moderateScale(10, 0.3),
                     textAlign: 'center',
                     paddingBottom: moderateScale(5, 0.3),
-                    backgroundColor:
-                      'transparent',
+                    backgroundColor: 'transparent',
                   }}>
                   {item?.name}
                 </CustomText>
@@ -98,7 +94,7 @@ const styles = ScaledSheet.create({
   statusModal: {
     alignSelf: 'center',
     // height : windowHeight * 0.5,
-    width: windowWidth * 0.8,
+    width: windowWidth * 0.9,
     // paddingHorizontal: moderateScale(10, 0.3),
     backgroundColor: Color.white,
     borderRadius: moderateScale(5, 0.3),

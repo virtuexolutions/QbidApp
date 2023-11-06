@@ -30,6 +30,7 @@ import {Get, Post} from '../Axios/AxiosInterceptorFunction';
 import {useIsFocused} from '@react-navigation/native';
 import NoData from '../Components/NoData';
 import VendorCards from '../Components/VendorCards';
+import CustomStatusModal1 from '../Components/CustomStatusModal1';
 
 const HomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
@@ -327,7 +328,7 @@ const HomeScreen = () => {
           )}
         </ScrollView>
       </LinearGradient>
-      <CustomStatusModal
+      <CustomStatusModal1
         isModalVisible={modalVisible1}
         setModalVisible={setModalVisible1}
         statusArray={[{name: 'negotiator'}, {name: 'qoutes'}]}

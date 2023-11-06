@@ -140,10 +140,9 @@ const Support = () => {
         <KeyboardAwareScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
-            paddingBottom: moderateScale(120, 0.3),
+            paddingBottom: moderateScale(140, 0.3),
             alignItems: 'center',
             width: '100%',
-            // height: windowHeight,
           }}>
           <CustomText style={styles.Txt1} isBold>
             {'Contact Us'}
