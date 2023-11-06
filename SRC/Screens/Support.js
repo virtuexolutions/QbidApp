@@ -42,17 +42,17 @@ const Support = () => {
   const navigation = useNavigation()
 
   const GetSupportData = async () => {
-    const url = 'auth/admin/info';
+    const url = 'auth/support';
     setLoading(true);
     const response = await Get(url, token);
     setLoading(false);
     if (response != undefined) {
       console.log(response?.data);
-      setSupportData(response?.data?.data);
+      setSupportData(response?.data);
     }
   };
   useEffect(() => {
-    // GetSupportData();
+    GetSupportData();
     return () => {
       setFullName('');
       setPhone('');
@@ -195,8 +195,8 @@ const Support = () => {
             <CustomText style={[styles.contactInfoText]} isRegular>
               {loading
                 ? 'loading...'
-                : supportData?.official_email
-                ? supportData?.official_email
+                : supportData?.email
+                ? supportData?.email
                 : 'not added yet'}
             </CustomText>
           </TouchableOpacity>

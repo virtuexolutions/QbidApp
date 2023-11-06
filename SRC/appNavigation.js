@@ -40,6 +40,8 @@ import TermsAndConditions from './Screens/TermsAndConditions';
 import Support from './Screens/Support';
 import MileRange from './Screens/MileRange';
 import DrawerScreen from './Screens/DrawerScreen';
+import YourJobes from './Screens/YourJobes';
+import CompleteJobes from './Screens/CompleteJobes';
 
 
 
@@ -81,6 +83,9 @@ const AppNavigator = () => {
           <RootNav.Screen name="Subscription" component={Subscription} />
           <RootNav.Screen name="TermsAndConditions" component={TermsAndConditions} />
           <RootNav.Screen name="Support" component={Support} />
+          <RootNav.Screen name="YourJobes" component={YourJobes} />
+          <RootNav.Screen name="CompleteJobes" component={CompleteJobes} />
+        
 
 
           <RootNav.Screen
