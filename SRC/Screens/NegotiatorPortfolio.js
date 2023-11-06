@@ -152,7 +152,7 @@ const NegotiatorPortfolio = props => {
     const response = await Get('auth/review', token);
    return  console.log(
       '🚀 ~ file: NegotiatorPortfolio.js:105 ~ reviews ~ response:',
-      response?.data?.review
+      response?.data
       
     );
     setIsLoading(false);
