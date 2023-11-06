@@ -40,7 +40,8 @@ const SeeAllScreen = props => {
   const [pageNum, setPageNum] = useState(1);
   const scrollViewRef = useRef();
   const [filterVisible, setFilterVisible] = useState(false);
-  const [selectFilters, setSelectFilters] = useState([]);
+  // const [selectFilters, setSelectFilters] = useState([]);
+  const [filters, setFilters] = useState({});
 
   const handleScroll = event => {
     const currentOffset = event.nativeEvent.contentOffset.y;
@@ -51,6 +52,20 @@ const SeeAllScreen = props => {
     if (currentOffset >= maxOffset) {
       setPageNum(prev => prev + 1);
     }
+  };
+
+  const searchCards = async () => {
+    const url = type == 'negotiater' ? '' : '';
+    const body =
+      type == 'negotiater'
+        ? {
+            ...filters,
+            type: type,
+            text: searchData,
+          }
+        : {status: selectedStatus, type: type, text: searchData};
+
+    const response = await Post(url, body, apiHeader(token));
   };
 
   // const filterQuotes = async()=>{
@@ -157,7 +172,9 @@ const SeeAllScreen = props => {
             size={moderateScale(22, 0.3)}
             color={Color.lightGrey}
             onPress={() => {
-              setFilterVisible(true);
+              type == 'negotiator'
+                ? setFilterVisible(true)
+                : setIsModalVisible(true);
             }}
           />
         </View>
@@ -184,9 +201,7 @@ const SeeAllScreen = props => {
               </View>
             );
           }}
-          // data={type == 'negotiator' ? negotiatorsArray : myQoutesArray}
           data={data}
-          // data={[]}
           ref={scrollViewRef}
           onScroll={handleScroll}
           scrollEventThrottle={16}
@@ -220,22 +235,24 @@ const SeeAllScreen = props => {
           }}
         />
         {/* </ScrollView> */}
-        {/* <CustomStatusModal
+        <CustomStatusModal
           isModalVisible={isModalVisible}
           setModalVisible={setIsModalVisible}
-          statusArray={
-            type == 'negotiator'
-            ? servicesArray
-            : [{name: 'pending'}, {name: 'onGoing'}, {name: 'completed'}]
-          }
+          text={'status'}
+          statusArray={[
+            {name: 'pending'},
+            {name: 'onGoing'},
+            {name: 'completed'},
+          ]}
           data={selectedStatus}
           setData={setSelectedStatus}
-        /> */}
+        />
         <CustomStatusModal1
           isModalVisible={filterVisible}
           setModalVisible={setFilterVisible}
-          data={selectFilters}
-          setData={setSelectFilters}
+          filters={filters}
+          setFilters={setFilters}
+          // setData={setSelectFilters}
         />
       </LinearGradient>
     </ScreenBoiler>

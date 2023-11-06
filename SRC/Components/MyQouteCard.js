@@ -27,7 +27,7 @@ import ReviewModal from './ReviewModal';
 
 const MyQouteCard = ({item}) => {
   const token = useSelector(state => state.authReducer.token);
-  // console.log('🚀 ~ file: MyQouteCard.js:14 ~ MyQouteCard ~ item:', item);
+  return console.log('🚀 ~ file: MyQouteCard.js:14 ~ MyQouteCard ~ item:', item);
   const [modalVisible, setModalVisible] = useState(false);
   const [cmpLoading, setCmpLoading] = useState(false);
   const [rbRef, setRbRef] = useState(null);
