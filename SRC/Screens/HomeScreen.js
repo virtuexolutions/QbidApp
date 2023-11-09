@@ -276,7 +276,7 @@ const HomeScreen = () => {
               <CustomText
                 onPress={() => {
                   navigationService.navigate('SeeAllScreen', {
-                    type: 'qoutes',
+                    type: 'quotes',
                     data: myQuotes,
                   });
                 }}

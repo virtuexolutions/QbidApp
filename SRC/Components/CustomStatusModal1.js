@@ -29,11 +29,11 @@ const CustomStatusModal1 = ({
 
   const negotiatorData = [
     {
-      name: 'Level',
+      name: 'level',
       data: ['Bronze', 'Gold', 'Silver', 'platinum'],
     },
     {
-      name: 'Expertise',
+      name: 'expertise',
       data: [
         'Auto repair',
         'plumbing Projects',
