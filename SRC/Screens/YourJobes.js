@@ -64,6 +64,31 @@ const YourJobes = props => {
       // console.log('Reached the end of ScrollView');
     }
   };
+  
+  const dummydata = [
+    {
+      title:'autorepair',
+      name: 'john',
+      photo: require('../Assets/Images/man1.jpg'),
+      quoted_price:20,
+      offering_percentage:10,
+      notes:'kfdkshdfgdshgfsbdfnbcnvbxncvkjtrhtuerht',
+    },
+    {
+      title:'plumbing project',
+      name: 'alexender',
+      image: require('../Assets/Images/man1.jpg'),
+      offering_percentage:15,
+      notes:'kfdkshdfgdshgfsbdfnbcnvbxncvkjtrhtuerht',
+    },
+    {
+      title:'autorepair',
+      name: 'matthew',
+      image: require('../Assets/Images/man1.jpg'),
+      offering_percentage:10,
+      notes:'kfdkshdfgdshgfsbdfnbcnvbxncvkjtrhtuerht',
+    },
+  ];
   return (
     <ScreenBoiler
       statusBarBackgroundColor={
@@ -96,43 +121,7 @@ const YourJobes = props => {
             ? Color.themeBgColorNegotiator
             : Color.themebgBusinessQbidder
         }>
-        <View
-          style={{
-            width: windowWidth * 0.93,
-            // backgroundColor: 'red',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            alignSelf: 'center',
-          }}>
-          <SearchContainer
-            width={windowWidth * 0.85}
-            input
-            inputStyle={{
-              height: windowHeight * 0.05,
-            }}
-            style={{
-              height: windowHeight * 0.06,
-              // marginRight:moderateScale(10,.6),
-              // alignSelf:'center',
-              marginBottom: moderateScale(10, 0.3),
-              borderRadius: moderateScale(5, 0.3),
-            }}
-            data={searchData}
-            setData={setSearchData}
-          />
-          {/* {type != 'working on' && (
-            <Icon
-              name={'sound-mix'}
-              as={Entypo}
-              size={moderateScale(22, 0.3)}
-              color={Color.lightGrey}
-              onPress={() => {
-                setIsModalVisible(true);
-              }}
-            />
-          )} */}
-        </View>
+    
         <CustomText isBold style={styles.heading}>
         Your Jobes
         </CustomText>
@@ -141,10 +130,11 @@ const YourJobes = props => {
           <View
             style={{
               width: windowWidth,
+              // backgroundColor:'red',
               height: windowHeight * 0.75,
               alignSelf: 'center',
               justifyContent: 'center',
-              // alignItems:'center'
+              alignItems:'center'
             }}>
             <ActivityIndicator color={'white'} size={'large'} />
           </View>
@@ -178,14 +168,15 @@ const YourJobes = props => {
             onScroll={handleScroll}
             scrollEventThrottle={16}
             // data={newArray}
-            data={[1, 2, 3]}
+            data={dummydata}
             numColumns={type != 'Seeking Help' ? 2 : 1}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{
               width: windowWidth,
               alignItems: 'center',
+              // backgroundColor:'red',
               // paddingHorizontal: moderateScale(15, 0.3),
-              paddingTop: moderateScale(20, 0.6),
+              // paddingTop: moderateScale(10, 0.6),
               paddingBottom: moderateScale(80, 0.6),
             }}
             renderItem={({item, index}) => {
@@ -198,7 +189,7 @@ const YourJobes = props => {
                   item={item}
                   style={index % 2 == 0 && {marginRight: moderateScale(7, 0.3)}}
                   onPress={() => {
-                    navigationService.navigate('CompleteJobes', {item});
+                    navigationService.navigate('CompleteJobes', {item:item});
                   }}
                 />
               ) : (
@@ -253,6 +244,6 @@ const styles = ScaledSheet.create({
     color: Color.white,
     marginLeft: moderateScale(15, 0.3),
     fontSize: moderateScale(20, 0.6),
-    paddingVertical: moderateScale(10, 0.3),
+    paddingTop: moderateScale(10, 0.3),
   },
 });
