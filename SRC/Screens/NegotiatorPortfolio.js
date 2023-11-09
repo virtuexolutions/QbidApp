@@ -511,8 +511,9 @@ const NegotiatorPortfolio = props => {
                 width: '100%',
                 paddingRight: moderateScale(5, 0.6),
                 flexWrap: 'wrap',
-              }}>
-              <Detailcards
+              }}>{
+                !fromSearch  &&  <>
+                <Detailcards
                 data={email}
                 iconName={'envelope'}
                 title={'Email'}
@@ -536,6 +537,9 @@ const NegotiatorPortfolio = props => {
                   backgroundColor: '#EEEEEE',
                 }}
               />
+               </>
+              }
+              
               <Detailcards
                 data={
                   fromSearch ? item?.company_name ?  item?.company_name  : 'not availble':

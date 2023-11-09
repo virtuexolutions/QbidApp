@@ -321,7 +321,7 @@ const HomeScreen = () => {
                 paddingTop: moderateScale(20, 0.3),
               }}
               renderItem={({item, index}) => {
-                // console.log("🚀 ~ file: HomeScreen.js:512 ~ HomeScreen ~ item:", item)
+                // console.log("🚀 ~ file: HomeScreen.r:512 ~ HomeScreen ~ item:", item)
                 return <MyQouteCard item={item} key={index} />;
               }}
             />

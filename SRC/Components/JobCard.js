@@ -14,7 +14,7 @@ import numeral from 'numeral';
 import {Post} from '../Axios/AxiosInterceptorFunction';
 
 const JobCard = ({fromSeeAll, style, onPress, item}) => {
-  console.log('🚀 ~ file: JobCard.js:15 ~ JobCard ~? item:', item?.user_info);
+  console.log('🚀 ~ file: JobCard.js:15 ~ JobCard ~? item:', item);
   const token = useSelector(state => state.authReducer.token);
 
   const [loading, setLoading] = useState(false);
