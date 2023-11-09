@@ -67,8 +67,9 @@ const SeeAllScreen = props => {
     const url = 'auth/member/search';
     const body = {
       ...filters,
-      search: '',
+      search: searchData,
     };
+    console.log("🚀 ~ file: SeeAllScreen.js:69 ~ searchCards ~ body:", body)
     // : {status: selectedStatus, type: type, text: searchData};
 
     const response = await Post(url, body, apiHeader(token));
@@ -148,7 +149,7 @@ const SeeAllScreen = props => {
     if (Object.keys(filters).length > 0) {
       type == 'negotiator' && searchCards();
     }
-  }, [filters]);
+  }, [filters, searchData]);
 
   return (
     <ScreenBoiler

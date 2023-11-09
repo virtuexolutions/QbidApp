@@ -77,7 +77,7 @@ const VendorCards = ({item}) => {
         {item?.company_name}
       </CustomText>
       {
-        JSON.parse(item?.expertise).slice(0,2).map((item ,index) => {
+       item?.expertise && JSON.parse(item?.expertise).slice(0,2).map((item ,index) => {
           return(
 
       <CustomText style={styles.decription} isBold>

@@ -46,7 +46,7 @@ const JobDetails = props => {
   );
 
   const [data, setData] = useState(data1);
-  console.log('🚀 ~ file: JobDetails.js:47 ~ JobDetails ~ data:', data);
+  // console.log('🚀 ~ file: JobDetails.js:47 ~ JobDetails ~ data:', data);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
   const [checked, setChecked] = useState(false);
@@ -68,14 +68,6 @@ const JobDetails = props => {
 
   
 
-  const images = [
-    {
-      uri: 'https://avatars2.githubusercontent.com/u/7970947?v=3&s=460',
-      // uri: item?.photo,
-    },
-    {},
-    {},
-  ];
 
   const bidDetails = async () => {
     const url = `auth/negotiator/quote_detail/${data?.id}`;
@@ -233,7 +225,7 @@ const JobDetails = props => {
                   flexDirection: 'row',
                   alignItems: 'center',
                 }}>
-                {/* <View
+                <View
                   style={{
                     width: moderateScale(60, 0.3),
                     height: moderateScale(50, 0.3),
@@ -251,7 +243,7 @@ const JobDetails = props => {
                       height: '100%',
                     }}
                   />
-                </View> */}
+                </View>
                 <View
                   style={{
                     marginLeft: moderateScale(5, 0.3),
@@ -403,7 +395,7 @@ const JobDetails = props => {
                         borderRadius: moderateScale(10, 0.3),
                         overflow: 'hidden',
                       }}>
-                      <CustomImage
+                      {/* <CustomImage
                         source={
                           data?.user_info?.photo
                             ? {uri: data?.user_info?.photo}
@@ -413,7 +405,7 @@ const JobDetails = props => {
                           width: '100%',
                           height: '100%',
                         }}
-                      />
+                      /> */}
                     </View>
                     <View
                       style={{
@@ -499,15 +491,15 @@ const JobDetails = props => {
                       paddingBottom: moderateScale(30, 0.6),
                     }}
                     renderItem={({item, index}) => {
-                    console.log(
+                  console.log(
                         '🚀 ~ file: JobDetails.js:349 ~ JobDetails ~ item: details',
-                        item
+                        item?.quote_info?.user_info?.photo
                       );
                       return (
                         <>
                           <BidderDetail
                             item={{
-                              image: item?.user_info?.photo ,
+                              image: item?.quote_info?.user_info?.photo ,
                               name: item?.fullname,
                               rating: item?.rating,
                               description: item?.coverletter,
@@ -600,7 +592,7 @@ const JobDetails = props => {
                   </CustomText>
                   <BidderDetail
                     item={{
-                      image: require('../Assets/Images/man1.jpg'),
+                      photo: require('../Assets/Images/man1.jpg'),
                       name: user?.first_name,
                       rating: user?.rating,
                       description: userData?.coverletter

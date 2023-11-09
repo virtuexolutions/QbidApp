@@ -45,7 +45,7 @@ const NegotiatorHomeScreen = () => {
   const token = useSelector(state => state.authReducer.token);
   // console.log("🚀 ~ file: NegotiatorHomeScreen.js:46 ~ NegotiatorHomeScreen ~ token:", token)
   const userData = useSelector(state => state.commonReducer.userData);
-  // console.log("🚀 ~ file: NegotiatorHomeScreen.js:43 ~ NegotiatorHomeScreen ~ userData:", userData)
+  console.log("🚀 ~ file: NegotiatorHomeScreen.js:43 ~ NegotiatorHomeScreen ~ userData:", userData)
 
   const [searchData, setSearchData] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -82,6 +82,7 @@ const NegotiatorHomeScreen = () => {
         setWorking(response2?.data?.quote_info?.data);
     }
     if (response3 != undefined) {
+    // console.log("🚀 ~ file: NegotiatorHomeScreen.js:85 ~ getProposal ~ response3:", response3?.data)
 
       ![null, undefined, ''].includes(response2?.data?.quote_info) &&
         setSeekingHelp(response3?.data?.bid_help_info?.data);

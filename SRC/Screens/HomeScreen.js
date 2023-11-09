@@ -331,7 +331,7 @@ const HomeScreen = () => {
       <CustomStatusModal
         isModalVisible={modalVisible1}
         setModalVisible={setModalVisible1}
-        statusArray={[{name: 'negotiator'}, {name: 'qoutes'}]}
+        statusArray={[{name: 'negotiator'}, {name: 'quotes'}]}
         data={selectedData1}
         setData={setSelectedData1}
         text={'category'}

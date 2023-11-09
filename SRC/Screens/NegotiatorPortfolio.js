@@ -46,6 +46,7 @@ import {setUserData} from '../Store/slices/common';
 const NegotiatorPortfolio = props => {
   const fromSearch = props?.route?.params?.fromSearch;
   const item = props?.route?.params?.item;
+  console.log("🚀 ~ file: NegotiatorPortfolio.js:49 ~ NegotiatorPortfolio ~ item:", item)
   const navigation = useNavigation();
   const userdata = useSelector(state => state.commonReducer.userData);
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
@@ -150,7 +151,7 @@ const NegotiatorPortfolio = props => {
     const url = 'auth/review';
     setIsLoading(true);
     const response = await Get('auth/review', token);
-   return  console.log(
+   console.log(
       '🚀 ~ file: NegotiatorPortfolio.js:105 ~ reviews ~ response:',
       response?.data
       
@@ -678,7 +679,7 @@ const NegotiatorPortfolio = props => {
             </CustomText>
             <FlatList
               // data={dummydata}
-              data={review}
+              data={item?.negotiator_review ? item?.negotiator_review : userdata?.negotiator_review}
               renderItem={({item, index}) => {
                 return (
                   <View

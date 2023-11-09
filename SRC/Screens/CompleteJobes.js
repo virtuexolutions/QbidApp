@@ -45,7 +45,7 @@ import moment from 'moment';
     );
   
     const [data, setData] = useState(data1);
-    console.log('🚀 ~ file: JobDetails.js:47 ~ JobDetails ~ data:', data);
+    // console.log('🚀 ~ file: JobDetails.js:47 ~ JobDetails ~ data:', data);
     const userRole = useSelector(state => state.commonReducer.selectedRole);
     const token = useSelector(state => state.authReducer.token);
     const [checked, setChecked] = useState(false);

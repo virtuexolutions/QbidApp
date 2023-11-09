@@ -103,7 +103,7 @@ const MyQouteCard = ({item}) => {
           borderRadius: moderateScale(10, 0.3),
           overflow: 'hidden',
         }}>
-        <CustomImage
+        {/* <CustomImage
           source={
             item?.images.length > 0
               ? {uri: item?.images[0]?.image}
@@ -117,7 +117,7 @@ const MyQouteCard = ({item}) => {
           onPress={() => {
             navigationService.navigate('JobDetails', {item: item});
           }}
-        />
+        /> */}
       </View>
       <View
         style={{
