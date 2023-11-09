@@ -10,15 +10,19 @@ import ScreenBoiler from '../Components/ScreenBoiler';
 import LinearGradient from 'react-native-linear-gradient';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import CustomButton from '../Components/CustomButton';
-import {setUserLogin, setUserLogoutAuth, setUserToken} from '../Store/slices/auth';
+import {
+  setUserLogin,
+  setUserLogoutAuth,
+  setUserToken,
+} from '../Store/slices/auth';
 import ImageView from 'react-native-image-viewing';
 // import RNInstalledApplication from 'react-native-installed-application';
 import moment from 'moment/moment';
 import navigationService from '../navigationService';
-import { setUserLogOut } from '../Store/slices/common';
+import {setUserLogOut} from '../Store/slices/common';
 
 const Settings = () => {
-  const user = useSelector(state=> state.commonReducer.userData)
+  const user = useSelector(state => state.commonReducer.userData);
   // console.log("🚀 ~ file: Settings.js:22 ~ Settings ~ user:", user?.photo)
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const dispatch = useDispatch();
@@ -54,10 +58,10 @@ const Settings = () => {
       statusBarContentStyle={'light-content'}
       headerColor={
         userRole == 'Qbid Member'
-        ? Color.themeBgColor
-        : userRole == 'Qbid Negotiator'
-        ? Color.themeBgColorNegotiator
-        : Color.themebgBusinessQbidder
+          ? Color.themeBgColor
+          : userRole == 'Qbid Negotiator'
+          ? Color.themeBgColorNegotiator
+          : Color.themebgBusinessQbidder
       }>
       <LinearGradient
         style={{
@@ -67,10 +71,10 @@ const Settings = () => {
         end={{x: 1, y: 0}}
         colors={
           userRole == 'Qbid Member'
-          ? Color.themeBgColor
-          : userRole == 'Qbid Negotiator'
-          ? Color.themeBgColorNegotiator
-          : Color.themebgBusinessQbidder
+            ? Color.themeBgColor
+            : userRole == 'Qbid Negotiator'
+            ? Color.themeBgColorNegotiator
+            : Color.themebgBusinessQbidder
         }>
         <KeyboardAwareScrollView
           showsVerticalScrollIndicator={false}
@@ -92,7 +96,7 @@ const Settings = () => {
               onPress={() => {
                 setIsVisible(true);
               }}
-              source={{uri:user?.photo}}
+              source={{uri: user?.photo}}
               style={[styles.image]}
             />
           </View>
@@ -113,7 +117,11 @@ const Settings = () => {
             height={windowHeight * 0.07}
             marginTop={moderateScale(10, 0.3)}
             onPress={() => {
-              navigationService.navigate(userRole == 'Qbid Member' ? 'MyAccounts' : 'NegotiatorPortfolio');
+              navigationService.navigate(
+                userRole == 'Qbid Member'
+                  ? 'MyAccounts'
+                  : 'NegotiatorPortfolio',
+              );
             }}
             bgColor={Color.white}
             // isGradient
@@ -134,24 +142,22 @@ const Settings = () => {
             // isGradient
             borderRadius={moderateScale(30, 0.3)}
           />
-          {
-             userRole == 'Business Qbidder' &&
-          
-           <CustomButton
-            isBold
-            text={'milage Rings'}
-            textColor={Color.themeDarkGray}
-            width={windowWidth * 0.9}
-            height={windowHeight * 0.07}
-            marginTop={moderateScale(10, 0.3)}
-            onPress={() => {
-              navigationService.navigate('MileRange');
-            }}
-            bgColor={Color.white}
-            // isGradient
-            borderRadius={moderateScale(30, 0.3)}
-          />
-}
+          {userRole == 'Business Qbidder' && (
+            <CustomButton
+              isBold
+              text={'milage Rings'}
+              textColor={Color.themeDarkGray}
+              width={windowWidth * 0.9}
+              height={windowHeight * 0.07}
+              marginTop={moderateScale(10, 0.3)}
+              onPress={() => {
+                navigationService.navigate('MileRange');
+              }}
+              bgColor={Color.white}
+              // isGradient
+              borderRadius={moderateScale(30, 0.3)}
+            />
+          )}
           <CustomButton
             isBold
             text={'Subscription'}
@@ -167,21 +173,23 @@ const Settings = () => {
             borderRadius={moderateScale(30, 0.3)}
             elevation
           />
-          <CustomButton
-            isBold
-            text={'your jobes'}
-            textColor={Color.themeDarkGray}
-            width={windowWidth * 0.9}
-            height={windowHeight * 0.07}
-            marginTop={moderateScale(10, 0.3)}
-            onPress={() => {
-              navigationService.navigate('YourJobes')
-              // console.log('here');
-            }}
-            bgColor={Color.white}
-            // isGradient
-            borderRadius={moderateScale(30, 0.3)}
-          />
+          {userRole != 'Qbid Member' && (
+            <CustomButton
+              isBold
+              text={'your jobes'}
+              textColor={Color.themeDarkGray}
+              width={windowWidth * 0.9}
+              height={windowHeight * 0.07}
+              marginTop={moderateScale(10, 0.3)}
+              onPress={() => {
+                navigationService.navigate('YourJobes');
+                // console.log('here');
+              }}
+              bgColor={Color.white}
+              // isGradient
+              borderRadius={moderateScale(30, 0.3)}
+            />
+          )}
           <CustomButton
             isBold
             text={'Change Password'}
@@ -232,8 +240,8 @@ const Settings = () => {
             height={windowHeight * 0.07}
             marginTop={moderateScale(10, 0.3)}
             onPress={() => {
-             dispatch(setUserLogOut())
-             dispatch(setUserLogoutAuth())
+              dispatch(setUserLogOut());
+              dispatch(setUserLogoutAuth());
             }}
             bgColor={Color.white}
             // isGradient

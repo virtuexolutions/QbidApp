@@ -39,13 +39,14 @@ import ImageView from 'react-native-image-viewing';
 
 const JobDetails = props => {
   const data1 = props?.route?.params?.item;
+  console.log("🚀 ~ file: JobDetails.js:42 ~ JobDetails ~ data1:", data1)
   const user = useSelector(state => state.commonReducer.userData);
   const UserCoverLetterArray = useSelector(
     state => state.commonReducer.servicesArray,
   );
 
   const [data, setData] = useState(data1);
-  // console.log('🚀 ~ file: JobDetails.js:47 ~ JobDetails ~ data:', data);
+  console.log('🚀 ~ file: JobDetails.js:47 ~ JobDetails ~ data:', data);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
   const [checked, setChecked] = useState(false);
@@ -87,7 +88,7 @@ const JobDetails = props => {
       const mainuserData = response?.data?.quote_info?.bids?.find(
         item => item.user_info?.id == user?.id,
       );
-      response?.data?.quote_info?.images.map(item => {
+      response?.data?.quote_info?.images?.map(item => {
         return setFinalImagesArray(prev => [...prev,{uri: item?.image}]);
       });
 
@@ -232,7 +233,7 @@ const JobDetails = props => {
                   flexDirection: 'row',
                   alignItems: 'center',
                 }}>
-                <View
+                {/* <View
                   style={{
                     width: moderateScale(60, 0.3),
                     height: moderateScale(50, 0.3),
@@ -241,16 +242,16 @@ const JobDetails = props => {
                   }}>
                   <CustomImage
                     source={
-                      data?.images
-                        ? {uri: data?.images[0]?.image}
-                        : require('../Assets/Images/dummyman1.png')
+                      // data?.images?.length>0 
+                      //   ? {uri: data?.images[0]?.image}  : 
+                      require('../Assets/Images/dummyman1.png')
                     }
                     style={{
                       width: '100%',
                       height: '100%',
                     }}
                   />
-                </View>
+                </View> */}
                 <View
                   style={{
                     marginLeft: moderateScale(5, 0.3),
