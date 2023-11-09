@@ -27,7 +27,7 @@ import ReviewModal from './ReviewModal';
 
 const MyQouteCard = ({item}) => {
   const token = useSelector(state => state.authReducer.token);
-  return console.log('🚀 ~ file: MyQouteCard.js:14 ~ MyQouteCard ~ item:', item);
+  console.log('🚀 ~ file: MyQouteCard.js:14 ~ MyQouteCard ~ item:', item);
   const [modalVisible, setModalVisible] = useState(false);
   const [cmpLoading, setCmpLoading] = useState(false);
   const [rbRef, setRbRef] = useState(null);
@@ -105,10 +105,10 @@ const MyQouteCard = ({item}) => {
         }}>
         <CustomImage
           source={
-            require('../Assets/Images/dummyman2.png')
-            // item?.status == 'pending'
-            //   ? {uri: item?.images[0]?.image}
-            //   : item?.negotiatorImage
+            item?.images.length > 0
+              ? {uri: item?.images[0]?.image}
+              : require('../Assets/Images/dummyman2.png')
+          
           }
           style={{
             width: '100%',
