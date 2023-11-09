@@ -39,11 +39,16 @@ const VendorCards = ({item}) => {
           }}
         />
       </View>
+      <View style={{
+        flexDirection:'row',
+        // backgroundColor:'red',
+        alignItems:'center',
+        justifyContent:'center',
+        // paddingHorizontal: moderateScale(15,0.3),
+        paddingTop:moderateScale(5,0.3)
+      }}>
       <CustomText style={styles.title} isBold>
         {item?.first_name}
-      </CustomText>
-      <CustomText style={styles.decription} isBold>
-        {item?.email}
       </CustomText>
       <View style={styles.view1}>
         <Icon
@@ -67,6 +72,21 @@ const VendorCards = ({item}) => {
           {`${item?.rating ? item?.rating : 0}/5`}
         </CustomText>
       </View>
+      </View>
+      <CustomText style={styles.decription} isBold>
+        {item?.company_name}
+      </CustomText>
+      {
+        JSON.parse(item?.expertise).slice(0,2).map((item ,index) => {
+          return(
+
+      <CustomText style={styles.decription} isBold>
+        {item}
+      </CustomText>
+          )
+        })
+      }
+      
       {/* <CustomText numberOfLines={2} style={styles.decription}>
         {item?.description}
       </CustomText> */}
@@ -94,16 +114,19 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 14,
-    textAlign: 'center',
-    paddingTop: 10,
-    width: windowWidth * 0.37,
+    // textAlign: 'center',
+    // paddingTop: 10,
+    // backgroundColor:'green',
+    paddingHorizontal:moderateScale(8,0.3)
+    // width: windowWidth * 0.37,
   },
   decription: {
-    fontSize: 10,
-    paddingHorizontal: 15,
+    fontSize: 12,
+    // backgroundColor:'red',
+    // paddingHorizontal:moderateScale(10 ,0.3) ,
     // paddingVertical: 5,
     textAlign: 'center',
-    width: windowWidth * 0.37,
+    width: windowWidth * 0.39,
     color: Color.darkGray,
   },
   view1: {
