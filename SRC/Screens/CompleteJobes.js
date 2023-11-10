@@ -132,23 +132,12 @@ const CompleteJobes = props => {
             paddingLeft: moderateScale(15, 0.6),
             // backgroundColor:'red'
           }}>
-          <View
-            style={
-              {
-                // alignItems:'center',
-                // width:windowWidth*0.2
-                // backgroundColor:'red',
-                // paddingHorizontal:moderateScale(5,0.3)
-              }
-            }>
-            <SliderBox
-              // dotColor="#8080ff"
-              // paginationBoxVerticalPadding={20}
-              autoplay={true}
-              autoplayInterval={1000}
+          <View>
+            <SliderBox    
+              autoplay={false}
               images={imagesSilder}
               sliderBoxHeight={230}
-              parentWidth={360}
+              parentWidth={355}
             />
             <CustomText
               style={{
@@ -157,7 +146,7 @@ const CompleteJobes = props => {
                 color: Color.white,
               }}
               isBold>
-              Bid name
+             {data1?.title}
             </CustomText>
             <View
               style={{
@@ -165,11 +154,13 @@ const CompleteJobes = props => {
                 width: windowWidth,
               }}>
               <View style={styles.views}>
-                <CustomText style={styles.viewText} isBold>
+                <CustomText style={[styles.viewText ,{
+                  color: Color.black
+                }]} isBold >
                   price
                 </CustomText>
                 <CustomText style={styles.viewText} isBold>
-                  $50
+                 {data1?.quoted_price}
                 </CustomText>
               </View>
               <View
@@ -184,23 +175,27 @@ const CompleteJobes = props => {
                   style={[
                     styles.viewText,
                     {
+                      color: Color.black,
                       paddingHorizontal: 0,
                     },
                   ]}
                   isBold>
                   vendor quote
                 </CustomText>
-                <CustomText style={styles.viewText} isBold>
-                  4
+                <CustomText
+                 style={styles.viewText} isBold>
+                  number
+               {/* {data1?.notes} */}
                 </CustomText>
               </View>
               <View style={styles.views}>
-                <CustomText style={styles.viewText} isBold>
+                <CustomText style={[styles.viewText,{
+                   color: Color.black,
+                }]} isBold>
                   offering
-                  {/* {item?.description} */}
                 </CustomText>
                 <CustomText style={styles.viewText} isBold>
-                  10%
+                  {data1?.offering_percentage}
                 </CustomText>
               </View>
             </View>
@@ -217,7 +212,6 @@ const CompleteJobes = props => {
               numberOfLines={4}
               style={{
                 fontSize: moderateScale(14, 0.6),
-                //  paddingVertical: moderateScale(20, 0.3),
                 width: windowWidth * 0.87,
                 color: Color.white,
               }}>
@@ -248,6 +242,70 @@ const CompleteJobes = props => {
                 $90
               </CustomText>
             </View>
+            <CustomText
+                style={{
+                  fontSize: moderateScale(18, 0.6),
+                  color: Color.white,
+                }}
+                isBold>
+                user detail
+              </CustomText>
+              <View
+            style={{
+              flexDirection: 'row',
+              marginVertical: moderateScale(10, 0.3),
+              paddingHorizontal: moderateScale(10, 0.3),
+              width:windowWidth*0.89,
+              borderRadius:moderateScale(10,0.3),
+              paddingVertical:moderateScale(10,0.3),
+              alignItems:'center',  
+            }}>
+            <View
+              style={{
+                height: windowHeight * 0.09,
+                width: windowHeight * 0.09,
+                borderRadius: 10,
+                overflow: 'hidden',
+              }}>
+              <CustomImage
+                style={{
+                  height: '100%',
+                  width: '100%',
+                }}
+                source={require('../Assets/Images/man1.jpg')}
+              />
+            </View>
+            <View
+              style={{
+                paddingHorizontal: moderateScale(10, 0.3),
+              }}> 
+              <View style={{
+                flexDirection:'row',
+                alignItems:'center'
+              }}>
+                <CustomText
+                      isBold
+                      style={{
+                        color: Color.white,
+                        fontSize: moderateScale(13, 0.6),
+                        textTransform: 'uppercase',
+                        paddingRight:moderateScale(10,0.3)
+                      }}>
+                        Member name
+                     {/* {item?.name} */}
+                    </CustomText>
+              </View>
+              <CustomText
+                style={{
+                  color: Color.white,
+                  fontSize: moderateScale(12, 0.6),
+                  width: windowWidth * 0.75,
+                }}>
+                   member email
+               {/* {item?.comment} */}
+              </CustomText>
+            </View>
+          </View>
             <View>
               <CustomText
                 style={{
@@ -259,79 +317,78 @@ const CompleteJobes = props => {
               </CustomText>
               <FlatList
           data={dummydata}
-          horizontal
-          pagingEnabled
-          renderItem={({item, index}) => {}
+          renderItem={({item, index}) => {
+          return(
+            <View
+            style={{
+              flexDirection: 'row',
+              marginVertical: moderateScale(10, 0.3),
+              paddingHorizontal: moderateScale(10, 0.3),
+              backgroundColor:Color.white,
+              width:windowWidth*0.89,
+              borderRadius:moderateScale(10,0.3),
+              paddingVertical:moderateScale(10,0.3),
+              alignItems:'center',  
+            }}>
+            <View
+              style={{
+                height: windowHeight * 0.08,
+                width: windowHeight * 0.08,
+                borderRadius: (windowHeight * 0.08) / 2,
+                overflow: 'hidden',
+              }}>
+              <CustomImage
+                style={{
+                  height: '100%',
+                  width: '100%',
+                }}
+                source={item?.image}
+              />
+            </View>
+            <View
+              style={{
+                paddingHorizontal: moderateScale(10, 0.3),
+              }}> 
+              <View style={{
+                flexDirection:'row',
+                alignItems:'center'
+              }}>
+                <CustomText
+                      isBold
+                      style={{
+                        color: Color.black,
+                        fontSize: moderateScale(13, 0.6),
+                        textTransform: 'uppercase',
+                        paddingRight:moderateScale(10,0.3)
+                      }}>
+                     {item?.name}
+                    </CustomText>
+                    <Icon name='star' as={FontAwesome} color={'black'} size={15}/>
+              </View>
+              <CustomText
+                style={{
+                  color: Color.black,
+                  fontSize: moderateScale(12, 0.6),
+                  width: windowWidth * 0.75,
+                }}>
+               {item?.comment}
+              </CustomText>
+              <CustomText
+                style={{
+                  color: Color.Grey,
+                  fontSize: moderateScale(12, 0.6),
+                  width: windowWidth * 0.75,
+                }}>
+                {moment().format('MMM Do, YYYY')}
+              </CustomText>
+            </View>
+          </View>
+          )
+
+          }
         }
           />
-              <View
-                    style={{
-                      flexDirection: 'row',
-                      marginVertical: moderateScale(10, 0.3),
-                      paddingHorizontal: moderateScale(10, 0.3),
-                      backgroundColor:Color.white,
-                      width:windowWidth*0.89,
-                      borderRadius:moderateScale(10,0.3),
-                      // paddingHorizontal:moderateScale(15,0.3),
-                      paddingVertical:moderateScale(10,0.3),
-                      alignItems:'center',  
-                    }}>
-                    <View
-                      style={{
-                        height: windowHeight * 0.08,
-                        width: windowHeight * 0.08,
-                        borderRadius: (windowHeight * 0.08) / 2,
-                        overflow: 'hidden',
-                      }}>
-                      <CustomImage
-                        style={{
-                          height: '100%',
-                          width: '100%',
-                        }}
-                        source={require('../Assets/Images/man1.jpg')}
-                      />
-                    </View>
-                    <View
-                      style={{
-                        paddingHorizontal: moderateScale(10, 0.3),
-                        // paddingVertical: moderateScale(5, 0.3),
-                      }}> 
-                      <View style={{
-                        flexDirection:'row',
-                        alignItems:'center'
-                      }}>
-                        <CustomText
-                              isBold
-                              style={{
-                                color: Color.black,
-                                fontSize: moderateScale(13, 0.6),
-                                textTransform: 'uppercase',
-                                paddingRight:moderateScale(10,0.3)
-                              }}>
-                              name
-                            </CustomText>
-                            <Icon name='star' as={FontAwesome} color={'black'} size={15}/>
-                      </View>
-                      <CustomText
-                        style={{
-                          color: Color.black,
-                          fontSize: moderateScale(12, 0.6),
-                          width: windowWidth * 0.75,
-                          // paddingVertical:moderateScale(5,0.3)
-                        }}>
-                       text
-                      </CustomText>
-                      <CustomText
-                        style={{
-                          color: Color.Grey,
-                          fontSize: moderateScale(12, 0.6),
-                          width: windowWidth * 0.75,
-                        }}>
-                        {moment().format('MMM Do, YYYY')}
-                      </CustomText>
-                    </View>
-                  </View>
-
+              
             </View>
           </View>
         </ScrollView>

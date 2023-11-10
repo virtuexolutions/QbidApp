@@ -1,4 +1,4 @@
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState, useRef} from 'react';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import Color from '../Assets/Utilities/Color';
@@ -24,6 +24,7 @@ import {useEffect} from 'react';
 import {ActivityIndicator} from 'react-native';
 import Card from '../Components/Card';
 import NoData from '../Components/NoData';
+import CustomImage from '../Components/CustomImage';
 
 const YourJobes = props => {
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
@@ -49,6 +50,7 @@ const YourJobes = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
   const [newArray, setNewArray] = useState([]);
+  const [completedjobescards, setCompletedjobescards] = useState('');
 
   // console.log("🚀 ~ file: SeeAllNegotiator.js:46 ~ SeeAllNegotiator ~ newArray:", newArray)
   const handleScroll = event => {
@@ -64,29 +66,52 @@ const YourJobes = props => {
       // console.log('Reached the end of ScrollView');
     }
   };
-  
+  //   const completedjobes = async()=>{
+  // const url =''
+  // setIsLoading(true)
+  // const response = await Get(url , token)
+  // setIsLoading(false)
+  // if(response != undefined){
+  //   setCompletedjobescards()
+  // }
+  //   }
+
+  //   useEffect(() => {
+  //     setCompletedjobescards()
+  //   }, [])
+
   const dummydata = [
     {
-      title:'autorepair',
+      title: 'autorepair',
       name: 'john',
       photo: require('../Assets/Images/man1.jpg'),
-      quoted_price:20,
-      offering_percentage:10,
-      notes:'kfdkshdfgdshgfsbdfnbcnvbxncvkjtrhtuerht',
+      quoted_price: 20,
+      offering_percentage: 10,
+      notes: 'kfdkshdfgdshgfsbdfnbcnvbxncvkjtrhtuerht',
     },
     {
-      title:'plumbing project',
+      title: 'plumbing project',
       name: 'alexender',
       image: require('../Assets/Images/man1.jpg'),
-      offering_percentage:15,
-      notes:'kfdkshdfgdshgfsbdfnbcnvbxncvkjtrhtuerht',
+      offering_percentage: 15,
+      quoted_price: 20,
+      notes: 'kfdkshdfgdshgfsbdfnbcnvbxncvkjtrhtuerht',
     },
     {
-      title:'autorepair',
+      title: 'autorepair',
       name: 'matthew',
       image: require('../Assets/Images/man1.jpg'),
-      offering_percentage:10,
-      notes:'kfdkshdfgdshgfsbdfnbcnvbxncvkjtrhtuerht',
+      offering_percentage: 10,
+      quoted_price: 20,
+      notes: 'kfdkshdfgdshgfsbdfnbcnvbxncvkjtrhtuerht',
+    },
+    {
+      title: 'autorepair',
+      name: 'john',
+      photo: require('../Assets/Images/man1.jpg'),
+      quoted_price: 20,
+      offering_percentage: 10,
+      notes: 'kfdkshdfgdshgfsbdfnbcnvbxncvkjtrhtuerht',
     },
   ];
   return (
@@ -121,20 +146,18 @@ const YourJobes = props => {
             ? Color.themeBgColorNegotiator
             : Color.themebgBusinessQbidder
         }>
-    
         <CustomText isBold style={styles.heading}>
-        Your Jobes
+          Your Jobes
         </CustomText>
 
         {isLoading ? (
           <View
             style={{
               width: windowWidth,
-              // backgroundColor:'red',
               height: windowHeight * 0.75,
               alignSelf: 'center',
               justifyContent: 'center',
-              alignItems:'center'
+              alignItems: 'center',
             }}>
             <ActivityIndicator color={'white'} size={'large'} />
           </View>
@@ -146,14 +169,12 @@ const YourJobes = props => {
                   style={{
                     alignItems: 'center',
                     justifyContent: 'center',
-                    // backgroundColor:'red',
                     height: windowHeight * 0.5,
                   }}>
                   <NoData
                     style={{
                       width: windowWidth * 0.95,
                       height: windowHeight * 0.3,
-                      // backgroundColor: 'green',
                       alignItems: 'center',
                       justifyContent: 'center',
                     }}
@@ -161,37 +182,89 @@ const YourJobes = props => {
                 </View>
               );
             }}
-            // onEndReached={() => {
-            //   setpageNum(prev => prev + 1);
-            // }}
             ref={scrollViewRef}
             onScroll={handleScroll}
             scrollEventThrottle={16}
-            // data={newArray}
             data={dummydata}
             numColumns={type != 'Seeking Help' ? 2 : 1}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{
               width: windowWidth,
               alignItems: 'center',
-              // backgroundColor:'red',
-              // paddingHorizontal: moderateScale(15, 0.3),
-              // paddingTop: moderateScale(10, 0.6),
               paddingBottom: moderateScale(80, 0.6),
             }}
             renderItem={({item, index}) => {
               // console.log("🚀 ~ file: SeeAllNegotiator.js:230 ~ SeeAllNegotiator ~ item:", item)
               console.log(index % 2 == 0);
               return type != 'Seeking Help' ? (
-                <JobCard
-                  key={index}
-                  fromSeeAll={true}
-                  item={item}
-                  style={index % 2 == 0 && {marginRight: moderateScale(7, 0.3)}}
-                  onPress={() => {
-                    navigationService.navigate('CompleteJobes', {item:item});
-                  }}
-                />
+                <TouchableOpacity
+                  onPress={() =>
+                    navigationService.navigate('CompleteJobes', {item: item})
+                  }
+                  style={{
+                    flexDirection: 'row',
+                    marginVertical: moderateScale(10, 0.3),
+                    paddingHorizontal: moderateScale(10, 0.3),
+                    backgroundColor: Color.white,
+                    width: windowWidth * 0.45,
+                    borderRadius: moderateScale(10, 0.3),
+                    marginHorizontal: moderateScale(5, 0.3),
+                    paddingVertical: moderateScale(10, 0.3),
+                    alignItems: 'center',
+                  }}>
+                  <View
+                    style={{
+                      height: windowHeight * 0.08,
+                      width: windowHeight * 0.08,
+                      borderRadius: 10,
+                      overflow: 'hidden',
+                    }}>
+                    <CustomImage
+                      style={{
+                        height: '100%',
+                        width: '100%',
+                      }}
+                      source={item?.image}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      paddingHorizontal: moderateScale(10, 0.3),
+                    }}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                      }}>
+                      <CustomText
+                        isBold
+                        style={{
+                          color: Color.black,
+                          fontSize: moderateScale(12, 0.6),
+                          textTransform: 'uppercase',
+                          paddingRight: moderateScale(10, 0.3),
+                        }}>
+                        {item?.name}
+                      </CustomText>
+                        </View>
+                    <CustomText
+                      style={{
+                        color: Color.black,
+                        fontSize: moderateScale(12, 0.6),
+                        width: windowWidth * 0.75,
+                      }}>
+                      earning
+                    </CustomText>
+                    <CustomText
+                      style={{
+                        color: Color.black,
+                        fontSize: moderateScale(12, 0.6),
+                        width: windowWidth * 0.75,
+                      }}>
+                      $50
+                    </CustomText>
+                  </View>
+                </TouchableOpacity>
               ) : (
                 <Card item={item} />
               );
