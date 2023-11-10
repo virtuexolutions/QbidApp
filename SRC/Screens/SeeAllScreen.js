@@ -28,7 +28,7 @@ const SeeAllScreen = props => {
   const token = useSelector(state => state.authReducer.token);
 
   const type = props?.route?.params?.type;
-  console.log('🚀 ~ file: SeeAllScreen.js:31 ~ SeeAllScreen ~ type:', type);
+  // console.log('🚀 ~ file: SeeAllScreen.js:31 ~ SeeAllScreen ~ type:', type);
   const data = props?.route?.params?.data;
 
   const [searchData, setSearchData] = useState('');
@@ -70,7 +70,6 @@ const SeeAllScreen = props => {
       search: searchData,
     };
     console.log("🚀 ~ file: SeeAllScreen.js:69 ~ searchCards ~ body:", body)
-    // : {status: selectedStatus, type: type, text: searchData};
 
     const response = await Post(url, body, apiHeader(token));
 
@@ -78,6 +77,10 @@ const SeeAllScreen = props => {
       console.log(
         '🚀 ~ file: SeeAllScreen.js:67 ~ searchCards ~ response:',
         response?.data,
+      );
+      console.log(
+        '🚀 ~ file: SeeAllScreen.js:67 ~ searchCards ~ response:',
+        response?.data?.negotiator_info?.length,
       );
       setNewArray(response?.data?.negotiator_info);
     }
@@ -137,8 +140,7 @@ const SeeAllScreen = props => {
 
   useEffect(() => {
     if (selectedStatus != '') {
-      // console.log('filter quotes')
-
+    
       type == 'quotes' && filterQuotes();
     }
   }, [selectedStatus]);
@@ -149,7 +151,7 @@ const SeeAllScreen = props => {
     if (Object.keys(filters).length > 0) {
       type == 'negotiator' && searchCards();
     }
-  }, [filters, searchData]);
+  }, [ searchData]);
 
   return (
     <ScreenBoiler
@@ -284,6 +286,7 @@ const SeeAllScreen = props => {
           setModalVisible={setFilterVisible}
           filters={filters}
           setFilters={setFilters}
+          searchCards={searchCards}
           // setData={setSelectFilters}
         />
       </LinearGradient>

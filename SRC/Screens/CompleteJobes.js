@@ -66,10 +66,10 @@ import moment from 'moment';
         const url = 'auth/review';
         setIsLoading(true);
         const response = await Get('auth/review', token);
-   console.log(
-          '🚀 ~ file: NegotiatorPortfolio.js:105 ~ reviews ~ response:',
-          response?.data?.review
-        );
+  //  console.log(
+  //         '🚀 ~ file: NegotiatorPortfolio.js:105 ~ reviews ~ response:',
+  //         response?.data?.review
+  //       );
         setIsLoading(false);
         if (response != undefined) {
           setReview(response?.data?.review);

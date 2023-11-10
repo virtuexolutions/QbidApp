@@ -14,7 +14,7 @@ import {ActivityIndicator} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const NegotiatorCard = ({item, fromSeeAll}) => {
-  console.log('🚀 ~ file: NegotiatorCard.js:16 ~ NegotiatorCard ~ item:', item);
+  // console.log('🚀 ~ file: NegotiatorCard.js:16 ~ NegotiatorCard ~ item:', item);
   const token = useSelector(state => state.authReducer.token);
   // console.log("🚀 ~ file: NegotiatorCard.js:18 ~ NegotiatorCard ~ token:", token)
   const [isLoading, setIsLoading] = useState(false);

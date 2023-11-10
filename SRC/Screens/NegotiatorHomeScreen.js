@@ -43,23 +43,17 @@ import NoData from '../Components/NoData';
 const NegotiatorHomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
-  // console.log("🚀 ~ file: NegotiatorHomeScreen.js:46 ~ NegotiatorHomeScreen ~ token:", token)
   const userData = useSelector(state => state.commonReducer.userData);
-  console.log("🚀 ~ file: NegotiatorHomeScreen.js:43 ~ NegotiatorHomeScreen ~ userData:", userData)
 
   const [searchData, setSearchData] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState('');
-  // console.log("🚀 ~ file: NegotiatorHomeScreen.js:52 ~ NegotiatorHomeScreen ~ selectedStatus:", selectedStatus)
   const [visible, setVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [recommended, setRecommended] = useState([]);
-  // console.log("🚀 ~ file: NegotiatorHomeScreen.js:56 ~ NegotiatorHomeScreen ~ recommended:", recommended)
   const [working, setWorking] = useState([]);
-  const [seekingHelp, setSeekingHelp] = useState([]);
+  const [jobPosting, setJobPosting] = useState([]);
   const isFocused = useIsFocused();
-
- 
 
   const getProposal = async () => {
     setIsLoading(true);
@@ -72,28 +66,27 @@ const NegotiatorHomeScreen = () => {
     setIsLoading(false);
 
     if (response1 != undefined) {
+      console.log(
+        '🚀 ~ file: NegotiatorHomeScreen.js:71 ~ getProposal ~ response1:',
+        response1?.data,
+      );
 
       ![null, undefined, ''].includes(response2?.data?.quote_info) &&
         setRecommended(response1?.data?.quote_info?.data);
     }
     if (response2 != undefined) {
-
       ![null, undefined, ''].includes(response2?.data?.quote_info) &&
         setWorking(response2?.data?.quote_info?.data);
     }
     if (response3 != undefined) {
-    // console.log("🚀 ~ file: NegotiatorHomeScreen.js:85 ~ getProposal ~ response3:", response3?.data)
-
       ![null, undefined, ''].includes(response2?.data?.quote_info) &&
-        setSeekingHelp(response3?.data?.bid_help_info?.data);
+        setJobPosting(response3?.data?.bid_help_info?.data);
     }
   };
 
   useEffect(() => {
     getProposal();
   }, [isFocused]);
-
- 
 
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', () => {
@@ -118,8 +111,7 @@ const NegotiatorHomeScreen = () => {
           : userRole == 'Qbid Negotiator'
           ? Color.themeBgColorNegotiator
           : Color.themebgBusinessQbidder
-      }
-    >
+      }>
       <LinearGradient
         style={{
           width: windowWidth,
@@ -149,8 +141,7 @@ const NegotiatorHomeScreen = () => {
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-             
-           <SearchContainer
+            <SearchContainer
               onPress={() => {
                 if (selectedStatus == '') {
                   return Platform.OS == 'android'
@@ -159,17 +150,16 @@ const NegotiatorHomeScreen = () => {
                         ToastAndroid.SHORT,
                       )
                     : Alert.alert('Please select any category');
-                    
-                }else{ 
-                  navigationService.navigate('SeeAllNegotiator',{type:selectedStatus})
+                } else {
+                  navigationService.navigate('SeeAllNegotiator', {
+                    type: selectedStatus,
+                  });
                 }
               }}
               width={windowWidth * 0.85}
-              // input
               inputStyle={{
                 height: windowHeight * 0.05,
               }}
-             
               style={{
                 height: windowHeight * 0.06,
                 marginBottom: moderateScale(10, 0.3),
@@ -200,13 +190,14 @@ const NegotiatorHomeScreen = () => {
                 isBold
                 style={{
                   fontSize: moderateScale(45, 0.6),
-                  //  backgroundColor : 'red'
+                  color: Color.black,
                 }}>
                 30%
               </CustomText>
               <CustomText
                 style={{
                   fontSize: moderateScale(9, 0.6),
+                  color: Color.black,
                 }}>
                 +5.44% then last Month
               </CustomText>
@@ -226,7 +217,7 @@ const NegotiatorHomeScreen = () => {
                 <CustomText
                   style={{
                     fontSize: moderateScale(13, 0.6),
-                    //  backgroundColor : 'red'
+                    color: Color.black,
                   }}>
                   Revenue
                 </CustomText>
@@ -234,6 +225,7 @@ const NegotiatorHomeScreen = () => {
                   isBold
                   style={{
                     fontSize: moderateScale(17, 0.6),
+                    color: Color.black,
                   }}>
                   {userData?.total_earning}
                 </CustomText>
@@ -243,13 +235,15 @@ const NegotiatorHomeScreen = () => {
                   name="star"
                   as={AntDesign}
                   size={moderateScale(22, 0.3)}
-                  color={userData?.rating <= 3
-                    ? '#CD7F32'
-                    : userData?.rating <= 3.5
-                    ? '#C0C0C0'
-                    : userData?.rating <= 4
-                    ? '#FF9529'
-                    : '#e5e4e2'}
+                  color={
+                    userData?.rating <= 3
+                      ? '#CD7F32'
+                      : userData?.rating <= 3.5
+                      ? '#C0C0C0'
+                      : userData?.rating <= 4
+                      ? '#FF9529'
+                      : '#e5e4e2'
+                  }
                 />
                 <CustomText
                   style={{
@@ -284,13 +278,7 @@ const NegotiatorHomeScreen = () => {
           </View>
 
           {isLoading ? (
-            <View
-              style={{
-                width: windowWidth,
-                height: windowHeight * 0.4,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
+            <View style={styles.loader}>
               <ActivityIndicator size={'large'} color={'white'} />
             </View>
           ) : (
@@ -313,24 +301,6 @@ const NegotiatorHomeScreen = () => {
                 </View>
 
                 <FlatList
-                  ListEmptyComponent={() => {
-                    return (
-                      <NoData
-                        style={{
-                          width: windowWidth * 0.95,
-                          height: windowHeight * 0.18,
-                          // backgroundColor: 'green',
-                          alignItems: 'center',
-                        }}
-                      />
-                    );
-                  }}
-                  // data={
-                  //   recommended.length > 5
-                  //     ? recommended?.slice(0, 5)
-                  //     : recommended
-                  // }
-                  // data={[]}
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={{
@@ -347,8 +317,21 @@ const NegotiatorHomeScreen = () => {
                       />
                     );
                   }}
+                  ListEmptyComponent={() => {
+                    return (
+                      <NoData
+                        style={{
+                          width: windowWidth * 0.95,
+                          height: windowHeight * 0.18,
+                          // backgroundColor: 'green',
+                          alignItems: 'center',
+                        }}
+                      />
+                    );
+                  }}
                 />
               </View>
+              
               <View style={styles.recommendedContainer}>
                 <View style={styles.row}>
                   <CustomText isBold style={styles.heading}>
@@ -377,11 +360,13 @@ const NegotiatorHomeScreen = () => {
                           alignItems: 'center',
                         }}
                       />
-
-                      // <Text>hello</Text>
                     );
                   }}
-                  data={working.length > 5 ? working.reverse().splice(0,5) : working.reverse() }
+                  data={
+                    working.length > 5
+                      ? working.reverse().splice(0, 5)
+                      : working.reverse()
+                  }
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={{
@@ -404,16 +389,17 @@ const NegotiatorHomeScreen = () => {
                   }}
                 />
               </View>
-              {/* <View style={styles.recommendedContainer}>
+
+              <View style={styles.recommendedContainer}>
                 <View style={styles.row}>
                   <CustomText isBold style={styles.heading}>
-                    Seeking Help
+                    Job Posts
                   </CustomText>
                   <CustomText
                     onPress={() => {
                       navigationService.navigate('SeeAllNegotiator', {
-                        type: 'Seeking Help',
-                        data: seekingHelp,
+                        type: 'Working On',
+                        data: working,
                       });
                     }}
                     style={styles.viewall}>
@@ -422,6 +408,16 @@ const NegotiatorHomeScreen = () => {
                 </View>
 
                 <FlatList
+                  data={
+                    working.length > 5
+                      ? working.reverse().splice(0, 5)
+                      : working.reverse()
+                  }
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={{
+                    paddingHorizontal: moderateScale(15, 0.3),
+                  }}
                   ListEmptyComponent={() => {
                     return (
                       <NoData
@@ -434,23 +430,11 @@ const NegotiatorHomeScreen = () => {
                       />
                     );
                   }}
-                  data={
-                    seekingHelp.length > 5
-                      ? seekingHelp.reverse().slice(0, 5)
-                      : seekingHelp.reverse()
-                  }
-                  // data={[1,2,]}
-                  // horizontal
-                  showsHorizontalScrollIndicator={false}
-                  contentContainerStyle={{
-                    paddingHorizontal: moderateScale(15, 0.3),
-                    paddingBottom: moderateScale(40, 0.6),
-                  }}
                   renderItem={({item, index}) => {
-                    return <Card item={item} key={index} />;
+                    return <JobCard key={index} item={item} />;
                   }}
                 />
-              </View> */}
+              </View>
             </>
           )}
         </ScrollView>
@@ -487,6 +471,12 @@ const NegotiatorHomeScreen = () => {
 export default NegotiatorHomeScreen;
 
 const styles = ScaledSheet.create({
+  loader: {
+    width: windowWidth,
+    height: windowHeight * 0.4,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   upperContainer: {
     width: windowWidth * 0.93,
     paddingVertical: moderateScale(10, 0.6),

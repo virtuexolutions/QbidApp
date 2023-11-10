@@ -14,7 +14,7 @@ import numeral from 'numeral';
 import {Post} from '../Axios/AxiosInterceptorFunction';
 
 const SeekingHelpCard = ({fromSeeAll, style, onPress, item}) => {
-  // console.log('🚀 ~ file: JobCard.js:15 ~ JobCard ~ item:', item);
+  console.log('🚀 ~ file: JobCard.js:15 ~ JobCard ~ item:', item);
   const token = useSelector(state => state.authReducer.token);
 
   const [loading, setLoading] = useState(false);
@@ -83,7 +83,7 @@ const SeekingHelpCard = ({fromSeeAll, style, onPress, item}) => {
                 : moderateScale(9, 0.6),
               marginLeft: moderateScale(5, 0.3),
             }}>
-           John Doe
+          {item?.title}
           </CustomText>
         </View>
         <View style={{
@@ -226,7 +226,7 @@ const SeekingHelpCard = ({fromSeeAll, style, onPress, item}) => {
               color: Color.black,
               fontSize: moderateScale(14, 0.3),
             }}>
-            Are you Sure You want to Help.?
+            Are you Sure You want to accept the job
           </CustomText>
        
 
@@ -280,7 +280,7 @@ export default SeekingHelpCard;
 const styles = ScaledSheet.create({
   joccard: {
     marginHorizontal: moderateScale(5, 0.6),
-    width: windowWidth * 0.7,
+    width: windowWidth * 0.4,
     paddingVertical: moderateScale(5, 0.6),
     // height: windowHeight * 0.2,
     borderRadius: moderateScale(10, 0.6),

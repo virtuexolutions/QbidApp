@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 
 const Card = ({item}) => {
   const token = useSelector(state=> state.authReducer.token)
-  console.log('🚀 ~ file: Card.js:11 ~ Card ~ item:', item);
+  // console.log('🚀 ~ file: Card.js:11 ~ Card ~ item:', item);
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false)
 

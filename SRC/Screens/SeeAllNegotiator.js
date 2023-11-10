@@ -32,7 +32,7 @@ const SeeAllNegotiator = props => {
   // console.log("🚀 ~ file: SeeAllNegotiator.js:30 ~ SeeAllNegotiator ~ token:", token)
 
   const type = props?.route?.params?.type;
-  console.log("🚀 ~ file: SeeAllNegotiator.js:33 ~ SeeAllNegotiator ~ type:", type)
+  // console.log("🚀 ~ file: SeeAllNegotiator.js:33 ~ SeeAllNegotiator ~ type:", type)
   const data = props?.route?.params?.data;
 
   const scrollViewRef = useRef();
@@ -57,10 +57,10 @@ const SeeAllNegotiator = props => {
     const response = await Post(url, body, apiHeader(token));
     setIsLoading(false);
     if (response != undefined) {
-      console.log(
-        '🚀 ~ file: HomeScreen.js:99 ~ searchQuotes ~ response:',
-        response?.data,
-      );
+      // console.log(
+      //   '🚀 ~ file: HomeScreen.js:99 ~ searchQuotes ~ response:',
+      //   response?.data,
+      // );
   
         setNewArray(response?.data?.quote_info?.data);
       
@@ -78,10 +78,10 @@ const SeeAllNegotiator = props => {
     const response = await Get(url, token);
     type1 == 'loadMore' ? setLoadMore(false) : setIsLoading(false);
     if (response != undefined) {
-      console.log(
-        '🚀 ~ file: SeeAllNegotiator.js:67 ~ getData ~ response:',
-        response?.data,
-      );
+      // console.log(
+      //   '🚀 ~ file: SeeAllNegotiator.js:67 ~ getData ~ response:',
+      //   response?.data,
+      // );
       if (type != 'Seeking Help') {
         type1 == 'loadMore'
           ? setNewArray(prev => [...prev, ...response?.data?.quote_info?.data])
@@ -251,8 +251,7 @@ const SeeAllNegotiator = props => {
               paddingBottom: moderateScale(80, 0.6),
             }}
             renderItem={({item, index}) => {
-              // console.log("🚀 ~ file: SeeAllNegotiator.js:230 ~ SeeAllNegotiator ~ item:", item)
-              console.log(index % 2 == 0);
+       
               return type != 'Seeking Help' ? (
                 <JobCard
                 key={index}

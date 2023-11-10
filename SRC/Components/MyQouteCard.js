@@ -45,10 +45,10 @@ const MyQouteCard = ({item}) => {
     const response = await Post(url, {status: 'completed'}, apiHeader(token));
     setCmpLoading(false);
     if (response != undefined) {
-      console.log(
-        '🚀 ~ file: MyQouteCard.js:30 ~ markCompleted ~ response:',
-        response?.data,
-      );
+      // console.log(
+      //   '🚀 ~ file: MyQouteCard.js:30 ~ markCompleted ~ response:',
+      //   response?.data,
+      // );
       Platform.OS == 'android'
         ? ToastAndroid.show('Order has been completed', ToastAndroid.SHORT)
         : Alert.alert('Order has been completed');

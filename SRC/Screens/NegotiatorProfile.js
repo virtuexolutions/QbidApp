@@ -114,11 +114,7 @@ const NegotiatorProfile = props => {
           backgroundColor: 'white',
           // maxHeight : windowHeight * 0.8
         }}
-        contentContainerStyle={{
-          paddingTop: moderateScale(10, 0.3),
-          alignItems: 'center',
-          paddingBottom: moderateScale(30, 0.3),
-        }}>
+        contentContainerStyle={styles.scroll}>
         <View
           style={{
             width: windowWidth * 0.87,
@@ -361,4 +357,9 @@ const styles = ScaledSheet.create({
     borderRadius: moderateScale(10, 0.3),
     marginRight: moderateScale(5, 0.3),
   },
+  scroll:{
+    paddingTop: moderateScale(10, 0.3),
+    alignItems: 'center',
+    paddingBottom: moderateScale(30, 0.3),
+  }
 });

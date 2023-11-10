@@ -31,6 +31,12 @@ const VendorCards = ({item}) => {
       style={styles.mainContainer}>
       <View style={styles.imageConatiner}>
         <CustomImage
+        onPress={() =>
+          navigation.navigate('NegotiatorPortfolio', {
+            fromSearch: true,
+            item: item,
+          })
+        }
           source={{uri: item?.photo}}
           style={{
             height: '100%',

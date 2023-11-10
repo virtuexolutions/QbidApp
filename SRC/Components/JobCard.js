@@ -1,4 +1,11 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {
+  Alert,
+  Platform,
+  StyleSheet,
+  Text,
+  ToastAndroid,
+  View,
+} from 'react-native';
 import React, {useState} from 'react';
 import {TouchableOpacity} from 'react-native';
 import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
@@ -12,13 +19,14 @@ import Modal from 'react-native-modal';
 import {useSelector} from 'react-redux';
 import numeral from 'numeral';
 import {Post} from '../Axios/AxiosInterceptorFunction';
+import ImageView from 'react-native-image-viewing';
 
 const JobCard = ({fromSeeAll, style, onPress, item}) => {
-  // console.log('🚀 ~ file: JobCard.js:15 ~ JobCard ~? item:', item);
+  console.log('🚀 ~ file: JobCard.js:15 ~ JobCard ~? item:', item);
   const token = useSelector(state => state.authReducer.token);
 
   const [loading, setLoading] = useState(false);
-
+  const [imageModal, setImageModal] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
 
@@ -28,11 +36,7 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
     const response = await Post(url, {status: value}, apiHeader(token));
     setLoading(false);
     if (response != undefined) {
-      // console.log(
-      //   '🚀 ~ file: JobCard.js:31 ~ changeStatus ~ response:',
-      //   response?.data,
-      // );
-
+  
       setModalVisible(false);
     }
   };
@@ -75,7 +79,8 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
                 : moderateScale(18, 0.3),
 
               overflow: 'hidden',
-            }}>
+            }}
+            >
             <CustomImage
               onPress={() => {
                 navigationService.navigate('MyAccounts');
@@ -119,12 +124,7 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
           {item?.notes ? item?.notes : item?.quote_info?.notes}
         </CustomText>
         <View
-          style={{
-            flexDirection: 'row',
-            marginTop: moderateScale(10, 0.3),
-            justifyContent: 'space-between',
-            paddingHorizontal: moderateScale(2, 0.6),
-          }}>
+          style={styles.row}>
           <View>
             <CustomText
               isBold
@@ -171,7 +171,6 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
           </View>
         </View>
 
-    
         <CustomButton
           text={'View Details'}
           textColor={Color.white}
@@ -201,54 +200,33 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
         onBackdropPress={() => {
           setModalVisible(false);
         }}>
-        <View
-          style={{
-            width: windowWidth * 0.75,
-            paddingVertical: moderateScale(20, 0.6),
-            alignSelf: 'center',
-            // height: windowHeight * 0.35,
-            borderRadius: moderateScale(15, 0.3),
-            backgroundColor: Color.white,
-            borderWidth: 2,
-            borderColor: Color.blue,
-            alignItems: 'center',
-            shadowColor: '#000',
-            shadowOffset: {
-              width: 0,
-              height: 1,
-            },
-            shadowOpacity: 0.22,
-            shadowRadius: 2.22,
-
-            elevation: 3,
-          }}>
-          <View
-            style={{
-              width: windowWidth * 0.2,
-              height: windowWidth * 0.2,
-              borderRadius: (windowWidth * 0.2) / 2,
-              borderWidth: 2,
-              borderColor: Color.blue,
-              overflow: 'hidden',
-            }}>
+        <View style={styles.mainViewModal}>
+          <View style={styles.container}>
             <CustomImage
               source={require('../Assets/Images/Avatar2.jpg')}
               resizeMode="cover"
-              style={{
-                height: '100%',
-                width: '100%',
-              }}
+              style={styles.image}
             />
           </View>
-
+          <CustomText style={[styles.text, {}]} isBold>
+            {item?.quote_info?.title}
+          </CustomText>
+          <CustomText style={styles.text}>{item?.coverletter}</CustomText>
           <CustomText
-            style={{
-              width: windowWidth * 0.9,
-              textAlign: 'center',
-              marginTop: moderateScale(10, 0.3),
-              color: Color.black,
-              fontSize: moderateScale(14, 0.3),
-            }}>
+            onPress={() => {
+              if (item?.quote_info?.images.length > 0) {
+                setImageModal(true);
+              } else {
+                Platform.OS == 'android'
+                  ? ToastAndroid.show('No attachments', ToastAndroid.SHORT)
+                  : Alert.alert('No attachments');
+              }
+            }}
+            style={[styles.text, {color: Color.blue}]}>
+            attachments...
+          </CustomText>
+
+          <CustomText style={styles.text}>
             Are you Sure You want to Help.?
           </CustomText>
 
@@ -293,6 +271,12 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
           </View>
         </View>
       </Modal>
+      <ImageView
+        images={item?.quote_info?.images}
+        imageIndex={0}
+        visible={imageModal}
+        onRequestClose={() => setImageModal(false)}
+      />
     </>
   );
 };
@@ -311,5 +295,50 @@ const styles = ScaledSheet.create({
     overflow: 'hidden',
     paddingLeft: moderateScale(5, 0.6),
     paddingTop: moderateScale(5, 0.6),
+  },
+  row:{
+    flexDirection: 'row',
+    marginTop: moderateScale(10, 0.3),
+    justifyContent: 'space-between',
+    paddingHorizontal: moderateScale(2, 0.6),
+  },
+  mainViewModal: {
+    width: windowWidth * 0.75,
+    paddingVertical: moderateScale(20, 0.6),
+    alignSelf: 'center',
+    // height: windowHeight * 0.35,
+    borderRadius: moderateScale(15, 0.3),
+    backgroundColor: Color.white,
+    borderWidth: 2,
+    borderColor: Color.blue,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+
+    elevation: 3,
+  },
+  container: {
+    width: windowWidth * 0.2,
+    height: windowWidth * 0.2,
+    borderRadius: (windowWidth * 0.2) / 2,
+    borderWidth: 2,
+    borderColor: Color.blue,
+    overflow: 'hidden',
+  },
+  image: {
+    height: '100%',
+    width: '100%',
+  },
+  text: {
+    // width: windowWidth * 0.9,
+    textAlign: 'center',
+    marginTop: moderateScale(10, 0.3),
+    color: Color.black,
+    fontSize: moderateScale(14, 0.3),
   },
 });

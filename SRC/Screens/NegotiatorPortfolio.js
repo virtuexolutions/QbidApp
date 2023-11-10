@@ -42,16 +42,19 @@ import moment from 'moment';
 
 import {Post, Get} from '../Axios/AxiosInterceptorFunction';
 import {setUserData} from '../Store/slices/common';
+import navigationService from '../navigationService';
 
 const NegotiatorPortfolio = props => {
   const fromSearch = props?.route?.params?.fromSearch;
   const item = props?.route?.params?.item;
-  console.log("🚀 ~ file: NegotiatorPortfolio.js:49 ~ NegotiatorPortfolio ~ item:", item)
-  const navigation = useNavigation();
+
   const userdata = useSelector(state => state.commonReducer.userData);
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
+  
+  const navigation = useNavigation();
+
   const [image, setImage] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [coverPhoto, setCoverPhoto] = useState({});
@@ -77,7 +80,6 @@ const NegotiatorPortfolio = props => {
   const [email, setEmail] = useState(
     fromSearch ? item?.email : userdata?.email,
   );
-  console.log("🚀 ~ file: NegotiatorPortfolio.js:113 ~ NegotiatorPortfolio ~ email:", email)
   const [contact, setContact] = useState(
     fromSearch ? item?.phone : userdata?.phone,
   );
@@ -149,52 +151,28 @@ const NegotiatorPortfolio = props => {
 
   const reviews = async () => {
     const url = 'auth/review';
+    
     setIsLoading(true);
     const response = await Get('auth/review', token);
-   console.log(
-      '🚀 ~ file: NegotiatorPortfolio.js:105 ~ reviews ~ response:',
-      response?.data
-      
-    );
     setIsLoading(false);
+    
     if (response != undefined) {
       setReview(response?.data?.review);
     }
   };
 
-  const dummydata = [
-    {
-      name: 'john',
-      image: require('../Assets/Images/man1.jpg'),
-      comment: 'hello every one',
-    },
-    {
-      name: 'john',
-      image: require('../Assets/Images/man1.jpg'),
-      comment: 'hhfjshdfjhskdfhjkshd',
-    },
-    {
-      name: 'john',
-      image: require('../Assets/Images/man1.jpg'),
-      comment: 'hello eltjikrejti reauthu ierterhtrtvery one',
-    },
-  ];
 
   const changeProfileImage = async (type, body, key) => {
     const url = `auth/negotiator/${type}`;
     const formData = new FormData();
     formData.append(key, body);
-    // const body= {}
+
     setIsLoading(true);
     const response = await Post(url, formData, apiHeader(token));
     setIsLoading(false);
-    console.log('formData====>>>>', body);
-
+  
     if (response != undefined) {
-      console.log(
-        '🚀 ~ file: NegotiatorPortfolio.js:227 ~ changeProfileImage ~ response:',
-        response?.data,
-      );
+     
       dispatch(setUserData(response?.data?.user));
       Platform.OS == 'android'
         ? ToastAndroid.show(`${type} updated successfully`, ToastAndroid.SHORT)
@@ -208,13 +186,10 @@ const NegotiatorPortfolio = props => {
 
   useEffect(() => {
     if (imageType == 'profile') {
-      // console.log(Object.keys(image));
       if (Object.keys(image).length > 0) {
-        console.log('Image type=====');
         changeProfileImage('photo_update', image,'photo');
       }
     } else {
-      // console.log('updateing cover image==========');
       if (Object.keys(coverPhoto).length > 0) {
         changeProfileImage('coverphoto_update', coverPhoto, 'coverphoto');
       }
@@ -283,7 +258,7 @@ const NegotiatorPortfolio = props => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             alignItems: 'center',
-            paddingBottom: moderateScale(50, 0.3),
+            paddingBottom: moderateScale(75, 0.3),
             backgroundColor: '#FFFFFF',
           }}
           style={{
@@ -667,7 +642,7 @@ const NegotiatorPortfolio = props => {
                   </View>
                 );
               })}
-            <CustomText
+         {  item?.negotiator_review && <CustomText
               isBold
               style={{
                 color: Color.black,
@@ -676,7 +651,7 @@ const NegotiatorPortfolio = props => {
                 marginTop: moderateScale(10, 0.6),
               }}>
               reviews
-            </CustomText>
+            </CustomText>}
             <FlatList
               // data={dummydata}
               data={item?.negotiator_review ? item?.negotiator_review : userdata?.negotiator_review}
@@ -762,7 +737,8 @@ const NegotiatorPortfolio = props => {
                   : Color.black
               }
               borderRadius={moderateScale(30, 0.3)}
-              disabled={!availibility}
+              onPress={()=>{navigationService.navigate('CreateNew',{hire:true})}}
+              // disabled={!availibility}
             />
           )}
         </ScrollView>

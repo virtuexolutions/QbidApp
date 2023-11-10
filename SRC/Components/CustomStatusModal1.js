@@ -21,6 +21,7 @@ const CustomStatusModal1 = ({
   setModalVisible,
   statusArray,
   setFilters,
+  searchCards,
   text,
   filters,
 }) => {
@@ -61,10 +62,6 @@ const CustomStatusModal1 = ({
     },
   ];
 
- 
-
-  // const [filters, setFilters] = useState({});
-  // console.log('🚀 ~ file: CustomStatusModal1.js:61 ~ filters:', filters);
   const [categoryindex, setCategoryIndex] = useState(0);
   const [selectedItems, setSelectedItems] = useState([]);
 
@@ -125,7 +122,7 @@ const CustomStatusModal1 = ({
                     return (
                       <TouchableOpacity
                         onPress={() => {
-                          console.log(filters?.hasOwnProperty(item?.name));
+                          // console.log(filters?.hasOwnProperty(item?.name));
                           if (filters?.hasOwnProperty(item?.name)) {
                             if (filters[item?.name]?.includes(i)) {
                               setFilters(prev => {
@@ -145,16 +142,13 @@ const CustomStatusModal1 = ({
                             setFilters(prev => {
                               return {...prev, [item?.name]: [i]};
                             });
-                            console.log('Hello2', filters[item?.name]);
+                            // console.log('Hello2', filters[item?.name]);
                           }
                         }}
                         style={{
-                          //   width: windowWidth * 0.2,
-                          // flexBasis: '27%',
-                          // marginRight: moderateScale(15, 0.3),
+                          
                           marginVertical: moderateScale(5, 0.6),
                           marginHorizontal: moderateScale(5, 0.3),
-                          // marginBottom: moderateScale(10, 0.3),
                           padding: moderateScale(5, 0.6),
                           borderWidth: moderateScale(1, 0.3),
                           borderColor: Color.blue,
@@ -192,9 +186,8 @@ const CustomStatusModal1 = ({
           bgColor={Color.themeColor}
           borderRadius={moderateScale(30, 0.3)}
           fontSize={moderateScale(11, 0.6)}
-          onPress={() => {
-            
-            // changeStatus('accept');
+          onPress={() => {    
+            searchCards() 
             setModalVisible(false);
           }}
         />
