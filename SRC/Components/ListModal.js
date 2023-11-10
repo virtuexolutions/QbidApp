@@ -31,7 +31,6 @@ const ListModal = ({
           overflow: 'hidden',
           borderRadius: moderateScale(5, 0.3),
           width: windowWidth * 0.7,
-          // height: windowHeight * 0.3,
           backgroundColor: 'white',
           alignItems: 'center',
           paddingBottom : moderateScale(10,0.3)
@@ -92,6 +91,5 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     width: '100%',
     textAlign: 'center',
-    // justifyContent : 'center'
   },
 });

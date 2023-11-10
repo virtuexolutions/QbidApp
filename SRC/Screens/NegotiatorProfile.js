@@ -255,7 +255,6 @@ const NegotiatorProfile = props => {
             width: windowWidth * 0.87,
             flexDirection: 'row',
             justifyContent: 'space-between',
-            // backgroundColor: 'red',
             marginTop: moderateScale(10, 0.3),
           }}>
           <CustomText
@@ -272,7 +271,6 @@ const NegotiatorProfile = props => {
             width: windowWidth * 0.87,
             flexDirection: 'row',
             justifyContent: 'space-between',
-            // backgroundColor: 'red',
             marginTop: moderateScale(10, 0.3),
           }}>
           <CustomText
@@ -291,7 +289,6 @@ const NegotiatorProfile = props => {
             color: Color.black,
             width: windowWidth * 0.87,
             marginTop: moderateScale(20, 0.3),
-            //   textDecorationLine : 'underline'
           }}>
           Satisfied Customers
         </CustomText>
@@ -313,8 +310,6 @@ const NegotiatorProfile = props => {
               setShowMore(!showMore);
             }}
             bgColor={Color.green}
-            // borderColor={Color.white}
-            // borderWidth={2}
             borderRadius={moderateScale(10, 0.3)}
           />
         )}

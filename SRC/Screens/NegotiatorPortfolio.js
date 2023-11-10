@@ -556,7 +556,6 @@ const NegotiatorPortfolio = props => {
                 color: Color.black,
                 fontSize: moderateScale(17, 0.6),
                 textTransform: 'uppercase',
-                // marginTop: moderateScale(10, 0.6),
               }}>
               Expertise
             </CustomText>
@@ -653,7 +652,6 @@ const NegotiatorPortfolio = props => {
               reviews
             </CustomText>}
             <FlatList
-              // data={dummydata}
               data={item?.negotiator_review ? item?.negotiator_review : userdata?.negotiator_review}
               renderItem={({item, index}) => {
                 return (
@@ -713,14 +711,7 @@ const NegotiatorPortfolio = props => {
                 );
               }}
             />
-            {/* 
-            {reviews?.map((item, index) => {
-              return (
-                
-                 
-                
-              );
-            })} */}
+      
           </View>
           {userRole == 'Qbid Member' && (
             <CustomButton
@@ -738,7 +729,6 @@ const NegotiatorPortfolio = props => {
               }
               borderRadius={moderateScale(30, 0.3)}
               onPress={()=>{navigationService.navigate('CreateNew',{hire:true})}}
-              // disabled={!availibility}
             />
           )}
         </ScrollView>
@@ -757,7 +747,6 @@ const NegotiatorPortfolio = props => {
           setIsVisible={setEditProfile}
           container={{
             width: windowWidth * 0.9,
-            // backgroundColor : Color.themeColor,
             borderRadius: moderateScale(10, 0.6),
             height: windowHeight * 0.8,
             overflow: 'hidden',
@@ -765,8 +754,6 @@ const NegotiatorPortfolio = props => {
           contentContainerStyle={{}}>
           <LinearGradient
             style={{
-              // width: windowWidth,
-              // height: windowHeight * 0.89,
               alignItems: 'center',
               paddingVertical: moderateScale(10, 0.6),
             }}
@@ -807,7 +794,6 @@ const NegotiatorPortfolio = props => {
               viewHeight={0.06}
               viewWidth={0.8}
               inputWidth={0.78}
-              // border={1}
               borderColor={'#ffffff'}
               backgroundColor={'#FFFFFF'}
               color={Color.themeColor}
@@ -823,7 +809,6 @@ const NegotiatorPortfolio = props => {
               viewHeight={0.06}
               viewWidth={0.8}
               inputWidth={0.78}
-              // border={1}
               borderColor={'#ffffff'}
               backgroundColor={'#FFFFFF'}
               color={Color.themeColor}
@@ -841,7 +826,6 @@ const NegotiatorPortfolio = props => {
                   viewHeight={0.06}
                   viewWidth={0.8}
                   inputWidth={0.78}
-                  // border={1}
                   borderColor={'#ffffff'}
                   backgroundColor={'#FFFFFF'}
                   color={Color.themeColor}
@@ -917,7 +901,6 @@ const NegotiatorPortfolio = props => {
               viewWidth={0.8}
               inputWidth={0.78}
               disable
-              // border={1}
               borderColor={'#ffffff'}
               backgroundColor={Color.veryLightGray}
               color={Color.themeColor}
@@ -934,7 +917,6 @@ const NegotiatorPortfolio = props => {
               viewWidth={0.8}
               inputWidth={0.78}
               disable
-              // border={1}
               borderColor={'#ffffff'}
               backgroundColor={Color.veryLightGray}
               color={Color.themeColor}
@@ -950,7 +932,6 @@ const NegotiatorPortfolio = props => {
               viewHeight={0.06}
               viewWidth={0.8}
               inputWidth={0.78}
-              // border={1}
               borderColor={'#ffffff'}
               backgroundColor={'#FFFFFF'}
               color={Color.themeColor}
@@ -966,7 +947,6 @@ const NegotiatorPortfolio = props => {
               viewHeight={0.06}
               viewWidth={0.8}
               inputWidth={0.78}
-              // border={1}
               borderColor={'#ffffff'}
               backgroundColor={'#FFFFFF'}
               color={Color.themeColor}
@@ -986,7 +966,6 @@ const NegotiatorPortfolio = props => {
               color={Color.themeColor}
               placeholderColor={Color.themeLightGray}
               borderRadius={moderateScale(25, 0.3)}
-              // marginBottom={moderateScale(10, 0.3)}
             />
             <TextInputWithTitle
               title={'Zip code'}
@@ -1001,7 +980,6 @@ const NegotiatorPortfolio = props => {
               color={Color.themeColor}
               placeholderColor={Color.themeLightGray}
               borderRadius={moderateScale(25, 0.3)}
-              // marginBottom={moderateScale(10, 0.3)}
             />
             {userRole != 'Qbid Member' && (
               <>
@@ -1059,8 +1037,6 @@ const NegotiatorPortfolio = props => {
                   ? Color.themeColor
                   : Color.black
               }
-              // borderColor={Color.white}
-              // borderWidth={2}
               borderRadius={moderateScale(30, 0.3)}
             />
           </LinearGradient>
@@ -1076,7 +1052,6 @@ const styles = ScaledSheet.create({
   upperContainer: {
     width: windowWidth,
     height: windowHeight * 0.5,
-    // borderRadius: moderateScale(2, 0.6),
     backgroundColor: Color.white,
     overflow: 'hidden',
   },
@@ -1114,17 +1089,14 @@ const styles = ScaledSheet.create({
   lowerContainer: {
     width: windowWidth,
     paddingVertical: moderateScale(20, 0.6),
-    // borderRadius: moderateScale(10, 0.3),
     backgroundColor: Color.white,
     marginTop: moderateScale(10, 0.3),
     paddingLeft: moderateScale(10, 0.6),
   },
   userTypeContainer: {
     width: windowWidth * 0.7,
-    // backgroundColor : Color.red,
     paddingTop: moderateScale(20, 0.3),
     paddingBottom: moderateScale(10, 0.3),
-    // marginTop: moderateScale(10, 0.3),
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -1143,8 +1115,6 @@ const styles = ScaledSheet.create({
   },
   innerContainer: {
     width: '48%',
-    // backgroundColor : 'green',
-    // paddingVertical : moderateScale(5,0.3),
     flexDirection: 'row',
     alignItems: 'center',
   },

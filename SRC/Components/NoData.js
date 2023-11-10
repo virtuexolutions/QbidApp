@@ -26,5 +26,5 @@ const styles = StyleSheet.create({
     fontSize:18,
     position:'absolute',
     bottom:0,
-    // marginTop:20
+
   }});

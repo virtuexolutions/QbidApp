@@ -39,8 +39,6 @@ const ReviewCard = ({ item ,photo, title, date, message }) => {
                 marginTop : moderateScale(1,0.3)
             }}
             starSize={moderateScale(9,0.3)}
-            // ratingGiven={star}
-            // setRatingGiven={setStar}
             />
 
         
@@ -61,9 +59,6 @@ const ReviewCard = ({ item ,photo, title, date, message }) => {
       </CustomText>
       <CustomText numberOfLines={1} style={{
         marginTop : moderateScale(10,0.3),
-        // position : 'absolute',
-        // right : 0,
-        // bottom : 0
         width : '100%',
         textAlign : 'right'
       }}>
@@ -75,15 +70,11 @@ const ReviewCard = ({ item ,photo, title, date, message }) => {
 const styles = ScaledSheet.create({
   container: {
     width: windowWidth * 0.87,
-    // height: windowHeight * 0.3,
-    // marginTop: moderateScale(20, 0.3),
     marginRight: moderateScale(10, 0.3),
     borderBottomWidth: 1,
     borderColor: Color.lightGrey,
-    // backgroundColor: Color.green,
     borderRadius: moderateScale(10, 0.3),
     paddingTop: moderateScale(20, 0.3),
-    // paddingHorizontal: moderateScale(15, 0.3),
     marginBottom: moderateScale(20, 0.3),
    
   },
