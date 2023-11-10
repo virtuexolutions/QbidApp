@@ -228,8 +228,8 @@ const JobDetails = props => {
                   }}>
                   <CustomImage
                     source={
-                      // data?.images?.length>0 
-                      //   ? {uri: data?.images[0]?.image}  : 
+                      data?.images?.length>0 
+                        ? {uri: data?.images[0]?.image}  : 
                       require('../Assets/Images/dummyman1.png')
                     }
                     style={{

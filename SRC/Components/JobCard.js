@@ -64,9 +64,9 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
           }}>
           <TouchableOpacity
             activeOpacity={0.8}
-            onPress={() => {
-              navigationService.navigate('MyAccounts');
-            }}
+            // onPress={() => {
+            //   navigationService.navigate('MyAccounts');
+            // }}
             style={{
               width: fromSeeAll
                 ? moderateScale(50, 0.3)
@@ -82,12 +82,12 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
             }}
             >
             <CustomImage
-              onPress={() => {
-                navigationService.navigate('MyAccounts');
-              }}
+              // onPress={() => {
+              //   navigationService.navigate('MyAccounts');
+              // }}
               source={
-                item?.user_info?.photo
-                  ? {uri: item?.user_info?.photo}
+                item?.quote_info?.images.length > 0 
+                  ? {uri: item?.quote_info?.images[0]?.image} 
                   : require('../Assets/Images/man1.jpg')
               }
               resizeMode={'cover'}

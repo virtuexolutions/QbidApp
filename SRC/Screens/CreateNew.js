@@ -215,7 +215,6 @@ const CreateNew = (props) => {
         }>
         <KeyboardAwareScrollView
           showsVerticalScrollIndicator={false}
-          // style={styles.container}
           contentContainerStyle={{
             alignItems: 'center',
             paddingBottom: windowHeight * 0.2,
@@ -224,6 +223,7 @@ const CreateNew = (props) => {
           <CustomText isBold style={styles.header}>
             Vendor Qoutes price
           </CustomText>
+
           <TextInputWithTitle
             titleText={'Qoute Title'}
             secureText={false}
@@ -241,6 +241,7 @@ const CreateNew = (props) => {
             placeholderColor={Color.themeLightGray}
             borderRadius={moderateScale(25, 0.3)}
           />
+
           <TextInputWithTitle
             titleText={'City'}
             secureText={false}
@@ -258,6 +259,7 @@ const CreateNew = (props) => {
             placeholderColor={Color.themeLightGray}
             borderRadius={moderateScale(25, 0.3)}
           />
+
           <TextInputWithTitle
             titleText={'State'}
             secureText={false}
@@ -275,6 +277,7 @@ const CreateNew = (props) => {
             placeholderColor={Color.themeLightGray}
             borderRadius={moderateScale(25, 0.3)}
           />
+
           <TextInputWithTitle
             titleText={'Vendor Qouted Price'}
             secureText={false}
@@ -292,6 +295,7 @@ const CreateNew = (props) => {
             placeholderColor={Color.themeLightGray}
             borderRadius={moderateScale(25, 0.3)}
           />
+
           <TextInputWithTitle
             titleText={'Asking Price '}
             secureText={false}
@@ -309,6 +313,7 @@ const CreateNew = (props) => {
             placeholderColor={Color.themeLightGray}
             borderRadius={moderateScale(25, 0.3)}
           />
+
           <TextInputWithTitle
             titleText={'Offering percent to negotiator from saving'}
             secureText={false}
@@ -326,6 +331,7 @@ const CreateNew = (props) => {
             placeholderColor={Color.themeLightGray}
             borderRadius={moderateScale(25, 0.3)}
           />
+
          {!hire && <DropDownSingleSelect
             array={servicesArray.filter(x => x?.name)}
             item={selectedService}
@@ -417,7 +423,6 @@ const CreateNew = (props) => {
             viewHeight={0.2}
             viewWidth={0.9}
             inputWidth={0.8}
-            // border={1}
             borderColor={'#ffffff'}
             backgroundColor={'#FFFFFF'}
             marginTop={moderateScale(15, 0.3)}
@@ -449,8 +454,7 @@ const CreateNew = (props) => {
                 ? Color.themeColor
                 : Color.black
             }
-            // borderColor={Color.white}
-            // borderWidth={2}
+          
             borderRadius={moderateScale(30, 0.3)}
           />
         </KeyboardAwareScrollView>
