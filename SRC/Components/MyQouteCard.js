@@ -27,7 +27,7 @@ import ReviewModal from './ReviewModal';
 
 const MyQouteCard = ({item}) => {
   const token = useSelector(state => state.authReducer.token);
-  console.log('🚀 ~ file: MyQouteCard.js:14 ~ MyQouteCard ~ item:', item);
+  // console.log('🚀 ~ file: MyQouteCard.js:14 ~ MyQouteCard ~ item:', item);
   const [modalVisible, setModalVisible] = useState(false);
   const [cmpLoading, setCmpLoading] = useState(false);
   const [rbRef, setRbRef] = useState(null);
@@ -45,10 +45,10 @@ const MyQouteCard = ({item}) => {
     const response = await Post(url, {status: 'completed'}, apiHeader(token));
     setCmpLoading(false);
     if (response != undefined) {
-      console.log(
-        '🚀 ~ file: MyQouteCard.js:30 ~ markCompleted ~ response:',
-        response?.data,
-      );
+      // console.log(
+      //   '🚀 ~ file: MyQouteCard.js:30 ~ markCompleted ~ response:',
+      //   response?.data,
+      // );
       Platform.OS == 'android'
         ? ToastAndroid.show('Order has been completed', ToastAndroid.SHORT)
         : Alert.alert('Order has been completed');
@@ -103,7 +103,7 @@ const MyQouteCard = ({item}) => {
           borderRadius: moderateScale(10, 0.3),
           overflow: 'hidden',
         }}>
-        <CustomImage
+        {/* <CustomImage
           source={
             item?.images.length > 0
               ? {uri: item?.images[0]?.image}
@@ -117,7 +117,7 @@ const MyQouteCard = ({item}) => {
           onPress={() => {
             navigationService.navigate('JobDetails', {item: item});
           }}
-        />
+        /> */}
       </View>
       <View
         style={{

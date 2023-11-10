@@ -201,10 +201,10 @@ const AddCard = () => {
                 borderColor: Color.lightGrey,
               }}
               onCardChange={cardDetails => {
-                console.log('cardDetails', cardDetails);
+                // console.log('cardDetails', cardDetails);
               }}
               onFocus={focusedField => {
-                console.log('focusField', focusedField);
+                // console.log('focusField', focusedField);
               }}
             />
 

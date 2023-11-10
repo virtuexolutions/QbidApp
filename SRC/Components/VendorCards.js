@@ -15,7 +15,7 @@ import {TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 const VendorCards = ({item}) => {
-  console.log('🚀 ~ file: VendorCards.js:18 ~ VendorCards ~ item:', item);
+  // console.log('🚀 ~ file: VendorCards.js:18 ~ VendorCards ~ item:', item);
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
   const token = useSelector(state => state.authReducer.token);
@@ -31,6 +31,12 @@ const VendorCards = ({item}) => {
       style={styles.mainContainer}>
       <View style={styles.imageConatiner}>
         <CustomImage
+        onPress={() =>
+          navigation.navigate('NegotiatorPortfolio', {
+            fromSearch: true,
+            item: item,
+          })
+        }
           source={{uri: item?.photo}}
           style={{
             height: '100%',
@@ -77,7 +83,7 @@ const VendorCards = ({item}) => {
         {item?.company_name}
       </CustomText>
       {
-        JSON.parse(item?.expertise).slice(0,2).map((item ,index) => {
+       item?.expertise && JSON.parse(item?.expertise).slice(0,2).map((item ,index) => {
           return(
 
       <CustomText style={styles.decription} isBold>

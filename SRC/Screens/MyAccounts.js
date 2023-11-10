@@ -31,15 +31,15 @@ const MyAccounts = props => {
   const dispatch = useDispatch();
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const user = useSelector(state => state.commonReducer.userData);
-  console.log("🚀 ~ file: MyAccounts.js:34 ~ MyAccounts ~ user:", user)
+  // console.log("🚀 ~ file: MyAccounts.js:34 ~ MyAccounts ~ user:", user)
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
   const [showModal, setShowModal] = useState(false);
   const [imageObject, setImageObject] = useState({});
-  console.log(
-    '🚀 ~ file: MyAccounts.js:40 ~ MyAccounts ~ imageObject:',
-    imageObject,
-  );
+  // console.log(
+  //   '🚀 ~ file: MyAccounts.js:40 ~ MyAccounts ~ imageObject:',
+  //   imageObject,
+  // );
   const [firstName, setFirstName] = useState(
     user?.first_name ? user?.first_name : '',
   );

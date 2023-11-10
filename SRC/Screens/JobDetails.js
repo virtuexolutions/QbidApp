@@ -39,16 +39,15 @@ import ImageView from 'react-native-image-viewing';
 
 const JobDetails = props => {
   const data1 = props?.route?.params?.item;
-  console.log("🚀 ~ file: JobDetails.js:42 ~ JobDetails ~ data1:", data1)
+
   const user = useSelector(state => state.commonReducer.userData);
+  const token = useSelector(state => state.authReducer.token);
+  const userRole = useSelector(state => state.commonReducer.selectedRole);
   const UserCoverLetterArray = useSelector(
     state => state.commonReducer.servicesArray,
   );
 
   const [data, setData] = useState(data1);
-  console.log('🚀 ~ file: JobDetails.js:47 ~ JobDetails ~ data:', data);
-  const userRole = useSelector(state => state.commonReducer.selectedRole);
-  const token = useSelector(state => state.authReducer.token);
   const [checked, setChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [bidDone, setBidDone] = useState(false);
@@ -61,22 +60,9 @@ const JobDetails = props => {
   const [coverletterRole, setCoverLetterRole] = useState('Expertise In');
   const [userData, setUserData] = useState({});
   const [imageModalVisible, setImageModalVisible] = useState(false);
-
-  // const images = data?.images.map(item=>{} )
   const [finalImagesArray, setFinalImagesArray] = useState([]);
-  console.log("🚀 ~ file: JobDetails.js:66 ~ JobDetails ~ finalImagesArray:", finalImagesArray)
 
   
-
-  const images = [
-    {
-      uri: 'https://avatars2.githubusercontent.com/u/7970947?v=3&s=460',
-      // uri: item?.photo,
-    },
-    {},
-    {},
-  ];
-
   const bidDetails = async () => {
     const url = `auth/negotiator/quote_detail/${data?.id}`;
     setIsLoading(true);
@@ -84,7 +70,7 @@ const JobDetails = props => {
     setIsLoading(false);
 
     if (response != undefined) {
-      console.log("🚀 ~ file: JobDetails.js:86 ~ bidDetails ~ response:", response?.data?.quote_info)
+      // console.log("🚀 ~ file: JobDetails.js:86 ~ bidDetails ~ response:", response?.data?.quote_info)
       const mainuserData = response?.data?.quote_info?.bids?.find(
         item => item.user_info?.id == user?.id,
       );
@@ -233,7 +219,7 @@ const JobDetails = props => {
                   flexDirection: 'row',
                   alignItems: 'center',
                 }}>
-                {/* <View
+                <View
                   style={{
                     width: moderateScale(60, 0.3),
                     height: moderateScale(50, 0.3),
@@ -251,7 +237,7 @@ const JobDetails = props => {
                       height: '100%',
                     }}
                   />
-                </View> */}
+                </View>
                 <View
                   style={{
                     marginLeft: moderateScale(5, 0.3),
@@ -403,7 +389,7 @@ const JobDetails = props => {
                         borderRadius: moderateScale(10, 0.3),
                         overflow: 'hidden',
                       }}>
-                      <CustomImage
+                      {/* <CustomImage
                         source={
                           data?.user_info?.photo
                             ? {uri: data?.user_info?.photo}
@@ -413,7 +399,7 @@ const JobDetails = props => {
                           width: '100%',
                           height: '100%',
                         }}
-                      />
+                      /> */}
                     </View>
                     <View
                       style={{
@@ -499,15 +485,15 @@ const JobDetails = props => {
                       paddingBottom: moderateScale(30, 0.6),
                     }}
                     renderItem={({item, index}) => {
-                    console.log(
-                        '🚀 ~ file: JobDetails.js:349 ~ JobDetails ~ item: details',
-                        item
-                      );
+                  // console.log(
+                  //       '🚀 ~ file: JobDetails.js:349 ~ JobDetails ~ item: details',
+                  //       item?.quote_info?.user_info?.photo
+                  //     );
                       return (
                         <>
                           <BidderDetail
                             item={{
-                              image: item?.user_info?.photo ,
+                              image: item?.quote_info?.user_info?.photo ,
                               name: item?.fullname,
                               rating: item?.rating,
                               description: item?.coverletter,
@@ -600,7 +586,7 @@ const JobDetails = props => {
                   </CustomText>
                   <BidderDetail
                     item={{
-                      image: require('../Assets/Images/man1.jpg'),
+                      photo: require('../Assets/Images/man1.jpg'),
                       name: user?.first_name,
                       rating: user?.rating,
                       description: userData?.coverletter

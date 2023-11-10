@@ -107,7 +107,7 @@ const ResetPassword = props => {
     setIsLoading(false);
 
     if (response != undefined) {
-      console.log('RSEST DATA ======>>>>>>', response?.data);
+      // console.log('RSEST DATA ======>>>>>>', response?.data);
       Platform.OS === 'android'
         ? ToastAndroid.show('Password Have been Reset', ToastAndroid.SHORT)
         : Alert.alert('Password Has been Reset');

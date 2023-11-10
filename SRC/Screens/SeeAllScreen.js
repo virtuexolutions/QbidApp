@@ -3,7 +3,7 @@ import React, {useState, useRef} from 'react';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import Color from '../Assets/Utilities/Color';
 import {moderateScale, ScaledSheet} from 'react-native-size-matters';
-import {windowHeight, windowWidth} from '../Utillity/utils';
+import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
 import CustomText from '../Components/CustomText';
 import BidDetailCard from '../Components/BidDetailCard';
 import {Actionsheet, Icon} from 'native-base';
@@ -16,7 +16,7 @@ import CustomStatusModal from '../Components/CustomStatusModal';
 import {useSelector} from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import {useEffect} from 'react';
-import {Get} from '../Axios/AxiosInterceptorFunction';
+import {Get, Post} from '../Axios/AxiosInterceptorFunction';
 import {ActivityIndicator} from 'react-native';
 import NoData from '../Components/NoData';
 import VendorCards from '../Components/VendorCards';
@@ -28,6 +28,7 @@ const SeeAllScreen = props => {
   const token = useSelector(state => state.authReducer.token);
 
   const type = props?.route?.params?.type;
+  // console.log('🚀 ~ file: SeeAllScreen.js:31 ~ SeeAllScreen ~ type:', type);
   const data = props?.route?.params?.data;
 
   const [searchData, setSearchData] = useState('');
@@ -38,10 +39,18 @@ const SeeAllScreen = props => {
   const [loadMore, setLoadMore] = useState(false);
   const [newArray, setNewArray] = useState([]);
   const [pageNum, setPageNum] = useState(1);
+  console.log(
+    '🚀 ~ file: SeeAllScreen.js:42 ~ SeeAllScreen ~ pageNum:',
+    pageNum,
+  );
   const scrollViewRef = useRef();
   const [filterVisible, setFilterVisible] = useState(false);
   // const [selectFilters, setSelectFilters] = useState([]);
-  const [filters, setFilters] = useState({});
+  const [filters, setFilters] = useState({level: [], expertise: []});
+  console.log(
+    '🚀 ~ file: SeeAllScreen.js:45 ~ SeeAllScreen ~ filters:',
+    filters,
+  );
 
   const handleScroll = event => {
     const currentOffset = event.nativeEvent.contentOffset.y;
@@ -55,69 +64,94 @@ const SeeAllScreen = props => {
   };
 
   const searchCards = async () => {
-    const url = type == 'negotiater' ? '' : '';
-    const body =
-      type == 'negotiater'
-        ? {
-            ...filters,
-            type: type,
-            text: searchData,
-          }
-        : {status: selectedStatus, type: type, text: searchData};
+    const url = 'auth/member/search';
+    const body = {
+      ...filters,
+      search: searchData,
+    };
+    console.log("🚀 ~ file: SeeAllScreen.js:69 ~ searchCards ~ body:", body)
 
     const response = await Post(url, body, apiHeader(token));
+
+    if (response != undefined) {
+      console.log(
+        '🚀 ~ file: SeeAllScreen.js:67 ~ searchCards ~ response:',
+        response?.data,
+      );
+      console.log(
+        '🚀 ~ file: SeeAllScreen.js:67 ~ searchCards ~ response:',
+        response?.data?.negotiator_info?.length,
+      );
+      setNewArray(response?.data?.negotiator_info);
+    }
   };
 
-  // const filterQuotes = async()=>{
-  //   const url = `auth/member/search_type/${selectedStatus}`
-  //   setIsLoading(true)
-  //   const response =  await Get(url, token)
-  //   setIsLoading(false)
-  //   if(response != undefined){
-  //     console.log("🚀 ~ file: HomeScreen.js:97 ~ filterQuotes ~ response:", response?.data)
-  //     setNewArray(response?.data?.quote_info)
-  //   }
-  // }
+  const filterQuotes = async () => {
+    const url = `auth/member/search_type/${selectedStatus}`;
+    setIsLoading(true);
+    const response = await Get(url, token);
+    setIsLoading(false);
+    if (response != undefined) {
+      console.log(
+        '🚀 ~ file: HomeScreen.js:97 ~ filterQuotes ~ response:',
+        response?.data,
+      );
+      setNewArray(response?.data?.quote_info);
+    }
+  };
 
-  // const getData = async value => {
-  //   const url =
-  //     type == 'qoutes'
-  //       ? `auth/member/quote?page=${pageNum}`
-  //       : `auth/member/bid_help?page=${pageNum}`;
-  //   value == 'loadMore' ? setLoadMore(true) : setIsLoading(true);
-  //   const response = await Get(url, token);
-  //   value == 'loadMore' ? setLoadMore(false) : setIsLoading(false);
+  const getData = async value => {
+    console.log('Page num ======>>>>> getsData');
 
-  //   if (response != undefined) {
-  //     if (type == 'qoutes') {
-  //       //  console.log('Here')
-  //       value == 'loadMore'
-  //         ? setNewArray(prev => [...prev, ...response?.data?.quote_info?.data])
-  //         : setNewArray(response?.data?.quote_info?.data);
-  //     } else {
-  //       value == 'loadMore'
-  //         ? setNewArray(prev => [
-  //             ...prev,
-  //             ...response?.data?.bid_help_info?.data,
-  //           ])
-  //         : setNewArray(response?.data?.bid_help_info?.data);
-  //     }
-  //   }
-  // };
+    const url = `auth/member/quote?page=${pageNum}`;
+    value == 'loadMore' ? setLoadMore(true) : setIsLoading(true);
+    const response = await Get(url, token);
+    value == 'loadMore' ? setLoadMore(false) : setIsLoading(false);
 
-  // useEffect(() => {
-  //   if (pageNum == 1) {
-  //     getData();
-  //   } else {
-  //     getData('loadMore');
-  //   }
-  // }, [pageNum]);
+    if (response != undefined) {
+      console.log(
+        '🚀 ~ file: SeeAllScreen.js:100 ~ getData ~ response:',
+        response?.data,
+      );
+      if (type == 'quotes') {
+        //  console.log('Here')
+        value == 'loadMore'
+          ? setNewArray(prev => [...prev, ...response?.data?.quote_info?.data])
+          : setNewArray(response?.data?.quote_info?.data);
+      } else {
+        value == 'loadMore'
+          ? setNewArray(prev => [
+              ...prev,
+              ...response?.data?.bid_help_info?.data,
+            ])
+          : setNewArray(response?.data?.bid_help_info?.data);
+      }
+    }
+  };
 
-  // useEffect(() => {
-  //   if(selectedStatus != ''){
-  //     filterQuotes()
-  //   }
-  // }, [selectedStatus])
+  useEffect(() => {
+    if (pageNum == 1) {
+      console.log('Page num ======>>>>>');
+      type == 'quotes' && getData('');
+    } else {
+      type == 'quotes' && getData('loadMore');
+    }
+  }, [pageNum]);
+
+  useEffect(() => {
+    if (selectedStatus != '') {
+    
+      type == 'quotes' && filterQuotes();
+    }
+  }, [selectedStatus]);
+
+  useEffect(() => {
+    // searchCards();
+
+    if (Object.keys(filters).length > 0) {
+      type == 'negotiator' && searchCards();
+    }
+  }, [ searchData]);
 
   return (
     <ScreenBoiler
@@ -201,7 +235,7 @@ const SeeAllScreen = props => {
               </View>
             );
           }}
-          data={data}
+          data={newArray}
           ref={scrollViewRef}
           onScroll={handleScroll}
           scrollEventThrottle={16}
@@ -252,6 +286,7 @@ const SeeAllScreen = props => {
           setModalVisible={setFilterVisible}
           filters={filters}
           setFilters={setFilters}
+          searchCards={searchCards}
           // setData={setSelectFilters}
         />
       </LinearGradient>

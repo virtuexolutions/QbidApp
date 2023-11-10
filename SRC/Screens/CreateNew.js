@@ -24,7 +24,8 @@ import {Alert} from 'react-native';
 import navigationService from '../navigationService';
 import {useNavigation} from '@react-navigation/native';
 
-const CreateNew = () => {
+const CreateNew = (props) => {
+  const hire = props?.route?.params?.hire
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
@@ -62,9 +63,7 @@ const CreateNew = () => {
     }
 
     const formData = new FormData();
-    
- 
-    
+
   
     for (let key in body) {
       if (body[key] == '') {
@@ -114,40 +113,69 @@ const CreateNew = () => {
     
   };
 
-  //  const someFunction=(image)=> {
-  //     const image1 = `https://www.google.com/url?sa=i&url=https%3A%2F%2Fimagepakistan.net%2F&psig=AOvVaw0cHt9oEt6QhxvuG4vCcRy5&ust=1676050033407000&source=images&cd=vfe&ved=0CA8QjRxqFwoTCKin4Yf7iP0CFQAAAAAdAAAAABAE`
-  //     const metadata = resolveAssetSource(image1);
-  //     const url = 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fimagepakistan.net%2F&psig=AOvVaw0cHt9oEt6QhxvuG4vCcRy5&ust=1676050033407000&source=images&cd=vfe&ved=0CA8QjRxqFwoTCKin4Yf7iP0CFQAAAAAdAAAAABAE';
-  //     console.log("🚀 ~ file: CreateNew.js:46 ~ someFunction ~ url", url)
+  const sendRequest =async ()=>{
+    const url = '';
+    const body = {
+      title: qouteTitle,
+      city: city,
+      state: state,
+      quoted_price: vendorQoutedPrice,
+      asking_price: askingPrice,
+      offering_percentage: offeringPercent,
+      notes: description,
+    };
+    const body2 = {
+      quoted_price: vendorQoutedPrice,
+      asking_price: askingPrice,
+      offering_percentage: offeringPercent,
+    }
 
-  //     const attachment = {
-  //         url: url,
-  //         iosType: 'man1.jpg',
-  //         iosFilename: 'man1.jpg',
-  //         androidType: 'image/*'
-  //     };
+    const formData = new FormData();
 
-  //     SendSMS.send({
-  //         body: 'The default body of the SMS!',
-  //         recipients: ['03112048588'],
-  //         successTypes: ['sent', 'queued'],
-  //         allowAndroidSendWithoutReadPermission: true,
-  //         attachment: attachment
-  //     }, (completed, cancelled, error) => {
+    for (let key in body) {
+      if (body[key] == '') {
+        return Platform.OS == 'android'
+          ? ToastAndroid.show(`${key} is required`, ToastAndroid.SHORT)
+          : Alert.alert(`${key} is required`);
+      } else {
+        formData.append(key, body[key]);
+      }
+    }
+    for(let key in body2){
+      if(isNaN(body2[key])){
+        return Platform.OS == 'android'
+        ?ToastAndroid.show(`${key}is not a number` ,ToastAndroid.SHORT )
+        :Alert.alert(`${key} is not a number `)
+      }
+    }
+    if(description.length < 100){
+      return Platform.OS == 'android'
+          ? ToastAndroid.show(`Description is too short`, ToastAndroid.SHORT)
+          : Alert.alert(`Description is too short`);
+    }
+    multiImages?.map((item, index) => formData.append(`images[${index}]`, item));
 
-  //         console.log('SMS Callback: completed: ' + completed + ' cancelled: ' + cancelled + 'error: ' + error);
+    setIsLoading(true);
+    const response = await Post(url, formData, apiHeader(token));
+    setIsLoading(false);
+    if (response != undefined) {
+    console.log("🚀 ~ file: CreateNew.js:164 ~ sendRequest ~ response:", response?.data)
 
-  //     });
-  // }
+      setCity('')
+      setAskingPrice('')
+      setDescription('')
+      setMultiImages([])
+      setOfferingPercent('')
+      setQouteTitle('')
+      setState('')
+      setSelectedService('')
+      setVendorQoutedPrice('')
+      
+     
+      navigation.goBack();
+    }
 
-  //   useEffect(() => {
-  //     if(multiImages?.length > 0){
-  //       console.log(multiImages[0]?.name)
-  //       // Linking.openURL(`sms:03112048588?body=${multiImages[0].uri}`)
-  //       someFunction(multiImages[0]?.name)
-  //     }
-
-  //   }, [multiImages])
+  }
 
   return (
     <ScreenBoiler
@@ -298,7 +326,7 @@ const CreateNew = () => {
             placeholderColor={Color.themeLightGray}
             borderRadius={moderateScale(25, 0.3)}
           />
-          <DropDownSingleSelect
+         {!hire && <DropDownSingleSelect
             array={servicesArray.filter(x => x?.name)}
             item={selectedService}
             setItem={setSelectedService}
@@ -310,7 +338,7 @@ const CreateNew = () => {
               borderBottomWidth: 0,
               marginTop: moderateScale(15, 0.3),
             }}
-          />
+          />}
           <CustomText
             isBold
             style={[
@@ -412,7 +440,7 @@ const CreateNew = () => {
             marginTop={moderateScale(20, 0.3)}
             onPress={() => {
               // console.log('here');
-              publishQuote();
+              hire ? sendRequest() : publishQuote();
             }}
             bgColor={
               userRole == 'Qbid Member'
@@ -441,10 +469,7 @@ export default CreateNew;
 
 const styles = ScaledSheet.create({
   container: {
-    // height : windowHeight * 0.85,
     width: windowWidth,
-    // minHeight: windowHeight * 0.89,
-    // backgroundColor: Color.themeColor,
   },
   image: {
     width: moderateScale(100, 0.3),
