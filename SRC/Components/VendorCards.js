@@ -47,10 +47,8 @@ const VendorCards = ({item}) => {
       </View>
       <View style={{
         flexDirection:'row',
-        // backgroundColor:'red',
         alignItems:'center',
         justifyContent:'center',
-        // paddingHorizontal: moderateScale(15,0.3),
         paddingTop:moderateScale(5,0.3)
       }}>
       <CustomText style={styles.title} isBold>
@@ -92,10 +90,6 @@ const VendorCards = ({item}) => {
           )
         })
       }
-      
-      {/* <CustomText numberOfLines={2} style={styles.decription}>
-        {item?.description}
-      </CustomText> */}
     </TouchableOpacity>
   );
 };
@@ -120,27 +114,18 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 14,
-    // textAlign: 'center',
-    // paddingTop: 10,
-    // backgroundColor:'green',
     paddingHorizontal:moderateScale(8,0.3)
-    // width: windowWidth * 0.37,
+  
   },
   decription: {
     fontSize: 12,
-    // backgroundColor:'red',
-    // paddingHorizontal:moderateScale(10 ,0.3) ,
-    // paddingVertical: 5,
     textAlign: 'center',
     width: windowWidth * 0.39,
     color: Color.darkGray,
   },
   view1: {
-    // paddingHorizontal:20,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    // paddingTop:2,
-    // backgroundColor:'red'
   },
 });

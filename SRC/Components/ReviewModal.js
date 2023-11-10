@@ -125,7 +125,6 @@ const ReviewModal = ({setRef,rbRef, item}) => {
           bgColor={Color.themeColor}
           borderRadius={moderateScale(30, 0.3)}
           fontSize={moderateScale(15, 0.3)}
-          // marginTop={moderateScale(10,.3)}
         />
       </View>
     </RBSheet>
@@ -150,7 +149,6 @@ const styles = StyleSheet.create({
     marginVertical: moderateScale(20, 0.3),
     borderRadius: moderateScale(15, 0.3),
     paddingHorizontal: moderateScale(20, 0.3),
-    // marginHorizontal:20
   },
   btnText: {
     color: Color.white,

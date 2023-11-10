@@ -118,12 +118,10 @@ const NegotiatorCard = ({item, fromSeeAll}) => {
             //     : windowHeight * 0.27,
             width: windowWidth * 0.9,
             paddingVertical: moderateScale(15, 0.6),
-            // height: windowHeight * 0.55,
             borderRadius: moderateScale(15, 0.3),
             backgroundColor: Color.white,
             borderWidth: 2,
             borderColor: Color.themeColor,
-            // alignItems: 'center',
           }}>
           <View
             style={{
@@ -149,12 +147,10 @@ const NegotiatorCard = ({item, fromSeeAll}) => {
               flexDirection: 'row',
               width: windowWidth * 0.9,
               paddingHorizontal: moderateScale(25, 0.6),
-              // backgroundColor: 'red',
             }}>
             <CustomText
               style={{
-                width: windowWidth * 0.45,
-                // textAlign: 'center',
+                width: windowWidth * 0.4,
                 paddingHorizontal: moderateScale(10, 0.6),
                 marginTop: moderateScale(10, 0.3),
                 fontSize: moderateScale(14, 0.6),
@@ -196,7 +192,6 @@ const NegotiatorCard = ({item, fromSeeAll}) => {
                   flexDirection: 'row',
                   width: windowWidth * 0.85,
                   justifyContent: 'space-between',
-                  // paddingHorizontal:20
                 }}>
                 <View
                   style={{
@@ -222,13 +217,10 @@ const NegotiatorCard = ({item, fromSeeAll}) => {
                 <View
                   style={{
                     width: windowWidth * 0.4,
-                    // backgroundColor: 'red',
-                  }}>
+                   }}>
                   <CustomText
                     style={{
                       width: windowWidth * 0.2,
-                      // textAlign: 'center',
-                      // paddingHorizontal: moderateScale(30, 0.6),
                       marginTop: moderateScale(10, 0.3),
                       fontSize: moderateScale(13, 0.6),
                       color: Color.black,
@@ -273,9 +265,6 @@ const NegotiatorCard = ({item, fromSeeAll}) => {
                     borderRadius={moderateScale(20, 0.3)}
                     iconStyle={{
                       fontSize: moderateScale(19, 0.6),
-                      // backgroundColor: 'blue',
-                      // height: windowHeight * 0.07,
-                      // color: 'white',
                     }}
                     marginRight={moderateScale(5, 0.3)}
                     isBold

@@ -115,21 +115,6 @@ const HomeScreen = () => {
   const toggleModal = () => {
     setModalVisible(!modalVisible);
   };
-  // const dummyarray =[
-  //   {
-  //     image:require('../Assets/Images/man2.jpg'),
-  //   title:'walter A. Jones',
-  //   subtitle:'jbhdfghjdgfh',
-  //   description:'kjadfhajkhdfjkhabvdmnabvnbanvbakeyrjaehjhityuireykdnvm,nvm,nacvhfghfjafbghfpwieroweihhr'
-  //   },
-  //   {
-  //     image:require('../Assets/Images/man2.jpg'),
-  //   title:'walter A. Jones',
-  //   subtitle:'jbhdfghjdgfh',
-  //   description:'kjadfhajkhdfjkhabvdmnabvnbanvbakeyrjaehjhityuireykdnvm,nvm,nacvhfghfjafbghfpwieroweihhr'
-  //   }
-  // ]
-
   return (
     <ScreenBoiler
       statusBarBackgroundColor={Color.themeBgColor}
@@ -238,8 +223,6 @@ const HomeScreen = () => {
                   />
                 );
               }}
-              // data={proposals}
-              // data={dummyarray}
               data={negotiator}
               horizontal
               showsHorizontalScrollIndicator={false}
@@ -269,9 +252,6 @@ const HomeScreen = () => {
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                // width: windowWidth * 0.2,
-                // backgroundColor:'red',
-                // marginRight: moderateScale(5, 0.3),
               }}>
               <CustomText
                 onPress={() => {
@@ -406,7 +386,6 @@ const styles = ScaledSheet.create({
     fontSize: 18,
     position: 'absolute',
     bottom: 0,
-    // marginTop:20
   },
 });
 

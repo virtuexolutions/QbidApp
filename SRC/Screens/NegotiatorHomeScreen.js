@@ -248,7 +248,6 @@ const NegotiatorHomeScreen = () => {
                 <CustomText
                   style={{
                     fontSize: moderateScale(13, 0.6),
-                    //  backgroundColor : 'red'
                   }}>
                   Your level
                 </CustomText>
@@ -323,7 +322,6 @@ const NegotiatorHomeScreen = () => {
                         style={{
                           width: windowWidth * 0.95,
                           height: windowHeight * 0.18,
-                          // backgroundColor: 'green',
                           alignItems: 'center',
                         }}
                       />
@@ -356,7 +354,6 @@ const NegotiatorHomeScreen = () => {
                         style={{
                           width: windowWidth * 0.95,
                           height: windowHeight * 0.18,
-                          // backgroundColor: 'green',
                           alignItems: 'center',
                         }}
                       />
@@ -424,7 +421,6 @@ const NegotiatorHomeScreen = () => {
                         style={{
                           width: windowWidth * 0.95,
                           height: windowHeight * 0.18,
-                          // backgroundColor: 'green',
                           alignItems: 'center',
                         }}
                       />
@@ -498,7 +494,6 @@ const styles = ScaledSheet.create({
     backgroundColor: 'white',
     borderRadius: moderateScale(10, 0.6),
     paddingLeft: moderateScale(10, 0.6),
-    // backgroundColor : 'green',
     paddingTop: moderateScale(10, 0.6),
   },
   recommendedContainer: {
@@ -528,6 +523,5 @@ const styles = ScaledSheet.create({
     fontSize: 18,
     position: 'absolute',
     bottom: 0,
-    // marginTop:20
   },
 });
