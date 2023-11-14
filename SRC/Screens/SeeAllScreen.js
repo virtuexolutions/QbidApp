@@ -175,7 +175,7 @@ const SeeAllScreen = props => {
           userRole == 'Qbid Member'
             ? Color.themeBgColor
             : userRole == 'Qbid Negotiator'
-            ? Color.themeBgColorNegotiator
+            ? Color.themeBgColorNegotiators
             : Color.themebgBusinessQbidder
         }>
         <View

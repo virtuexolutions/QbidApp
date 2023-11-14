@@ -84,7 +84,7 @@ const YourJobes = props => {
     {
       title: 'autorepair',
       name: 'john',
-      photo: require('../Assets/Images/man1.jpg'),
+      image: require('../Assets/Images/man1.jpg'),
       quoted_price: 20,
       offering_percentage: 10,
       notes: 'kfdkshdfgdshgfsbdfnbcnvbxncvkjtrhtuerht',
@@ -108,7 +108,7 @@ const YourJobes = props => {
     {
       title: 'autorepair',
       name: 'john',
-      photo: require('../Assets/Images/man1.jpg'),
+      image: require('../Assets/Images/man1.jpg'),
       quoted_price: 20,
       offering_percentage: 10,
       notes: 'kfdkshdfgdshgfsbdfnbcnvbxncvkjtrhtuerht',
