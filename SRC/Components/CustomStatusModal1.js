@@ -25,6 +25,10 @@ const CustomStatusModal1 = ({
   text,
   filters,
 }) => {
+
+  const Data = ['TECH', 'BANKING', 'FASHION', 'CONSTRUCTION'];
+  const Data1 = ['REMOTE', '401K', 'PAID VACATIONS', 'PET FRIENDLY'];
+
   const services = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
 
@@ -62,6 +66,11 @@ const CustomStatusModal1 = ({
     },
   ];
 
+ 
+
+  // const [filters, setFilters] = useState({});
+  // console.log('🚀 ~ file: CustomStatusModal1.js:61 ~ filters:', filters);
+
   const [categoryindex, setCategoryIndex] = useState(0);
   const [selectedItems, setSelectedItems] = useState([]);
 
@@ -87,92 +96,101 @@ const CustomStatusModal1 = ({
         }}>
         <View
           style={{
+            width: '100%',
+            paddingVertical: moderateScale(10, 0.6),
+            backgroundColor: Color.themeColor,
+            justifyContent: 'center',
+          }}>
+          <CustomText
+            style={{
+              fontSize: moderateScale(17, 0.6),
+              width: windowWidth * 0.5,
+              paddingLeft: moderateScale(10, 0.6),
+            }}>
+            FIELD CATEGORY
+          </CustomText>
+        </View>
+
+        <View
+          style={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
             width: windowWidth * 0.95,
+            paddingLeft: moderateScale(10, 0.6),
+            marginTop: moderateScale(20, 0.3),
             // marginTop: moderateScale(20, 0.3),
           }}>
-          {negotiatorData.map((item, index) => {
+          {Data.map((item, index) => {
             return (
-              <>
-                <View
+              <TouchableOpacity
+                onPress={() => {
+                  setCategoryIndex(index);
+                }}
+                style={{
+                  //   width: windowWidth * 0.2,
+                  flexBasis: '27%',
+                  marginRight: moderateScale(15, 0.3),
+                  paddingVertical: moderateScale(12, 0.6),
+                  marginBottom: moderateScale(10, 0.3),
+                  borderWidth: moderateScale(1, 0.3),
+                  borderColor: Color.veryLightGray,
+                  borderRadius: moderateScale(5, 0.3),
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor:
+                    categoryindex == index ? '#000' : 'transparent',
+                }}>
+                <CustomText
                   style={{
-                    width: windowWidth * 0.95,
-                    alignSelf: 'center',
-                    paddingVertical: moderateScale(5, 0.6),
-                    backgroundColor: Color.themeColor,
-                    justifyContent: 'center',
+                    fontSize: moderateScale(12, 0.6),
+                    color: categoryindex == index ? '#fff' : '#000',
                   }}>
-                  <CustomText
-                    style={{
-                      fontSize: moderateScale(15, 0.6),
-                      // width: windowWidth * 0.5,
-                      color:Color.white,
-                      paddingLeft: moderateScale(10, 0.6),
-                    }}>
-                    {item?.name}
-                  </CustomText>
-                </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                    paddingHorizontal: moderateScale(10, 0.6),
-                    paddingVertical: moderateScale(5, 0.6),
-                  }}>
-                  {item?.data?.map((i, index) => {
-                    return (
-                      <TouchableOpacity
-                        onPress={() => {
-                          // console.log(filters?.hasOwnProperty(item?.name));
-                          if (filters?.hasOwnProperty(item?.name)) {
-                            if (filters[item?.name]?.includes(i)) {
-                              setFilters(prev => {
-                                return {
-                                  ...prev,
-                                  [item?.name]: prev[item?.name]?.filter(
-                                    d => d != i,
-                                  ),
-                                };
-                              });
-                            } else {
-                              setFilters(prev => {
-                                return {...prev};
-                              }, filters[item?.name]?.push(i));
-                            }
-                          } else {
-                            setFilters(prev => {
-                              return {...prev, [item?.name]: [i]};
-                            });
-                            // console.log('Hello2', filters[item?.name]);
-                          }
-                        }}
-                        style={{
-                          
-                          marginVertical: moderateScale(5, 0.6),
-                          marginHorizontal: moderateScale(5, 0.3),
-                          padding: moderateScale(5, 0.6),
-                          borderWidth: moderateScale(1, 0.3),
-                          borderColor: Color.blue,
-                          borderRadius: moderateScale(5, 0.3),
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          backgroundColor: filters[item?.name]?.includes(i)
-                            ? Color.blue
-                            : 'transparent',
-                        }}>
-                        <CustomText
-                          style={{
-                            fontSize: moderateScale(10, 0.6),
-                            color: filters[item?.name]?.includes(i)
-                              ? '#fff'
-                              : '#000',
-                          }}>
-                          {i}
-                        </CustomText>
-                      </TouchableOpacity>
-                    );
-                  })}
-                </View>
-              </>
+                  {item}
+                </CustomText>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+
+        <View
+          style={{
+            width: '100%',
+            paddingVertical: moderateScale(10, 0.6),
+            backgroundColor: Color.themeColor,
+            justifyContent: 'center',
+            marginTop: moderateScale(20, 0.3),
+          }}>
+          <CustomText
+            style={{
+              fontSize: moderateScale(17, 0.6),
+              width: windowWidth * 0.5,
+              paddingLeft: moderateScale(10, 0.6),
+            }}>
+            BENEFITS
+          </CustomText>
+        </View>
+
+        <View
+          style={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            width: windowWidth * 0.95,
+            paddingLeft: moderateScale(10, 0.6),
+            marginTop: moderateScale(20, 0.3),
+          }}>
+          {Data1.map((item, index) => {
+            const isSelected = selectedItems.includes(item);
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  BENEFITS(item);
+                }}
+                style={[styles.item, isSelected && styles.selectedItem]}>
+                <CustomText
+                  style={[styles.itemText, isSelected && styles.selectedItemText]}>
+                  {item}
+                </CustomText>
+              </TouchableOpacity>
             );
           })}
         </View>
@@ -228,9 +246,9 @@ const styles = ScaledSheet.create({
     fontSize: moderateScale(10, 0.6),
   },
   selectedItem: {
-    backgroundColor: 'black',
+    backgroundColor: 'black', 
   },
   selectedItemText: {
-    color: 'white',
+    color: 'white', 
   },
 });
