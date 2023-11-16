@@ -47,6 +47,7 @@ import navigationService from '../navigationService';
 const NegotiatorPortfolio = props => {
   const fromSearch = props?.route?.params?.fromSearch;
   const item = props?.route?.params?.item;
+  console.log("🚀 ~ file: NegotiatorPortfolio.js:50 ~ NegotiatorPortfolio ~ item:", item)
 
   const userdata = useSelector(state => state.commonReducer.userData);
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
@@ -183,7 +184,7 @@ const NegotiatorPortfolio = props => {
   };
 
   useEffect(() => {
-    reviews();
+    // reviews();
   }, []);
 
   useEffect(() => {

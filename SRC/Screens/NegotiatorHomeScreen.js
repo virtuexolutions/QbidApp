@@ -54,7 +54,7 @@ const NegotiatorHomeScreen = () => {
   const [working, setWorking] = useState([]);
   const [jobPosting, setJobPosting] = useState([]);
   const isFocused = useIsFocused();
-  const [postJob ,setPostJob] = useState('')
+  const [postJob, setPostJob] = useState('');
 
   const getProposal = async () => {
     setIsLoading(true);
@@ -69,7 +69,7 @@ const NegotiatorHomeScreen = () => {
     if (response1 != undefined) {
       console.log(
         '🚀 ~ file: NegotiatorHomeScreen.js:71 ~ getProposal ~ response1:',
-        response1?.data,
+        response1?.data?.quote_info?.data,
       );
 
       ![null, undefined, ''].includes(response2?.data?.quote_info) &&
@@ -84,8 +84,6 @@ const NegotiatorHomeScreen = () => {
         setJobPosting(response3?.data?.bid_help_info?.data);
     }
   };
-
-
 
   useEffect(() => {
     getProposal();
@@ -109,7 +107,7 @@ const NegotiatorHomeScreen = () => {
   //   useEffect(() => {
   //     postedJob()
   //   }, [])
-    
+
   return (
     <ScreenBoiler
       statusBarBackgroundColor={
@@ -316,6 +314,7 @@ const NegotiatorHomeScreen = () => {
                 </View>
 
                 <FlatList
+                  data={recommended}
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={{
@@ -345,7 +344,7 @@ const NegotiatorHomeScreen = () => {
                   }}
                 />
               </View>
-              
+
               <View style={styles.recommendedContainer}>
                 <View style={styles.row}>
                   <CustomText isBold style={styles.heading}>
