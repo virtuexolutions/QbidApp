@@ -113,6 +113,7 @@ const NegotiatorPortfolio = props => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [review, setReview] = useState('');
+  console.log("🚀 ~ file: NegotiatorPortfolio.js:116 ~ NegotiatorPortfolio ~ setReview:", setReview)
 
   const updateProfile = async () => {
     const url = 'auth/negotiator/profile_update';
@@ -154,6 +155,7 @@ const NegotiatorPortfolio = props => {
     
     setIsLoading(true);
     const response = await Get('auth/review', token);
+    console.log("🚀 ~ file: NegotiatorPortfolio.js:157 ~ reviews ~ response:", response)
     setIsLoading(false);
     
     if (response != undefined) {
@@ -552,24 +554,14 @@ const NegotiatorPortfolio = props => {
             </View>
             <CustomText
               isBold
-              style={{
-                color: Color.black,
-                fontSize: moderateScale(17, 0.6),
-                textTransform: 'uppercase',
-              }}>
+              style={styles.heading1}>
               Expertise
             </CustomText>
             {
             services?.map((x, index) => {
                 return (
                   <View
-                    style={{
-                      flexDirection: 'row',
-                      width: '100%',
-                      alignItems: 'center',
-                      marginTop: moderateScale(7, 0.3),
-                      paddingLeft: moderateScale(15, 0.6),
-                    }}>
+                    style={styles.language}>
                     <View
                       style={{
                         width: moderateScale(7, 0.6),
@@ -597,25 +589,14 @@ const NegotiatorPortfolio = props => {
               })}
             <CustomText
               isBold
-              style={{
-                color: Color.black,
-                fontSize: moderateScale(17, 0.6),
-                textTransform: 'uppercase',
-                marginTop: moderateScale(10, 0.6),
-              }}>
+              style={styles.heading1}>
               Languages
             </CustomText>
             {
             language?.map((x, index) => {
                 return (
                   <View
-                    style={{
-                      flexDirection: 'row',
-                      width: '100%',
-                      alignItems: 'center',
-                      marginTop: moderateScale(7, 0.3),
-                      paddingLeft: moderateScale(15, 0.6),
-                    }}>
+                    style={styles.language}>
                     <View
                       style={{
                         width: moderateScale(7, 0.6),
@@ -641,14 +622,11 @@ const NegotiatorPortfolio = props => {
                   </View>
                 );
               })}
-         {  item?.negotiator_review && <CustomText
+         { 
+          item?.negotiator_review &&
+           <CustomText
               isBold
-              style={{
-                color: Color.black,
-                fontSize: moderateScale(17, 0.6),
-                textTransform: 'uppercase',
-                marginTop: moderateScale(10, 0.6),
-              }}>
+              style={styles.heading1}>
               reviews
             </CustomText>}
             <FlatList
@@ -656,19 +634,9 @@ const NegotiatorPortfolio = props => {
               renderItem={({item, index}) => {
                 return (
                   <View
-                    style={{
-                      flexDirection: 'row',
-                      marginVertical: moderateScale(10, 0.3),
-                      paddingHorizontal: moderateScale(10, 0.3),
-                      // backgroundColor:'red'
-                    }}>
+                    style={styles.view}>
                     <View
-                      style={{
-                        height: windowHeight * 0.06,
-                        width: windowHeight * 0.06,
-                        borderRadius: (windowHeight * 0.06) / 2,
-                        overflow: 'hidden',
-                      }}>
+                      style={styles.mainview}>
                       <CustomImage
                         style={{
                           height: '100%',
@@ -683,27 +651,15 @@ const NegotiatorPortfolio = props => {
                       }}>
                       <CustomText
                         isBold
-                        style={{
-                          color: Color.black,
-                          fontSize: moderateScale(13, 0.6),
-                          textTransform: 'uppercase',
-                        }}>
+                        style={styles.text}>
                         {item?.user_info?.first_name}
                       </CustomText>
                       <CustomText
-                        style={{
-                          color: Color.black,
-                          fontSize: moderateScale(12, 0.6),
-                          width: windowWidth * 0.75,
-                        }}>
+                        style={styles.text2}>
                         {item?.text}
                       </CustomText>
                       <CustomText
-                        style={{
-                          color: Color.Grey,
-                          fontSize: moderateScale(12, 0.6),
-                          width: windowWidth * 0.75,
-                        }}>
+                        style={styles.text2}>
                         {moment().format('MMM Do, YYYY')}
                       </CustomText>
                     </View>
@@ -1118,6 +1074,42 @@ const styles = ScaledSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  view:{
+    flexDirection: 'row',
+    marginVertical: moderateScale(10, 0.3),
+    paddingHorizontal: moderateScale(10, 0.3),
+    // backgroundColor:'red'
+  },
+  mainview:{
+    height: windowHeight * 0.06,
+    width: windowHeight * 0.06,
+    borderRadius: (windowHeight * 0.06) / 2,
+    overflow: 'hidden',
+  },
+  text:{
+    color: Color.black,
+    fontSize: moderateScale(13, 0.6),
+    textTransform: 'uppercase',
+  },
+  text2:{
+    color: Color.black,
+    fontSize: moderateScale(12, 0.6),
+    width: windowWidth * 0.75,
+  },
+  heading1:{
+    color: Color.black,
+    fontSize: moderateScale(17, 0.6),
+    textTransform: 'uppercase',
+    marginTop: moderateScale(10, 0.6),
+  },
+  language:{
+    flexDirection: 'row',
+    width: '100%',
+    alignItems: 'center',
+    marginTop: moderateScale(7, 0.3),
+    paddingLeft: moderateScale(15, 0.6),
+  },
+
 });
 
 const DetailContainer = ({

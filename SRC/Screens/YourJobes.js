@@ -66,54 +66,56 @@ const YourJobes = props => {
       // console.log('Reached the end of ScrollView');
     }
   };
-  //   const completedjobes = async()=>{
-  // const url =''
-  // setIsLoading(true)
-  // const response = await Get(url , token)
-  // setIsLoading(false)
-  // if(response != undefined){
-  //   setCompletedjobescards()
-  // }
-  //   }
+    const completedjobes = async()=>{
+  const url ='auth/negotiator/quote/complete'
+  setIsLoading(true)
+  const response = await Get('auth/negotiator/quote/complete' , token)
+  console.log("🚀 ~ file: YourJobes.js:73 ~ completedjobes ~ response:", response?.data?.quote_info?.data)
+  setIsLoading(false)
+  if(response != undefined){
+    setCompletedjobescards(response?.data?.quote_info?.data)
+  }
+    }
 
-  //   useEffect(() => {
-  //     setCompletedjobescards()
-  //   }, [])
+    useEffect(() => {
+      completedjobes()
+    }, [])
 
-  const dummydata = [
-    {
-      title: 'autorepair',
-      name: 'john',
-      image: require('../Assets/Images/man1.jpg'),
-      quoted_price: 20,
-      offering_percentage: 10,
-      notes: 'kfdkshdfgdshgfsbdfnbcnvbxncvkjtrhtuerht',
-    },
-    {
-      title: 'plumbing project',
-      name: 'alexender',
-      image: require('../Assets/Images/man1.jpg'),
-      offering_percentage: 15,
-      quoted_price: 20,
-      notes: 'kfdkshdfgdshgfsbdfnbcnvbxncvkjtrhtuerht',
-    },
-    {
-      title: 'autorepair',
-      name: 'matthew',
-      image: require('../Assets/Images/man1.jpg'),
-      offering_percentage: 10,
-      quoted_price: 20,
-      notes: 'kfdkshdfgdshgfsbdfnbcnvbxncvkjtrhtuerht',
-    },
-    {
-      title: 'autorepair',
-      name: 'john',
-      image: require('../Assets/Images/man1.jpg'),
-      quoted_price: 20,
-      offering_percentage: 10,
-      notes: 'kfdkshdfgdshgfsbdfnbcnvbxncvkjtrhtuerht',
-    },
-  ];
+  // const dummydata = [
+  //   {
+  //     title: 'autorepair',
+  //     name: 'john',
+  //     image: require('../Assets/Images/man1.jpg'),
+  //     quoted_price: 20,
+  //     offering_percentage: 10,
+  //     notes: 'kfdkshdfgdshgfsbdfnbcnvbxncvkjtrhtuerht',
+  //   },
+  //   {
+  //     title: 'plumbing project',
+  //     name: 'alexender',
+  //     image: require('../Assets/Images/man1.jpg'),
+  //     offering_percentage: 15,
+  //     quoted_price: 20,
+  //     notes: 'kfdkshdfgdshgfsbdfnbcnvbxncvkjtrhtuerht',
+  //   },
+  //   {
+  //     title: 'autorepair',
+  //     name: 'matthew',
+  //     image: require('../Assets/Images/man1.jpg'),
+  //     offering_percentage: 10,
+  //     quoted_price: 20,
+  //     notes: 'kfdkshdfgdshgfsbdfnbcnvbxncvkjtrhtuerht',
+  //   },
+  //   {
+  //     title: 'autorepair',
+  //     name: 'john',
+  //     image: require('../Assets/Images/man1.jpg'),
+  //     quoted_price: 20,
+  //     offering_percentage: 10,
+  //     notes: 'kfdkshdfgdshgfsbdfnbcnvbxncvkjtrhtuerht',
+  //   },
+    
+  // ];
   return (
     <ScreenBoiler
       statusBarBackgroundColor={
@@ -147,7 +149,7 @@ const YourJobes = props => {
             : Color.themebgBusinessQbidder
         }>
         <CustomText isBold style={styles.heading}>
-          Your Jobes
+          completed Jobes
         </CustomText>
 
         {isLoading ? (
@@ -185,7 +187,7 @@ const YourJobes = props => {
             ref={scrollViewRef}
             onScroll={handleScroll}
             scrollEventThrottle={16}
-            data={dummydata}
+            data={completedjobescards}
             numColumns={type != 'Seeking Help' ? 2 : 1}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{
@@ -224,7 +226,8 @@ const YourJobes = props => {
                         height: '100%',
                         width: '100%',
                       }}
-                      source={item?.image}
+                      source={{ uri : item?.user_info?.photo}}
+                      // {uri: user?.photo}
                     />
                   </View>
                   <View
@@ -244,7 +247,7 @@ const YourJobes = props => {
                           textTransform: 'uppercase',
                           paddingRight: moderateScale(10, 0.3),
                         }}>
-                        {item?.name}
+                        {item?.user_info?.first_name}
                       </CustomText>
                         </View>
                     <CustomText
@@ -253,7 +256,7 @@ const YourJobes = props => {
                         fontSize: moderateScale(12, 0.6),
                         width: windowWidth * 0.75,
                       }}>
-                      earning
+                     earning
                     </CustomText>
                     <CustomText
                       style={{
@@ -261,7 +264,7 @@ const YourJobes = props => {
                         fontSize: moderateScale(12, 0.6),
                         width: windowWidth * 0.75,
                       }}>
-                      $50
+                     {item?.user_info?.total_earning}
                     </CustomText>
                   </View>
                 </TouchableOpacity>

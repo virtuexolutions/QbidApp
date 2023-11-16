@@ -54,6 +54,7 @@ const NegotiatorHomeScreen = () => {
   const [working, setWorking] = useState([]);
   const [jobPosting, setJobPosting] = useState([]);
   const isFocused = useIsFocused();
+  const [postJob ,setPostJob] = useState('')
 
   const getProposal = async () => {
     setIsLoading(true);
@@ -84,6 +85,8 @@ const NegotiatorHomeScreen = () => {
     }
   };
 
+
+
   useEffect(() => {
     getProposal();
   }, [isFocused]);
@@ -94,6 +97,19 @@ const NegotiatorHomeScreen = () => {
     });
   }, []);
 
+  // const postedJob = async () => {
+  //   const url =''
+  //   setIsLoading(true)
+  //   const response = await Get(url ,token)
+  //   setIsLoading(false)
+  //   if(response != undefined){
+  //   setPostJob()
+  //   }
+  // }
+  //   useEffect(() => {
+  //     postedJob()
+  //   }, [])
+    
   return (
     <ScreenBoiler
       statusBarBackgroundColor={

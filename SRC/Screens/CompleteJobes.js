@@ -40,7 +40,7 @@ import {SliderBox} from 'react-native-image-slider-box';
 
 const CompleteJobes = props => {
   const data1 = props?.route?.params?.item;
-  console.log('🚀 ~ file: CompleteJobes.js:42 ~ CompleteJobes ~ data1:', data1);
+  // console.log('🚀 ~ file: CompleteJobes.js:42 ~ CompleteJobes ~ data1:', data1);
   const user = useSelector(state => state.commonReducer.userData);
   const UserCoverLetterArray = useSelector(
     state => state.commonReducer.servicesArray,
@@ -62,6 +62,8 @@ const CompleteJobes = props => {
   const [coverletterRole, setCoverLetterRole] = useState('Expertise In');
   const [userData, setUserData] = useState({});
   const [review, setReview] = useState('');
+  const [CompletedJobes ,setCompletedJobes] =useState('')
+  // console.log("🚀 ~ file: CompleteJobes.js:66 ~ CompleteJobes ~ CompletedJobes:", CompletedJobes)
 
   const dummydata = [
     {
@@ -81,13 +83,14 @@ const CompleteJobes = props => {
     },
   ];
 
-  const imagesSilder = [
-    require('../Assets/Images/man1.jpg'),
-    require('../Assets/Images/man2.jpg'),
-    require('../Assets/Images/man3.jpg'),
-    require('../Assets/Images/master.png'),
-    require('../Assets/Images/user3.jpg'),
-  ];
+  // const imagesSilder = [
+  //   require('../Assets/Images/man1.jpg'),
+  //   require('../Assets/Images/man2.jpg'),
+  //   require('../Assets/Images/man3.jpg'),
+  //   require('../Assets/Images/master.png'),
+  //   require('../Assets/Images/user3.jpg'),
+  // ];
+
 
   return (
     <ScreenBoiler
@@ -133,7 +136,7 @@ const CompleteJobes = props => {
           <View>
             <SliderBox
               autoplay={false}
-              images={imagesSilder}
+              images={data1?.images}
               sliderBoxHeight={230}
               parentWidth={355}
             />
@@ -183,7 +186,8 @@ const CompleteJobes = props => {
                   vendor quote
                 </CustomText>
                 <CustomText style={styles.viewText} isBold>
-                  number
+                {data1?. asking_price}
+                 
                   {/* {data1?.notes} */}
                 </CustomText>
               </View>
@@ -207,14 +211,14 @@ const CompleteJobes = props => {
               descrpition
             </CustomText>
             <CustomText numberOfLines={4} style={styles.description}>
-              descrpitioqwhgety
+              {data1?.notes}
             </CustomText>
             <View style={styles.view2}>
               <CustomText style={styles.heading1} isBold>
                 earning from this project
               </CustomText>
               <CustomText style={styles.heading1} isBold>
-                $90
+               {data1?.user_info?.total_earning}
               </CustomText>
             </View>
             <CustomText style={styles.heading1} isBold>
@@ -227,7 +231,7 @@ const CompleteJobes = props => {
                     height: '100%',
                     width: '100%',
                   }}
-                  source={require('../Assets/Images/man1.jpg')}
+                  source={{uri :data1?.user_info?.photo}}
                 />
               </View>
               <View
@@ -242,11 +246,11 @@ const CompleteJobes = props => {
                       textTransform: 'uppercase',
                     },
                   ]}>
-                  Member name
+                 {data1?.user_info?.first_name}
                   {/* {item?.name} */}
                 </CustomText>
                 <CustomText style={styles.usertext}>
-                  member email
+                {data1?.user_info?.email}
                   {/* {item?.comment} */}
                 </CustomText>
               </View>

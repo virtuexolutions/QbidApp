@@ -36,6 +36,7 @@ const HomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
+  console.log("🚀 ~ file: HomeScreen.js:39 ~ HomeScreen ~ token:", token)
   const [searchData, setSearchData] = useState('');
   const [showMultiImageModal, setShowMultiImageModal] = useState(false);
   const [multiImages, setMultiImages] = useState([]);
@@ -50,6 +51,7 @@ const HomeScreen = () => {
   const [modalVisible3, setModalVisible3] = useState(false);
   const [selectedData1, setSelectedData1] = useState('');
   const [negotiator, setNegotiator] = useState([])
+  console.log("🚀 ~ file: HomeScreen.js:53 ~ HomeScreen ~ negotiator:", negotiator)
  
   const [selectedData2, setSelectedData2] = useState('');
 
@@ -87,6 +89,7 @@ const HomeScreen = () => {
     const url = 'auth/member/negotiator'
     setIsLoading(true)
     const response =await Get('auth/member/negotiator' ,token)
+    console.log("🚀 ~ file: HomeScreen.js:90 ~ vendor ~ response:", response)
     setIsLoading(false)
     if(response != undefined){
       setNegotiator(response?.data?.negotitator_info)
