@@ -59,7 +59,7 @@ const BidderDetail = ({item, photo, title, date, message}) => {
                     borderColor: Color.lightGrey,
                   },
             ]}>
-            {item?.name}sdsdff
+            {item?.name}
           </CustomText>
           <RatingComponent
             disable={true}
