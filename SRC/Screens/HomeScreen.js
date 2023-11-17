@@ -61,13 +61,13 @@ const HomeScreen = () => {
   const getAllData = async () => {
     setIsLoading(true);
     const [response1, response2] = await Promise.all([
-      Get('auth/member/bid_help', token),
+      Get('auth/member/negotiator', token),
       Get('auth/member/quote', token),
     ]);
     setIsLoading(false);
     if (response1 != undefined) {
-     
-      setProposals(response1?.data?.bid_help_info?.data);
+      setNegotiator(response1?.data?.negotitator_info)
+      // setProposals(response1?.data?.bid_help_info?.data);
     }
     if (response2 != undefined) {
       console.log("🚀 ~ file: HomeScreen.js:90 ~ getAllData ~ response2:", response2?.data?.quote_info?.data)
@@ -85,19 +85,6 @@ const HomeScreen = () => {
       setMyQuotes(response?.data?.quote_info);
     }
   };
-  const vendor =async() => {
-    const url = 'auth/member/negotiator'
-    setIsLoading(true)
-    const response =await Get('auth/member/negotiator' ,token)
-    console.log("🚀 ~ file: HomeScreen.js:90 ~ vendor ~ response:", response)
-    setIsLoading(false)
-    if(response != undefined){
-      setNegotiator(response?.data?.negotitator_info)
-    }
-  }
-  useEffect(() => {
-    vendor()
-  }, [])
 
   useEffect(() => {
     getAllData();
@@ -115,9 +102,7 @@ const HomeScreen = () => {
     });
   }, []);
 
-  // const toggleModal = () => {
-  //   setModalVisible(!modalVisible);
-  // };
+ 
   return (
     <ScreenBoiler
       statusBarBackgroundColor={Color.themeBgColor}

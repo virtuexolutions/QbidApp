@@ -40,30 +40,16 @@ import {SliderBox} from 'react-native-image-slider-box';
 
 const CompleteJobes = props => {
   const data1 = props?.route?.params?.item;
-  // console.log('🚀 ~ file: CompleteJobes.js:42 ~ CompleteJobes ~ data1:', data1);
+  console.log("🚀 ~ file: CompleteJobes.js:43 ~ CompleteJobes ~ data1:", data1?.images)
+  
   const user = useSelector(state => state.commonReducer.userData);
-  const UserCoverLetterArray = useSelector(
-    state => state.commonReducer.servicesArray,
-  );
-
-  const [data, setData] = useState(data1);
-  // console.log('🚀 ~ file: JobDetails.js:47 ~ JobDetails ~ data:', data);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
-  const [checked, setChecked] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [bidDone, setBidDone] = useState(false);
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [fullName, setFullName] = useState('');
-  const [Email, setEmail] = useState('');
-  const [number, setNumber] = useState('');
-  const [desc, setDesc] = useState('');
-  const isFocused = useIsFocused();
-  const [coverletterRole, setCoverLetterRole] = useState('Expertise In');
-  const [userData, setUserData] = useState({});
-  const [review, setReview] = useState('');
-  const [CompletedJobes ,setCompletedJobes] =useState('')
-  // console.log("🚀 ~ file: CompleteJobes.js:66 ~ CompleteJobes ~ CompletedJobes:", CompletedJobes)
+
+  const [images, setImages] = useState([])
+  console.log("🚀 ~ file: CompleteJobes.js:50 ~ CompleteJobes ~ images:", images)
+
+  // const [data, setData] = useState(data1);
 
   const dummydata = [
     {
@@ -83,13 +69,20 @@ const CompleteJobes = props => {
     },
   ];
 
-  // const imagesSilder = [
-  //   require('../Assets/Images/man1.jpg'),
-  //   require('../Assets/Images/man2.jpg'),
-  //   require('../Assets/Images/man3.jpg'),
-  //   require('../Assets/Images/master.png'),
-  //   require('../Assets/Images/user3.jpg'),
-  // ];
+  useEffect(() => {
+    setImages(data1?.images.map((item)=>{return ({uri:item?.image})}))
+  
+    
+  }, [])
+  
+
+  const imagesSilder = [
+    require('../Assets/Images/man1.jpg'),
+    require('../Assets/Images/man2.jpg'),
+    require('../Assets/Images/man3.jpg'),
+    require('../Assets/Images/master.png'),
+    require('../Assets/Images/user3.jpg'),
+  ];
 
 
   return (
@@ -136,7 +129,7 @@ const CompleteJobes = props => {
           <View>
             <SliderBox
               autoplay={false}
-              images={data1?.images}
+              images={images}
               sliderBoxHeight={230}
               parentWidth={355}
             />

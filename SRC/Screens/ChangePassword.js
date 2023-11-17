@@ -33,6 +33,7 @@ import {setUserToken} from '../Store/slices/auth';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import LinearGradient from 'react-native-linear-gradient';
 import { setUserData } from '../Store/slices/common';
+import { Alert } from 'react-native';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -59,6 +60,7 @@ const ChangePassword = props => {
     // console.log("🚀 ~ file: ChangePassword.js:54 ~ ChangePassword ~ response:", response?.data)
     if(response != undefined){
       dispatch(setUserData(response?.data?.user_info))
+      Platform.OS == 'android' ? ToastAndroid.show('Password changed Successfully', ToastAndroid.SHORT) : Alert.alert('Password changed Successfully')
       navigation.goBack()
     }
   }

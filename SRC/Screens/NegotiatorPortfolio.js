@@ -49,6 +49,7 @@ const NegotiatorPortfolio = props => {
   const item = props?.route?.params?.item;
 
   const userdata = useSelector(state => state.commonReducer.userData);
+  console.log("🚀 ~ file: NegotiatorPortfolio.js:52 ~ NegotiatorPortfolio ~ userdata:", userdata?.photo)
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
@@ -189,6 +190,7 @@ const NegotiatorPortfolio = props => {
     setIsLoading(false);
   
     if (response != undefined) {
+     console.log("🚀 ~ file: NegotiatorPortfolio.js:192 ~ changeProfileImage ~ response:", response?.data)
      
       dispatch(setUserData(response?.data?.user));
       Platform.OS == 'android'
@@ -205,10 +207,12 @@ const NegotiatorPortfolio = props => {
     if (imageType == 'profile') {
       if (Object.keys(image).length > 0) {
         changeProfileImage('photo_update', image,'photo');
+        setImage({})
       }
     } else {
       if (Object.keys(coverPhoto).length > 0) {
         changeProfileImage('coverphoto_update', coverPhoto, 'coverphoto');
+        setCoverPhoto({})
       }
     }
   }, [image, coverPhoto]);
@@ -342,9 +346,8 @@ const NegotiatorPortfolio = props => {
               <CustomImage
                 onPress={() => {
                   setImageToShow([
-                    userdata?.photo
-                      ? {uri: userdata?.photo}
-                      : require('../Assets/Images/coverPhoto.jpg'),
+                   
+                       {uri: userdata?.photo}
                   ]);
                   setVisible(true);
                 }}
