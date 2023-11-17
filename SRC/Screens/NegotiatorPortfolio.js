@@ -47,7 +47,6 @@ import navigationService from '../navigationService';
 const NegotiatorPortfolio = props => {
   const fromSearch = props?.route?.params?.fromSearch;
   const item = props?.route?.params?.item;
-  console.log("🚀 ~ file: NegotiatorPortfolio.js:50 ~ NegotiatorPortfolio ~ item:", item)
 
   const userdata = useSelector(state => state.commonReducer.userData);
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
@@ -130,6 +129,8 @@ const NegotiatorPortfolio = props => {
       expertise: services,
       language: language,
     };
+
+
     for (let key in body) {
       if (body[key] == '') {
         return Platform.OS == 'android'
@@ -147,16 +148,29 @@ const NegotiatorPortfolio = props => {
     const response = await Post(url, body, apiHeader(token));
     setIsLoading(false);
     if (response?.data?.success) {
+       console.log("🚀 ~ file: NegotiatorPortfolio.js:151 ~ updateProfile ~ response:", response?.data)
       setEditProfile(false);
+      dispatch(setUserData(response?.data?.user))
     }
   };
+
+  // const hireNow = async () =>{
+// const url =''
+// const body ={
+//   address: address,
+//       city: city,
+//       state: state,
+//       zip: zipCode,
+// }
+
+// }
 
   const reviews = async () => {
     const url = 'auth/review';
     
     setIsLoading(true);
     const response = await Get('auth/review', token);
-    console.log("🚀 ~ file: NegotiatorPortfolio.js:157 ~ reviews ~ response:", response)
+    // console.log("🚀 ~ file: NegotiatorPortfolio.js:157 ~ reviews ~ response:", response)
     setIsLoading(false);
     
     if (response != undefined) {
@@ -184,7 +198,7 @@ const NegotiatorPortfolio = props => {
   };
 
   useEffect(() => {
-    // reviews();
+    reviews();
   }, []);
 
   useEffect(() => {

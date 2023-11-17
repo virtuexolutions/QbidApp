@@ -115,9 +115,9 @@ const HomeScreen = () => {
     });
   }, []);
 
-  const toggleModal = () => {
-    setModalVisible(!modalVisible);
-  };
+  // const toggleModal = () => {
+  //   setModalVisible(!modalVisible);
+  // };
   return (
     <ScreenBoiler
       statusBarBackgroundColor={Color.themeBgColor}

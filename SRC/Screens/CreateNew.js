@@ -29,6 +29,7 @@ const CreateNew = (props) => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
+  // console.log("🚀 ~ file: CreateNew.js:32 ~ CreateNew ~ token:", token)
   const [qouteTitle, setQouteTitle] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
@@ -116,6 +117,8 @@ const CreateNew = (props) => {
   const sendRequest =async ()=>{
     const url = '';
     const body = {
+      id:1,
+      type:'specific',
       title: qouteTitle,
       city: city,
       state: state,
@@ -155,6 +158,7 @@ const CreateNew = (props) => {
     }
     multiImages?.map((item, index) => formData.append(`images[${index}]`, item));
 
+    return console.log("🚀 ~ file: CreateNew.js:160 ~ sendRequest ~ formData:", formData)
     setIsLoading(true);
     const response = await Post(url, formData, apiHeader(token));
     setIsLoading(false);
