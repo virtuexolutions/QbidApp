@@ -39,10 +39,6 @@ const SeeAllScreen = props => {
   const [loadMore, setLoadMore] = useState(false);
   const [newArray, setNewArray] = useState([]);
   const [pageNum, setPageNum] = useState(1);
-  console.log(
-    '🚀 ~ file: SeeAllScreen.js:42 ~ SeeAllScreen ~ pageNum:',
-    pageNum,
-  );
   const scrollViewRef = useRef();
   const [filterVisible, setFilterVisible] = useState(false);
   // const [selectFilters, setSelectFilters] = useState([]);
@@ -74,14 +70,15 @@ const SeeAllScreen = props => {
     const response = await Post(url, body, apiHeader(token));
 
     if (response != undefined) {
-      console.log(
-        '🚀 ~ file: SeeAllScreen.js:67 ~ searchCards ~ response:',
-        response?.data,
-      );
-      console.log(
-        '🚀 ~ file: SeeAllScreen.js:67 ~ searchCards ~ response:',
-        response?.data?.negotiator_info?.length,
-      );
+      console.log("🚀 ~ file: SeeAllScreen.js:73 ~ searchCards ~ response:", response?.data)
+      // console.log(
+      //   '🚀 ~ file: SeeAllScreen.js:67 ~ searchCards ~ response:',
+      //   response?.data,
+      // );
+      // console.log(
+      //   '🚀 ~ file: SeeAllScreen.js:67 ~ searchCards ~ response:',
+      //   response?.data?.negotiator_info?.length,
+      // );
       setNewArray(response?.data?.negotiator_info);
     }
   };
@@ -101,7 +98,7 @@ const SeeAllScreen = props => {
   };
 
   const getData = async value => {
-    console.log('Page num ======>>>>> getsData');
+    console.log('Page num ======>>>>> getData');
 
     const url = `auth/member/quote?page=${pageNum}`;
     value == 'loadMore' ? setLoadMore(true) : setIsLoading(true);
@@ -132,16 +129,16 @@ const SeeAllScreen = props => {
   useEffect(() => {
     if (pageNum == 1) {
       console.log('Page num ======>>>>>');
-      type == 'quotes' && getData('');
+      // type == 'quotes' && getData('');
     } else {
-      type == 'quotes' && getData('loadMore');
+      // type == 'quotes' && getData('loadMore');
     }
   }, [pageNum]);
 
   useEffect(() => {
     if (selectedStatus != '') {
     
-      type == 'quotes' && filterQuotes();
+      // type == 'quotes' && filterQuotes();
     }
   }, [selectedStatus]);
 

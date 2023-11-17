@@ -70,7 +70,8 @@ const HomeScreen = () => {
       setProposals(response1?.data?.bid_help_info?.data);
     }
     if (response2 != undefined) {
-   console.log("🚀 ~ file: HomeScreen.js:90 ~ getAllData ~ response2:", response2?.data?.quote_info?.data)
+
+      console.log("🚀 ~ file: HomeScreen.js:90 ~ getAllData ~ response2:", response2?.data?.quote_info?.data)
       setMyQuotes(response2?.data?.quote_info?.data);
     }
   };

@@ -39,6 +39,7 @@ import ImageView from 'react-native-image-viewing';
 
 const JobDetails = props => {
   const data1 = props?.route?.params?.item;
+  console.log("🚀 ~ file: JobDetails.js:42 ~ JobDetails ~ data1:", data1)
 
   const user = useSelector(state => state.commonReducer.userData);
   const token = useSelector(state => state.authReducer.token);
@@ -64,13 +65,13 @@ const JobDetails = props => {
 
   
   const bidDetails = async () => {
-    const url = `auth/negotiator/quote_detail/${data?.id}`;
+    const url = `auth/negotiator/quote_detail/${data1?.id}`;
     setIsLoading(true);
     const response = await Get(url, token);
     setIsLoading(false);
 
     if (response != undefined) {
-      // console.log("🚀 ~ file: JobDetails.js:86 ~ bidDetails ~ response:", response?.data?.quote_info)
+       console.log("🚀 ~ file: JobDetails.js:86 ~ bidDetails ~ response:", response?.data?.quote_info)
       const mainuserData = response?.data?.quote_info?.bids?.find(
         item => item.user_info?.id == user?.id,
       );
@@ -78,7 +79,7 @@ const JobDetails = props => {
         return setFinalImagesArray(prev => [...prev,{uri: item?.image}]);
       });
 
-      setData(response?.data?.quote_info);
+      // setData(response?.data?.quote_info);
       if (mainuserData) {
        
         
@@ -389,7 +390,7 @@ const JobDetails = props => {
                         borderRadius: moderateScale(10, 0.3),
                         overflow: 'hidden',
                       }}>
-                      {/* <CustomImage
+                      <CustomImage
                         source={
                           data?.user_info?.photo
                             ? {uri: data?.user_info?.photo}
@@ -399,7 +400,7 @@ const JobDetails = props => {
                           width: '100%',
                           height: '100%',
                         }}
-                      /> */}
+                      />
                     </View>
                     <View
                       style={{
@@ -485,16 +486,16 @@ const JobDetails = props => {
                       paddingBottom: moderateScale(30, 0.6),
                     }}
                     renderItem={({item, index}) => {
-                  // console.log(
-                  //       '🚀 ~ file: JobDetails.js:349 ~ JobDetails ~ item: details',
-                  //       item?.quote_info?.user_info?.photo
-                  //     );
+                  console.log(
+                        '🚀 ~ file: JobDetails.js:349 ~ JobDetails ~ item: details',
+                        item
+                      );
                       return (
                         <>
                           <BidderDetail
                             item={{
                               image: item?.quote_info?.user_info?.photo ,
-                              name: item?.fullname,
+                              name: item?.user_info?.first_name,
                               rating: item?.rating,
                               description: item?.coverletter,
                               status: item?.status,

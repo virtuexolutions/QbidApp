@@ -52,6 +52,7 @@ const NegotiatorHomeScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [recommended, setRecommended] = useState([]);
   const [working, setWorking] = useState([]);
+  console.log("🚀 ~ file: NegotiatorHomeScreen.js:55 ~ NegotiatorHomeScreen ~ working:", working)
   const [jobPosting, setJobPosting] = useState([]);
   const isFocused = useIsFocused();
   const [postJob, setPostJob] = useState('');
@@ -67,10 +68,7 @@ const NegotiatorHomeScreen = () => {
     setIsLoading(false);
 
     if (response1 != undefined) {
-      console.log(
-        '🚀 ~ file: NegotiatorHomeScreen.js:71 ~ getProposal ~ response1:',
-        response1?.data?.quote_info?.data,
-      );
+     
 
       ![null, undefined, ''].includes(response2?.data?.quote_info) &&
         setRecommended(response1?.data?.quote_info?.data);
@@ -385,10 +383,7 @@ const NegotiatorHomeScreen = () => {
                     paddingHorizontal: moderateScale(15, 0.3),
                   }}
                   renderItem={({item, index}) => {
-                    // console.log(
-                    //   '🚀 ~ file: NegotiatorHomeScreen.js:343 ~ NegotiatorHomeScreen ~ item:',
-                    //   item,
-                    // );
+                   
                     return (
                       <JobCard
                         key={index}
