@@ -66,7 +66,7 @@ const JobDetails = props => {
 
   
   const bidDetails = async () => {
-    const url = `auth/negotiator/quote_detail/${data1.id}`;
+    const url = `auth/negotiator/quote_detail/${data1?.id}`;
     setIsLoading(true);
     const response = await Get(url, token);
     setIsLoading(false);
