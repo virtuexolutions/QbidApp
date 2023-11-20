@@ -45,10 +45,11 @@ const JobDetails = props => {
   const token = useSelector(state => state.authReducer.token);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const UserCoverLetterArray = useSelector(
-    state => state.commonReducer.servicesArray,
+    state => state.commonReducer.servicesArray
   );
 
   const [data, setData] = useState(data1);
+  console.log("🚀 ~ file: JobDetails.js:52 ~ JobDetails ~ data:", data)
   const [checked, setChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [bidDone, setBidDone] = useState(false);
@@ -71,21 +72,19 @@ const JobDetails = props => {
     setIsLoading(false);
 
     if (response != undefined) {
-       console.log("🚀 ~ file: JobDetails.js:86 ~ bidDetails ~ response:", response?.data?.quote_info)
-      const mainuserData = response?.data?.quote_info?.bids?.find(
+       console.log("🚀 ~ file: JobDetails.js:86 ~ bidDetails ~ response:", response?.data)
+       setData(response?.data?.quote_info)
+      
+       const mainuserData = response?.data?.quote_info?.bids?.find(
         item => item.user_info?.id == user?.id,
       );
       response?.data?.quote_info?.images?.map(item => {
         return setFinalImagesArray(prev => [...prev,{uri: item?.image}]);
       });
 
-      // setData(response?.data?.quote_info);
-      if (mainuserData) {
-       
-        
+      if (mainuserData) {        
         setBidDone(true);
-        setUserData(mainuserData);
-        
+        setUserData(mainuserData);        
       }
     }
   };
@@ -96,6 +95,7 @@ const JobDetails = props => {
     const response = await Post(url, {status: value}, apiHeader(token));
     setIsLoading(false);
     if (response != undefined) {
+      console.log("🚀 ~ file: JobDetails.js:99 ~ changeStatus ~ response:", response?.data)
       bidDetails();
     }
   };
@@ -156,7 +156,6 @@ const JobDetails = props => {
 
   useEffect(() => {
     bidDetails();
-    
   }, [isFocused]);
 
   
@@ -290,14 +289,12 @@ const JobDetails = props => {
                   </CustomText>
                 </View>
               </View>
-              <ShowMoreAndShowLessText minTextLength={50} style={styles.desc}>
+              {/* <ShowMoreAndShowLessText minTextLength={50} style={styles.desc}>
                 {data?.notes ? data?.notes : data?.coverletter}
-              </ShowMoreAndShowLessText>
+              </ShowMoreAndShowLessText> */}
               <CustomText
                 onPress={() => {
-                  // console.log('Here=====>>>>');
                   if(finalImagesArray.length>0){
-
                     setImageModalVisible(true);
                   }else{
                     return Platform.OS == 'android' ?  ToastAndroid.show('No attachments', ToastAndroid.SHORT) : Alert.alert('No Attachments')
@@ -308,8 +305,6 @@ const JobDetails = props => {
                   color: Color.blue,
                   fontSize: moderateScale(12, 0.6),
                   marginTop: moderateScale(10, 0.3),
-                  
-                  // backgroundColor : 'red'
                 }}>
                 Attachments...
               </CustomText>

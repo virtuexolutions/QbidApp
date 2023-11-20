@@ -44,10 +44,6 @@ const MyQouteCard = ({item}) => {
     const response = await Post(url, {status: 'completed'}, apiHeader(token));
     setCmpLoading(false);
     if (response != undefined) {
-      // console.log(
-      //   '🚀 ~ file: MyQouteCard.js:30 ~ markCompleted ~ response:',
-      //   response?.data,
-      // );
       Platform.OS == 'android'
         ? ToastAndroid.show('Order has been completed', ToastAndroid.SHORT)
         : Alert.alert('Order has been completed');
@@ -210,8 +206,8 @@ const MyQouteCard = ({item}) => {
             textColor={Color.white}
             marginTop={moderateScale(2, 0.3)}
             onPress={() => {
-              item?.status == 'completed' && rbRef.open();
-              item?.status == 'onGoing' && markCompleted();
+              buttonName == 'Review' && rbRef.open();
+              buttonName == 'Complete' && markCompleted();
             }}
             bgColor={Color.blue}
             borderRadius={moderateScale(30, 0.3)}
