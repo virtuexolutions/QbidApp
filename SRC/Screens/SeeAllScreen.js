@@ -28,11 +28,9 @@ const SeeAllScreen = props => {
   const token = useSelector(state => state.authReducer.token);
 
   const type = props?.route?.params?.type;
-  // console.log('🚀 ~ file: SeeAllScreen.js:31 ~ SeeAllScreen ~ type:', type);
   const data = props?.route?.params?.data;
 
   const [searchData, setSearchData] = useState('');
-  const [showSearch, setShowSearch] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -41,7 +39,6 @@ const SeeAllScreen = props => {
   const [pageNum, setPageNum] = useState(1);
   const scrollViewRef = useRef();
   const [filterVisible, setFilterVisible] = useState(false);
-  // const [selectFilters, setSelectFilters] = useState([]);
   const [filters, setFilters] = useState({level: [], expertise: []});
   console.log(
     '🚀 ~ file: SeeAllScreen.js:45 ~ SeeAllScreen ~ filters:',
@@ -65,20 +62,17 @@ const SeeAllScreen = props => {
       ...filters,
       search: searchData,
     };
-    console.log("🚀 ~ file: SeeAllScreen.js:69 ~ searchCards ~ body:", body)
-
+    console.log('🚀 ~ file: SeeAllScreen.js:69 ~ searchCards ~ body:', body);
+    setIsLoading(true);
     const response = await Post(url, body, apiHeader(token));
+    setIsLoading(false);
 
     if (response != undefined) {
-      console.log("🚀 ~ file: SeeAllScreen.js:73 ~ searchCards ~ response:", response?.data)
-      // console.log(
-      //   '🚀 ~ file: SeeAllScreen.js:67 ~ searchCards ~ response:',
-      //   response?.data,
-      // );
-      // console.log(
-      //   '🚀 ~ file: SeeAllScreen.js:67 ~ searchCards ~ response:',
-      //   response?.data?.negotiator_info?.length,
-      // );
+      console.log(
+        '🚀 ~ file: SeeAllScreen.js:73 ~ searchCards ~ response:',
+        response?.data,
+      );
+
       setNewArray(response?.data?.negotiator_info);
     }
   };
@@ -128,27 +122,23 @@ const SeeAllScreen = props => {
 
   useEffect(() => {
     if (pageNum == 1) {
-      console.log('Page num ======>>>>>');
-      // type == 'quotes' && getData('');
+      type == 'quotes' && getData('');
     } else {
-      // type == 'quotes' && getData('loadMore');
+      type == 'quotes' && getData('loadMore');
     }
   }, [pageNum]);
 
   useEffect(() => {
     if (selectedStatus != '') {
-    
-      // type == 'quotes' && filterQuotes();
+      type == 'quotes' && filterQuotes();
     }
   }, [selectedStatus]);
 
   useEffect(() => {
-    // searchCards();
-
     if (Object.keys(filters).length > 0) {
       type == 'negotiator' && searchCards();
     }
-  }, [ searchData]);
+  }, [searchData]);
 
   return (
     <ScreenBoiler
@@ -210,62 +200,70 @@ const SeeAllScreen = props => {
           />
         </View>
 
-        <FlatList
-          ListEmptyComponent={() => {
-            return (
-              <View
-                style={{
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  // backgroundColor:'red',
-                  height: windowHeight * 0.5,
-                }}>
-                <NoData
+        {isLoading ? (
+          <View
+            style={{
+              justifyContent: 'center',
+              height: windowHeight * 0.7,
+            }}>
+            <ActivityIndicator color={Color.white} size={'large'} />
+          </View>
+        ) : (
+          <FlatList
+            ListEmptyComponent={() => {
+              return (
+                <View
                   style={{
-                    width: windowWidth * 0.95,
-                    height: windowHeight * 0.3,
-                    // backgroundColor: 'green',
                     alignItems: 'center',
                     justifyContent: 'center',
-                  }}
-                />
-              </View>
-            );
-          }}
-          data={newArray}
-          ref={scrollViewRef}
-          onScroll={handleScroll}
-          scrollEventThrottle={16}
-          numColumns={type == 'negotiator' ? 2 : 1}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            width: windowWidth,
-            alignItems: 'center',
-            // paddingHorizontal: moderateScale(15, 0.3),
-            paddingVertical: moderateScale(20, 0.3),
-            paddingBottom: moderateScale(50, 0.6),
-          }}
-          renderItem={({item, index}) => {
-            return type == 'negotiator' ? (
-              <VendorCards item={item} />
-            ) : (
-              <MyQouteCard item={item} />
-            );
-          }}
-          ListHeaderComponent={() => {
-            return <CustomText style={styles.header}>{type}</CustomText>;
-          }}
-          ListFooterComponent={() => {
-            return (
-              loadMore && (
-                <View style={{alignSelf: 'center'}}>
-                  <ActivityIndicator size={'small'} color={'white'} />
+                    // backgroundColor:'red',
+                    height: windowHeight * 0.5,
+                  }}>
+                  <NoData
+                    style={{
+                      width: windowWidth * 0.95,
+                      height: windowHeight * 0.3,
+                      // backgroundColor: 'green',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  />
                 </View>
-              )
-            );
-          }}
-        />
-        {/* </ScrollView> */}
+              );
+            }}
+            data={newArray}
+            ref={scrollViewRef}
+            onScroll={handleScroll}
+            scrollEventThrottle={16}
+            numColumns={type == 'negotiator' ? 2 : 1}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+              width: windowWidth,
+              alignItems: 'center',
+              paddingVertical: moderateScale(20, 0.3),
+              paddingBottom: moderateScale(50, 0.6),
+            }}
+            renderItem={({item, index}) => {
+              return type == 'negotiator' ? (
+                <VendorCards item={item} />
+              ) : (
+                <MyQouteCard item={item} />
+              );
+            }}
+            ListHeaderComponent={() => {
+              return <CustomText style={styles.header}>{type}</CustomText>;
+            }}
+            ListFooterComponent={() => {
+              return (
+                loadMore && (
+                  <View style={{alignSelf: 'center'}}>
+                    <ActivityIndicator size={'small'} color={'white'} />
+                  </View>
+                )
+              );
+            }}
+          />
+        )}
         <CustomStatusModal
           isModalVisible={isModalVisible}
           setModalVisible={setIsModalVisible}
