@@ -47,9 +47,10 @@ import navigationService from '../navigationService';
 const NegotiatorPortfolio = props => {
   const fromSearch = props?.route?.params?.fromSearch;
   const item = props?.route?.params?.item;
+  console.log("🚀 ~ file: NegotiatorPortfolio.js:50 ~ NegotiatorPortfolio ~ item:", item?.average_rating)
 
   const userdata = useSelector(state => state.commonReducer.userData);
-  console.log("🚀 ~ file: NegotiatorPortfolio.js:52 ~ NegotiatorPortfolio ~ userdata:", userdata?.photo)
+  // console.log("🚀 ~ file: NegotiatorPortfolio.js:52 ~ NegotiatorPortfolio ~ userdata:", userdata?.photo)
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
@@ -114,7 +115,7 @@ const NegotiatorPortfolio = props => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [review, setReview] = useState('');
-  console.log("🚀 ~ file: NegotiatorPortfolio.js:116 ~ NegotiatorPortfolio ~ setReview:", setReview)
+  // console.log("🚀 ~ file: NegotiatorPortfolio.js:116 ~ NegotiatorPortfolio ~ setReview:", setReview)
 
   const updateProfile = async () => {
     const url = 'auth/negotiator/profile_update';
@@ -149,7 +150,7 @@ const NegotiatorPortfolio = props => {
     const response = await Post(url, body, apiHeader(token));
     setIsLoading(false);
     if (response?.data?.success) {
-       console.log("🚀 ~ file: NegotiatorPortfolio.js:151 ~ updateProfile ~ response:", response?.data)
+      //  console.log("🚀 ~ file: NegotiatorPortfolio.js:151 ~ updateProfile ~ response:", response?.data)
       setEditProfile(false);
       dispatch(setUserData(response?.data?.user))
     }
@@ -190,7 +191,7 @@ const NegotiatorPortfolio = props => {
     setIsLoading(false);
   
     if (response != undefined) {
-     console.log("🚀 ~ file: NegotiatorPortfolio.js:192 ~ changeProfileImage ~ response:", response?.data)
+    //  console.log("🚀 ~ file: NegotiatorPortfolio.js:192 ~ changeProfileImage ~ response:", response?.data)
      
       dispatch(setUserData(response?.data?.user));
       Platform.OS == 'android'
@@ -438,8 +439,9 @@ const NegotiatorPortfolio = props => {
               <RatingComponent
                 disable={true}
                 rating={ 
-                  fromSearch ? item?.rating : 
-                  userdata?.rating}
+                  fromSearch ? Math.floor(item?.average_rating): 
+                  Math.floor(userdata?.average_rating)
+                }
                 starColor={'#ffa534'}
                 starStyle={{
                   marginRight: moderateScale(1, 0.3),
@@ -702,7 +704,7 @@ const NegotiatorPortfolio = props => {
                   : Color.black
               }
               borderRadius={moderateScale(30, 0.3)}
-              onPress={()=>{navigationService.navigate('CreateNew',{hire:true})}}
+              onPress={()=>{navigationService.navigate('CreateNew',{hire:true, id:item?.id})}}
             />
           )}
         </ScrollView>

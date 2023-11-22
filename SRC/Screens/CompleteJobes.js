@@ -40,16 +40,13 @@ import {SliderBox} from 'react-native-image-slider-box';
 
 const CompleteJobes = props => {
   const data1 = props?.route?.params?.item;
-  console.log("🚀 ~ file: CompleteJobes.js:43 ~ CompleteJobes ~ data1:", data1?.images)
+
   
   const user = useSelector(state => state.commonReducer.userData);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
 
   const [images, setImages] = useState([])
-  console.log("🚀 ~ file: CompleteJobes.js:50 ~ CompleteJobes ~ images:", images)
-
-  // const [data, setData] = useState(data1);
 
   const dummydata = [
     {

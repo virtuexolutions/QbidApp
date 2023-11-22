@@ -36,8 +36,8 @@ const ReviewModal = ({setRef,rbRef, item}) => {
     setLoading(true);
     const response = await Post(url, body, apiHeader(token));
     setLoading(false);
-    console.log("🚀 ~ file: ReviewModal.js:40 ~ sendReview ~ response:", response?.data)
     if (response != undefined) {
+      console.log("🚀 ~ file: ReviewModal.js:40 ~ sendReview ~ response:", response?.data)
     
       Platform.OS == 'android'? ToastAndroid.show('Review sent',ToastAndroid.SHORT) : Alert.alert('Review sent')
         rbRef.close()

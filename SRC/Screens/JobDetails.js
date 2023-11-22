@@ -39,7 +39,7 @@ import ImageView from 'react-native-image-viewing';
 
 const JobDetails = props => {
   const data1 = props?.route?.params?.item;
-  console.log("🚀 ~ file: JobDetails.js:42 ~ JobDetails ~ data1:", data1)
+  // console.log("🚀 ~ file: JobDetails.js:42 ~ JobDetails ~ data1:", data1)
 
   const user = useSelector(state => state.commonReducer.userData);
   const token = useSelector(state => state.authReducer.token);
@@ -66,13 +66,13 @@ const JobDetails = props => {
 
   
   const bidDetails = async () => {
-    const url = `auth/negotiator/quote_detail/${data1?.id}`;
+    const url = `auth/negotiator/quote_detail/${data1?.quote_id ? data1?.quote_id : data1?.id}`;
     setIsLoading(true);
     const response = await Get(url, token);
     setIsLoading(false);
 
     if (response != undefined) {
-       console.log("🚀 ~ file: JobDetails.js:86 ~ bidDetails ~ response:", response?.data)
+      //  console.log("🚀 ~ file: JobDetails.js:86 ~ bidDetails ~ response:", response?.data)
        setData(response?.data?.quote_info)
       
        const mainuserData = response?.data?.quote_info?.bids?.find(
@@ -95,7 +95,7 @@ const JobDetails = props => {
     const response = await Post(url, {status: value}, apiHeader(token));
     setIsLoading(false);
     if (response != undefined) {
-      console.log("🚀 ~ file: JobDetails.js:99 ~ changeStatus ~ response:", response?.data)
+      // console.log("🚀 ~ file: JobDetails.js:99 ~ changeStatus ~ response:", response?.data)
       bidDetails();
     }
   };
@@ -289,9 +289,9 @@ const JobDetails = props => {
                   </CustomText>
                 </View>
               </View>
-              {/* <ShowMoreAndShowLessText minTextLength={50} style={styles.desc}>
+              <ShowMoreAndShowLessText minTextLength={50} style={styles.desc}>
                 {data?.notes ? data?.notes : data?.coverletter}
-              </ShowMoreAndShowLessText> */}
+              </ShowMoreAndShowLessText>
               <CustomText
                 onPress={() => {
                   if(finalImagesArray.length>0){
@@ -417,7 +417,7 @@ const JobDetails = props => {
                         {data?.user_info?.email}
                       </CustomText>
                     </View>
-                    <View
+                    {/* <View
                       style={{
                         flexDirection: 'row',
                         position: 'absolute',
@@ -446,12 +446,12 @@ const JobDetails = props => {
                         }}>
                         {data?.status}
                       </CustomText>
-                    </View>
+                    </View> */}
                   </View>
                 </>
               )}
 
-              {userRole == 'Qbid Member' ? (
+              {userRole == 'Qbid Member' && data1?.type !='specific' ? (
                 <>
                   <CustomText
                     isBold
@@ -481,10 +481,7 @@ const JobDetails = props => {
                       paddingBottom: moderateScale(30, 0.6),
                     }}
                     renderItem={({item, index}) => {
-                  console.log(
-                        '🚀 ~ file: JobDetails.js:349 ~ JobDetails ~ item: details',
-                        item
-                      );
+               
                       return (
                         <>
                           <BidderDetail
@@ -569,7 +566,7 @@ const JobDetails = props => {
                     }}
                   />
                 </>
-              ) : userRole != 'Qbid Member' && bidDone ? (
+              ) : (userRole != 'Qbid Member' && bidDone && data1?.type!='specific') ? (
                 <>
                   <CustomText
                     isBold
@@ -594,7 +591,8 @@ const JobDetails = props => {
                   />
                 </>
               ) : (
-                <>
+                (data1?.type != 'specific') &&  
+               ( <>
                   <MarkCheckWithText
                     checked={checked}
                     setChecked={setChecked}
@@ -630,7 +628,7 @@ const JobDetails = props => {
                     borderRadius={moderateScale(30, 0.3)}
                     alignSelf={'flex-start'}
                   />
-                </>
+                </>)
               )}
             </>
           )}

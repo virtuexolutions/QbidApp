@@ -36,7 +36,7 @@ const HomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
-  console.log("🚀 ~ file: HomeScreen.js:39 ~ HomeScreen ~ token:", token)
+  // console.log("🚀 ~ file: HomeScreen.js:39 ~ HomeScreen ~ token:", token)
   const [searchData, setSearchData] = useState('');
   const [showMultiImageModal, setShowMultiImageModal] = useState(false);
   const [multiImages, setMultiImages] = useState([]);
@@ -51,12 +51,9 @@ const HomeScreen = () => {
   const [modalVisible3, setModalVisible3] = useState(false);
   const [selectedData1, setSelectedData1] = useState('');
   const [negotiator, setNegotiator] = useState([])
-  console.log("🚀 ~ file: HomeScreen.js:53 ~ HomeScreen ~ negotiator:", negotiator)
- 
+  // console.log("🚀 ~ file: HomeScreen.js:53 ~ HomeScreen ~ negotiator:", negotiator)
   const [selectedData2, setSelectedData2] = useState('');
-
   const [selectedData3, setSelectedData3] = useState('');
- 
 
   const getAllData = async () => {
     setIsLoading(true);
@@ -66,11 +63,12 @@ const HomeScreen = () => {
     ]);
     setIsLoading(false);
     if (response1 != undefined) {
+      console.log("🚀 ~ file: HomeScreen.js:66 ~ getAllData ~ response1:", response1?.data)
       setNegotiator(response1?.data?.negotitator_info)
       // setProposals(response1?.data?.bid_help_info?.data);
     }
     if (response2 != undefined) {
-      console.log("🚀 ~ file: HomeScreen.js:90 ~ getAllData ~ response2:", response2?.data?.quote_info?.data)
+      // console.log("🚀 ~ file: HomeScreen.js:90 ~ getAllData ~ response2:", response2?.data?.quote_info?.data)
       setMyQuotes(response2?.data?.quote_info?.data);
     }
   };

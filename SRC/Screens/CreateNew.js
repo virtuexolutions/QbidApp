@@ -26,6 +26,9 @@ import {useNavigation} from '@react-navigation/native';
 
 const CreateNew = (props) => {
   const hire = props?.route?.params?.hire
+  console.log("🚀 ~ file: CreateNew.js:29 ~ CreateNew ~ hire:", hire)
+  const negotiater_id = props?.route?.params?.id
+  console.log("🚀 ~ file: CreateNew.js:30 ~ CreateNew ~ negotiater_id:", negotiater_id)
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
@@ -49,12 +52,12 @@ const CreateNew = (props) => {
     const body = {
       title: qouteTitle,
       city: city,
+      type:'general',
       state: state,
       quoted_price: vendorQoutedPrice,
       asking_price: askingPrice,
       offering_percentage: offeringPercent,
       service_preference: selectedService,
-      // vendorList: multiImages,
       notes: description,
     };
     const body2 = {
@@ -115,9 +118,10 @@ const CreateNew = (props) => {
   };
 
   const sendRequest =async ()=>{
-    const url = '';
+    console.log('In send request======>>>>')
+    const url = 'auth/member/hiring/create';
     const body = {
-      id:1,
+      negotiator_id:negotiater_id,
       type:'specific',
       title: qouteTitle,
       city: city,
@@ -158,13 +162,14 @@ const CreateNew = (props) => {
     }
     multiImages?.map((item, index) => formData.append(`images[${index}]`, item));
 
-    return console.log("🚀 ~ file: CreateNew.js:160 ~ sendRequest ~ formData:", formData)
+     console.log("🚀 ~ file: CreateNew.js:160 ~ sendRequest ~ formData:", formData)
     setIsLoading(true);
     const response = await Post(url, formData, apiHeader(token));
     setIsLoading(false);
     if (response != undefined) {
-    console.log("🚀 ~ file: CreateNew.js:164 ~ sendRequest ~ response:", response?.data)
-
+      // hire = false;
+      // negotiater_id = undefined
+      console.log("🚀 ~ file: CreateNew.js:164 ~ sendRequest ~ response:", response?.data)
       setCity('')
       setAskingPrice('')
       setDescription('')
@@ -175,7 +180,6 @@ const CreateNew = (props) => {
       setSelectedService('')
       setVendorQoutedPrice('')
       
-     
       navigation.goBack();
     }
 

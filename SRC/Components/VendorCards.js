@@ -60,20 +60,21 @@ const VendorCards = ({item}) => {
           as={AntDesign}
           size={13}
           color={
-            item?.rating <= 3
-              ? '#CD7F32'
-              : item?.rating <= 3.5
-              ? '#C0C0C0'
-              : item?.rating <= 4
-              ? '#FF9529'
-              : '#e5e4e2'
+            '#CD7F32'
+            // item?.average_rating <= 3
+            //   ? '#CD7F32'
+            //   : item?.average_rating <= 3.5
+            //   ? '#C0C0C0'
+            //   : item?.average_rating <= 4
+            //   ? '#FF9529'
+            //   : '#e5e4e2'
           }
         />
         <CustomText
           style={{
             fontSize: moderateScale(13),
           }}>
-          {`${item?.rating ? item?.rating : 0}/5`}
+          {`${item?.average_rating ? item?.average_rating : 0}/5`}
         </CustomText>
       </View>
       </View>

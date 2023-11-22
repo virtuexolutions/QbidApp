@@ -13,31 +13,22 @@ import React, {useEffect, useState} from 'react';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import Color from '../Assets/Utilities/Color';
 import {moderateScale, ScaledSheet} from 'react-native-size-matters';
-import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
+import {windowHeight, windowWidth} from '../Utillity/utils';
 import CustomText from '../Components/CustomText';
-import BidDetailCard from '../Components/BidDetailCard';
 import {Actionsheet, Icon} from 'native-base';
 import {ScrollView} from 'react-native';
 import SearchContainer from '../Components/SearchContainer';
 import Entypo from 'react-native-vector-icons/Entypo';
-import NegotiatorCard from '../Components/NegotiatorCard';
-import MyQouteCard from '../Components/MyQouteCard';
 import navigationService from '../navigationService';
-import {useDispatch, useSelector} from 'react-redux';
+import { useSelector} from 'react-redux';
 import CustomStatusModal from '../Components/CustomStatusModal';
 import LinearGradient from 'react-native-linear-gradient';
-import {setUserToken} from '../Store/slices/auth';
 import CustomAlertModal from '../Components/CustomAlertModal';
-import {setSelectedRole} from '../Store/slices/common';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import JobCard from '../Components/JobCard';
-import Modal from 'react-native-modal';
-import {Get, Post} from '../Axios/AxiosInterceptorFunction';
-import SeekingHelpCard from '../Components/SeekingHelpCard';
+import {Get} from '../Axios/AxiosInterceptorFunction';
 import {useIsFocused} from '@react-navigation/native';
-import Lottie from 'lottie-react-native';
-import Card from '../Components/Card';
 import NoData from '../Components/NoData';
 
 const NegotiatorHomeScreen = () => {
@@ -55,7 +46,6 @@ const NegotiatorHomeScreen = () => {
   console.log("🚀 ~ file: NegotiatorHomeScreen.js:55 ~ NegotiatorHomeScreen ~ working:", working)
   const [jobPosting, setJobPosting] = useState([]);
   const isFocused = useIsFocused();
-  const [postJob, setPostJob] = useState('');
 
   const getProposal = async () => {
     setIsLoading(true);
@@ -63,23 +53,25 @@ const NegotiatorHomeScreen = () => {
     const [response1, response2, response3] = await Promise.all([
       Get('auth/negotiator/quote/recommended', token),
       Get('auth/negotiator/quote/working', token),
-      Get('auth/negotiator/bid_help', token),
+      Get('auth/negotiator/hiring/list', token),
     ]);
     setIsLoading(false);
 
     if (response1 != undefined) {
      
-
       ![null, undefined, ''].includes(response2?.data?.quote_info) &&
         setRecommended(response1?.data?.quote_info?.data);
     }
     if (response2 != undefined) {
+      console.log("🚀 ~ file: NegotiatorHomeScreen.js:78 ~ getProposal ~ response2:", response2?.data)
       ![null, undefined, ''].includes(response2?.data?.quote_info) &&
         setWorking(response2?.data?.quote_info?.data);
+        setWorking(prev => [...prev, ...(response2?.data?.hiring_info?.data)])
     }
     if (response3 != undefined) {
-      ![null, undefined, ''].includes(response2?.data?.quote_info) &&
-        setJobPosting(response3?.data?.bid_help_info?.data);
+      console.log("🚀 ~ file: NegotiatorHomeScreen.js:81 ~ getProposal ~ response3:", response3?.data?.hiring_info?.data)
+      // ![null, undefined, ''].includes(response2?.data?.hiring_info) &&
+        setJobPosting(response3?.data?.hiring_info?.data);
     }
   };
 
@@ -93,19 +85,7 @@ const NegotiatorHomeScreen = () => {
     });
   }, []);
 
-  // const postedJob = async () => {
-  //   const url =''
-  //   setIsLoading(true)
-  //   const response = await Get(url ,token)
-  //   setIsLoading(false)
-  //   if(response != undefined){
-  //   setPostJob()
-  //   }
-  // }
-  //   useEffect(() => {
-  //     postedJob()
-  //   }, [])
-
+  
   return (
     <ScreenBoiler
       statusBarBackgroundColor={
@@ -389,7 +369,7 @@ const NegotiatorHomeScreen = () => {
                         key={index}
                         item={item}
                         onPress={() => {
-                          navigationService.navigate('JobDetails', {item});
+                          navigationService.navigate('JobDetails', {item, type:'working'});
                         }}
                       />
                     );
@@ -416,9 +396,9 @@ const NegotiatorHomeScreen = () => {
 
                 <FlatList
                   data={
-                    working.length > 5
-                      ? working.reverse().splice(0, 5)
-                      : working.reverse()
+                    jobPosting.length > 5
+                      ? jobPosting.reverse().splice(0, 5)
+                      : jobPosting.reverse()
                   }
                   horizontal
                   showsHorizontalScrollIndicator={false}

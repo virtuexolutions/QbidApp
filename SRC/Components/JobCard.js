@@ -30,11 +30,12 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
 
   const changeStatus = async value => {
-    const url = `auth/negotiator/bid_help/${item?.id}`;
+    const url = `auth/negotiator/hiring/update/${item?.id}`;
     setLoading(true);
     const response = await Post(url, {status: value}, apiHeader(token));
     setLoading(false);
     if (response != undefined) {
+    console.log("🚀 ~ file: JobCard.js:38 ~ changeStatus ~ response:", response?.data)
   
       setModalVisible(false);
     }
@@ -248,7 +249,7 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
               borderRadius={moderateScale(30, 0.3)}
               fontSize={moderateScale(11, 0.6)}
               onPress={() => {
-                changeStatus('accept');
+                changeStatus('accepted');
                 // setModalVisible(false);
               }}
             />
@@ -263,7 +264,7 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
               borderRadius={moderateScale(30, 0.3)}
               fontSize={moderateScale(11, 0.6)}
               onPress={() => {
-                changeStatus('reject');
+                changeStatus('rejected');
                 // setModalVisible(false);
               }}
             />
