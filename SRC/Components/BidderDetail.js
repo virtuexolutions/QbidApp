@@ -11,8 +11,14 @@ import {useSelector} from 'react-redux';
 import CustomButton from './CustomButton';
 import {Post} from '../Axios/AxiosInterceptorFunction';
 import {ActivityIndicator} from 'react-native';
+import { FlatList } from 'react-native';
+import CustomImage from './CustomImage';
 
 const BidderDetail = ({item, photo, title, date, message}) => {
+  console.log(
+    '🚀 ~ file: BidderDetail.js:16 ~ BidderDetail ~ review:',
+    item?.review,
+  );
   // console.log('🚀 ~ file: BidderDetail.js:16 ~ BidderDetail ~ item:', item);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
@@ -87,6 +93,37 @@ const BidderDetail = ({item, photo, title, date, message}) => {
         ]}>
         {item?.description}
       </CustomText>
+      <FlatList
+        data={item?.review}
+        renderItem={({item, index}) => {
+          return (
+            <View style={styles.view}>
+              <View style={styles.mainview}>
+                <CustomImage
+                  style={{
+                    height: '100%',
+                    width: '100%',
+                  }}
+                  source={{uri: item?.user_info?.photo}}
+                />
+              </View>
+              <View
+                style={{
+                  paddingHorizontal: moderateScale(10, 0.3),
+                }}>
+                <CustomText isBold style={styles.text}>
+                  {item?.user_info?.first_name}
+                </CustomText>
+                <CustomText style={styles.text2}>{item?.text}</CustomText>
+                <CustomText style={styles.text2}>
+                  {moment().format('MMM Do, YYYY')}
+                </CustomText>
+              </View>
+            </View>
+          );
+        }}
+      />
+
       <View
         style={{
           position: 'absolute',
@@ -145,6 +182,34 @@ const styles = ScaledSheet.create({
     height: windowWidth * 0.11,
 
     borderRadius: moderateScale((windowWidth * 0.11) / 2, 0.3),
+  },
+  heading1:{
+    color: Color.black,
+    fontSize: moderateScale(17, 0.6),
+    textTransform: 'uppercase',
+    marginTop: moderateScale(10, 0.6),
+  },
+  view:{
+    flexDirection: 'row',
+    marginVertical: moderateScale(10, 0.3),
+    paddingHorizontal: moderateScale(10, 0.3),
+    // backgroundColor:'red'
+  },
+  mainview:{
+    height: windowHeight * 0.06,
+    width: windowHeight * 0.06,
+    borderRadius: (windowHeight * 0.06) / 2,
+    overflow: 'hidden',
+  },
+  text:{
+    color: Color.black,
+    fontSize: moderateScale(13, 0.6),
+    textTransform: 'uppercase',
+  },
+  text2:{
+    color: Color.black,
+    fontSize: moderateScale(12, 0.6),
+    width: windowWidth * 0.75,
   },
 });
 

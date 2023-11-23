@@ -49,7 +49,7 @@ const JobDetails = props => {
   );
 
   const [data, setData] = useState(data1);
-  console.log("🚀 ~ file: JobDetails.js:52 ~ JobDetails ~ data:", data)
+  console.log("🚀 ~ file: JobDetails.js:52 ~ JobDetails ~ data:", data1?.review)
   const [checked, setChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [bidDone, setBidDone] = useState(false);
@@ -72,7 +72,7 @@ const JobDetails = props => {
     setIsLoading(false);
 
     if (response != undefined) {
-       console.log("🚀 ~ file: JobDetails.js:86 ~ bidDetails ~ response:", response?.data)
+      //  console.log("🚀 ~ file: JobDetails.js:86 ~ bidDetails ~ response:", response?.data?.quote_info)
        setData(response?.data?.quote_info)
       
        const mainuserData = response?.data?.quote_info?.bids?.find(
@@ -463,7 +463,7 @@ const JobDetails = props => {
                     Applied Negotiators
                   </CustomText>
                   <FlatList
-                    data={data?.bids}
+                    data={data?.bids?.some(item=> item?.status == 'accept') ? [data?.bids?.find(item=> item?.status == 'accept')] : data?.bids}
                     ListEmptyComponent={() => {
                       return (
                         <NoData
@@ -481,6 +481,7 @@ const JobDetails = props => {
                       paddingBottom: moderateScale(30, 0.6),
                     }}
                     renderItem={({item, index}) => {
+                    // console.log("🚀 ~ file: JobDetails.js:484 ~ JobDetails ~ item:", data1?.review)
                
                       return (
                         <>
@@ -489,6 +490,7 @@ const JobDetails = props => {
                               image: item?.quote_info?.user_info?.photo ,
                               name: item?.user_info?.first_name,
                               rating: item?.rating,
+                              review:data1?.review,
                               description: item?.coverletter,
                               status: item?.status,
                               id: item?.id,
