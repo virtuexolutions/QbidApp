@@ -26,6 +26,7 @@ const SeeAllScreen = props => {
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
+  // console.log("🚀 ~ file: SeeAllScreen.js:29 ~ SeeAllScreen ~ token:", token)
 
   const type = props?.route?.params?.type;
   const data = props?.route?.params?.data;
@@ -78,15 +79,15 @@ const SeeAllScreen = props => {
   };
 
   const filterQuotes = async () => {
-    const url = `auth/member/search_type/${selectedStatus}`;
+    const url = `auth/member/search_type/${selectedStatus}?title=${searchData}`;
     setIsLoading(true);
     const response = await Get(url, token);
     setIsLoading(false);
     if (response != undefined) {
-      console.log(
-        '🚀 ~ file: HomeScreen.js:97 ~ filterQuotes ~ response:',
-        response?.data,
-      );
+      //  console.log(
+      //   '🚀 ~ file: HomeScreen.js:97 ~ filterQuotes ~ response:',
+      //   response?.data?.quote_info[0]?.images,
+      // );
       setNewArray(response?.data?.quote_info);
     }
   };
@@ -129,15 +130,16 @@ const SeeAllScreen = props => {
   }, [pageNum]);
 
   useEffect(() => {
-    if (selectedStatus != '') {
+    if (selectedStatus !=  '' || searchData != '') {
       type == 'quotes' && filterQuotes();
     }
-  }, [selectedStatus]);
+  }, [selectedStatus ,searchData]);
 
   useEffect(() => {
     if (Object.keys(filters).length > 0) {
       type == 'negotiator' && searchCards();
     }
+  
   }, [searchData]);
 
   return (

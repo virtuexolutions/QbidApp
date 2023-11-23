@@ -40,8 +40,11 @@ const ReviewModal = ({setRef,rbRef, item}) => {
       console.log("🚀 ~ file: ReviewModal.js:40 ~ sendReview ~ response:", response?.data)
     
       Platform.OS == 'android'? ToastAndroid.show('Review sent',ToastAndroid.SHORT) : Alert.alert('Review sent')
-        rbRef.close()
+     setRating(0)
+    setReview('')
+     rbRef.close()
     }
+
   };
 
   return (

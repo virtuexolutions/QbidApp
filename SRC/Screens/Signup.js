@@ -464,6 +464,7 @@ const Signup = () => {
             color={Color.themeColor}
             placeholderColor={Color.themeLightGray}
             borderRadius={moderateScale(25, 0.3)}
+            keyboardType={'numeric'}
           />
           <TextInputWithTitle
             titleText={'Address'}
@@ -530,6 +531,7 @@ const Signup = () => {
             placeholderColor={Color.themeLightGray}
             borderRadius={moderateScale(25, 0.3)}
             // marginBottom={moderateScale(10, 0.3)}
+            keyboardType={'numeric'}
           />
           <TextInputWithTitle
             titleText={'Password'}
