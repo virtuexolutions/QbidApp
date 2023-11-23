@@ -35,6 +35,7 @@ const NegotiatorHomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
   const userData = useSelector(state => state.commonReducer.userData);
+  console.log("🚀 ~ file: NegotiatorHomeScreen.js:38 ~ NegotiatorHomeScreen ~ userData:", userData)
 
   const [searchData, setSearchData] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -43,7 +44,7 @@ const NegotiatorHomeScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [recommended, setRecommended] = useState([]);
   const [working, setWorking] = useState([]);
-  console.log("🚀 ~ file: NegotiatorHomeScreen.js:55 ~ NegotiatorHomeScreen ~ working:", working)
+  // console.log("🚀 ~ file: NegotiatorHomeScreen.js:55 ~ NegotiatorHomeScreen ~ working:", working)
   const [jobPosting, setJobPosting] = useState([]);
   const isFocused = useIsFocused();
 
@@ -385,8 +386,8 @@ const NegotiatorHomeScreen = () => {
                   <CustomText
                     onPress={() => {
                       navigationService.navigate('SeeAllNegotiator', {
-                        type: 'Working On',
-                        data: working,
+                        type: 'job posts',
+                        data: jobPosting,
                       });
                     }}
                     style={styles.viewall}>

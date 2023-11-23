@@ -90,6 +90,7 @@ const CreateNew = (props) => {
           ? ToastAndroid.show(`Description should be greater than 100 letters`, ToastAndroid.SHORT)
           : Alert.alert(`Description should be greater than 100 letters`);
     }
+    
     multiImages?.map((item, index) => formData.append(`images[${index}]`, item));
     // console.log("🚀 ~ file: CreateNew.js:67 ~ publishQuote ~ formData:", formData)
 

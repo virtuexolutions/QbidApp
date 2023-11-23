@@ -72,7 +72,7 @@ const JobDetails = props => {
     setIsLoading(false);
 
     if (response != undefined) {
-      //  console.log("🚀 ~ file: JobDetails.js:86 ~ bidDetails ~ response:", response?.data)
+       console.log("🚀 ~ file: JobDetails.js:86 ~ bidDetails ~ response:", response?.data)
        setData(response?.data?.quote_info)
       
        const mainuserData = response?.data?.quote_info?.bids?.find(

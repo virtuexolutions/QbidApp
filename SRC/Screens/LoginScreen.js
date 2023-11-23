@@ -136,9 +136,9 @@ const LoginScreen = () => {
     const response = await Post(url, body, apiHeader());
     setIsLoading(false);
     if (response != undefined) {
-    //  console.log("🚀 ~ file: LoginScreen.js:139 ~ Login ~ response:", response?.data?.user_info)
+      console.log("🚀 ~ file: LoginScreen.js:139 ~ Login ~ response:", response?.data)
       if (selectedRole == response?.data?.user_info?.role) {
-        dispatch(setUserData(response?.data?.user_info));
+        dispatch(setUserData({...response?.data?.user_info, average_rating:response?.data?.average_rating}));
         dispatch(setSelectedRole(response?.data?.user_info?.role));
         dispatch(setUserLogin(response?.data?.token));
         dispatch(setUserToken({token: response?.data?.token}));

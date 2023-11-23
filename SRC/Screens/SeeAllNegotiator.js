@@ -41,7 +41,7 @@ const SeeAllNegotiator = props => {
   const [showSearch, setShowSearch] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState('');
-  
+
   const [pageNum, setpageNum] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
@@ -52,18 +52,11 @@ const SeeAllNegotiator = props => {
     const url = `auth/negotiator/search/${type}`;
     const body = {search: searchData, status: type};
 
-    // console.log('🚀 ~ file: HomeScreen.js:99 ~ searchQuotes ~ body:', body);
     setIsLoading(true);
     const response = await Post(url, body, apiHeader(token));
     setIsLoading(false);
     if (response != undefined) {
-      // console.log(
-      //   '🚀 ~ file: HomeScreen.js:99 ~ searchQuotes ~ response:',
-      //   response?.data,
-      // );
-  
-        setNewArray(response?.data?.quote_info?.data);
-      
+      setNewArray(response?.data?.quote_info?.data);
     }
   };
 
@@ -73,26 +66,20 @@ const SeeAllNegotiator = props => {
         ? `auth/negotiator/quote/recommended?page=${pageNum}`
         : type == 'Working On'
         ? `auth/negotiator/quote/working?page=${pageNum}`
-        : `auth/negotiator/bid_help?page=${pageNum}`;
+        : `auth/negotiator/hiring/list?page=${pageNum}`;
     type1 == 'loadMore' ? setLoadMore(true) : setIsLoading(true);
     const response = await Get(url, token);
     type1 == 'loadMore' ? setLoadMore(false) : setIsLoading(false);
     if (response != undefined) {
-      // console.log(
-      //   '🚀 ~ file: SeeAllNegotiator.js:67 ~ getData ~ response:',
-      //   response?.data,
-      // );
-      if (type != 'Seeking Help') {
+      console.log("🚀 ~ file: SeeAllNegotiator.js:74 ~ getData ~ response:", response?.data)
+      if (type != 'job posts') {
         type1 == 'loadMore'
           ? setNewArray(prev => [...prev, ...response?.data?.quote_info?.data])
           : setNewArray(response?.data?.quote_info?.data);
       } else {
         type1 == 'loadMore'
-          ? setNewArray(prev => [
-              ...prev,
-              ...response?.data?.bid_help_info?.data,
-            ])
-          : setNewArray(response?.data?.bid_help_info?.data);
+          ? setNewArray(prev => [...prev, ...response?.data?.hiring_info?.data])
+          : setNewArray(response?.data?.hiring_info?.data);
       }
     }
   };
@@ -112,14 +99,14 @@ const SeeAllNegotiator = props => {
   };
 
   useEffect(() => {
-    searchQuotes();
+    // searchQuotes();
   }, [searchData]);
 
   useEffect(() => {
     if (pageNum == 1) {
       getData();
     } else {
-      if (newArray.length == data.length) {
+      if (newArray?.length == data?.length) {
         getData('loadMore');
       }
     }
@@ -162,7 +149,6 @@ const SeeAllNegotiator = props => {
             ? Color.themeBgColorNegotiator
             : Color.themebgBusinessQbidder
         }>
-    
         <View
           style={{
             width: windowWidth * 0.93,
@@ -214,26 +200,27 @@ const SeeAllNegotiator = props => {
           </View>
         ) : (
           <FlatList
-          ListEmptyComponent={()=>{
-          return(
-              <View style={{
-                alignItems:'center',
-                justifyContent:'center',
-                // backgroundColor:'red',
-                height:windowHeight*0.5
-              }}>
-                <NoData 
-                style={{
-                  width: windowWidth * 0.95,
-                  height: windowHeight * 0.3,
-                  // backgroundColor: 'green',
-                  alignItems: 'center',
-                  justifyContent:'center'
-                }}
-                />
-              </View>
-            )
-          }}
+            ListEmptyComponent={() => {
+              return (
+                <View
+                  style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    // backgroundColor:'red',
+                    height: windowHeight * 0.5,
+                  }}>
+                  <NoData
+                    style={{
+                      width: windowWidth * 0.95,
+                      height: windowHeight * 0.3,
+                      // backgroundColor: 'green',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  />
+                </View>
+              );
+            }}
             // onEndReached={() => {
             //   setpageNum(prev => prev + 1);
             // }}
@@ -241,7 +228,7 @@ const SeeAllNegotiator = props => {
             onScroll={handleScroll}
             scrollEventThrottle={16}
             data={newArray}
-            numColumns={type != 'Seeking Help' ? 2: 1}
+            numColumns={type != 'Seeking Help' ? 2 : 1}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{
               width: windowWidth,
@@ -251,10 +238,9 @@ const SeeAllNegotiator = props => {
               paddingBottom: moderateScale(80, 0.6),
             }}
             renderItem={({item, index}) => {
-       
               return type != 'Seeking Help' ? (
                 <JobCard
-                key={index}
+                  key={index}
                   fromSeeAll={true}
                   item={item}
                   style={index % 2 == 0 && {marginRight: moderateScale(7, 0.3)}}
