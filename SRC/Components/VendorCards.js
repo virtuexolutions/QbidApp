@@ -15,7 +15,7 @@ import {TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 const VendorCards = ({item}) => {
-  console.log('🚀 ~ file: VendorCards.js:18 ~ VendorCards ~ item:', item);
+  // console.log('🚀 ~ file: VendorCards.js:18 ~ VendorCards ~ item:', item);
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
   const token = useSelector(state => state.authReducer.token);
@@ -51,7 +51,9 @@ const VendorCards = ({item}) => {
         justifyContent:'center',
         paddingTop:moderateScale(5,0.3)
       }}>
-      <CustomText style={styles.title} isBold>
+      <CustomText style={styles.title} 
+      numberOfLines={1}
+      isBold>
         {item?.first_name}
       </CustomText>
       <View style={styles.view1}>
@@ -74,7 +76,7 @@ const VendorCards = ({item}) => {
           style={{
             fontSize: moderateScale(13),
           }}>
-          {`${item?.average_rating ? item?.average_rating : 0}/5`}
+          {`${item?.average_rating ? Math.round(item?.average_rating,2) : 0}/5`}
         </CustomText>
       </View>
       </View>
@@ -114,8 +116,10 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   title: {
+    // backgroundColor:'red',
+    width:windowWidth*0.22,
     fontSize: 14,
-    paddingHorizontal:moderateScale(8,0.3)
+    paddingHorizontal:moderateScale(5,0.3)
   
   },
   decription: {

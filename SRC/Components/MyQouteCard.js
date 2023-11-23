@@ -35,7 +35,7 @@ const MyQouteCard = ({item}) => {
       ? 'Complete'
       : item?.status == 'completed' && [0, undefined].includes(item?.rating)
       ? 'Review'
-      : '',
+      : 'reviewed',
   );
 
   const markCompleted = async () => {
