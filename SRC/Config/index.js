@@ -1,4 +1,4 @@
-export const baseUrl = "https://0fb9-103-125-71-18.ngrok-free.app";
+export const baseUrl = "https://ddc8-113-203-241-45.ngrok-free.app";
 // export const baseUrl = "https://4b54-113-203-241-1.in.ngrok.io";
 export const imageUrl = `${baseUrl}/api/images/`;
 export const profilePicUrl = `${baseUrl}/uploads`

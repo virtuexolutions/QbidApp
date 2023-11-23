@@ -24,11 +24,14 @@ import {Alert} from 'react-native';
 import navigationService from '../navigationService';
 import {useNavigation} from '@react-navigation/native';
 
-const CreateNew = (props) => {
-  const hire = props?.route?.params?.hire
-  console.log("🚀 ~ file: CreateNew.js:29 ~ CreateNew ~ hire:", hire)
-  const negotiater_id = props?.route?.params?.id
-  console.log("🚀 ~ file: CreateNew.js:30 ~ CreateNew ~ negotiater_id:", negotiater_id)
+const CreateNew = props => {
+  const hire = props?.route?.params?.hire;
+  console.log('🚀 ~ file: CreateNew.js:29 ~ CreateNew ~ hire:', hire);
+  const negotiater_id = props?.route?.params?.id;
+  console.log(
+    '🚀 ~ file: CreateNew.js:30 ~ CreateNew ~ negotiater_id:',
+    negotiater_id,
+  );
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
@@ -36,9 +39,9 @@ const CreateNew = (props) => {
   const [qouteTitle, setQouteTitle] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
-  const [vendorQoutedPrice, setVendorQoutedPrice] = useState('');
-  const [askingPrice, setAskingPrice] = useState('');
-  const [offeringPercent, setOfferingPercent] = useState('');
+  const [vendorQoutedPrice, setVendorQoutedPrice] = useState(0);
+  const [askingPrice, setAskingPrice] = useState(0);
+  const [offeringPercent, setOfferingPercent] = useState(0);
   const [selectedService, setSelectedService] = useState('');
   const [description, setDescription] = useState('');
   const [multiImages, setMultiImages] = useState([]);
@@ -48,11 +51,12 @@ const CreateNew = (props) => {
   const navigation = useNavigation();
 
   const publishQuote = async () => {
+    console.log("itny payaray ho ")
     const url = 'auth/member/quote';
     const body = {
       title: qouteTitle,
       city: city,
-      type:'general',
+      type: 'general',
       state: state,
       quoted_price: vendorQoutedPrice,
       asking_price: askingPrice,
@@ -64,11 +68,10 @@ const CreateNew = (props) => {
       quoted_price: vendorQoutedPrice,
       asking_price: askingPrice,
       offering_percentage: offeringPercent,
-    }
+    };
 
     const formData = new FormData();
 
-  
     for (let key in body) {
       if (body[key] == '') {
         return Platform.OS == 'android'
@@ -78,51 +81,59 @@ const CreateNew = (props) => {
         formData.append(key, body[key]);
       }
     }
-    for(let key in body2){
-      if(isNaN(body2[key])){
+    for (let key in body2) {
+      if (isNaN(body2[key])) {
         return Platform.OS == 'android'
-        ?ToastAndroid.show(`${key}is not a number` ,ToastAndroid.SHORT )
-        :Alert.alert(`${key} is not a number `)
+          ? ToastAndroid.show(`${key}is not a number`, ToastAndroid.SHORT)
+          : Alert.alert(`${key} is not a number `);
       }
     }
-    if(description.length < 100){
+    if (description.length < 100) {
       return Platform.OS == 'android'
-          ? ToastAndroid.show(`Description should be greater than 100 letters`, ToastAndroid.SHORT)
-          : Alert.alert(`Description should be greater than 100 letters`);
+        ? ToastAndroid.show(
+            `Description should be greater than 100 letters`,
+            ToastAndroid.SHORT,
+          )
+        : Alert.alert(`Description should be greater than 100 letters`);
     }
-    multiImages?.map((item, index) => formData.append(`images[${index}]`, item));
+    if (multiImages.length == 0) {
+      return Platform.OS == 'android'
+        ? ToastAndroid.show(`add atleast one image `, ToastAndroid.SHORT)
+        : Alert.alert(`add atleast one image `);
+    }
+    multiImages?.map((item, index) =>
+      formData.append(`images[${index}]`, item),
+    );
     // console.log("🚀 ~ file: CreateNew.js:67 ~ publishQuote ~ formData:", formData)
 
     setIsLoading(true);
     const response = await Post(url, formData, apiHeader(token));
     setIsLoading(false);
     if (response != undefined) {
+      setCity('');
+      setAskingPrice('');
+      setDescription('');
+      setMultiImages([]);
+      setOfferingPercent('');
+      setQouteTitle('');
+      setState('');
+      setSelectedService('');
+      setVendorQoutedPrice('');
 
-      setCity('')
-      setAskingPrice('')
-      setDescription('')
-      setMultiImages([])
-      setOfferingPercent('')
-      setQouteTitle('')
-      setState('')
-      setSelectedService('')
-      setVendorQoutedPrice('')
-      
       // console.log(
       //   '🚀 ~ file: CreateNew.js:81 ~ publishQuote ~ response:',
       //   response?.data,
       // );
       navigation.goBack();
     }
-    
   };
 
-  const sendRequest =async ()=>{
-    console.log('In send request======>>>>')
+  const sendRequest = async () => {
+    console.log('In send request======>>>>');
     const url = 'auth/member/hiring/create';
     const body = {
-      negotiator_id:negotiater_id,
-      type:'specific',
+      negotiator_id: negotiater_id,
+      type: 'specific',
       title: qouteTitle,
       city: city,
       state: state,
@@ -135,7 +146,7 @@ const CreateNew = (props) => {
       quoted_price: vendorQoutedPrice,
       asking_price: askingPrice,
       offering_percentage: offeringPercent,
-    }
+    };
 
     const formData = new FormData();
 
@@ -148,43 +159,61 @@ const CreateNew = (props) => {
         formData.append(key, body[key]);
       }
     }
-    for(let key in body2){
-      if(isNaN(body2[key])){
+    for (let key in body2) {
+      if (isNaN(body2[key])) {
         return Platform.OS == 'android'
-        ?ToastAndroid.show(`${key}is not a number` ,ToastAndroid.SHORT )
-        :Alert.alert(`${key} is not a number `)
+          ? ToastAndroid.show(`${key}is not a number`, ToastAndroid.SHORT)
+          : Alert.alert(`${key} is not a number `);
       }
     }
-    if(description.length < 100){
+    if (description.length < 100) {
       return Platform.OS == 'android'
-          ? ToastAndroid.show(`Description is too short`, ToastAndroid.SHORT)
-          : Alert.alert(`Description is too short`);
+        ? ToastAndroid.show(`Description is too short`, ToastAndroid.SHORT)
+        : Alert.alert(`Description is too short`);
     }
-    multiImages?.map((item, index) => formData.append(`images[${index}]`, item));
+    multiImages?.map((item, index) =>
+      formData.append(`images[${index}]`, item),
+    );
 
-     console.log("🚀 ~ file: CreateNew.js:160 ~ sendRequest ~ formData:", formData)
+    console.log(
+      '🚀 ~ file: CreateNew.js:160 ~ sendRequest ~ formData:',
+      formData,
+    );
     setIsLoading(true);
     const response = await Post(url, formData, apiHeader(token));
     setIsLoading(false);
     if (response != undefined) {
       // hire = false;
       // negotiater_id = undefined
-      console.log("🚀 ~ file: CreateNew.js:164 ~ sendRequest ~ response:", response?.data)
-      setCity('')
-      setAskingPrice('')
-      setDescription('')
-      setMultiImages([])
-      setOfferingPercent('')
-      setQouteTitle('')
-      setState('')
-      setSelectedService('')
-      setVendorQoutedPrice('')
-      
+      console.log(
+        '🚀 ~ file: CreateNew.js:164 ~ sendRequest ~ response:',
+        response?.data,
+      );
+      setCity('');
+      setAskingPrice('');
+      setDescription('');
+      setMultiImages([]);
+      setOfferingPercent('');
+      setQouteTitle('');
+      setState('');
+      setSelectedService('');
+      setVendorQoutedPrice('');
+
       navigation.goBack();
     }
+  };
 
-  }
+  useEffect(() => {
+    if (askingPrice >= vendorQoutedPrice) {
+      alert('asking price can not be higher than vendor quoted price ');
+      setAskingPrice('');
+    }
+    if (offeringPercent > 100) {
+      alert('offering percentage can not be greater than 100');
+    }
+  }, [askingPrice, offeringPercent]);
 
+  useEffect(() => {}, []);
   return (
     <ScreenBoiler
       statusBarBackgroundColor={
@@ -302,6 +331,7 @@ const CreateNew = (props) => {
             color={Color.themeColor}
             placeholderColor={Color.themeLightGray}
             borderRadius={moderateScale(25, 0.3)}
+            keyboardType={'numeric'}
           />
 
           <TextInputWithTitle
@@ -320,6 +350,7 @@ const CreateNew = (props) => {
             color={Color.themeColor}
             placeholderColor={Color.themeLightGray}
             borderRadius={moderateScale(25, 0.3)}
+            keyboardType={'numeric'}
           />
 
           <TextInputWithTitle
@@ -338,21 +369,24 @@ const CreateNew = (props) => {
             color={Color.themeColor}
             placeholderColor={Color.themeLightGray}
             borderRadius={moderateScale(25, 0.3)}
+            keyboardType={'numeric'}
           />
 
-         {!hire && <DropDownSingleSelect
-            array={servicesArray.filter(x => x?.name)}
-            item={selectedService}
-            setItem={setSelectedService}
-            placeholder={'Service preference'}
-            width={windowWidth * 0.9}
-            dropDownHeight={windowHeight * 0.06}
-            dropdownStyle={{
-              width: windowWidth * 0.9,
-              borderBottomWidth: 0,
-              marginTop: moderateScale(15, 0.3),
-            }}
-          />}
+          {!hire && (
+            <DropDownSingleSelect
+              array={servicesArray.filter(x => x?.name)}
+              item={selectedService}
+              setItem={setSelectedService}
+              placeholder={'Service preference'}
+              width={windowWidth * 0.9}
+              dropDownHeight={windowHeight * 0.06}
+              dropdownStyle={{
+                width: windowWidth * 0.9,
+                borderBottomWidth: 0,
+                marginTop: moderateScale(15, 0.3),
+              }}
+            />
+          )}
           <CustomText
             isBold
             style={[
@@ -462,7 +496,6 @@ const CreateNew = (props) => {
                 ? Color.themeColor
                 : Color.black
             }
-          
             borderRadius={moderateScale(30, 0.3)}
           />
         </KeyboardAwareScrollView>

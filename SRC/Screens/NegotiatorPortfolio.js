@@ -47,7 +47,7 @@ import navigationService from '../navigationService';
 const NegotiatorPortfolio = props => {
   const fromSearch = props?.route?.params?.fromSearch;
   const item = props?.route?.params?.item;
-  console.log("🚀 ~ file: NegotiatorPortfolio.js:50 ~ NegotiatorPortfolio ~ item:", item?.average_rating)
+  console.log("🚀 ~ file: NegotiatorPortfolio.js:50 ~ NegotiatorPortfolio ~ item:", item?.ratings)
 
   const userdata = useSelector(state => state.commonReducer.userData);
   // console.log("🚀 ~ file: NegotiatorPortfolio.js:52 ~ NegotiatorPortfolio ~ userdata:", userdata?.photo)
@@ -642,15 +642,17 @@ const NegotiatorPortfolio = props => {
                   </View>
                 );
               })}
-         { 
-          item?.negotiator_review &&
-           <CustomText
+            <FlatList
+            ListHeaderComponent={()=> { 
+              return(
+              <CustomText
               isBold
               style={styles.heading1}>
               reviews
-            </CustomText>}
-            <FlatList
-              data={item?.negotiator_review ? item?.negotiator_review : userdata?.negotiator_review}
+            </CustomText>
+              )
+            }}
+              data={item?.ratings ? item?.ratings : userdata?.negotiator_review}
               renderItem={({item, index}) => {
                 return (
                   <View

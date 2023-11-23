@@ -99,6 +99,8 @@ const HomeScreen = () => {
       setVisible(true);
     });
   }, []);
+  
+  
 
  
   return (
