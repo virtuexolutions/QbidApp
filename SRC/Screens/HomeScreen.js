@@ -211,7 +211,7 @@ const HomeScreen = () => {
                   />
                 );
               }}
-              data={negotiator}
+              data={negotiator.slice(0,5)}
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{
@@ -280,7 +280,7 @@ const HomeScreen = () => {
               data={
                 myQuotes?.length > 5
                   ? myQuotes.reverse().slice(0, 5)
-                  : myQuotes
+                  : myQuotes.reverse()
               }
               // data={[]}
               showsVerticalScrollIndicator={false}

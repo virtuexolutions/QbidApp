@@ -718,6 +718,7 @@ const JobDetails = props => {
               color={Color.themeColor}
               placeholderColor={Color.themeLightGray}
               borderRadius={moderateScale(25, 0.3)}
+              keyboardType={'numeric'}
             />
             <DropDownSingleSelect
               array={UserCoverLetterArray}

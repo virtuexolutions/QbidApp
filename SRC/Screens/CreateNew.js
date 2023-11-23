@@ -51,7 +51,7 @@ const CreateNew = props => {
   const navigation = useNavigation();
 
   const publishQuote = async () => {
-    console.log('itny payaray ho ');
+    console.log("itny payaray ho ")
     const url = 'auth/member/quote';
     const body = {
       title: qouteTitle,
@@ -100,11 +100,10 @@ const CreateNew = props => {
       return Platform.OS == 'android'
         ? ToastAndroid.show(`add atleast one image `, ToastAndroid.SHORT)
         : Alert.alert(`add atleast one image `);
-    } else {
-      multiImages?.map((item, index) =>
-        formData.append(`images[${index}]`, item),
-      );
     }
+    multiImages?.map((item, index) =>
+      formData.append(`images[${index}]`, item),
+    );
     // console.log("🚀 ~ file: CreateNew.js:67 ~ publishQuote ~ formData:", formData)
 
     setIsLoading(true);
@@ -112,14 +111,14 @@ const CreateNew = props => {
     setIsLoading(false);
     if (response != undefined) {
       setCity('');
-      setAskingPrice('');
+      setAskingPrice(0);
       setDescription('');
       setMultiImages([]);
-      setOfferingPercent('');
+      setOfferingPercent(0);
       setQouteTitle('');
       setState('');
       setSelectedService('');
-      setVendorQoutedPrice('');
+      setVendorQoutedPrice(0);
 
       // console.log(
       //   '🚀 ~ file: CreateNew.js:81 ~ publishQuote ~ response:',
@@ -191,30 +190,30 @@ const CreateNew = props => {
         response?.data,
       );
       setCity('');
-      setAskingPrice('');
+      setAskingPrice(0);
       setDescription('');
       setMultiImages([]);
-      setOfferingPercent('');
+      setOfferingPercent(0);
       setQouteTitle('');
       setState('');
       setSelectedService('');
-      setVendorQoutedPrice('');
+      setVendorQoutedPrice(0);
 
       navigation.goBack();
     }
   };
 
   useEffect(() => {
-    if (askingPrice >= vendorQoutedPrice) {
+    if (askingPrice > vendorQoutedPrice) {
       alert('asking price can not be higher than vendor quoted price ');
-      setAskingPrice('');
+      setAskingPrice(0);
     }
     if (offeringPercent > 100) {
       alert('offering percentage can not be greater than 100');
     }
   }, [askingPrice, offeringPercent]);
 
-  useEffect(() => {}, []);
+
   return (
     <ScreenBoiler
       statusBarBackgroundColor={
@@ -332,7 +331,7 @@ const CreateNew = props => {
             color={Color.themeColor}
             placeholderColor={Color.themeLightGray}
             borderRadius={moderateScale(25, 0.3)}
-            keyboardType={'numeric'}
+          
           />
 
           <TextInputWithTitle

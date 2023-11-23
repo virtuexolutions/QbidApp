@@ -76,8 +76,11 @@ const CustomStatusModal = ({
                     // marginTop: moderateScale(10, 0.3),
                     textAlign: 'center',
                     paddingBottom: moderateScale(5, 0.3),
-                    backgroundColor: 'transparent',
-                  }}>
+                    // backgroundColor: 'transparent',
+                    // backgroundColor: item?.name == data  ? Color.blue : 'white',
+                    color:   item?.name == data?  Color.blue :'black',
+                  
+                  }}  isBold={ item?.name == data ? true :false }>
                   {item?.name}
                 </CustomText>
               );

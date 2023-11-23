@@ -26,6 +26,7 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import ReviewModal from './ReviewModal';
 
 const MyQouteCard = ({item}) => {
+  // console.log("🚀 ~ file: MyQouteCard.js:29 ~ MyQouteCard ~ item:", item?.images[0])
   const token = useSelector(state => state.authReducer.token);
   const [modalVisible, setModalVisible] = useState(false);
   const [cmpLoading, setCmpLoading] = useState(false);
@@ -35,7 +36,7 @@ const MyQouteCard = ({item}) => {
       ? 'Complete'
       : item?.status == 'completed' && [0, undefined].includes(item?.rating)
       ? 'Review'
-      : '',
+      : 'Reviewcomplete',
   );
 
   const markCompleted = async () => {
@@ -123,12 +124,13 @@ const MyQouteCard = ({item}) => {
           paddingTop: moderateScale(4, 0.3),
         }}>
         <CustomText
-          numberOfLines={2}
+          numberOfLines={1}
           isBold
           style={{
             fontSize: moderateScale(14, 0.3),
             width: windowWidth * 0.3,
           }}>
+            
           {item?.title}
         </CustomText>
 
@@ -206,10 +208,10 @@ const MyQouteCard = ({item}) => {
             textColor={Color.white}
             marginTop={moderateScale(2, 0.3)}
             onPress={() => {
-              buttonName == 'Review' && rbRef.open();
+              buttonName  == 'Review'  && rbRef.open();
               buttonName == 'Complete' && markCompleted();
             }}
-            bgColor={Color.blue}
+            bgColor={Color.blue} 
             borderRadius={moderateScale(30, 0.3)}
             alignSelf={'flex-end'}
             fontSize={moderateScale(9, 0.3)}
