@@ -39,17 +39,17 @@ import ImageView from 'react-native-image-viewing';
 
 const JobDetails = props => {
   const data1 = props?.route?.params?.item;
-  // console.log("🚀 ~ file: JobDetails.js:42 ~ JobDetails ~ data1:", data1)
+  console.log('🚀 ~ file: JobDetails.js:42 ~ JobDetails ~ data1:', data1);
 
   const user = useSelector(state => state.commonReducer.userData);
   const token = useSelector(state => state.authReducer.token);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const UserCoverLetterArray = useSelector(
-    state => state.commonReducer.servicesArray
+    state => state.commonReducer.servicesArray,
   );
 
   const [data, setData] = useState(data1);
-  console.log("🚀 ~ file: JobDetails.js:52 ~ JobDetails ~ data:", data1?.review)
+  // console.log("🚀 ~ file: JobDetails.js:52 ~ JobDetails ~ data:", data1?.review)
   const [checked, setChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [bidDone, setBidDone] = useState(false);
@@ -64,27 +64,28 @@ const JobDetails = props => {
   const [imageModalVisible, setImageModalVisible] = useState(false);
   const [finalImagesArray, setFinalImagesArray] = useState([]);
 
-  
   const bidDetails = async () => {
-    const url = `auth/negotiator/quote_detail/${data1?.quote_id ? data1?.quote_id : data1?.id}`;
+    const url = `auth/negotiator/quote_detail/${
+      data1?.quote_id ? data1?.quote_id : data1?.id
+    }`;
     setIsLoading(true);
     const response = await Get(url, token);
     setIsLoading(false);
 
     if (response != undefined) {
       //  console.log("🚀 ~ file: JobDetails.js:86 ~ bidDetails ~ response:", response?.data?.quote_info)
-       setData(response?.data?.quote_info)
-      
-       const mainuserData = response?.data?.quote_info?.bids?.find(
+      setData(response?.data?.quote_info);
+
+      const mainuserData = response?.data?.quote_info?.bids?.find(
         item => item.user_info?.id == user?.id,
       );
       response?.data?.quote_info?.images?.map(item => {
-        return setFinalImagesArray(prev => [...prev,{uri: item?.image}]);
+        return setFinalImagesArray(prev => [...prev, {uri: item?.image}]);
       });
 
-      if (mainuserData) {        
+      if (mainuserData) {
         setBidDone(true);
-        setUserData(mainuserData);        
+        setUserData(mainuserData);
       }
     }
   };
@@ -158,8 +159,6 @@ const JobDetails = props => {
     bidDetails();
   }, [isFocused]);
 
-  
-
   return (
     <ScreenBoiler
       hideUser={false}
@@ -228,9 +227,9 @@ const JobDetails = props => {
                   }}>
                   <CustomImage
                     source={
-                      data?.images?.length>0 
-                        ? {uri: data?.images[0]?.image}  : 
-                      require('../Assets/Images/dummyman1.png')
+                      data?.images?.length > 0
+                        ? {uri: data?.images[0]?.image}
+                        : require('../Assets/Images/dummyman1.png')
                     }
                     style={{
                       width: '100%',
@@ -294,10 +293,12 @@ const JobDetails = props => {
               </ShowMoreAndShowLessText>
               <CustomText
                 onPress={() => {
-                  if(finalImagesArray.length>0){
+                  if (finalImagesArray.length > 0) {
                     setImageModalVisible(true);
-                  }else{
-                    return Platform.OS == 'android' ?  ToastAndroid.show('No attachments', ToastAndroid.SHORT) : Alert.alert('No Attachments')
+                  } else {
+                    return Platform.OS == 'android'
+                      ? ToastAndroid.show('No attachments', ToastAndroid.SHORT)
+                      : Alert.alert('No Attachments');
                   }
                 }}
                 isBold
@@ -362,6 +363,21 @@ const JobDetails = props => {
                   marginTop={moderateScale(30, 0.3)}
                 />
               </View>
+              {/* {userRole != 'Qbid Member' ? (
+                <>
+                  <CustomText
+                    isBold
+                    style={{
+                      color: Color.white,
+                      fontSize: moderateScale(17, 0.6),
+                      marginVertical: moderateScale(10, 0.3),
+                    }}>
+                   {`You will earn ${((data?.quoted_price-data?.asking_price)*data?.offering_percentage)/100} from this job`}
+                  </CustomText>
+                </>
+              ) : (
+                <></>
+              )} */}
               {userRole != 'Qbid Member' && (
                 <>
                   <CustomText
@@ -451,7 +467,7 @@ const JobDetails = props => {
                 </>
               )}
 
-              {userRole == 'Qbid Member' && data1?.type !='specific' ? (
+              {userRole == 'Qbid Member' && data1?.type != 'specific' ? (
                 <>
                   <CustomText
                     isBold
@@ -463,7 +479,11 @@ const JobDetails = props => {
                     Applied Negotiators
                   </CustomText>
                   <FlatList
-                    data={data?.bids?.some(item=> item?.status == 'accept') ? [data?.bids?.find(item=> item?.status == 'accept')] : data?.bids}
+                    data={
+                      data?.bids?.some(item => item?.status == 'accept')
+                        ? [data?.bids?.find(item => item?.status == 'accept')]
+                        : data?.bids
+                    }
                     ListEmptyComponent={() => {
                       return (
                         <NoData
@@ -481,16 +501,16 @@ const JobDetails = props => {
                       paddingBottom: moderateScale(30, 0.6),
                     }}
                     renderItem={({item, index}) => {
-                    // console.log("🚀 ~ file: JobDetails.js:484 ~ JobDetails ~ item:", data1?.review)
-               
+                      // console.log("🚀 ~ file: JobDetails.js:484 ~ JobDetails ~ item:", data1?.review)
+
                       return (
                         <>
                           <BidderDetail
                             item={{
-                              image: item?.quote_info?.user_info?.photo ,
+                              image: item?.quote_info?.user_info?.photo,
                               name: item?.user_info?.first_name,
                               rating: item?.rating,
-                              review:data1?.review,
+                              review: data1?.review,
                               description: item?.coverletter,
                               status: item?.status,
                               id: item?.id,
@@ -568,7 +588,9 @@ const JobDetails = props => {
                     }}
                   />
                 </>
-              ) : (userRole != 'Qbid Member' && bidDone && data1?.type!='specific') ? (
+              ) : userRole != 'Qbid Member' &&
+                bidDone &&
+                data1?.type != 'specific' ? (
                 <>
                   <CustomText
                     isBold
@@ -593,44 +615,45 @@ const JobDetails = props => {
                   />
                 </>
               ) : (
-                (data1?.type != 'specific') &&  
-               ( <>
-                  <MarkCheckWithText
-                    checked={checked}
-                    setChecked={setChecked}
-                    textPrimary={'I want to boost '}
-                    textSecondary={'my Bid'}
-                    textStyleSecondary={{
-                      color:
+                data1?.type != 'specific' && (
+                  <>
+                    <MarkCheckWithText
+                      checked={checked}
+                      setChecked={setChecked}
+                      textPrimary={'I want to boost '}
+                      textSecondary={'my Bid'}
+                      textStyleSecondary={{
+                        color:
+                          userRole == 'Qbid Member'
+                            ? Color.blue
+                            : userRole == 'Qbid Negotiator'
+                            ? Color.themeColor
+                            : Color.black,
+                      }}
+                    />
+
+                    <CustomButton
+                      text={'Bid Now'}
+                      textColor={Color.white}
+                      width={windowWidth * 0.92}
+                      height={windowHeight * 0.07}
+                      marginTop={moderateScale(20, 0.3)}
+                      onPress={() => {
+                        // setBidDone(true);
+                        toggleModal();
+                      }}
+                      bgColor={
                         userRole == 'Qbid Member'
                           ? Color.blue
                           : userRole == 'Qbid Negotiator'
                           ? Color.themeColor
-                          : Color.black,
-                    }}
-                  />
-
-                  <CustomButton
-                    text={'Bid Now'}
-                    textColor={Color.white}
-                    width={windowWidth * 0.92}
-                    height={windowHeight * 0.07}
-                    marginTop={moderateScale(20, 0.3)}
-                    onPress={() => {
-                      // setBidDone(true);
-                      toggleModal();
-                    }}
-                    bgColor={
-                      userRole == 'Qbid Member'
-                        ? Color.blue
-                        : userRole == 'Qbid Negotiator'
-                        ? Color.themeColor
-                        : Color.black
-                    }
-                    borderRadius={moderateScale(30, 0.3)}
-                    alignSelf={'flex-start'}
-                  />
-                </>)
+                          : Color.black
+                      }
+                      borderRadius={moderateScale(30, 0.3)}
+                      alignSelf={'flex-start'}
+                    />
+                  </>
+                )
               )}
             </>
           )}

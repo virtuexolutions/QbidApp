@@ -40,6 +40,7 @@ import {SliderBox} from 'react-native-image-slider-box';
 
 const CompleteJobes = props => {
   const data1 = props?.route?.params?.item;
+  console.log("🚀 ~ file: CompleteJobes.js:43 ~ CompleteJobes ~ data1:", data1)
 
   
   const user = useSelector(state => state.commonReducer.userData);
@@ -250,7 +251,7 @@ const CompleteJobes = props => {
                 Review
               </CustomText>
               <FlatList
-                data={dummydata}
+                data={data1?.review}
                 renderItem={({item, index}) => {
                   return (
                     <View style={styles.reviewcard}>
@@ -260,7 +261,7 @@ const CompleteJobes = props => {
                             height: '100%',
                             width: '100%',
                           }}
-                          source={item?.image}
+                          source={{uri:item?.user_info?.photo}}
                         />
                       </View>
                       <View
@@ -280,7 +281,7 @@ const CompleteJobes = props => {
                                 textTransform: 'uppercase',
                               },
                             ]}>
-                            {item?.name}
+                            {item?.user_info?.first_name}
                           </CustomText>
                           <Icon
                             name="star"
@@ -290,7 +291,7 @@ const CompleteJobes = props => {
                           />
                         </View>
                         <CustomText style={styles.reviewtext}>
-                          {item?.comment}
+                          {item?.text}
                         </CustomText>
                         <CustomText style={styles.moment}>
                           {moment().format('MMM Do, YYYY')}
