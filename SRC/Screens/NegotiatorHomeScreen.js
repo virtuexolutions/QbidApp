@@ -34,6 +34,7 @@ import NoData from '../Components/NoData';
 const NegotiatorHomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
+  console.log("🚀 ~ file: NegotiatorHomeScreen.js:37 ~ NegotiatorHomeScreen ~ token:", token)
   const userData = useSelector(state => state.commonReducer.userData);
   console.log("🚀 ~ file: NegotiatorHomeScreen.js:38 ~ NegotiatorHomeScreen ~ userData:", userData)
 
@@ -60,17 +61,18 @@ const NegotiatorHomeScreen = () => {
 
     if (response1 != undefined) {
      
+      
       ![null, undefined, ''].includes(response2?.data?.quote_info) &&
         setRecommended(response1?.data?.quote_info?.data);
     }
     if (response2 != undefined) {
-      console.log("🚀 ~ file: NegotiatorHomeScreen.js:78 ~ getProposal ~ response2:", response2?.data)
+      // console.log("🚀 ~ file: NegotiatorHomeScreen.js:78 ~ getProposal ~ response2:", response2?.data)
       ![null, undefined, ''].includes(response2?.data?.quote_info) &&
         setWorking(response2?.data?.quote_info?.data);
         setWorking(prev => [...prev, ...(response2?.data?.hiring_info?.data)])
     }
     if (response3 != undefined) {
-      console.log("🚀 ~ file: NegotiatorHomeScreen.js:81 ~ getProposal ~ response3:", response3?.data?.hiring_info?.data)
+      console.log("🚀 ~ file: NegotiatorHomeScreen.js:81 ~ getProposal ~ response3:", response3?.data)
       // ![null, undefined, ''].includes(response2?.data?.hiring_info) &&
         setJobPosting(response3?.data?.hiring_info?.data);
     }
