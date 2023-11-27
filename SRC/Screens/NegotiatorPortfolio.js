@@ -47,14 +47,21 @@ import navigationService from '../navigationService';
 const NegotiatorPortfolio = props => {
   const fromSearch = props?.route?.params?.fromSearch;
   const item = props?.route?.params?.item;
-  console.log("🚀 ~ file: NegotiatorPortfolio.js:50 ~ NegotiatorPortfolio ~ item:", item?.ratings)
+  console.log(
+    '🚀 ~ file: NegotiatorPortfolio.js:50 ~ NegotiatorPortfolio ~ item:',
+    item,
+  );
 
   const userdata = useSelector(state => state.commonReducer.userData);
+  // console.log(
+  //   '🚀 ~ file: NegotiatorPortfolio.js:50 ~ NegotiatorPortfolio ~ item:',
+  //   userdata,
+  // );
   // console.log("🚀 ~ file: NegotiatorPortfolio.js:52 ~ NegotiatorPortfolio ~ userdata:", userdata?.photo)
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
-  
+
   const navigation = useNavigation();
 
   const [image, setImage] = useState({});
@@ -64,17 +71,40 @@ const NegotiatorPortfolio = props => {
   const [imageToShow, setImageToShow] = useState([]);
   const [visible, setVisible] = useState(false);
   const [editProfile, setEditProfile] = useState(false);
-  const [availibility, setAvailibility] = useState(false);
+  const [rating, setrating] = useState(
+    fromSearch ? item?.average_rating : userdata?.average_rating,
+  );
+  const [availibility, setAvailibility] = useState(
+    fromSearch
+      ? item?.status == 'active'
+        ? true
+        : false
+      : userdata?.status == 'active'
+      ? true
+      : false,
+  );
   const dispatch = useDispatch();
 
   const [firstName, setFirstName] = useState(
-    fromSearch ? item?.first_name : userdata?.first_name,
+    fromSearch
+      ? item?.first_name
+        ? item?.first_name
+        : item?.user_info?.first_name
+      : userdata?.first_name,
   );
   const [lastName, setLastName] = useState(
-    fromSearch ? item?.last_name : userdata?.last_name,
+    fromSearch
+      ? item?.last_name
+        ? item?.last_name
+        : item?.user_info?.last_name
+      : userdata?.last_name,
   );
   const [companyName, setCompanyName] = useState(
-    fromSearch ? item?.company_name : userdata?.company_name,
+    fromSearch
+      ? item?.company_name
+        ? item?.company_name
+        : item?.user_info?.company_name
+      : userdata?.company_name,
   );
   const [jobStatus, setJobStatus] = useState(
     fromSearch ? item?.job_status : userdata?.status,
@@ -98,19 +128,44 @@ const NegotiatorPortfolio = props => {
       : '',
   );
   const [state, setState] = useState(
-    fromSearch ? item?.state ? item?.state  :'not availble' :
-    userdata?.state ? userdata?.state : '');
+    fromSearch
+      ? item?.state
+        ? item?.state
+        : 'not availble'
+      : userdata?.state
+      ? userdata?.state
+      : '',
+  );
   const [zipCode, setZipCode] = useState(
-    fromSearch ? item?.zip ? item?.zip : 'not availble' :
-    userdata?.zip ? userdata?.zip : '');
+    fromSearch
+      ? item?.zip
+        ? item?.zip
+        : 'not availble'
+      : userdata?.zip
+      ? userdata?.zip
+      : '',
+  );
   const [services, setServices] = useState(
-    fromSearch ? item?.expertise ? JSON.parse(item?.expertise) :[] :
-    userdata?.expertise ? JSON.parse(
-      userdata?.expertise) : [],
+    fromSearch
+      ? item?.expertise
+        ? JSON.parse(item?.expertise)
+        : item?.user_info?.expertise
+        ? JSON.parse(item?.user_info?.expertise)
+        : []
+      : userdata?.expertise
+      ? JSON.parse(userdata?.expertise)
+      : [],
   );
   const [language, setLanguage] = useState(
-    fromSearch ? item?.language ? JSON.parse(item?.language) :[] :
-    userdata?.language ? JSON.parse(userdata?.language) : [],
+    fromSearch
+      ? item?.language
+        ? JSON.parse(item?.language)
+        : item?.user_info?.language
+        ? JSON.parse(item?.user_info?.language)
+        : []
+      : userdata?.language
+      ? JSON.parse(userdata?.language)
+      : [],
   );
 
   const [isLoading, setIsLoading] = useState(false);
@@ -132,7 +187,6 @@ const NegotiatorPortfolio = props => {
       language: language,
     };
 
-
     for (let key in body) {
       if (body[key] == '') {
         return Platform.OS == 'android'
@@ -152,34 +206,62 @@ const NegotiatorPortfolio = props => {
     if (response?.data?.success) {
       //  console.log("🚀 ~ file: NegotiatorPortfolio.js:151 ~ updateProfile ~ response:", response?.data)
       setEditProfile(false);
-      dispatch(setUserData(response?.data?.user))
+      dispatch(setUserData(response?.data?.user));
     }
   };
 
   // const hireNow = async () =>{
-// const url =''
-// const body ={
-//   address: address,
-//       city: city,
-//       state: state,
-//       zip: zipCode,
-// }
+  // const url =''
+  // const body ={
+  //   address: address,
+  //       city: city,
+  //       state: state,
+  //       zip: zipCode,
+  // }
 
-// }
+  // }
 
   const reviews = async () => {
     const url = 'auth/review';
-    
+
     setIsLoading(true);
     const response = await Get('auth/review', token);
     // console.log("🚀 ~ file: NegotiatorPortfolio.js:157 ~ reviews ~ response:", response)
     setIsLoading(false);
-    
+
     if (response != undefined) {
       setReview(response?.data?.review);
     }
   };
 
+  const handleAvailiblity = async () => {
+    const url = `auth/user_status`;
+    const body = {
+      status: availibility == true ? 'inactive' : 'active',
+    };
+    console.log(
+      '🚀 ~ file: NegotiatorPortfolio.js:219 ~ handleAvailiblity ~ body:',
+      body,
+    );
+
+    setIsLoading(true);
+    const response = await Post(url, body, apiHeader(token));
+    setIsLoading(false);
+
+    if (response != undefined) {
+      console.log(
+        '🚀 ~ file: NegotiatorPortfolio.js:192 ~ changeProfileImage ~ response:',
+        response?.data,
+      );
+      dispatch(
+        setUserData({
+          ...response?.data?.user,
+          average_rating: response?.data?.average_rating,
+        }),
+      );
+      setAvailibility(!availibility);
+    }
+  };
 
   const changeProfileImage = async (type, body, key) => {
     const url = `auth/negotiator/${type}`;
@@ -189,10 +271,10 @@ const NegotiatorPortfolio = props => {
     setIsLoading(true);
     const response = await Post(url, formData, apiHeader(token));
     setIsLoading(false);
-  
+
     if (response != undefined) {
-    //  console.log("🚀 ~ file: NegotiatorPortfolio.js:192 ~ changeProfileImage ~ response:", response?.data)
-     
+      //  console.log("🚀 ~ file: NegotiatorPortfolio.js:192 ~ changeProfileImage ~ response:", response?.data)
+
       dispatch(setUserData(response?.data?.user));
       Platform.OS == 'android'
         ? ToastAndroid.show(`${type} updated successfully`, ToastAndroid.SHORT)
@@ -207,13 +289,13 @@ const NegotiatorPortfolio = props => {
   useEffect(() => {
     if (imageType == 'profile') {
       if (Object.keys(image).length > 0) {
-        changeProfileImage('photo_update', image,'photo');
-        setImage({})
+        changeProfileImage('photo_update', image, 'photo');
+        setImage({});
       }
     } else {
       if (Object.keys(coverPhoto).length > 0) {
         changeProfileImage('coverphoto_update', coverPhoto, 'coverphoto');
-        setCoverPhoto({})
+        setCoverPhoto({});
       }
     }
   }, [image, coverPhoto]);
@@ -296,9 +378,13 @@ const NegotiatorPortfolio = props => {
               <CustomImage
                 onPress={() => {
                   setImageToShow([
-                    userdata?.coverphoto
-                      ? {uri: userdata?.coverphoto}
-                      : require('../Assets/Images/coverPhoto.jpg'),
+                    fromSearch
+                      ? {
+                          uri: item?.coverphoto
+                            ? item?.coverphoto
+                            : item?.user_info?.coverphoto,
+                        }
+                      : userdata?.coverphoto,
                   ]);
                   setVisible(true);
                 }}
@@ -307,7 +393,11 @@ const NegotiatorPortfolio = props => {
                     ? Object.keys(coverPhoto).length > 0
                       ? {uri: coverPhoto?.uri}
                       : {uri: userdata?.coverphoto}
-                    : {uri: item?.coverphoto}
+                    : {
+                        uri: item?.coverphoto
+                          ? item?.coverphoto
+                          : item?.user_info?.coverphoto,
+                      }
                 }
                 style={{
                   width: '100%',
@@ -341,24 +431,19 @@ const NegotiatorPortfolio = props => {
             <View
               style={{
                 marginTop: -windowWidth * 0.15,
+                // backgroundColor:'red',
                 marginLeft: moderateScale(15, 0.3),
                 width: windowWidth * 0.25,
               }}>
               <CustomImage
                 onPress={() => {
-                  setImageToShow([
-                   
-                       {uri: userdata?.photo}
-                  ]);
+                  setImageToShow([{uri: userdata?.photo}]);
                   setVisible(true);
                 }}
                 source={
-                  // userRole != 'Qbid Member'
-                  //   ? Object.keys(image).length > 0
-                  //     ? {uri: image?.uri}
-                  //     : {uri: userdata?.photo}
-                  //   : {uri: item?.photo}
-                  {uri: userdata?.photo}
+                  fromSearch
+                    ? {uri: item?.photo ? item?.photo : item?.user_info?.photo}
+                    :{uri: userdata?.photo}
                 }
                 style={styles.image}
               />
@@ -438,9 +523,10 @@ const NegotiatorPortfolio = props => {
               </CustomText>
               <RatingComponent
                 disable={true}
-                rating={ 
-                  fromSearch ? Math.floor(item?.average_rating): 
-                  Math.floor(userdata?.average_rating)
+                rating={
+                  fromSearch
+                    ? Math.floor(item?.average_rating)
+                    : Math.floor(userdata?.average_rating)
                 }
                 starColor={'#ffa534'}
                 starStyle={{
@@ -465,13 +551,21 @@ const NegotiatorPortfolio = props => {
                 editEnable
                 edit={availibility}
                 setEdit={setAvailibility}
+                handleOnPress={handleAvailiblity}
               />
               <DetailContainer
                 imageName={'briefcase'}
                 type={Entypo}
                 subtitle={
-                  fromSearch ?item?.numb_jobs_done ?  item?.numb_jobs_done :'' : 
-                  userdata?.numb_jobs_done ? userdata?.numb_jobs_done : 0
+                  fromSearch
+                    ? item?.numb_jobs_done
+                      ? item?.numb_jobs_done
+                      : item?.user_info?.numb_jobs_done
+                      ? item?.user_info?.numb_jobs_done
+                      : 0
+                    : userdata?.numb_jobs_done
+                    ? userdata?.numb_jobs_done
+                    : 0
                 }
                 title={'Jobs'}
               />
@@ -479,8 +573,12 @@ const NegotiatorPortfolio = props => {
                 imageName={'dollar'}
                 type={FontAwesome}
                 subtitle={
-                  fromSearch ? item?.total_earning :
-                  userdata?.total_earning}
+                  fromSearch
+                    ? item?.total_earning
+                      ? item?.total_earning
+                      : item?.user_info?.total_earning
+                    : userdata?.total_earning
+                }
                 title={'Total earning'}
               />
             </View>
@@ -509,39 +607,50 @@ const NegotiatorPortfolio = props => {
                 width: '100%',
                 paddingRight: moderateScale(5, 0.6),
                 flexWrap: 'wrap',
-              }}>{
-                !fromSearch  &&  <>
-                <Detailcards
-                data={email}
-                iconName={'envelope'}
-                title={'Email'}
-                iconType={FontAwesome}
-                textColor={Color.black}
-                containerStyle={{
-                  backgroundColor: '#EEEEEE',
-                }}
-                marginTop={moderateScale(10, 0.3)}
-              />
+              }}>
+              {!fromSearch && (
+                <>
+                  <Detailcards
+                    data={email}
+                    iconName={'envelope'}
+                    title={'Email'}
+                    iconType={FontAwesome}
+                    textColor={Color.black}
+                    containerStyle={{
+                      backgroundColor: '#EEEEEE',
+                    }}
+                    marginTop={moderateScale(10, 0.3)}
+                  />
+                  <Detailcards
+                    data={
+                      fromSearch
+                        ? item?.phone
+                          ? item?.phone
+                          : 'not availble'
+                        : userdata?.phone
+                    }
+                    iconName={'phone'}
+                    title={'Contact'}
+                    iconType={FontAwesome}
+                    marginTop={moderateScale(10, 0.3)}
+                    textColor={Color.black}
+                    containerStyle={{
+                      backgroundColor: '#EEEEEE',
+                    }}
+                  />
+                </>
+              )}
+
               <Detailcards
                 data={
-                  fromSearch ? item?.phone ? item?.phone  : 'not availble' :
-                  userdata?.phone}
-                iconName={'phone'}
-                title={'Contact'}
-                iconType={FontAwesome}
-                marginTop={moderateScale(10, 0.3)}
-                textColor={Color.black}
-                containerStyle={{
-                  backgroundColor: '#EEEEEE',
-                }}
-              />
-               </>
-              }
-              
-              <Detailcards
-                data={
-                  fromSearch ? item?.company_name ?  item?.company_name  : 'not availble':
-                  userdata?.company_name}
+                  fromSearch
+                    ? item?.company_name
+                      ? item?.company_name
+                      : item?.user_info?.company_name
+                      ? item?.user_info?.company_name
+                      : 'not availble'
+                    : userdata?.company_name
+                }
                 iconName={'building'}
                 title={'Company name'}
                 iconType={FontAwesome}
@@ -553,14 +662,13 @@ const NegotiatorPortfolio = props => {
               />
               <Detailcards
                 data={
-                  fromSearch ? item?.designation ? item?.designation : 'not available':
-                  userdata?.rating <= 3
-                    ? 'Bronze'
-                    : userdata?.rating <= 3.5
-                    ? 'Silver'
-                    : userdata?.rating <= 4
+                  rating > 4
+                    ? 'Platinum'
+                    : rating > 3.5
                     ? 'Gold'
-                    : 'Platinum'
+                    : rating > 3
+                    ? 'Silver'
+                    : 'Bronze'
                 }
                 iconName={'trophy'}
                 title={'Qbid Level'}
@@ -572,116 +680,98 @@ const NegotiatorPortfolio = props => {
                 }}
               />
             </View>
-            <CustomText
-              isBold
-              style={styles.heading1}>
+            <CustomText isBold style={styles.heading1}>
               Expertise
             </CustomText>
-            {
-            services?.map((x, index) => {
-                return (
+            {services?.map((x, index) => {
+              return (
+                <View style={styles.language}>
                   <View
-                    style={styles.language}>
-                    <View
-                      style={{
-                        width: moderateScale(7, 0.6),
-                        height: moderateScale(7, 0.6),
-                        borderRadius: moderateScale(3.5, 0.6),
-                        backgroundColor:
-                          userRole == 'Qbid Member'
-                            ? Color.blue
-                            : userRole == 'Qbid Negotiator'
-                            ? Color.themeColor
-                            : Color.black,
-                      }}
-                    />
-                    <CustomText
-                      numberOfLines={2}
-                      style={{
-                        fontSize: moderateScale(11, 0.6),
-                        color: Color.black,
-                        marginLeft: moderateScale(3, 0.3),
-                      }}>
-                      {x}
-                    </CustomText>
-                  </View>
-                );
-              })}
-            <CustomText
-              isBold
-              style={styles.heading1}>
+                    style={{
+                      width: moderateScale(7, 0.6),
+                      height: moderateScale(7, 0.6),
+                      borderRadius: moderateScale(3.5, 0.6),
+                      backgroundColor:
+                        userRole == 'Qbid Member'
+                          ? Color.blue
+                          : userRole == 'Qbid Negotiator'
+                          ? Color.themeColor
+                          : Color.black,
+                    }}
+                  />
+                  <CustomText
+                    numberOfLines={2}
+                    style={{
+                      fontSize: moderateScale(11, 0.6),
+                      color: Color.black,
+                      marginLeft: moderateScale(3, 0.3),
+                    }}>
+                    {x}
+                  </CustomText>
+                </View>
+              );
+            })}
+            <CustomText isBold style={styles.heading1}>
               Languages
             </CustomText>
-            {
-            language?.map((x, index) => {
-                return (
+            {language?.map((x, index) => {
+              return (
+                <View style={styles.language}>
                   <View
-                    style={styles.language}>
-                    <View
-                      style={{
-                        width: moderateScale(7, 0.6),
-                        height: moderateScale(7, 0.6),
-                        borderRadius: moderateScale(3.5, 0.6),
-                        backgroundColor:
-                          userRole == 'Qbid Member'
-                            ? Color.blue
-                            : userRole == 'Qbid Negotiator'
-                            ? Color.themeColor
-                            : Color.black,
-                      }}
-                    />
-                    <CustomText
-                      numberOfLines={2}
-                      style={{
-                        fontSize: moderateScale(11, 0.6),
-                        color: Color.black,
-                        marginLeft: moderateScale(3, 0.3),
-                      }}>
-                      {x}
-                    </CustomText>
-                  </View>
-                );
-              })}
+                    style={{
+                      width: moderateScale(7, 0.6),
+                      height: moderateScale(7, 0.6),
+                      borderRadius: moderateScale(3.5, 0.6),
+                      backgroundColor:
+                        userRole == 'Qbid Member'
+                          ? Color.blue
+                          : userRole == 'Qbid Negotiator'
+                          ? Color.themeColor
+                          : Color.black,
+                    }}
+                  />
+                  <CustomText
+                    numberOfLines={2}
+                    style={{
+                      fontSize: moderateScale(11, 0.6),
+                      color: Color.black,
+                      marginLeft: moderateScale(3, 0.3),
+                    }}>
+                    {x}
+                  </CustomText>
+                </View>
+              );
+            })}
             <FlatList
-            ListHeaderComponent={()=> { 
-              return(
-              <CustomText
-              isBold
-              style={styles.heading1}>
-              reviews
-            </CustomText>
-              )
-            }}
+              ListHeaderComponent={() => {
+                return (
+                  <CustomText isBold style={styles.heading1}>
+                    reviews
+                  </CustomText>
+                );
+              }}
               data={item?.ratings ? item?.ratings : userdata?.negotiator_review}
               renderItem={({item, index}) => {
                 return (
-                  <View
-                    style={styles.view}>
-                    <View
-                      style={styles.mainview}>
+                  <View style={styles.view}>
+                    <View style={styles.mainview}>
                       <CustomImage
                         style={{
                           height: '100%',
                           width: '100%',
                         }}
-                        source={{uri :item?.user_info?.photo}}
+                        source={{uri: item?.user_info?.photo}}
                       />
                     </View>
                     <View
                       style={{
                         paddingHorizontal: moderateScale(10, 0.3),
                       }}>
-                      <CustomText
-                        isBold
-                        style={styles.text}>
+                      <CustomText isBold style={styles.text}>
                         {item?.user_info?.first_name}
                       </CustomText>
-                      <CustomText
-                        style={styles.text2}>
-                        {item?.text}
-                      </CustomText>
-                      <CustomText
-                        style={styles.text2}>
+                      <CustomText style={styles.text2}>{item?.text}</CustomText>
+                      <CustomText style={styles.text2}>
                         {moment().format('MMM Do, YYYY')}
                       </CustomText>
                     </View>
@@ -689,7 +779,6 @@ const NegotiatorPortfolio = props => {
                 );
               }}
             />
-      
           </View>
           {userRole == 'Qbid Member' && (
             <CustomButton
@@ -706,7 +795,13 @@ const NegotiatorPortfolio = props => {
                   : Color.black
               }
               borderRadius={moderateScale(30, 0.3)}
-              onPress={()=>{navigationService.navigate('CreateNew',{hire:true, id:item?.id})}}
+              onPress={() => {
+                navigationService.navigate('CreateNew', {
+                  hire: true,
+                  id: item?.id,
+                });
+              }}
+              disabled={item?.status == 'active' ? false : true}
             />
           )}
         </ScrollView>
@@ -1096,42 +1191,41 @@ const styles = ScaledSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  view:{
+  view: {
     flexDirection: 'row',
     marginVertical: moderateScale(10, 0.3),
     paddingHorizontal: moderateScale(10, 0.3),
     // backgroundColor:'red'
   },
-  mainview:{
+  mainview: {
     height: windowHeight * 0.06,
     width: windowHeight * 0.06,
     borderRadius: (windowHeight * 0.06) / 2,
     overflow: 'hidden',
   },
-  text:{
+  text: {
     color: Color.black,
     fontSize: moderateScale(13, 0.6),
     textTransform: 'uppercase',
   },
-  text2:{
+  text2: {
     color: Color.black,
     fontSize: moderateScale(12, 0.6),
     width: windowWidth * 0.75,
   },
-  heading1:{
+  heading1: {
     color: Color.black,
     fontSize: moderateScale(17, 0.6),
     textTransform: 'uppercase',
     marginTop: moderateScale(10, 0.6),
   },
-  language:{
+  language: {
     flexDirection: 'row',
     width: '100%',
     alignItems: 'center',
     marginTop: moderateScale(7, 0.3),
     paddingLeft: moderateScale(15, 0.6),
   },
-
 });
 
 const DetailContainer = ({
@@ -1142,6 +1236,7 @@ const DetailContainer = ({
   editEnable,
   edit,
   setEdit,
+  handleOnPress,
 }) => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
 
@@ -1154,9 +1249,7 @@ const DetailContainer = ({
       {editEnable && userRole != 'Qbid Member' && (
         <TouchableOpacity
           activeOpacity={0.8}
-          onPress={() => {
-            setEdit(!edit);
-          }}
+          onPress={handleOnPress}
           style={[
             styles.edit,
             {
@@ -1173,11 +1266,9 @@ const DetailContainer = ({
             name={edit ? 'toggle-on' : 'toggle-off'}
             as={FontAwesome}
             style={styles.icon}
-            color={Color.black}
+            color={Color.themeColor1}
             size={moderateScale(10, 0.3)}
-            onPress={() => {
-              setEdit(!edit);
-            }}
+            onPress={handleOnPress}
           />
         </TouchableOpacity>
       )}

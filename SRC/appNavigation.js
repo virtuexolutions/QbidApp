@@ -74,6 +74,7 @@ const AppNavigator = () => {
           <RootNav.Screen name="MileRange" component={MileRange} />
           <RootNav.Screen name="Walkthrough" component={Walkthrough} />
           <RootNav.Screen name="DrawerScreen" component={DrawerScreen} />
+          <RootNav.Screen name="CreateNew" component={CreateNew} />
           <RootNav.Screen name="LoginScreen" component={LoginScreen} />
           <RootNav.Screen name="TabNavigation" component={TabNavigation} />
           <RootNav.Screen name="QbidStatus" component={QbidStatus} />

@@ -40,7 +40,9 @@ const CreateNew = props => {
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
   const [vendorQoutedPrice, setVendorQoutedPrice] = useState(0);
+  console.log("🚀 ~ file: CreateNew.js:43 ~ CreateNew ~ vendorQoutedPrice:", vendorQoutedPrice)
   const [askingPrice, setAskingPrice] = useState(0);
+  console.log("🚀 ~ file: CreateNew.js:44 ~ CreateNew ~ askingPrice:", askingPrice.length)
   const [offeringPercent, setOfferingPercent] = useState(0);
   const [selectedService, setSelectedService] = useState('');
   const [description, setDescription] = useState('');
@@ -204,7 +206,7 @@ const CreateNew = props => {
   };
 
   useEffect(() => {
-    if (askingPrice > vendorQoutedPrice) {
+    if (askingPrice.length == vendorQoutedPrice.length && askingPrice > vendorQoutedPrice) {
       alert('asking price can not be higher than vendor quoted price ');
       setAskingPrice(0);
     }
@@ -331,6 +333,7 @@ const CreateNew = props => {
             color={Color.themeColor}
             placeholderColor={Color.themeLightGray}
             borderRadius={moderateScale(25, 0.3)}
+            keyboardType={'numeric'}
           
           />
 

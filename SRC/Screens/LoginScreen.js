@@ -52,7 +52,9 @@ const LoginScreen = () => {
   // );
   const [baseImage, setBaseImage] = useState('');
 
-  const servicesArray = ['Qbid Negotiator', 'Qbid Member', 'Business Qbidder'];
+  const servicesArray = ['Qbid Negotiator', 'Qbid Member',
+  //  'Business Qbidder'
+  ];
 
   const imageRef = useRef();
   const [scale, setScale] = useState(1);
@@ -136,17 +138,24 @@ const LoginScreen = () => {
     const response = await Post(url, body, apiHeader());
     setIsLoading(false);
     if (response != undefined) {
-      console.log("🚀 ~ file: LoginScreen.js:139 ~ Login ~ response:", response?.data)
+      console.log(
+        '🚀 ~ file: LoginScreen.js:139 ~ Login ~ response:',
+        response?.data,
+      );
       if (selectedRole == response?.data?.user_info?.role) {
-        dispatch(setUserData({...response?.data?.user_info, average_rating:response?.data?.average_rating}));
+        dispatch(
+          setUserData({
+            ...response?.data?.user_info,
+            average_rating: response?.data?.average_rating,
+          }),
+        );
         dispatch(setSelectedRole(response?.data?.user_info?.role));
-        dispatch(setUserLogin(response?.data?.token));
+        // dispatch(setUserLogin(response?.data?.token));
         dispatch(setUserToken({token: response?.data?.token}));
-      }else{
+      } else {
         return Platform.OS == 'android'
-        ? ToastAndroid.show('unauthenticated', ToastAndroid.SHORT)
-        : Alert.alert('unauthenticated');
-
+          ? ToastAndroid.show('unauthenticated', ToastAndroid.SHORT)
+          : Alert.alert('unauthenticated');
       }
       // console.log('VERIFY=========>>>>>>', response?.data?.user_info);
     }

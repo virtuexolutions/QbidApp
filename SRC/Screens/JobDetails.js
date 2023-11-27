@@ -363,7 +363,7 @@ const JobDetails = props => {
                   marginTop={moderateScale(30, 0.3)}
                 />
               </View>
-              {/* {userRole != 'Qbid Member' ? (
+              {userRole != 'Qbid Member' && (
                 <>
                   <CustomText
                     isBold
@@ -371,13 +371,38 @@ const JobDetails = props => {
                       color: Color.white,
                       fontSize: moderateScale(17, 0.6),
                       marginVertical: moderateScale(10, 0.3),
+
                     }}>
-                   {`You will earn ${((data?.quoted_price-data?.asking_price)*data?.offering_percentage)/100} from this job`}
+                    {`You will earn`}
                   </CustomText>
+                  <View
+                    style={{
+                      width: windowWidth * 0.2,
+                      height: windowHeight * 0.08,
+                      paddingHorizontal:moderateScale(10,.6),
+                      backgroundColor: 'white',
+                      justifyContent:'center',
+                      alignItems:'center',
+                      borderRadius: moderateScale(10, 0.6),
+                    }}>
+                    <View>
+                    <CustomText
+                      isBold
+                      style={{
+                        color: Color.black,
+                        fontSize: moderateScale(17, 0.6),
+                       
+                      }}>
+                      {data1?.quote_info?.negotiator_amount ? `${numeral(
+                        data1?.quote_info?.negotiator_amount,
+                      ).format('$0,0a')}` : `${numeral(
+                        ((data?.quoted_price - data?.asking_price)*data?.offering_percentage)/100
+                      ).format('$0,0a')}` }
+                    </CustomText>
+                    </View>
+                  </View>
                 </>
-              ) : (
-                <></>
-              )} */}
+              ) }
               {userRole != 'Qbid Member' && (
                 <>
                   <CustomText
@@ -474,7 +499,8 @@ const JobDetails = props => {
                     style={{
                       color: Color.white,
                       fontSize: moderateScale(17, 0.6),
-                      marginVertical: moderateScale(20, 0.3),
+                      marginBottom: moderateScale(10, 0.3),
+                      marginTop: moderateScale(20, 0.3),
                     }}>
                     Applied Negotiators
                   </CustomText>
@@ -501,13 +527,13 @@ const JobDetails = props => {
                       paddingBottom: moderateScale(30, 0.6),
                     }}
                     renderItem={({item, index}) => {
-                      // console.log("🚀 ~ file: JobDetails.js:484 ~ JobDetails ~ item:", data1?.review)
+                      // console.log("🚀 ~ file: JobDetails.js:484 ~ JobDetails ~ item:", data?.quote_info?.user_info)
 
                       return (
                         <>
                           <BidderDetail
                             item={{
-                              image: item?.quote_info?.user_info?.photo,
+                              image: item?.user_info?.photo,
                               name: item?.user_info?.first_name,
                               rating: item?.rating,
                               review: data1?.review,

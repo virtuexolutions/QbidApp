@@ -14,6 +14,7 @@ const CustomStatusModal = ({
   text,
   data,
 }) => {
+  console.log("🚀 ~ file: CustomStatusModal.js:17 ~ data:", data)
   return (
     <Modal
       isVisible={isModalVisible}
@@ -29,11 +30,13 @@ const CustomStatusModal = ({
         }
       }>
       <View
-        style={{
-          // paddingVertical:moderateScale(20,0.6),
-          // maxHeight : windowHeight * 0.5,
-          // paddingVertical: moderateScale(10, 0.3),
-        }}>
+        style={
+          {
+            // paddingVertical:moderateScale(20,0.6),
+            // maxHeight : windowHeight * 0.5,
+            // paddingVertical: moderateScale(10, 0.3),
+          }
+        }>
         <ScrollView
           style={styles.statusModal}
           contentContainerStyle={
@@ -64,8 +67,13 @@ const CustomStatusModal = ({
                 <CustomText
                   key={index}
                   onPress={() => {
-                    setData(item?.name);
-                    setModalVisible(false);
+                    if (item?.name == 'All') {
+                      setData('');
+                      setModalVisible(false);
+                    } else {
+                      setData(item?.name);
+                      setModalVisible(false);
+                    }
                   }}
                   style={{
                     borderBottomWidth:
@@ -78,9 +86,9 @@ const CustomStatusModal = ({
                     paddingBottom: moderateScale(5, 0.3),
                     // backgroundColor: 'transparent',
                     // backgroundColor: item?.name == data  ? Color.blue : 'white',
-                    color:   item?.name == data?  Color.blue :'black',
-                  
-                  }}  isBold={ item?.name == data ? true :false }>
+                    color: (item?.name == data || (item?.name=='All'&& data=='')) ? Color.blue : 'black',
+                  }}
+                  isBold={(item?.name == data || (item?.name=='All'&& data=='')) ? true : false}>
                   {item?.name}
                 </CustomText>
               );

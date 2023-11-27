@@ -15,10 +15,20 @@ import {TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 const VendorCards = ({item}) => {
-  // console.log('🚀 ~ file: VendorCards.js:18 ~ VendorCards ~ item:', item);
+  console.log(
+    '🚀 ~ file: VendorCards.js:18 ~ VendorCards ~ item:',
+    item?.user_info,
+  );
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
   const token = useSelector(state => state.authReducer.token);
+  const [expertise, setexpertise] = useState(
+    item?.expertise
+      ? JSON.parse(item?.expertise)
+      : item?.user_info?.expertise
+      ? JSON.parse(item?.user_info?.expertise)
+      : [],
+  );
 
   return (
     <TouchableOpacity
@@ -31,13 +41,13 @@ const VendorCards = ({item}) => {
       style={styles.mainContainer}>
       <View style={styles.imageConatiner}>
         <CustomImage
-        onPress={() =>
-          navigation.navigate('NegotiatorPortfolio', {
-            fromSearch: true,
-            item: item,
-          })
-        }
-          source={{uri: item?.photo}}
+          onPress={() =>
+            navigation.navigate('NegotiatorPortfolio', {
+              fromSearch: true,
+              item:item,
+            })
+          }
+          source={{uri: item?.photo ? item?.photo : item?.user_info?.photo}}
           style={{
             height: '100%',
             width: '100%',
@@ -45,54 +55,52 @@ const VendorCards = ({item}) => {
           }}
         />
       </View>
-      <View style={{
-        flexDirection:'row',
-        alignItems:'center',
-        justifyContent:'center',
-        paddingTop:moderateScale(5,0.3)
-      }}>
-      <CustomText style={styles.title} 
-      numberOfLines={1}
-      isBold>
-        {item?.first_name}
-      </CustomText>
-      <View style={styles.view1}>
-        <Icon
-          name="star"
-          as={AntDesign}
-          size={13}
-          color={
-            '#CD7F32'
-            // item?.average_rating <= 3
-            //   ? '#CD7F32'
-            //   : item?.average_rating <= 3.5
-            //   ? '#C0C0C0'
-            //   : item?.average_rating <= 4
-            //   ? '#FF9529'
-            //   : '#e5e4e2'
-          }
-        />
-        <CustomText
-          style={{
-            fontSize: moderateScale(13),
-          }}>
-          {`${item?.average_rating ? Math.round(item?.average_rating,2) : 0}/5`}
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          paddingTop: moderateScale(5, 0.3),
+        }}>
+        <CustomText style={styles.title} numberOfLines={1} isBold>
+          {item?.first_name}
         </CustomText>
-      </View>
+        <View style={styles.view1}>
+          <Icon
+            name="star"
+            as={AntDesign}
+            size={13}
+            color={
+              '#CD7F32'
+              // item?.average_rating <= 3
+              //   ? '#CD7F32'
+              //   : item?.average_rating <= 3.5
+              //   ? '#C0C0C0'
+              //   : item?.average_rating <= 4
+              //   ? '#FF9529'
+              //   : '#e5e4e2'
+            }
+          />
+          <CustomText
+            style={{
+              fontSize: moderateScale(13),
+            }}>
+            {`${
+              item?.average_rating ? Math.round(item?.average_rating, 2) : 0
+            }/5`}
+          </CustomText>
+        </View>
       </View>
       <CustomText style={styles.decription} isBold>
         {item?.company_name}
       </CustomText>
-      {
-       item?.expertise && JSON.parse(item?.expertise).slice(0,2).map((item ,index) => {
-          return(
-
-      <CustomText style={styles.decription} isBold>
-        {item}
-      </CustomText>
-          )
-        })
-      }
+      {expertise.slice(0, 2).map((item, index) => {
+        return (
+          <CustomText style={styles.decription} isBold>
+            {item}
+          </CustomText>
+        );
+      })}
     </TouchableOpacity>
   );
 };
@@ -117,10 +125,9 @@ const styles = StyleSheet.create({
   },
   title: {
     // backgroundColor:'red',
-    width:windowWidth*0.22,
+    width: windowWidth * 0.22,
     fontSize: 14,
-    paddingHorizontal:moderateScale(5,0.3)
-  
+    paddingHorizontal: moderateScale(5, 0.3),
   },
   decription: {
     fontSize: 12,

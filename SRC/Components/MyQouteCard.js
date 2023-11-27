@@ -157,7 +157,7 @@ const MyQouteCard = ({item}) => {
                 fontSize: moderateScale(12, 0.3),
                 color: Color.blue,
               }}>
-              {numeral(item?.asking_price).format('$0,0a')}
+              {numeral(item?.quoted_price).format('$0,0a')}
             </CustomText>
           }
         </CustomText>
@@ -171,7 +171,7 @@ const MyQouteCard = ({item}) => {
               }}>
               {item?.status == 'pending'
                 ? 'not yet'
-                : numeral(item?.quoted_price).format('$0,0a')}
+                : numeral(item?.asking_price).format('$0,0a')}
             </CustomText>
           }
         </CustomText>
@@ -218,7 +218,7 @@ const MyQouteCard = ({item}) => {
           />
         )}
       </View>
-      <ReviewModal setRef={setRbRef} item={item} rbRef={rbRef} />
+      <ReviewModal setRef={setRbRef} item={item} rbRef={rbRef} setbuttonName={setbuttonName} />
     </TouchableOpacity>
   );
 };

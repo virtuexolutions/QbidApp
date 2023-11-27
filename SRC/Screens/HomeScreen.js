@@ -36,13 +36,13 @@ const HomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
-  // console.log("🚀 ~ file: HomeScreen.js:39 ~ HomeScreen ~ token:", token)
+  console.log("🚀 ~ file: HomeScreen.js:39 ~ HomeScreen ~ token:", token)
   const [searchData, setSearchData] = useState('');
   const [showMultiImageModal, setShowMultiImageModal] = useState(false);
   const [multiImages, setMultiImages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const isFocused = useIsFocused();
-  const [selectedStatus, setSelectedStatus] = useState('');
+  // const [selectedStatus, setSelectedStatus] = useState('');
   const [visible, setVisible] = useState(false);
   const [myQuotes, setMyQuotes] = useState([]);
   const [proposals, setProposals] = useState([]);
@@ -64,7 +64,6 @@ const HomeScreen = () => {
     if (response1 != undefined) {
     
       setNegotiator(response1?.data?.negotitator_info)
-      // setProposals(response1?.data?.bid_help_info?.data);
     }
     if (response2 != undefined) {
   
@@ -72,26 +71,26 @@ const HomeScreen = () => {
     }
   };
 
-  const filterQuotes = async () => {
-    const url = `auth/member/search_type/${selectedStatus}`;
-    setIsLoading(true);
-    const response = await Get(url, token);
-    setIsLoading(false);
-    if (response != undefined) {
+  // const filterQuotes = async () => {
+  //   const url = `auth/member/search_type/${selectedStatus}`;
+  //   setIsLoading(true);
+  //   const response = await Get(url, token);
+  //   setIsLoading(false);
+  //   if (response != undefined) {
     
-      setMyQuotes(response?.data?.quote_info);
-    }
-  };
+  //     setMyQuotes(response?.data?.quote_info);
+  //   }
+  // };
 
   useEffect(() => {
     getAllData();
   }, [isFocused]);
 
-  useEffect(() => {
-    if (selectedStatus != '') {
-      filterQuotes();
-    }
-  }, [selectedStatus]);
+  // useEffect(() => {
+  //   if (selectedStatus != '') {
+  //     filterQuotes();
+  //   }
+  // }, [selectedStatus]);
 
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', () => {
@@ -172,7 +171,7 @@ const HomeScreen = () => {
           </View>
           <View style={styles.row}>
             <CustomText isBold style={styles.header}>
-              negotiator
+              Popular negotiator
             </CustomText>
             <CustomText
               onPress={() => {

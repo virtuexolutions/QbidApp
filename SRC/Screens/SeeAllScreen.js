@@ -34,6 +34,7 @@ const SeeAllScreen = props => {
   const [searchData, setSearchData] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState('');
+  console.log("🚀 ~ file: SeeAllScreen.js:37 ~ SeeAllScreen ~ selectedStatus:", selectedStatus)
   const [isLoading, setIsLoading] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
   const [newArray, setNewArray] = useState([]);
@@ -79,15 +80,16 @@ const SeeAllScreen = props => {
   };
 
   const filterQuotes = async () => {
-    const url = `auth/member/search_type/${selectedStatus}?title=${searchData}`;
+    console.log('in filter quotes=======>>>>')
+    const url = `auth/member/search_type?status=${selectedStatus}&title=${searchData}`;
     setIsLoading(true);
     const response = await Get(url, token);
     setIsLoading(false);
     if (response != undefined) {
-      //  console.log(
-      //   '🚀 ~ file: HomeScreen.js:97 ~ filterQuotes ~ response:',
-      //   response?.data?.quote_info[0]?.images,
-      // );
+       console.log(
+        '🚀 ~ file: HomeScreen.js:97 ~ filterQuotes ~ response:',
+        response?.data?.quote_info[0]?.images,
+      );
       setNewArray(response?.data?.quote_info);
     }
   };
@@ -130,16 +132,13 @@ const SeeAllScreen = props => {
   }, [pageNum]);
 
   useEffect(() => {
-    if (selectedStatus !=  '' || searchData != '') {
-      type == 'quotes' && filterQuotes();
-    }
-  }, [selectedStatus ,searchData]);
+    type == 'quotes' && filterQuotes();
+  }, [selectedStatus, searchData]);
 
   useEffect(() => {
     if (Object.keys(filters).length > 0) {
       type == 'negotiator' && searchCards();
     }
-  
   }, [searchData]);
 
   return (
@@ -271,6 +270,7 @@ const SeeAllScreen = props => {
           setModalVisible={setIsModalVisible}
           text={'status'}
           statusArray={[
+            {name: 'All'},
             {name: 'pending'},
             {name: 'onGoing'},
             {name: 'completed'},

@@ -249,7 +249,7 @@ const Settings = () => {
           />
         </KeyboardAwareScrollView>
         <ImageView
-          images={[require('../Assets/Images/man1.jpg')]}
+          images={[{uri: user?.photo}]}
           imageIndex={0}
           visible={isVisible}
           onRequestClose={() => {

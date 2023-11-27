@@ -15,10 +15,7 @@ import { FlatList } from 'react-native';
 import CustomImage from './CustomImage';
 
 const BidderDetail = ({item, photo, title, date, message}) => {
-  console.log(
-    '🚀 ~ file: BidderDetail.js:16 ~ BidderDetail ~ review:',
-    item?.review,
-  );
+
   // console.log('🚀 ~ file: BidderDetail.js:16 ~ BidderDetail ~ item:', item);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
@@ -115,7 +112,7 @@ const BidderDetail = ({item, photo, title, date, message}) => {
                   {item?.user_info?.first_name}
                 </CustomText>
                 <CustomText style={styles.text2}>{item?.text}</CustomText>
-                <CustomText style={styles.text2}>
+                <CustomText style={[styles.text2,{color:Color.veryLightGray}]}>
                   {moment().format('MMM Do, YYYY')}
                 </CustomText>
               </View>

@@ -29,7 +29,7 @@ const SeeAllNegotiator = props => {
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
-  // console.log("🚀 ~ file: SeeAllNegotiator.js:30 ~ SeeAllNegotiator ~ token:", token)
+  console.log("🚀 ~ file: SeeAllNegotiator.js:30 ~ SeeAllNegotiator ~ token:", token)
 
   const type = props?.route?.params?.type;
   // console.log("🚀 ~ file: SeeAllNegotiator.js:33 ~ SeeAllNegotiator ~ type:", type)
@@ -50,7 +50,7 @@ const SeeAllNegotiator = props => {
 
   const searchQuotes = async () => {
     const url = `auth/negotiator/search/${type}`;
-    const body = {search: searchData, status: type};
+    const body = {search: searchData};
 
     setIsLoading(true);
     const response = await Post(url, body, apiHeader(token));
@@ -99,7 +99,7 @@ const SeeAllNegotiator = props => {
   };
 
   useEffect(() => {
-    // searchQuotes();
+    searchQuotes();
   }, [searchData]);
 
   useEffect(() => {

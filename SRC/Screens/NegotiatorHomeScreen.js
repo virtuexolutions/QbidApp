@@ -34,15 +34,7 @@ import NoData from '../Components/NoData';
 const NegotiatorHomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
-  console.log(
-    '🚀 ~ file: NegotiatorHomeScreen.js:37 ~ NegotiatorHomeScreen ~ token:',
-    token,
-  );
   const userData = useSelector(state => state.commonReducer.userData);
-  console.log(
-    '🚀 ~ file: NegotiatorHomeScreen.js:38 ~ NegotiatorHomeScreen ~ userData:',
-    userData,
-  );
 
   const [searchData, setSearchData] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -51,7 +43,6 @@ const NegotiatorHomeScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [recommended, setRecommended] = useState([]);
   const [working, setWorking] = useState([]);
-  // console.log("🚀 ~ file: NegotiatorHomeScreen.js:55 ~ NegotiatorHomeScreen ~ working:", working)
   const [jobPosting, setJobPosting] = useState([]);
   const isFocused = useIsFocused();
 
@@ -236,15 +227,7 @@ const NegotiatorHomeScreen = () => {
                   name="star"
                   as={AntDesign}
                   size={moderateScale(22, 0.3)}
-                  color={
-                    userData?.rating <= 3
-                      ? '#CD7F32'
-                      : userData?.rating <= 3.5
-                      ? '#C0C0C0'
-                      : userData?.rating <= 4
-                      ? '#FF9529'
-                      : '#e5e4e2'
-                  }
+                  color={'#FF9529'}
                 />
                 <CustomText
                   style={{
@@ -256,22 +239,15 @@ const NegotiatorHomeScreen = () => {
                   isBold
                   style={{
                     fontSize: moderateScale(17, 0.6),
-                    color:
-                      userData?.rating <= 3
-                        ? '#CD7F32'
-                        : userData?.rating <= 3.5
-                        ? '#C0C0C0'
-                        : userData?.rating <= 4
-                        ? '#FF9529'
-                        : '#e5e4e2',
+                    color: Color.black,
                   }}>
-                  {userData?.rating <= 3
-                    ? 'Bronze'
-                    : userData?.rating <= 3.5
-                    ? 'Silver'
-                    : userData?.rating <= 4
+                  {userData?.average_rating > 4
+                    ? 'Platinum'
+                    : userData?.average_rating > 3.5
                     ? 'Gold'
-                    : 'Platinum'}
+                    : userData?.average_rating > 3
+                    ? 'Silver'
+                    : 'Bronze'}
                 </CustomText>
               </View>
             </View>
