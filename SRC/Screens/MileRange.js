@@ -2,22 +2,16 @@ import React, {useState} from 'react';
 import {View} from 'react-native';
 import Color from '../Assets/Utilities/Color';
 import CustomText from '../Components/CustomText';
-import CustomImage from '../Components/CustomImage';
 import {windowHeight, windowWidth} from '../Utillity/utils';
 import {moderateScale, ScaledSheet} from 'react-native-size-matters';
-// import AntDesign from 'react-native-vector-icons/AntDesign';
 import {Slider} from 'native-base';
 import {useDispatch, useSelector} from 'react-redux';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import LinearGradient from 'react-native-linear-gradient';
-import CustomButton from '../Components/CustomButton';
-import {setUserToken} from '../Store/slices/auth';
-// import MapView from 'react-native-maps';
-import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+import MapView from 'react-native-maps';
 
 const MileRange = props => {
   const fromLogin = props?.route?.params?.fromLogin;
-  // console.log(fromLogin);
   const dispatch = useDispatch();
   const DollarData = [
     {mile: '10 Miles', price: 10},
@@ -27,7 +21,6 @@ const MileRange = props => {
     {mile: '50 Miles', price: 50},
     {mile: '60 Miles', price: 60},
   ];
-  const [isLoading, setIsLoading] = useState(false);
   const [dollar, setDollar] = useState(10);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
 
@@ -130,27 +123,6 @@ const MileRange = props => {
             // backgroundColor : 'red',
             alignSelf: 'center',
           }}>
-          {/* <MapView
-        style={{
-          width : '100%',
-          height : '100%'
-        }}
-          // provider={PROVIDER_GOOGLE}
-          region={{
-            latitude: 37.78825,
-            longitude: -122.4324,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}>
-          {/* {this.state.markers.map((marker, index) => ( */}
-          {/* <Marker
-            coordinate= {{latitude : 37.78825,longitude : -122.4324}}
-            title={'MY location'}
-            description={'here i am standing'}
-            
-          /> */}
-          {/* ))} 
-        </MapView> */}
           <MapView
             style={{
               width: '100%',

@@ -3,7 +3,6 @@ import {
   ActivityIndicator,
   ImageBackground,
   Platform,
-  Text,
   ToastAndroid,
   TouchableOpacity,
   View,
@@ -33,7 +32,7 @@ const LoginScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [selectedRole, setSelectedType] = useState('Qbid Member');
+  const [selectedRole, setSelectedType] = useState(userRole ?  userRole : 'Qbid Member');
   const [images, setImages] = useState([]);
   const [scale, setScale] = useState(1);
   const [previousScale, setPreviousScale] = useState(1);
@@ -52,7 +51,7 @@ const LoginScreen = () => {
       if (gesture.numberActiveTouches === 2) {
         // Pinch-to-zoom
         const distance = Math.sqrt(
-          (gesture.dx - gesture.x0) ** 2 + (gesture.dy - gesture.y0) ** 2,
+          (gesture.dx - gesture.x0) * 2 + (gesture.dy - gesture.y0) * 2,
         );
         const newScale = previousScale * (distance / gesture.previousDistance);
         setScale(newScale);
@@ -101,7 +100,7 @@ const LoginScreen = () => {
     setIsLoading(false);
     if (response != undefined) {
       console.log(
-        '🚀 ~ file: LoginScreen.js:139 ~ Login ~ response:',
+        '🚀  file: LoginScreen.js:139  Login ~ response:',
         response?.data,
       );
       if (selectedRole == response?.data?.user_info?.role) {
