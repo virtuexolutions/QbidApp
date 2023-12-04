@@ -7,6 +7,7 @@ const initialState = {
   isVerified: false,
   userWalkThrough: false,
   isGoalCreated : false ,
+  isMileage:false,
 };
 
 const AuthSlice = createSlice({
@@ -31,6 +32,10 @@ const AuthSlice = createSlice({
     setWalkThrough(state, action) {
       state.userWalkThrough = action.payload;
     },
+    setMilageRing(state ,action){
+      state.isMileage = action.payload;
+    }
+    
   },
 });
 
@@ -41,6 +46,7 @@ export const {
   setUserToken,
   SetFCMToken,
   setWalkThrough,
+  setMilageRing,
   
   
 } = AuthSlice.actions;

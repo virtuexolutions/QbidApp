@@ -11,6 +11,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import CustomButton from '../Components/CustomButton';
 import {
+  setMilageRing,
   setUserLogin,
   setUserLogoutAuth,
   setUserToken,
@@ -241,7 +242,8 @@ const Settings = () => {
             marginTop={moderateScale(10, 0.3)}
             onPress={() => {
               dispatch(setUserLogOut());
-              dispatch(setUserLogoutAuth());
+              dispatch(setUserLogoutAuth());       
+              dispatch(setMilageRing(false))
             }}
             bgColor={Color.white}
             // isGradient

@@ -9,10 +9,14 @@ import {useDispatch, useSelector} from 'react-redux';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import LinearGradient from 'react-native-linear-gradient';
 import MapView from 'react-native-maps';
+import CustomButton from '../Components/CustomButton';
+import { setMilageRing } from '../Store/slices/auth';
 
 const MileRange = props => {
   const fromLogin = props?.route?.params?.fromLogin;
   const dispatch = useDispatch();
+  const [isLoading ,setIsLoading] =useState() 
+
   const DollarData = [
     {mile: '10 Miles', price: 10},
     {mile: '20 Miles', price: 20},
@@ -47,7 +51,7 @@ const MileRange = props => {
       <LinearGradient
         style={{
           width: windowWidth,
-          height: windowHeight,
+          height: windowHeight*0.9
         }}
         start={{x: 0, y: 0}}
         end={{x: 1, y: 0}}
@@ -137,12 +141,13 @@ const MileRange = props => {
           />
         </View>
 
-        {/* <View
+        <View
           style={{
             alignItems: 'center',
             width: windowWidth,
+      
             position: 'absolute',
-            bottom: 90,
+            bottom: 50,
           }}>
           <CustomButton
             text={
@@ -157,18 +162,19 @@ const MileRange = props => {
             height={windowHeight * 0.07}
             marginTop={moderateScale(20, 0.3)}
             onPress={() => {
-              dispatch(setUserToken({token: 'dasdawradawdawrtfeasfzs'}));
+              dispatch(setMilageRing(true))
             }}
-            bgColor={userRole == 'Qbid Member' ? Color.blue : Color.themeColor}
+            bgColor={Color.black}
             borderRadius={moderateScale(30, 0.3)}
+          
           />
-          <CustomText
+          {/* <CustomText
             numberOfLines={2}
             style={{textAlign: 'center', marginTop: moderateScale(40, 0.3)}}>
             Lorem Ipsum is simply dummy text of the printing and typesetting
             industry. Lorem Ipsum Lorem Ipsum
-          </CustomText>
-        </View> */}
+          </CustomText> */}
+        </View>
       </LinearGradient>
     </ScreenBoiler>
   );

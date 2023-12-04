@@ -50,6 +50,7 @@ const AppNavigator = () => {
   const isVerified = useSelector(state => state.authReducer.isVerified);
   const token = useSelector(state => state.authReducer.token);
   const selectedRole = useSelector(state => state.commonReducer.selectedRole);
+  const isMileage = useSelector(state => state.authReducer.isMileage)
 
   const RootNav = createNativeStackNavigator();
   const RootNavLogged = createNativeStackNavigator();
@@ -58,8 +59,9 @@ const AppNavigator = () => {
     const firstScreen =
       walkThrough == false
         ? 'Walkthrough'
-        : token != null && selectedRole == 'Business Qbidder'
+        : token != null && selectedRole == 'Business Qbidder' && isMileage == false 
         ? 'MileRange'
+        
         : token != null
         ? 'TabNavigation'
         : 'LoginScreen';

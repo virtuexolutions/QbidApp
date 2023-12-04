@@ -19,7 +19,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import CustomButton from '../Components/CustomButton';
 import {Icon, ScrollView} from 'native-base';
-import {setUserLogin, setUserToken, setWalkThrough} from '../Store/slices/auth';
+import {setMilageRing, setUserLogin, setUserToken, setWalkThrough} from '../Store/slices/auth';
 import {useDispatch, useSelector} from 'react-redux';
 import DropDownSingleSelect from '../Components/DropDownSingleSelect';
 import navigationService from '../navigationService';
@@ -219,6 +219,7 @@ const Signup = () => {
        dispatch(setSelectedRole(response?.data?.user_info?.role))
        dispatch(setUserLogin(response?.data?.token))
        dispatch(setUserToken({token:response?.data?.token}))
+       dispatch(setMilageRing(false))
       }
   };
 
