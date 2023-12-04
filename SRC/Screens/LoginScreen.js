@@ -1,7 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {
   ActivityIndicator,
-  // Image,
   ImageBackground,
   Platform,
   Text,
@@ -17,55 +16,35 @@ import CustomImage from '../Components/CustomImage';
 import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
 import {moderateScale, ScaledSheet} from 'react-native-size-matters';
 import TextInputWithTitle from '../Components/TextInputWithTitle';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import CustomButton from '../Components/CustomButton';
 import {ScrollView} from 'native-base';
-import {useIsFocused} from '@react-navigation/native';
 import {Post} from '../Axios/AxiosInterceptorFunction';
 import {validateEmail} from '../Config';
 import {setSelectedRole, setUserData} from '../Store/slices/common';
-import {setUserLogin, setUserToken, setWalkThrough} from '../Store/slices/auth';
+import { setUserToken, setWalkThrough} from '../Store/slices/auth';
 import {useDispatch, useSelector} from 'react-redux';
 import DropDownSingleSelect from '../Components/DropDownSingleSelect';
-import CustomDropDown from '../Components/CustomDropDown';
 import navigationService from '../navigationService';
-// import GalleryManager from 'react-native-gallery-manager';
-import RNFetchBlob from 'rn-fetch-blob';
-import DraggableView from 'react-native-draggable-reanimated';
-import PinchZoomView from 'react-native-pinch-zoom-view';
-
-import {useRef} from 'react';
 
 const LoginScreen = () => {
   const dispatch = useDispatch();
   const userRole = useSelector(state => state.commonReducer.selectedRole);
-  // console.log('🚀 ~ file: Color.js:4 ~ userRole:', userRole);
-  const [firstSection, setFirstSection] = useState(true);
+
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [selectedRole, setSelectedType] = useState('Qbid Member');
   const [images, setImages] = useState([]);
-  // console.log(
-  //   '🚀 ~ file: LoginScreen.js:43 ~ LoginScreen ~ images:',
-  //   images[0]?.uri,
-  // );
-  const [baseImage, setBaseImage] = useState('');
-
-  const servicesArray = ['Qbid Negotiator', 'Qbid Member',
-  //  'Business Qbidder'
-  ];
-
-  const imageRef = useRef();
   const [scale, setScale] = useState(1);
   const [previousScale, setPreviousScale] = useState(1);
   const [translateX, setTranslateX] = useState(0);
-  const [rotate, setRotate] = useState(0);
-  // console.log(
-  //   '🚀 ~ file: LoginScreen.js:57 ~ LoginScreen ~ translateX:',
-  //   translateX,
-  // );
+  
   const [translateY, setTranslateY] = useState(0);
+
+  const servicesArray = ['Qbid Negotiator', 'Qbid Member',
+   'Business Qbidder'
+  ];
+
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
@@ -88,27 +67,10 @@ const LoginScreen = () => {
     },
   });
 
-  // const getData = async () => {
-  //   GalleryManager.getAssets({
-  //     type: 'image',
-  //     startFrom: 0,
-  //     limit: 5,
-  //     // albumName : 'Camera'
-  //   })
-  //     .then(response => {
-  //       console.log('data ===== ?? ?', response);
-  //       setImages(response?.assets);
-  //     })
-  //     .catch(err => {
-  //       // no rejects are defined currently on iOS
-  //     });
-  // };
-
   const Login = async () => {
     const body = {
       email: email,
       password: password,
-      // photo: image,
     };
 
     for (let key in body) {
@@ -157,28 +119,14 @@ const LoginScreen = () => {
           ? ToastAndroid.show('unauthenticated', ToastAndroid.SHORT)
           : Alert.alert('unauthenticated');
       }
-      // console.log('VERIFY=========>>>>>>', response?.data?.user_info);
     }
   };
 
   useEffect(() => {
     dispatch(setSelectedRole(selectedRole));
-    // getData()
   }, [selectedRole]);
 
-  // useEffect(() => {
-  //   if(images.length > 0){
-
-  //     getImageData()
-  //   }
-
-  // }, [images])
-
   return (
-    //   <ScreenBoiler
-
-    //   statusBarBackgroundColor={Color.themeColor}
-    //   statusBarContentStyle={"light-content"}
     <>
       <CustomStatusBar
         backgroundColor={
@@ -193,10 +141,7 @@ const LoginScreen = () => {
       <ImageBackground
         style={{
           flex: 1,
-          // justifyContent : 'center',
           alignItems: 'center',
-          // width: windowWidth,
-          // height: windowHeight,
         }}
         resizeMode={'stretch'}
         source={
@@ -217,8 +162,6 @@ const LoginScreen = () => {
           style={{
             width: '100%',
             flexGrow: 0,
-            // minHeight : windowHeight * 0.6,
-            // backgroundColor : 'red',
           }}>
           <View style={[styles?.textContainer]}>
             <CustomImage
@@ -255,7 +198,6 @@ const LoginScreen = () => {
             viewHeight={0.07}
             viewWidth={0.9}
             inputWidth={0.86}
-            // border={1}
             borderColor={'#ffffff'}
             backgroundColor={'#FFFFFF'}
             marginTop={moderateScale(15, 0.6)}
@@ -272,8 +214,6 @@ const LoginScreen = () => {
             viewHeight={0.07}
             viewWidth={0.9}
             inputWidth={0.86}
-            // border={1}
-            // borderColor={'#1B5CFB45'}
             backgroundColor={'#FFFFFF'}
             marginTop={moderateScale(15, 0.6)}
             color={Color.themeColor}
@@ -313,11 +253,10 @@ const LoginScreen = () => {
             height={windowHeight * 0.07}
             marginTop={moderateScale(10, 0.3)}
             onPress={() => {
-              Login();
-              // navigationService.navigate('AddCard');
-              // handleLogin('Receptionist');
-              // alert('Action to be happened')
-              // navigationService.navigate('HomeScreen')
+              dispatch(setUserToken({token:'dskfjhskjdfsj flsdkfjsj'}))
+              dispatch(setUserData({name:'random'}))
+              dispatch(setSelectedRole(selectedRole))
+              // Login();
             }}
             bgColor={
               userRole == 'Qbid Member'

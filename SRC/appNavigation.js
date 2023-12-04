@@ -43,17 +43,13 @@ import DrawerScreen from './Screens/DrawerScreen';
 import YourJobes from './Screens/YourJobes';
 import CompleteJobes from './Screens/CompleteJobes';
 
-
-
 const AppNavigator = () => {
   // const isLogin = false;
   const isGoalCreated = useSelector(state => state.authReducer.isGoalCreated);
   const walkThrough = useSelector(state => state.authReducer.userWalkThrough);
   const isVerified = useSelector(state => state.authReducer.isVerified);
   const token = useSelector(state => state.authReducer.token);
-
-  // console.log('token>>>>', token);
-  // console.log('isVerified', isGoalCreated);
+  const selectedRole = useSelector(state => state.commonReducer.selectedRole);
 
   const RootNav = createNativeStackNavigator();
   const RootNavLogged = createNativeStackNavigator();
@@ -62,6 +58,8 @@ const AppNavigator = () => {
     const firstScreen =
       walkThrough == false
         ? 'Walkthrough'
+        : token != null && selectedRole == 'Business Qbidder'
+        ? 'MileRange'
         : token != null
         ? 'TabNavigation'
         : 'LoginScreen';
@@ -82,12 +80,13 @@ const AppNavigator = () => {
           <RootNav.Screen name="Signup" component={Signup} />
           <RootNav.Screen name="SeeAllScreen" component={SeeAllScreen} />
           <RootNav.Screen name="Subscription" component={Subscription} />
-          <RootNav.Screen name="TermsAndConditions" component={TermsAndConditions} />
+          <RootNav.Screen
+            name="TermsAndConditions"
+            component={TermsAndConditions}
+          />
           <RootNav.Screen name="Support" component={Support} />
           <RootNav.Screen name="YourJobes" component={YourJobes} />
           <RootNav.Screen name="CompleteJobes" component={CompleteJobes} />
-        
-
 
           <RootNav.Screen
             name="SeeAllNegotiator"
@@ -101,14 +100,10 @@ const AppNavigator = () => {
             name="NegotiatorPortfolio"
             component={NegotiatorPortfolio}
           />
-          <RootNav.Screen
-            name="PaymentMethod"
-            component={PaymentMethod}
-          />
+          <RootNav.Screen name="PaymentMethod" component={PaymentMethod} />
           <RootNav.Screen name="JobDetails" component={JobDetails} />
           <RootNav.Screen name="MyAccounts" component={MyAccounts} />
           <RootNav.Screen name="ChangePassword" component={ChangePassword} />
-
         </RootNav.Navigator>
       </NavigationContainer>
     );
@@ -139,49 +134,59 @@ export const TabNavigation = () => {
             route.name === 'NegotiatorHomeScreen'
           ) {
             iconName = focused ? 'home' : 'home-outline';
-            color = focused ? userRole == 'Qbid Member'
-            ? Color.blue
-            : userRole == 'Qbid Negotiator'
-            ? Color.themeColor
-            : Color.black : Color.themeLightGray;
+            color = focused
+              ? userRole == 'Qbid Member'
+                ? Color.blue
+                : userRole == 'Qbid Negotiator'
+                ? Color.themeColor
+                : Color.black
+              : Color.themeLightGray;
             size = focused ? moderateScale(30, 0.3) : moderateScale(20, 0.3);
           } else if (route.name === 'ChatScreen') {
             iconName = focused
               ? 'ios-chatbubble-ellipses-sharp'
               : 'ios-chatbubble-ellipses-outline';
-            color = focused ? userRole == 'Qbid Member'
-            ? Color.blue
-            : userRole == 'Qbid Negotiator'
-            ? Color.themeColor
-            : Color.black  : Color.themeLightGray;
+            color = focused
+              ? userRole == 'Qbid Member'
+                ? Color.blue
+                : userRole == 'Qbid Negotiator'
+                ? Color.themeColor
+                : Color.black
+              : Color.themeLightGray;
             size = focused ? moderateScale(30, 0.3) : moderateScale(20, 0.3);
           } else if (route.name === 'NotificationScreen') {
             type = FontAwesome;
             iconName = focused ? 'bell' : 'bell-o';
 
-            color = focused ? userRole == 'Qbid Member'
-            ? Color.blue
-            : userRole == 'Qbid Negotiator'
-            ? Color.themeColor
-            : Color.black  : Color.themeLightGray;
+            color = focused
+              ? userRole == 'Qbid Member'
+                ? Color.blue
+                : userRole == 'Qbid Negotiator'
+                ? Color.themeColor
+                : Color.black
+              : Color.themeLightGray;
             size = focused ? moderateScale(30, 0.3) : moderateScale(20, 0.3);
           } else if (route.name === 'CreateNew') {
             type = AntDesign;
             iconName = focused ? 'Plus' : 'Plus';
 
-            color = focused ?userRole == 'Qbid Member'
-            ? Color.blue
-            : userRole == 'Qbid Negotiator'
-            ? Color.themeColor
-            : Color.black  : Color.themeLightGray;
+            color = focused
+              ? userRole == 'Qbid Member'
+                ? Color.blue
+                : userRole == 'Qbid Negotiator'
+                ? Color.themeColor
+                : Color.black
+              : Color.themeLightGray;
             size = focused ? moderateScale(30, 0.3) : moderateScale(20, 0.3);
           } else {
             iconName = focused ? 'settings-outline' : 'settings-sharp';
-            color = focused ? userRole == 'Qbid Member'
-            ? Color.blue
-            : userRole == 'Qbid Negotiator'
-            ? Color.themeColor
-            : Color.black  : Color.themeLightGray;
+            color = focused
+              ? userRole == 'Qbid Member'
+                ? Color.blue
+                : userRole == 'Qbid Negotiator'
+                ? Color.themeColor
+                : Color.black
+              : Color.themeLightGray;
             size = focused ? moderateScale(30, 0.3) : moderateScale(20, 0.3);
           }
           return route.name == 'CreateNew' ? (

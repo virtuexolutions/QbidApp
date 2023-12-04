@@ -22,7 +22,6 @@ import {Icon, ScrollView} from 'native-base';
 import {setUserLogin, setUserToken, setWalkThrough} from '../Store/slices/auth';
 import {useDispatch, useSelector} from 'react-redux';
 import DropDownSingleSelect from '../Components/DropDownSingleSelect';
-import CustomDropDown from '../Components/CustomDropDown';
 import navigationService from '../navigationService';
 import CustomDropDownMultiSelect from '../Components/CustomDropDownMultiSelect';
 import ImagePickerModal from '../Components/ImagePickerModal';
@@ -42,7 +41,6 @@ const Signup = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [companyName, setCompanyName] = useState(''); //for negotiator
-  const [jobStatus, setJobStatus] = useState(''); //for negotiator
   const [email, setEmail] = useState('');
   const [contact, setContact] = useState('');
   const [address, setAddress] = useState('');checked
@@ -53,7 +51,6 @@ const Signup = () => {
   const [confirmPassword, setConfirmPassword] = useState(false);
   const [services, setServices] = useState([]); //for negotiator
   const [language, setLanguage] = useState([]); //for negotiator
-
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [checked, setChecked] = useState(false);
@@ -124,7 +121,6 @@ const Signup = () => {
     const body = {
       first_name: firstName,
       last_name: lastName,
-      // company_name: companyName,
       email: email,
       phone: contact,
       address: address,
@@ -134,7 +130,6 @@ const Signup = () => {
       password: password,
       confirm_password: confirmPassword,
       role: selectedRole,
-      // photo: image,
     };
 
     for (let key in body) {
@@ -247,10 +242,7 @@ const Signup = () => {
       <ImageBackground
         style={{
           flex: 1,
-          // justifyContent : 'center',
           alignItems: 'center',
-          // width: windowWidth,
-          // height: windowHeight,
         }}
         resizeMode={'stretch'}
         source={
@@ -271,8 +263,6 @@ const Signup = () => {
           style={{
             width: '100%',
             flexGrow: 0,
-            // minHeight : windowHeight * 0.6,
-            // backgroundColor : 'red',
           }}>
           <View>
             {Object.keys(image).length > 0 ? (
@@ -307,10 +297,8 @@ const Signup = () => {
               />
             </TouchableOpacity>
           </View>
-          {/* <Text style={styles.Heading}>User Type</Text> */}
           <DropDownSingleSelect
             array={UserRoleArray}
-            // backgroundColor={Color.themeColor}
             item={userRole}
             setItem={setselectedRole}
             placeholder={userRole}
@@ -332,7 +320,6 @@ const Signup = () => {
             viewHeight={0.07}
             viewWidth={0.9}
             inputWidth={0.86}
-            // border={1}
             borderColor={'#ffffff'}
             backgroundColor={'#FFFFFF'}
             marginTop={moderateScale(15, 0.3)}
@@ -349,7 +336,6 @@ const Signup = () => {
             viewHeight={0.07}
             viewWidth={0.9}
             inputWidth={0.86}
-            // border={1}
             borderColor={'#ffffff'}
             backgroundColor={'#FFFFFF'}
             marginTop={moderateScale(15, 0.3)}
@@ -368,7 +354,6 @@ const Signup = () => {
                 viewHeight={0.07}
                 viewWidth={0.9}
                 inputWidth={0.86}
-                // border={1}
                 borderColor={'#ffffff'}
                 backgroundColor={'#FFFFFF'}
                 marginTop={moderateScale(15, 0.3)}
@@ -376,59 +361,6 @@ const Signup = () => {
                 placeholderColor={Color.themeLightGray}
                 borderRadius={moderateScale(25, 0.3)}
               />
-
-              {/* <View style={styles.userTypeContainer}>
-                <View style={styles.innerContainer}>
-                  <CustomText
-                    isBold
-                    style={[
-                      styles.txt2,
-                      {
-                        color:
-                          userRole == 'Qbid Member' ? Color.black : Color.white,
-                      },
-                    ]}>
-                    Retired
-                  </CustomText>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setJobStatus('Retired');
-                    }}
-                    activeOpacity={0.9}
-                    style={[
-                      styles.circle,
-                      jobStatus == 'Retired' && {
-                        backgroundColor: Color.themeColor1,
-                        borderColor: Color.white,
-                      },
-                    ]}></TouchableOpacity>
-                </View>
-                <View style={styles.innerContainer}>
-                  <CustomText
-                    isBold
-                    style={[
-                      styles.txt2,
-                      {
-                        color:
-                          userRole == 'Qbid Member' ? Color.black : Color.white,
-                      },
-                    ]}>
-                    Self-Employed
-                  </CustomText>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setJobStatus('Self-Employed');
-                    }}
-                    activeOpacity={0.9}
-                    style={[
-                      styles.circle,
-                      jobStatus == 'Self-Employed' && {
-                        backgroundColor: Color.themeColor1,
-                        borderColor: Color.white,
-                      },
-                    ]}></TouchableOpacity>
-                </View>
-              </View> */}
             </>
           )}
           <TextInputWithTitle
@@ -440,7 +372,6 @@ const Signup = () => {
             viewHeight={0.07}
             viewWidth={0.9}
             inputWidth={0.86}
-            // border={1}
             borderColor={'#ffffff'}
             backgroundColor={'#FFFFFF'}
             marginTop={moderateScale(15, 0.3)}
@@ -457,7 +388,6 @@ const Signup = () => {
             viewHeight={0.07}
             viewWidth={0.9}
             inputWidth={0.86}
-            // border={1}
             borderColor={'#ffffff'}
             backgroundColor={'#FFFFFF'}
             marginTop={moderateScale(15, 0.3)}
@@ -475,7 +405,6 @@ const Signup = () => {
             viewHeight={0.07}
             viewWidth={0.9}
             inputWidth={0.86}
-            // border={1}
             borderColor={'#ffffff'}
             backgroundColor={'#FFFFFF'}
             marginTop={moderateScale(15, 0.3)}
@@ -492,7 +421,6 @@ const Signup = () => {
             viewHeight={0.07}
             viewWidth={0.9}
             inputWidth={0.86}
-            // border={1}
             borderColor={'#ffffff'}
             backgroundColor={'#FFFFFF'}
             marginTop={moderateScale(15, 0.3)}
@@ -514,7 +442,6 @@ const Signup = () => {
             color={Color.themeColor}
             placeholderColor={Color.themeLightGray}
             borderRadius={moderateScale(25, 0.3)}
-            // marginBottom={moderateScale(10, 0.3)}
           />
           <TextInputWithTitle
             titleText={'Zip code'}
@@ -530,7 +457,6 @@ const Signup = () => {
             color={Color.themeColor}
             placeholderColor={Color.themeLightGray}
             borderRadius={moderateScale(25, 0.3)}
-            // marginBottom={moderateScale(10, 0.3)}
             keyboardType={'numeric'}
           />
           <TextInputWithTitle
@@ -547,7 +473,6 @@ const Signup = () => {
             color={Color.themeColor}
             placeholderColor={Color.themeLightGray}
             borderRadius={moderateScale(25, 0.3)}
-            // marginBottom={moderateScale(10, 0.3)}
           />
           <TextInputWithTitle
             titleText={'Confirm Password'}
@@ -563,7 +488,6 @@ const Signup = () => {
             color={Color.themeColor}
             placeholderColor={Color.themeLightGray}
             borderRadius={moderateScale(25, 0.3)}
-            // marginBottom={moderateScale(10, 0.3)}
           />
           {userRole != 'Qbid Member' && (
             <>
@@ -602,7 +526,6 @@ const Signup = () => {
             style={{
               flexDirection: 'row',
               width: windowWidth * 0.85,
-              // backgroundColor : 'red',
               marginTop: moderateScale(20, 0.3),
               alignItems: 'center',
             }}>
@@ -617,7 +540,6 @@ const Signup = () => {
             />
             <CustomText
               onPress={() => {
-                // navigationService.navigate('EnterPhone', {fromForgot: true});
               }}
               style={[
                 styles.txt3,
@@ -660,7 +582,6 @@ const Signup = () => {
             marginTop={moderateScale(10, 0.3)}
             onPress={() => {
               Register();
-              // dispatch(setUserToken({token: 'dasdawradawdawrtfeasfzs'}));
             }}
             bgColor={
               userRole == 'Qbid Member'
@@ -669,8 +590,6 @@ const Signup = () => {
                 ? Color.themeColor
                 : Color.black
             }
-            // borderColor={Color.white}
-            // borderWidth={2}
             borderRadius={moderateScale(30, 0.3)}
           />
           <View style={styles.container2}>
