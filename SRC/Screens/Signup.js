@@ -19,7 +19,12 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import CustomButton from '../Components/CustomButton';
 import {Icon, ScrollView} from 'native-base';
-import {setMilageRing, setUserLogin, setUserToken, setWalkThrough} from '../Store/slices/auth';
+import {
+  setMilageRing,
+  setUserLogin,
+  setUserToken,
+  setWalkThrough,
+} from '../Store/slices/auth';
 import {useDispatch, useSelector} from 'react-redux';
 import DropDownSingleSelect from '../Components/DropDownSingleSelect';
 import navigationService from '../navigationService';
@@ -37,13 +42,16 @@ const Signup = () => {
 
   const [image, setImage] = useState({});
   console.log('🚀 ~ file: Signup.js:40 ~ Signup ~ image:', image);
-  const [selectedRole, setselectedRole] = useState('Qbid Member');
+  const [selectedRole, setselectedRole] = useState(
+    userRole ? userRole : 'Qbid Member',
+  );
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [companyName, setCompanyName] = useState(''); //for negotiator
   const [email, setEmail] = useState('');
   const [contact, setContact] = useState('');
-  const [address, setAddress] = useState('');checked
+  const [address, setAddress] = useState('');
+  checked;
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
   const [zipCode, setZipCode] = useState('');
@@ -143,10 +151,10 @@ const Signup = () => {
 
     if (Object.keys(image).length > 0) {
       formData.append('photo', image);
-    }else{
+    } else {
       return Platform.OS == 'android'
-      ? ToastAndroid.show(`Profile image is required`, ToastAndroid.SHORT)
-      : Alert.alert(`Profile image is required`);
+        ? ToastAndroid.show(`Profile image is required`, ToastAndroid.SHORT)
+        : Alert.alert(`Profile image is required`);
     }
 
     if (isNaN(zipCode)) {
@@ -178,13 +186,15 @@ const Signup = () => {
         : Alert.alert('Password does not match');
     }
 
-    if(selectedRole == 'Qbid Negotiator'){
-        if(companyName == ''){
-          return Platform.OS == 'android'
-          ? ToastAndroid.show('company name is not a number', ToastAndroid.SHORT)
+    if (selectedRole == 'Qbid Negotiator') {
+      if (companyName == '') {
+        return Platform.OS == 'android'
+          ? ToastAndroid.show(
+              'company name is not a number',
+              ToastAndroid.SHORT,
+            )
           : Alert.alert('company name is not a number');
-        }
-
+      }
     }
 
     if (
@@ -192,35 +202,42 @@ const Signup = () => {
       (language.length == 0 || services.length == 0)
     ) {
       return Platform.OS == 'android'
-        ? ToastAndroid.show('Languages and expertise are required', ToastAndroid.SHORT)
+        ? ToastAndroid.show(
+            'Languages and expertise are required',
+            ToastAndroid.SHORT,
+          )
         : Alert.alert('Languages and expertise are required');
-      }else{
-        
-        language?.map((item, index) => formData.append(`language[${index}]`, item));
-        services?.map((item, index) => formData.append(`expertise[${index}]`, item));
-      }
+    } else {
+      language?.map((item, index) =>
+        formData.append(`language[${index}]`, item),
+      );
+      services?.map((item, index) =>
+        formData.append(`expertise[${index}]`, item),
+      );
+    }
 
-
-      if(!checked){
-        return Platform.OS == 'android'
-        ? ToastAndroid.show('Please accept terms and conditions', ToastAndroid.SHORT)
+    if (!checked) {
+      return Platform.OS == 'android'
+        ? ToastAndroid.show(
+            'Please accept terms and conditions',
+            ToastAndroid.SHORT,
+          )
         : Alert.alert('Please accept terms and conditions');
-      }
-      
-      
-      const url = 'register';
-     console.log('🚀 ~ file: Signup.js:149 ~ Register ~ formData:', formData);
-     setIsLoading(true);
-     const response = await Post(url, formData, apiHeader());
-     setIsLoading(false);
-     if (response != undefined) {
-       console.log('VERIFY=========>>>>>>', response?.data?.user_info);
-       dispatch(setUserData(response?.data?.user_info))
-       dispatch(setSelectedRole(response?.data?.user_info?.role))
-       dispatch(setUserLogin(response?.data?.token))
-       dispatch(setUserToken({token:response?.data?.token}))
-       dispatch(setMilageRing(false))
-      }
+    }
+
+    const url = 'register';
+    console.log('🚀 ~ file: Signup.js:149 ~ Register ~ formData:', formData);
+    setIsLoading(true);
+    const response = await Post(url, formData, apiHeader());
+    setIsLoading(false);
+    if (response != undefined) {
+      console.log('VERIFY=========>>>>>>', response?.data?.user_info);
+      dispatch(setUserData(response?.data?.user_info));
+      dispatch(setSelectedRole(response?.data?.user_info?.role));
+      dispatch(setUserLogin(response?.data?.token));
+      dispatch(setUserToken({token: response?.data?.token}));
+      dispatch(setMilageRing(false));
+    }
   };
 
   const UserRoleArray = ['Qbid Negotiator', 'Qbid Member', 'Business Qbidder'];
@@ -540,8 +557,7 @@ const Signup = () => {
               size={moderateScale(13, 0.3)}
             />
             <CustomText
-              onPress={() => {
-              }}
+              onPress={() => {}}
               style={[
                 styles.txt3,
                 {

@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
-import {View} from 'react-native';
+import {Alert, Platform, ToastAndroid, View} from 'react-native';
 import Color from '../Assets/Utilities/Color';
 import CustomText from '../Components/CustomText';
-import {windowHeight, windowWidth} from '../Utillity/utils';
+import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
 import {moderateScale, ScaledSheet} from 'react-native-size-matters';
 import {Slider} from 'native-base';
 import {useDispatch, useSelector} from 'react-redux';
@@ -10,12 +10,32 @@ import ScreenBoiler from '../Components/ScreenBoiler';
 import LinearGradient from 'react-native-linear-gradient';
 import MapView from 'react-native-maps';
 import CustomButton from '../Components/CustomButton';
-import { setMilageRing } from '../Store/slices/auth';
+import {setMilageRing} from '../Store/slices/auth';
+import {Post} from '../Axios/AxiosInterceptorFunction';
 
 const MileRange = props => {
   const fromLogin = props?.route?.params?.fromLogin;
+  const token = useSelector(state => state.authReducer.token);
   const dispatch = useDispatch();
-  const [isLoading ,setIsLoading] =useState() 
+  const [isLoading, setIsLoading] = useState();
+  const [miles, setMiles] = useState('');
+  console.log('🚀 ~ file: MileRange.js:22 ~ MileRange ~ miles:', miles);
+  const [dollar, setDollar] = useState(10);
+  const userRole = useSelector(state => state.commonReducer.selectedRole);
+
+  const setMileage = async () => {
+    const url = '';
+    const body = {};
+    setIsLoading(true);
+    const response = await Post(url, body, apiHeader(token));
+    setIsLoading(false);
+    if (response != undefined) {
+      return console.log(
+        '🚀 ~ file: MileRange.js:29 ~ setMileage ~ response:',
+        response?.data,
+      );
+    }
+  };
 
   const DollarData = [
     {mile: '10 Miles', price: 10},
@@ -25,8 +45,6 @@ const MileRange = props => {
     {mile: '50 Miles', price: 50},
     {mile: '60 Miles', price: 60},
   ];
-  const [dollar, setDollar] = useState(10);
-  const userRole = useSelector(state => state.commonReducer.selectedRole);
 
   return (
     <ScreenBoiler
@@ -46,12 +64,12 @@ const MileRange = props => {
           : Color.themebgBusinessQbidder
       }
       showHeader={true}
-      showBack={fromLogin ? false : true}
+      // showBack={fromLogin ? false : true}
       hideUser>
       <LinearGradient
         style={{
           width: windowWidth,
-          height: windowHeight*0.9
+          height: windowHeight * 0.9,
         }}
         start={{x: 0, y: 0}}
         end={{x: 1, y: 0}}
@@ -82,12 +100,13 @@ const MileRange = props => {
           <Slider
             onChange={data => {
               // console.log(data);
+              setMiles(data);
               setDollar(data);
             }}
             onPointerUpCapture={() => {
               // console.log('up');
             }}
-            w="92%"
+            w="85%"
             size="lg"
             defaultValue={10}
             minValue={10}
@@ -103,7 +122,7 @@ const MileRange = props => {
           style={{
             flexDirection: 'row',
             justifyContent: 'space-evenly',
-            width: windowWidth * 0.99,
+            width: windowWidth,
             alignSelf: 'center',
           }}>
           {DollarData.map((item, index) => {
@@ -145,7 +164,7 @@ const MileRange = props => {
           style={{
             alignItems: 'center',
             width: windowWidth,
-      
+
             position: 'absolute',
             bottom: 50,
           }}>
@@ -162,11 +181,15 @@ const MileRange = props => {
             height={windowHeight * 0.07}
             marginTop={moderateScale(20, 0.3)}
             onPress={() => {
-              dispatch(setMilageRing(true))
+              if (miles == '') {
+                return Platform.OS == 'android' ?  ToastAndroid.show('Please set the milage', ToastAndroid.SHORT) :  Alert.alert('Please set the milage')
+              }else{
+                dispatch(setMilageRing(true));
+                
+              }
             }}
             bgColor={Color.black}
             borderRadius={moderateScale(30, 0.3)}
-          
           />
           {/* <CustomText
             numberOfLines={2}
