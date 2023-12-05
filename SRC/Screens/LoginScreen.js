@@ -20,7 +20,7 @@ import {ScrollView} from 'native-base';
 import {Post} from '../Axios/AxiosInterceptorFunction';
 import {validateEmail} from '../Config';
 import {setSelectedRole, setUserData} from '../Store/slices/common';
-import { setUserToken, setWalkThrough} from '../Store/slices/auth';
+import { setMilageRing, setUserToken, setWalkThrough} from '../Store/slices/auth';
 import {useDispatch, useSelector} from 'react-redux';
 import DropDownSingleSelect from '../Components/DropDownSingleSelect';
 import navigationService from '../navigationService';
@@ -43,7 +43,6 @@ const LoginScreen = () => {
   const servicesArray = ['Qbid Negotiator', 'Qbid Member',
    'Business Qbidder'
   ];
-
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
@@ -111,8 +110,9 @@ const LoginScreen = () => {
           }),
         );
         dispatch(setSelectedRole(response?.data?.user_info?.role));
-        // dispatch(setUserLogin(response?.data?.token));
         dispatch(setUserToken({token: response?.data?.token}));
+        dispatch(setMilageRing(['', null, 'null', undefined, 0 ].includes(response?.data?.user_info?.radius) ? false: true))
+
       } else {
         return Platform.OS == 'android'
           ? ToastAndroid.show('unauthenticated', ToastAndroid.SHORT)
@@ -252,10 +252,10 @@ const LoginScreen = () => {
             height={windowHeight * 0.07}
             marginTop={moderateScale(10, 0.3)}
             onPress={() => {
-              dispatch(setUserToken({token:'dskfjhskjdfsj flsdkfjsj'}))
-              dispatch(setUserData({name:'random'}))
-              dispatch(setSelectedRole(selectedRole))
-              // Login();
+              // dispatch(setUserToken({token:'dskfjhskjdfsj flsdkfjsj'}))
+              // dispatch(setUserData({name:'random'}))
+              // dispatch(setSelectedRole(selectedRole))
+              Login();
             }}
             bgColor={
               userRole == 'Qbid Member'

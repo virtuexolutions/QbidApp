@@ -9,7 +9,7 @@ import TextInputWithTitle from '../Components/TextInputWithTitle';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {Icon, ScrollView} from 'native-base';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import DropDownSingleSelect from '../Components/DropDownSingleSelect';
 import ImagePickerModal from '../Components/ImagePickerModal';
 import ScreenBoiler from '../Components/ScreenBoiler';
@@ -21,7 +21,6 @@ import {Post} from '../Axios/AxiosInterceptorFunction';
 import {Platform} from 'react-native';
 import {ToastAndroid} from 'react-native';
 import {Alert} from 'react-native';
-import navigationService from '../navigationService';
 import {useNavigation} from '@react-navigation/native';
 
 const CreateNew = props => {
@@ -35,27 +34,27 @@ const CreateNew = props => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
-  // console.log("🚀 ~ file: CreateNew.js:32 ~ CreateNew ~ token:", token)
+  const location = useSelector(state => state.commonReducer.location);
+  console.log("🚀 ~ file: CreateNew.js:38 ~ CreateNew ~ location:", location)
+
   const [qouteTitle, setQouteTitle] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
   const [vendorQoutedPrice, setVendorQoutedPrice] = useState(0);
-  console.log("🚀 ~ file: CreateNew.js:43 ~ CreateNew ~ vendorQoutedPrice:", vendorQoutedPrice)
   const [askingPrice, setAskingPrice] = useState(0);
-  console.log("🚀 ~ file: CreateNew.js:44 ~ CreateNew ~ askingPrice:", askingPrice.length)
   const [offeringPercent, setOfferingPercent] = useState(0);
   const [selectedService, setSelectedService] = useState('');
   const [description, setDescription] = useState('');
   const [multiImages, setMultiImages] = useState([]);
-  // console.log("🚀 ~ file: CreateNew.js:40 ~ CreateNew ~ multiImages:", multiImages)
   const [showMultiImageModal, setShowMultiImageModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
 
   const publishQuote = async () => {
-    console.log("itny payaray ho ")
     const url = 'auth/member/quote';
     const body = {
+      lat: location?.latitude,
+      lng: location?.longitude,
       title: qouteTitle,
       city: city,
       type: 'general',
@@ -83,6 +82,7 @@ const CreateNew = props => {
         formData.append(key, body[key]);
       }
     }
+
     for (let key in body2) {
       if (isNaN(body2[key])) {
         return Platform.OS == 'android'
@@ -90,6 +90,7 @@ const CreateNew = props => {
           : Alert.alert(`${key} is not a number `);
       }
     }
+
     if (description.length < 100) {
       return Platform.OS == 'android'
         ? ToastAndroid.show(
@@ -98,15 +99,16 @@ const CreateNew = props => {
           )
         : Alert.alert(`Description should be greater than 100 letters`);
     }
+
     if (multiImages.length == 0) {
       return Platform.OS == 'android'
         ? ToastAndroid.show(`add atleast one image `, ToastAndroid.SHORT)
         : Alert.alert(`add atleast one image `);
     }
+
     multiImages?.map((item, index) =>
       formData.append(`images[${index}]`, item),
     );
-    // console.log("🚀 ~ file: CreateNew.js:67 ~ publishQuote ~ formData:", formData)
 
     setIsLoading(true);
     const response = await Post(url, formData, apiHeader(token));
@@ -206,7 +208,7 @@ const CreateNew = props => {
   };
 
   useEffect(() => {
-    if (askingPrice.length == vendorQoutedPrice.length && askingPrice > vendorQoutedPrice) {
+    if (parseInt(askingPrice) > parseInt(vendorQoutedPrice)) {
       alert('asking price can not be higher than vendor quoted price ');
       setAskingPrice(0);
     }
@@ -214,7 +216,6 @@ const CreateNew = props => {
       alert('offering percentage can not be greater than 100');
     }
   }, [askingPrice, offeringPercent]);
-
 
   return (
     <ScreenBoiler
@@ -334,7 +335,6 @@ const CreateNew = props => {
             placeholderColor={Color.themeLightGray}
             borderRadius={moderateScale(25, 0.3)}
             keyboardType={'numeric'}
-          
           />
 
           <TextInputWithTitle

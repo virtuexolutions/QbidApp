@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Alert, Platform, ToastAndroid, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {ActivityIndicator, Alert, Platform, ToastAndroid, View} from 'react-native';
 import Color from '../Assets/Utilities/Color';
 import CustomText from '../Components/CustomText';
 import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
@@ -11,29 +11,54 @@ import LinearGradient from 'react-native-linear-gradient';
 import MapView from 'react-native-maps';
 import CustomButton from '../Components/CustomButton';
 import {setMilageRing} from '../Store/slices/auth';
-import {Post} from '../Axios/AxiosInterceptorFunction';
+import {Get, Post} from '../Axios/AxiosInterceptorFunction';
+import GetLocation from 'react-native-get-location';
+import {setLocation} from '../Store/slices/common';
 
 const MileRange = props => {
   const fromLogin = props?.route?.params?.fromLogin;
+
   const token = useSelector(state => state.authReducer.token);
+  const location = useSelector(state => state.commonReducer.location);
+  
   const dispatch = useDispatch();
+  
   const [isLoading, setIsLoading] = useState();
   const [miles, setMiles] = useState('');
-  console.log('🚀 ~ file: MileRange.js:22 ~ MileRange ~ miles:', miles);
   const [dollar, setDollar] = useState(10);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
 
+  const getLocation = () => {
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 60000,
+    })
+      .then(location => {
+        console.log("🚀 ~ file: MileRange.js:37 ~ getLocation ~ location:", location)
+        dispatch(setLocation(location));
+      })
+      .catch(error => {
+        const {code, message} = error;
+        console.warn(code, message);
+      });
+  };
+
+  useEffect(() => {
+    getLocation();
+  }, []);
+
   const setMileage = async () => {
-    const url = '';
-    const body = {};
+    const url = `auth/negotiator/filter_radius?lat=${location?.latitude}&lng=${location?.longitude}&radius=${miles}`;
+    // const body = {radius: miles};
     setIsLoading(true);
-    const response = await Post(url, body, apiHeader(token));
+    const response = await Get(url, token);
     setIsLoading(false);
     if (response != undefined) {
-      return console.log(
+       console.log(
         '🚀 ~ file: MileRange.js:29 ~ setMileage ~ response:',
         response?.data,
       );
+      dispatch(setMilageRing(true));
     }
   };
 
@@ -182,10 +207,14 @@ const MileRange = props => {
             marginTop={moderateScale(20, 0.3)}
             onPress={() => {
               if (miles == '') {
-                return Platform.OS == 'android' ?  ToastAndroid.show('Please set the milage', ToastAndroid.SHORT) :  Alert.alert('Please set the milage')
-              }else{
-                dispatch(setMilageRing(true));
-                
+                return Platform.OS == 'android'
+                  ? ToastAndroid.show(
+                      'Please set the milage',
+                      ToastAndroid.SHORT,
+                    )
+                  : Alert.alert('Please set the milage');
+              } else {
+                setMileage();
               }
             }}
             bgColor={Color.black}

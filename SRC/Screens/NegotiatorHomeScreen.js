@@ -20,7 +20,7 @@ import {ScrollView} from 'react-native';
 import SearchContainer from '../Components/SearchContainer';
 import Entypo from 'react-native-vector-icons/Entypo';
 import navigationService from '../navigationService';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import CustomStatusModal from '../Components/CustomStatusModal';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomAlertModal from '../Components/CustomAlertModal';
@@ -31,11 +31,14 @@ import {Get} from '../Axios/AxiosInterceptorFunction';
 import {useIsFocused} from '@react-navigation/native';
 import GetLocation from 'react-native-get-location'
 import NoData from '../Components/NoData';
+import { setLocation } from '../Store/slices/common';
 
 const NegotiatorHomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
   const userData = useSelector(state => state.commonReducer.userData);
+
+  const dispatch = useDispatch()
 
   const [searchData, setSearchData] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -63,17 +66,11 @@ const NegotiatorHomeScreen = () => {
         setRecommended(response1?.data?.quote_info?.data);
     }
     if (response2 != undefined) {
-      // console.log("🚀 ~ file: NegotiatorHomeScreen.js:78 ~ getProposal ~ response2:", response2?.data)
       ![null, undefined, ''].includes(response2?.data?.quote_info) &&
         setWorking(response2?.data?.quote_info?.data);
       setWorking(prev => [...prev, ...response2?.data?.hiring_info?.data]);
     }
     if (response3 != undefined) {
-      console.log(
-        '🚀 ~ file: NegotiatorHomeScreen.js:81 ~ getProposal ~ response3:',
-        response3?.data,
-      );
-      // ![null, undefined, ''].includes(response2?.data?.hiring_info) &&
       setJobPosting(response3?.data?.hiring_info?.data);
     }
   };
@@ -97,7 +94,9 @@ const NegotiatorHomeScreen = () => {
   })
   .then(location => {
     setIsLocation(location)
-      // console.log(location, 'new jhjdhfghufg ===========>');
+    dispatch(setLocation(location))
+    
+      
   })
   .catch(error => {
       const { code, message } = error;

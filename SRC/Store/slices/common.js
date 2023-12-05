@@ -33,6 +33,7 @@ const initialState = {
 
   ],
   selectedRole : '',
+  location:''
   
 };
 
@@ -63,6 +64,9 @@ const CommonSlice = createSlice({
     },
     setSelectedRole(state,action){
       state.selectedRole = action.payload
+    },
+    setLocation(state, action){
+      state.location = action.payload
     }
   },
 });
@@ -74,7 +78,8 @@ export const {
   setCategoryProperties,
   setFinanceBreakDown,
   setNotification,
-  setSelectedRole
+  setSelectedRole,
+  setLocation
 } = CommonSlice.actions;
 
 export default CommonSlice.reducer;
