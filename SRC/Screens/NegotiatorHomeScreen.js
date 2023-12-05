@@ -29,6 +29,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import JobCard from '../Components/JobCard';
 import {Get} from '../Axios/AxiosInterceptorFunction';
 import {useIsFocused} from '@react-navigation/native';
+import GetLocation from 'react-native-get-location'
 import NoData from '../Components/NoData';
 
 const NegotiatorHomeScreen = () => {
@@ -45,6 +46,7 @@ const NegotiatorHomeScreen = () => {
   const [working, setWorking] = useState([]);
   const [jobPosting, setJobPosting] = useState([]);
   const isFocused = useIsFocused();
+  const [isLocation ,setIsLocation]=useState(false)
 
   const getProposal = async () => {
     setIsLoading(true);
@@ -86,6 +88,28 @@ const NegotiatorHomeScreen = () => {
     });
   }, []);
 
+  const getLocation =() => {
+
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 60000,
+      isLocation
+  })
+  .then(location => {
+    setIsLocation(location)
+      // console.log(location, 'new jhjdhfghufg ===========>');
+  })
+  .catch(error => {
+      const { code, message } = error;
+      console.warn(code, message);
+  })
+  }
+  
+  useEffect(() => {
+    // console.log('inside useEffect ==============>')
+    getLocation()
+  }, [])
+  
   return (
     <ScreenBoiler
       statusBarBackgroundColor={

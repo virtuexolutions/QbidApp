@@ -54,6 +54,8 @@
     "react-native-size-matters": "^0.4.0",
     "react-native-skeleton-placeholder": "^5.0.0",
     "react-native-sms": "^1.11.0",
+    "react-native-android-location-enabler": "^1.2.2",
+    "react-native-get-location": "^3.0.1",
     "react-native-svg": "^13.8.0",
     "react-native-vector-icons": "^9.1.0",
     "react-redux": "^8.0.2",
