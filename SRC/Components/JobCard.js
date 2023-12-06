@@ -99,7 +99,9 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
           </TouchableOpacity>
           <CustomText
             isBold
+            numberOfLines={2}
             style={{
+              width:windowWidth*0.2,
               fontSize: fromSeeAll
                 ? moderateScale(11, 0.6)
                 : moderateScale(9, 0.6),

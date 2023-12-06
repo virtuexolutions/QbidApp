@@ -6,8 +6,8 @@ import CustomButton from './CustomButton';
 import {moderateScale, ScaledSheet} from 'react-native-size-matters';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {Icon} from 'native-base';
-import {useSelector} from 'react-redux';
 import CustomText from './CustomText';
+import {useSelector} from 'react-redux';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -22,8 +22,8 @@ const CustomAlertModal = props => {
     iconType,
     areYouSureAlert,
   } = props;
+  const userRole = useSelector(state => state.commonReducer.selectedRole);
 
-  // iconType  () error == 0 ) ( success == 1 ) ( warning == 2 )
   return (
     <Modal
       isVisible={isModalVisible}
@@ -32,8 +32,18 @@ const CustomAlertModal = props => {
         justifyContent: 'center',
         alignItems: 'center',
       }}>
-      {/* Modal main View */}
-      <View style={styles.modalUpperView}>
+      <View
+        style={[
+          styles.modalUpperView,
+          {
+            backgroundColor:
+              userRole == 'Qbid Member'
+                ? Color.green
+                : userRole == 'Qbid Negotiator'
+                ? Color.blue
+                : Color.black,
+          },
+        ]}>
         <Icon
           name={
             iconType == 0
@@ -62,7 +72,13 @@ const CustomAlertModal = props => {
             // width: width * 0.625,
           }}>
           <CustomButton
-            bgColor={Color.blue}
+            bgColor={
+              userRole == 'Qbid Member'
+                ? Color.blue
+                : userRole == 'Qbid Negotiator'
+                ? Color.themeColor
+                : Color.black
+            }
             borderColor={'white'}
             borderWidth={1}
             textColor={Color.white}
@@ -72,9 +88,6 @@ const CustomAlertModal = props => {
             text={areYouSureAlert ? 'Yes' : 'Okay'}
             fontSize={moderateScale(16, 0.3)}
             borderRadius={moderateScale(30, 0.3)}
-            // textTransform={'capitalize'}
-            // isGradient={true}
-            // marginTop={moderateScale(12, 0.3)}
           />
           {areYouSureAlert && (
             <View
@@ -83,9 +96,21 @@ const CustomAlertModal = props => {
               }}>
               <CustomButton
                 bgColor={Color.white}
-                borderColor={Color.blue}
+                borderColor={
+                  userRole == 'Qbid Member'
+                    ? Color.blue
+                    : userRole == 'Qbid Negotiator'
+                    ? Color.themeColor
+                    : Color.black
+                }
                 borderWidth={1}
-                textColor={Color.blue}
+                textColor={
+                  userRole == 'Qbid Member'
+                    ? Color.blue
+                    : userRole == 'Qbid Negotiator'
+                    ? Color.themeColor
+                    : Color.black
+                }
                 onPress={onClose}
                 width={width * 0.2}
                 height={height * 0.045}
@@ -102,9 +127,7 @@ const CustomAlertModal = props => {
       </View>
     </Modal>
   );
-  // Modal end
 };
-// Filter Modal end
 
 const styles = ScaledSheet.create({
   modalUpperView: {
@@ -112,8 +135,6 @@ const styles = ScaledSheet.create({
     width: width * 0.7,
     minHeight: height * 0.1,
     maxHeight: height * 0.1,
-    // borderTopLeftRadius: moderateScale(20, 0.3),
-    // borderTopRightRadius: moderateScale(20, 0.3),
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
@@ -136,7 +157,6 @@ const styles = ScaledSheet.create({
     fontSize: moderateScale(20, 0.3),
     fontWeight: 'bold',
     textTransform: 'capitalize',
-    
   },
   message: {
     fontSize: moderateScale(11, 0.3),

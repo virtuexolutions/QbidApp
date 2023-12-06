@@ -14,14 +14,18 @@ import {setMilageRing} from '../Store/slices/auth';
 import {Get, Post} from '../Axios/AxiosInterceptorFunction';
 import GetLocation from 'react-native-get-location';
 import {setLocation} from '../Store/slices/common';
+import { useNavigation } from '@react-navigation/native';
 
 const MileRange = props => {
-  const fromLogin = props?.route?.params?.fromLogin;
+  const fromSetting = props?.route?.params?.fromSetting;
+  console.log("🚀 ~ file: MileRange.js:20 ~ MileRange ~ fromSetting:", fromSetting)
 
   const token = useSelector(state => state.authReducer.token);
   const location = useSelector(state => state.commonReducer.location);
   
   const dispatch = useDispatch();
+
+const navigation = useNavigation()
   
   const [isLoading, setIsLoading] = useState();
   const [miles, setMiles] = useState('');
@@ -56,9 +60,10 @@ const MileRange = props => {
     if (response != undefined) {
        console.log(
         '🚀 ~ file: MileRange.js:29 ~ setMileage ~ response:',
-        response?.data,
+        response?.data,url
       );
       dispatch(setMilageRing(true));
+      fromSetting && navigation.goBack()
     }
   };
 
@@ -89,7 +94,7 @@ const MileRange = props => {
           : Color.themebgBusinessQbidder
       }
       showHeader={true}
-      // showBack={fromLogin ? false : true}
+      showBack={!fromSetting ? false : true}
       hideUser>
       <LinearGradient
         style={{

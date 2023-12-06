@@ -152,7 +152,7 @@ const Settings = () => {
               height={windowHeight * 0.07}
               marginTop={moderateScale(10, 0.3)}
               onPress={() => {
-                navigationService.navigate('MileRange');
+                navigationService.navigate('MileRange',{fromSetting:true});
               }}
               bgColor={Color.white}
               // isGradient
