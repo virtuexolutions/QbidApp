@@ -37,92 +37,28 @@ import {Post} from '../Axios/AxiosInterceptorFunction';
 const Signup = () => {
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
-  console.log('🚀 ~ file: Signup.js:33 ~ Signup ~ userRole:', userRole);
   const dispatch = useDispatch();
 
   const [image, setImage] = useState({});
-  console.log('🚀 ~ file: Signup.js:40 ~ Signup ~ image:', image);
   const [selectedRole, setselectedRole] = useState(
     userRole ? userRole : 'Qbid Member',
   );
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [companyName, setCompanyName] = useState(''); //for negotiator
+  const [companyName, setCompanyName] = useState(''); 
   const [email, setEmail] = useState('');
   const [contact, setContact] = useState('');
   const [address, setAddress] = useState('');
-  // checked;
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
   const [zipCode, setZipCode] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState(false);
-  const [services, setServices] = useState([]); //for negotiator
-  const [language, setLanguage] = useState([]); //for negotiator
+  const [services, setServices] = useState([]); 
+  const [language, setLanguage] = useState([]); 
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [checked, setChecked] = useState(false);
-
-  // const formData = new FormData();
-  // const SignUp = async () => {
-  //   const params = {
-  //     role: userRole,
-  //     first_name: `${firstName}`,
-  //     last_name: `${lastName}`,
-  //     companyName: companyName,
-  //     email: email,
-  //     phone: contact,
-  //     password: password,
-  //     c_password: confirmPassword,
-  //   };
-
-  //   for (let key in params) {
-  //     if (params[key] === '') {
-  //       return Platform.OS == 'android'
-  //         ? ToastAndroid.show(` ${key} field is empty`, ToastAndroid.SHORT)
-  //         : Alert.alert(` ${key} field is empty`);
-  //     }
-  //     formData.append(key, params[key]);
-  //   }
-  //   formData.append('image', image);
-  //   console.log(JSON.stringify(formData, null, 2));
-  //   if (isNaN(contact)) {
-  //     return Platform.OS == 'android'
-  //       ? ToastAndroid.show('phone is not a number', ToastAndroid.SHORT)
-  //       : Alert.alert('phone is not a number');
-  //   }
-  //   if (!validateEmail(email)) {
-  //     return Platform.OS == 'android'
-  //       ? ToastAndroid.show('email is not validate', ToastAndroid.SHORT)
-  //       : Alert.alert('email is not validate');
-  //   }
-  //   if (password.length < 8) {
-  //     return Platform.OS == 'android'
-  //       ? ToastAndroid.show(
-  //           'Password should atleast 8 character long',
-  //           ToastAndroid.SHORT,
-  //         )
-  //       : Alert.alert('Password should atleast 8 character long');
-  //   }
-  //   if (password != confirmPassword) {
-  //     return Platform.OS == 'android'
-  //       ? ToastAndroid.show('Password does not match', ToastAndroid.SHORT)
-  //       : Alert.alert('Password does not match');
-  //   }
-
-  //   const url = 'register';
-  //   setIsLoading(true);
-  //   const response = await Post(url, formData, apiHeader());
-  //   setIsLoading(false);
-  //   if (response != undefined) {
-  //     //  return  console.log("response?.data", response?.data?.data);
-  //     Platform.OS === 'android'
-  //       ? ToastAndroid.show('User Registered Succesfully', ToastAndroid.SHORT)
-  //       : Alert.alert('User Registered Succesfully');
-  //     dispatch(setUserData(response?.data?.data?.user_details));
-  //     dispatch(setUserLogin(response?.data?.data?.token));
-  //   }
-  // };
 
   const formData = new FormData();
   const Register = async () => {
@@ -231,7 +167,6 @@ const Signup = () => {
     const response = await Post(url, formData, apiHeader());
     setIsLoading(false);
     if (response != undefined) {
-      console.log('VERIFY=========>>>>>>', response?.data?.user_info);
       dispatch(setUserData(response?.data?.user_info));
       dispatch(setSelectedRole(response?.data?.user_info?.role));
       dispatch(setUserLogin(response?.data?.token));
