@@ -37,6 +37,7 @@ const NegotiatorHomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
   const userData = useSelector(state => state.commonReducer.userData);
+  // console.log("🚀 ~ file: NegotiatorHomeScreen.js:40 ~ NegotiatorHomeScreen ~ userData:", userData)
 
   const dispatch = useDispatch();
 
@@ -80,11 +81,13 @@ const NegotiatorHomeScreen = () => {
         setRecommended(response1?.data?.quote_info);
     }
     if (response2 != undefined) {
+       console.log("🚀 ~ file: NegotiatorHomeScreen.js:83 ~ getProposal ~ response2:", response2?.data)
       ![null, undefined, ''].includes(response2?.data?.quote_info) &&
         setWorking(response2?.data?.quote_info?.data);
-      setWorking(prev => [...prev, ...response2?.data?.hiring_info?.data]);
+      // setWorking(prev => [...prev, ...response2?.data?.hiring_info?.data]);
     }
     if (response3 != undefined) {
+      console.log("🚀 ~ file: NegotiatorHomeScreen.js:89 ~ getProposal ~ response3:",response3?.data?.hiring_info?.data?.length)
       setJobPosting(response3?.data?.hiring_info?.data);
     }
   };
@@ -106,6 +109,7 @@ const NegotiatorHomeScreen = () => {
       isLocation,
     })
       .then(location => {
+        console.log("🚀 ~ file: NegotiatorHomeScreen.js:119 ~ getLocation ~ location:", location)
         setIsLocation(location);
         dispatch(setLocation(location));
       })
@@ -396,7 +400,7 @@ const NegotiatorHomeScreen = () => {
               <View style={styles.recommendedContainer}>
                 <View style={styles.row}>
                   <CustomText isBold style={styles.heading}>
-                    Job Posts
+                    Job Requests
                   </CustomText>
                   <CustomText
                     onPress={() => {
@@ -429,7 +433,7 @@ const NegotiatorHomeScreen = () => {
                     );
                   }}
                   renderItem={({item, index}) => {
-                    return <JobCard key={index} item={item} />;
+                    return <JobCard key={index} item={item} getProposal={getProposal}/>;
                   }}
                 />
               </View>

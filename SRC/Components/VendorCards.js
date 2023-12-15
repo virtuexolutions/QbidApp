@@ -60,9 +60,11 @@ const VendorCards = ({item}) => {
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'center',
+          width:windowWidth*0.39,
+          // backgroundColor:'red',
           paddingTop: moderateScale(5, 0.3),
         }}>
-        <CustomText style={styles.title} numberOfLines={1} isBold>
+        <CustomText style={[styles.title]} numberOfLines={1} isBold>
           {item?.first_name}
         </CustomText>
         <View style={styles.view1}>
@@ -124,10 +126,9 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   title: {
-    // backgroundColor:'red',
-    width: windowWidth * 0.22,
+    textAlign:'center',
+    width: windowWidth * 0.18,
     fontSize: 14,
-    paddingHorizontal: moderateScale(5, 0.3),
   },
   decription: {
     fontSize: 12,

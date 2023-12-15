@@ -5,20 +5,12 @@ import Color from '../Assets/Utilities/Color';
 import {moderateScale, ScaledSheet} from 'react-native-size-matters';
 import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
 import CustomText from '../Components/CustomText';
-import BidDetailCard from '../Components/BidDetailCard';
-import {Actionsheet, Icon} from 'native-base';
-import {ScrollView} from 'react-native';
 import SearchContainer from '../Components/SearchContainer';
-import Entypo from 'react-native-vector-icons/Entypo';
-import NegotiatorCard from '../Components/NegotiatorCard';
-import MyQouteCard from '../Components/MyQouteCard';
 import CustomStatusModal from '../Components/CustomStatusModal';
 import {useSelector} from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import JobCard from '../Components/JobCard';
 import navigationService from '../navigationService';
-import SeekingHelpCard from '../Components/SeekingHelpCard';
-import {Socket} from 'engine.io-client';
 import {Get, Post} from '../Axios/AxiosInterceptorFunction';
 import {useEffect} from 'react';
 import {ActivityIndicator} from 'react-native';
@@ -26,14 +18,16 @@ import Card from '../Components/Card';
 import NoData from '../Components/NoData';
 
 const SeeAllNegotiator = props => {
+  const type = props?.route?.params?.type;
+  const data = props?.route?.params?.data;
+
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
-  console.log("🚀 ~ file: SeeAllNegotiator.js:30 ~ SeeAllNegotiator ~ token:", token)
-
-  const type = props?.route?.params?.type;
-  // console.log("🚀 ~ file: SeeAllNegotiator.js:33 ~ SeeAllNegotiator ~ type:", type)
-  const data = props?.route?.params?.data;
+   console.log(
+    '🚀 ~ file: SeeAllNegotiator.js:30 ~ SeeAllNegotiator ~ token:',
+    type, data,
+  );
 
   const scrollViewRef = useRef();
 
@@ -46,7 +40,6 @@ const SeeAllNegotiator = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
   const [newArray, setNewArray] = useState([]);
-  // console.log("🚀 ~ file: SeeAllNegotiator.js:46 ~ SeeAllNegotiator ~ newArray:", newArray)
 
   const searchQuotes = async () => {
     const url = `auth/negotiator/search/${type}`;
@@ -71,11 +64,19 @@ const SeeAllNegotiator = props => {
     const response = await Get(url, token);
     type1 == 'loadMore' ? setLoadMore(false) : setIsLoading(false);
     if (response != undefined) {
-      console.log("🚀 ~ file: SeeAllNegotiator.js:74 ~ getData ~ response:", response?.data)
-      if (type != 'job posts') {
+        return console.log(
+        '🚀 ~ file: SeeAllNegotiator.js:74 ~ getData ~ response:',
+        response?.data,
+      );
+      if(type == 'Working On'){
         type1 == 'loadMore'
-          ? setNewArray(prev => [...prev, ...response?.data?.quote_info?.data])
-          : setNewArray(response?.data?.quote_info?.data);
+        ? setNewArray(prev => [...prev, ...response?.data?.quote_info])
+        : setNewArray(response?.data?.hiring_info?.data);
+      }
+      else if (type != 'job posts') {
+        type1 == 'loadMore'
+          ? setNewArray(prev => [...prev, ...response?.data?.quote_info])
+          : setNewArray(response?.data?.quote_info);
       } else {
         type1 == 'loadMore'
           ? setNewArray(prev => [...prev, ...response?.data?.hiring_info?.data])
@@ -110,11 +111,6 @@ const SeeAllNegotiator = props => {
         getData('loadMore');
       }
     }
-
-    // return () => {
-    //   setpageNum(1);
-    //   setNewArray([]);
-    // };
   }, [pageNum]);
 
   return (
@@ -152,7 +148,7 @@ const SeeAllNegotiator = props => {
         <View
           style={{
             width: windowWidth * 0.93,
-            // backgroundColor: 'red',
+
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
@@ -166,25 +162,13 @@ const SeeAllNegotiator = props => {
             }}
             style={{
               height: windowHeight * 0.06,
-              // marginRight:moderateScale(10,.6),
-              // alignSelf:'center',
+
               marginBottom: moderateScale(10, 0.3),
               borderRadius: moderateScale(5, 0.3),
             }}
             data={searchData}
             setData={setSearchData}
           />
-          {/* {type != 'working on' && (
-            <Icon
-              name={'sound-mix'}
-              as={Entypo}
-              size={moderateScale(22, 0.3)}
-              color={Color.lightGrey}
-              onPress={() => {
-                setIsModalVisible(true);
-              }}
-            />
-          )} */}
         </View>
 
         {isLoading ? (
@@ -194,7 +178,6 @@ const SeeAllNegotiator = props => {
               height: windowHeight * 0.75,
               alignSelf: 'center',
               justifyContent: 'center',
-              // alignItems:'center'
             }}>
             <ActivityIndicator color={'white'} size={'large'} />
           </View>
@@ -206,14 +189,14 @@ const SeeAllNegotiator = props => {
                   style={{
                     alignItems: 'center',
                     justifyContent: 'center',
-                    // backgroundColor:'red',
+
                     height: windowHeight * 0.5,
                   }}>
                   <NoData
                     style={{
                       width: windowWidth * 0.95,
                       height: windowHeight * 0.3,
-                      // backgroundColor: 'green',
+
                       alignItems: 'center',
                       justifyContent: 'center',
                     }}

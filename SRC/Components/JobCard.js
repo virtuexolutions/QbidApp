@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Alert,
   Platform,
   StyleSheet,
@@ -14,30 +15,41 @@ import Color from '../Assets/Utilities/Color';
 import CustomImage from './CustomImage';
 import CustomText from './CustomText';
 import CustomButton from './CustomButton';
-import navigationService from '../navigationService';
 import Modal from 'react-native-modal';
 import {useSelector} from 'react-redux';
 import numeral from 'numeral';
 import {Post} from '../Axios/AxiosInterceptorFunction';
 import ImageView from 'react-native-image-viewing';
 
-const JobCard = ({fromSeeAll, style, onPress, item}) => {
+const JobCard = ({fromSeeAll, style, onPress, item, getProposal}) => {
+  // console.log("🚀 ~ file: JobCard.js:25 ~ JobCard ~ item:", item?.quote_info?.images)
   const token = useSelector(state => state.authReducer.token);
+  const userRole = useSelector(state => state.commonReducer.selectedRole);
 
   const [loading, setLoading] = useState(false);
+  const [declineLoading, setDeclineLoading] = useState(false);
   const [imageModal, setImageModal] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const userRole = useSelector(state => state.commonReducer.selectedRole);
+
+
+  const imagesArray = (
+    item?.images ? item?.images : item?.quote_info?.images
+  )?.map(item => {
+    return {uri: item?.image};
+  });
 
   const changeStatus = async value => {
     const url = `auth/negotiator/hiring/update/${item?.id}`;
-    setLoading(true);
+    value == 'onGoing' ? setLoading(true) : setDeclineLoading(true);
     const response = await Post(url, {status: value}, apiHeader(token));
-    setLoading(false);
+    value == 'onGoing' ? setLoading(false) : setDeclineLoading(false);
     if (response != undefined) {
-    console.log("🚀 ~ file: JobCard.js:38 ~ changeStatus ~ response:", response?.data)
-  
+      console.log(
+        '🚀 ~ file: JobCard.js:38 ~ changeStatus ~ response:',
+        response?.data,
+      );
       setModalVisible(false);
+      getProposal()
     }
   };
 
@@ -53,7 +65,6 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
           fromSeeAll && {
             width: windowWidth * 0.46,
             paddingVertical: moderateScale(10, 0.6),
-            // height: windowHeight * 0.22,
           },
           style,
         ]}>
@@ -64,9 +75,6 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
           }}>
           <TouchableOpacity
             activeOpacity={0.8}
-            // onPress={() => {
-            //   navigationService.navigate('MyAccounts');
-            // }}
             style={{
               width: fromSeeAll
                 ? moderateScale(50, 0.3)
@@ -79,15 +87,11 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
                 : moderateScale(18, 0.3),
 
               overflow: 'hidden',
-            }}
-            >
+            }}>
             <CustomImage
-              // onPress={() => {
-              //   navigationService.navigate('MyAccounts');
-              // }}
-              source={
-                item?.quote_info?.images.length > 0 
-                  ? {uri: item?.quote_info?.images[0]?.image} 
+              source={item?.images?.length > 0 ? {uri:item?.images[0]?.image} :
+                item?.quote_info?.images.length > 0
+                  ? {uri: item?.quote_info?.images[0]?.image}
                   : require('../Assets/Images/man1.jpg')
               }
               resizeMode={'cover'}
@@ -101,7 +105,7 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
             isBold
             numberOfLines={2}
             style={{
-              width:windowWidth*0.2,
+              width: windowWidth * 0.2,
               fontSize: fromSeeAll
                 ? moderateScale(11, 0.6)
                 : moderateScale(9, 0.6),
@@ -125,8 +129,7 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
           }}>
           {item?.notes ? item?.notes : item?.quote_info?.notes}
         </CustomText>
-        <View
-          style={styles.row}>
+        <View style={styles.row}>
           <View>
             <CustomText
               isBold
@@ -142,7 +145,6 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
             <CustomText
               style={{
                 fontSize: moderateScale(8, 0.6),
-                //  backgroundColor : 'red'
               }}>
               Vendor Qoute
             </CustomText>
@@ -166,7 +168,6 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
             <CustomText
               style={{
                 fontSize: moderateScale(8, 0.6),
-                //  backgroundColor : 'red'
               }}>
               Offering
             </CustomText>
@@ -189,8 +190,6 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
               ? Color.themeColor
               : Color.black
           }
-          // borderColor={Color.white}
-          // borderWidth={2}
           borderRadius={moderateScale(30, 0.3)}
           alignSelf={'flex-start'}
           fontSize={fromSeeAll ? moderateScale(7, 0.6) : moderateScale(7, 0.6)}
@@ -211,12 +210,18 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
             />
           </View>
           <CustomText style={[styles.text, {}]} isBold>
-            {item?.quote_info?.title}
+            {item?.title}
           </CustomText>
-          <CustomText style={styles.text}>{item?.coverletter}</CustomText>
+          <CustomText style={styles.text}>
+            {item?.coverletter ? item?.coverletter : item?.notes}
+          </CustomText>
           <CustomText
             onPress={() => {
-              if (item?.quote_info?.images.length > 0) {
+              if (
+                (item?.images
+                  ? item?.images.length
+                  : item?.quote_info?.images.length) > 0
+              ) {
                 setImageModal(true);
               } else {
                 Platform.OS == 'android'
@@ -228,9 +233,9 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
             attachments...
           </CustomText>
 
-          <CustomText style={styles.text}>
-            Are you Sure You want to Help.?
-          </CustomText>
+          {/* <CustomText style={styles.text}>
+            Are you Sure You want to Help?
+          </CustomText> */}
 
           <View
             style={{
@@ -242,7 +247,13 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
             }}>
             <CustomButton
               isBold
-              text={'Accept'}
+              text={
+                loading ? (
+                  <ActivityIndicator color={Color.white} size={'small'} />
+                ) : (
+                  'Accept'
+                )
+              }
               textColor={Color.white}
               width={windowWidth * 0.25}
               height={windowHeight * 0.04}
@@ -251,13 +262,19 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
               borderRadius={moderateScale(30, 0.3)}
               fontSize={moderateScale(11, 0.6)}
               onPress={() => {
-                changeStatus('accepted');
+                changeStatus('onGoing');
                 // setModalVisible(false);
               }}
             />
             <CustomButton
               isBold
-              text={'Decline'}
+              text={
+                declineLoading ? (
+                  <ActivityIndicator color={Color.white} size={'small'} />
+                ) : (
+                  'Decline'
+                )
+              }
               textColor={Color.white}
               width={windowWidth * 0.25}
               height={windowHeight * 0.04}
@@ -274,7 +291,7 @@ const JobCard = ({fromSeeAll, style, onPress, item}) => {
         </View>
       </Modal>
       <ImageView
-        images={item?.quote_info?.images}
+        images={imagesArray}
         imageIndex={0}
         visible={imageModal}
         onRequestClose={() => setImageModal(false)}
@@ -298,7 +315,7 @@ const styles = ScaledSheet.create({
     paddingLeft: moderateScale(5, 0.6),
     paddingTop: moderateScale(5, 0.6),
   },
-  row:{
+  row: {
     flexDirection: 'row',
     marginTop: moderateScale(10, 0.3),
     justifyContent: 'space-between',
@@ -338,6 +355,7 @@ const styles = ScaledSheet.create({
   },
   text: {
     // width: windowWidth * 0.9,
+    paddingHorizontal: moderateScale(10, 0.6),
     textAlign: 'center',
     marginTop: moderateScale(10, 0.3),
     color: Color.black,

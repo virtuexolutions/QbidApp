@@ -14,7 +14,7 @@ const CustomStatusModal = ({
   text,
   data,
 }) => {
-  console.log("🚀 ~ file: CustomStatusModal.js:17 ~ data:", data)
+  // console.log("🚀 ~ file: CustomStatusModal.js:17 ~ data:", data)
   return (
     <Modal
       isVisible={isModalVisible}
