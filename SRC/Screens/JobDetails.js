@@ -49,6 +49,7 @@ const JobDetails = props => {
   );
 
   const [data, setData] = useState(data1);
+  console.log("🚀 ~ file: JobDetails.js:52 ~ JobDetails ~ data:", data)
   const [checked, setChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [bidDone, setBidDone] = useState(false);

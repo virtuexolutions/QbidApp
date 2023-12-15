@@ -116,7 +116,7 @@ const MyAccounts = props => {
     setIsLoading(false);
 
     if (response !== undefined) {
-      // console.log("🚀 ~ file: MyAccounts.js:113 ~ EditProfile ~ response:", response?.data)
+      console.log("🚀 ~ file: MyAccounts.js:113 ~ EditProfile ~ response:", response?.data)
       // console.log('response?.data?.data?.user', response?.data);
       dispatch(setUserData(response?.data?.user_info));
 

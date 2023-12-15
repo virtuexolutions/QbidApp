@@ -49,23 +49,23 @@ const CompleteJobes = props => {
 
   const [images, setImages] = useState([])
 
-  const dummydata = [
-    {
-      name: 'john',
-      image: require('../Assets/Images/man1.jpg'),
-      comment: 'hello every one',
-    },
-    {
-      name: 'john',
-      image: require('../Assets/Images/man1.jpg'),
-      comment: 'hhfjshdfjhskdfhjkshd',
-    },
-    {
-      name: 'john',
-      image: require('../Assets/Images/man1.jpg'),
-      comment: 'hello eltjikrejti reauthu ierterhtrtvery one',
-    },
-  ];
+  // const dummydata = [
+  //   {
+  //     name: 'john',
+  //     image: require('../Assets/Images/man1.jpg'),
+  //     comment: 'hello every one',
+  //   },
+  //   {
+  //     name: 'john',
+  //     image: require('../Assets/Images/man1.jpg'),
+  //     comment: 'hhfjshdfjhskdfhjkshd',
+  //   },
+  //   {
+  //     name: 'john',
+  //     image: require('../Assets/Images/man1.jpg'),
+  //     comment: 'hello eltjikrejti reauthu ierterhtrtvery one',
+  //   },
+  // ];
 
   useEffect(() => {
     setImages(data1?.images.map((item)=>{return ({uri:item?.image})}))
@@ -74,13 +74,13 @@ const CompleteJobes = props => {
   }, [])
   
 
-  const imagesSilder = [
-    require('../Assets/Images/man1.jpg'),
-    require('../Assets/Images/man2.jpg'),
-    require('../Assets/Images/man3.jpg'),
-    require('../Assets/Images/master.png'),
-    require('../Assets/Images/user3.jpg'),
-  ];
+  // const imagesSilder = [
+  //   require('../Assets/Images/man1.jpg'),
+  //   require('../Assets/Images/man2.jpg'),
+  //   require('../Assets/Images/man3.jpg'),
+  //   require('../Assets/Images/master.png'),
+  //   require('../Assets/Images/user3.jpg'),
+  // ];
 
 
   return (
@@ -121,8 +121,8 @@ const CompleteJobes = props => {
           style={styles.sectionContainer}
           contentContainerStyle={{
             paddingBottom: moderateScale(80, 0.6),
-            paddingTop: moderateScale(40, 0.6),
-            paddingLeft: moderateScale(15, 0.6),
+            // paddingTop: moderateScale(40, 0.6),
+            // paddingHorizontal: moderateScale(5, 0.6),
           }}>
           <View>
             <SliderBox
@@ -136,6 +136,8 @@ const CompleteJobes = props => {
                 fontSize: moderateScale(20, 0.6),
                 paddingVertical: moderateScale(20, 0.3),
                 color: Color.white,
+                // backgroundColor:'green',
+                paddingHorizontal:moderateScale(10,0.6)
               }}
               isBold>
               {data1?.title}
@@ -147,11 +149,12 @@ const CompleteJobes = props => {
                   style={[
                     styles.viewText,
                     {
+                    
                       color: Color.black,
                     },
                   ]}
                   isBold>
-                  price
+                 quoted price
                 </CustomText>
                 <CustomText style={styles.viewText} isBold>
                   {data1?.quoted_price}
@@ -161,8 +164,8 @@ const CompleteJobes = props => {
                 style={[
                   styles.views,
                   {
-                    marginHorizontal: moderateScale(30, 0.3),
-                    width: windowWidth * 0.28,
+                    // marginHorizontal: moderateScale(30, 0.3),
+                    // width: windowWidth * 0.28,
                   },
                 ]}>
                 <CustomText
@@ -174,7 +177,7 @@ const CompleteJobes = props => {
                     },
                   ]}
                   isBold>
-                  vendor quote
+                 asking price
                 </CustomText>
                 <CustomText style={styles.viewText} isBold>
                 {data1?. asking_price}
@@ -327,17 +330,20 @@ const styles = ScaledSheet.create({
   },
   views: {
     height: windowHeight * 0.12,
-    width: windowWidth * 0.23,
+    width: windowWidth * 0.25,
     backgroundColor: Color.white,
     borderRadius: 10,
+    // backgroundColor:'red',
     alignItems: 'center',
     justifyContent: 'center',
   },
   viewText: {
     fontSize: moderateScale(13, 0.6),
-    paddingHorizontal: moderateScale(10, 0.3),
+    paddingHorizontal: moderateScale(5, 0.3),
     paddingVertical: moderateScale(5, 0.3),
     color: Color.black,
+    textAlign:'center',
+    // backgroundColor:'blue'
   },
   imageConatiner: {
     height: windowHeight * 0.07,
@@ -349,11 +355,14 @@ const styles = ScaledSheet.create({
     fontSize: moderateScale(20, 0.6),
     paddingVertical: moderateScale(15, 0.3),
     color: Color.white,
+    paddingHorizontal:moderateScale(10,0.6)
   },
   description: {
     fontSize: moderateScale(14, 0.6),
     width: windowWidth * 0.87,
     color: Color.white,
+    paddingHorizontal:moderateScale(10,0.6)
+
   },
   view2: {
     flexDirection: 'row',
@@ -365,6 +374,8 @@ const styles = ScaledSheet.create({
   heading1: {
     fontSize: moderateScale(18, 0.6),
     color: Color.white,
+    paddingHorizontal:moderateScale(10,0.6)
+
   },
   userview: {
     flexDirection: 'row',
@@ -389,8 +400,11 @@ const styles = ScaledSheet.create({
   reviewheading: {
     fontSize: moderateScale(20, 0.6),
     color: Color.white,
+    paddingHorizontal:moderateScale(10,0.6)
+
   },
   reviewcard: {
+    marginHorizontal:moderateScale(15,0.6),
     flexDirection: 'row',
     marginVertical: moderateScale(10, 0.3),
     paddingHorizontal: moderateScale(10, 0.3),
@@ -419,5 +433,7 @@ const styles = ScaledSheet.create({
   parentview:{
     flexDirection: 'row',
     width: windowWidth,
+    justifyContent:'space-between',
+    paddingHorizontal:moderateScale(15,0.6),
   } 
 });

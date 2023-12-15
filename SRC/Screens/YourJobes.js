@@ -196,7 +196,7 @@ const YourJobes = props => {
               paddingBottom: moderateScale(80, 0.6),
             }}
             renderItem={({item, index}) => {
-              // console.log("🚀 ~ file: SeeAllNegotiator.js:230 ~ SeeAllNegotiator ~ item:", item)
+              console.log("🚀 ~ file: SeeAllNegotiator.js:230 ~ SeeAllNegotiator ~ item:", item)
               console.log(index % 2 == 0);
               return type != 'Seeking Help' ? (
                 <TouchableOpacity
@@ -232,20 +232,27 @@ const YourJobes = props => {
                   </View>
                   <View
                     style={{
+                      paddingTop:moderateScale(15,0.3),
                       paddingHorizontal: moderateScale(10, 0.3),
+                      // alignItems:'center',
+                      justifyContent:'center'
                     }}>
                     <View
                       style={{
                         flexDirection: 'row',
                         alignItems: 'center',
+                        // justifyContent:'center'
                       }}>
                       <CustomText
                         isBold
+                        numberOfLines={1}
                         style={{
                           color: Color.black,
                           fontSize: moderateScale(12, 0.6),
-                          textTransform: 'uppercase',
-                          paddingRight: moderateScale(10, 0.3),
+                          // textTransform: 'uppercase',
+                          width:windowWidth*0.2,
+                          // backgroundColor:'red',
+                          // paddingRight: moderateScale(10, 0.3),
                         }}>
                         {item?.user_info?.first_name}
                       </CustomText>
