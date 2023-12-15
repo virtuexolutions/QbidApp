@@ -49,7 +49,6 @@ const JobDetails = props => {
   );
 
   const [data, setData] = useState(data1);
-  // console.log("🚀 ~ file: JobDetails.js:52 ~ JobDetails ~ data:", data1?.review)
   const [checked, setChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [bidDone, setBidDone] = useState(false);
@@ -73,7 +72,6 @@ const JobDetails = props => {
     setIsLoading(false);
 
     if (response != undefined) {
-      //  console.log("🚀 ~ file: JobDetails.js:86 ~ bidDetails ~ response:", response?.data?.quote_info)
       setData(response?.data?.quote_info);
 
       const mainuserData = response?.data?.quote_info?.bids?.find(
@@ -96,7 +94,6 @@ const JobDetails = props => {
     const response = await Post(url, {status: value}, apiHeader(token));
     setIsLoading(false);
     if (response != undefined) {
-      // console.log("🚀 ~ file: JobDetails.js:99 ~ changeStatus ~ response:", response?.data)
       bidDetails();
     }
   };
@@ -199,7 +196,7 @@ const JobDetails = props => {
             paddingBottom: moderateScale(80, 0.6),
             paddingTop: moderateScale(40, 0.6),
             paddingLeft: moderateScale(15, 0.6),
-            // backgroundColor:'red'
+            // backgroundColor:'redx'
           }}>
           {isLoading ? (
             <View
@@ -527,7 +524,6 @@ const JobDetails = props => {
                       paddingBottom: moderateScale(30, 0.6),
                     }}
                     renderItem={({item, index}) => {
-                      // console.log("🚀 ~ file: JobDetails.js:484 ~ JobDetails ~ item:", data?.quote_info?.user_info)
 
                       return (
                         <>
@@ -571,7 +567,6 @@ const JobDetails = props => {
                                   textColor={Color.white}
                                   width={windowWidth * 0.25}
                                   height={windowHeight * 0.04}
-                                  // marginTop={moderateScale(10, 0.3)}
                                   bgColor={
                                     userRole == 'Qbid Member'
                                       ? Color.blue
@@ -583,7 +578,6 @@ const JobDetails = props => {
                                   fontSize={moderateScale(11, 0.6)}
                                   onPress={() => {
                                     changeStatus('accept', item?.id);
-                                    // setModalVisible(false);
                                   }}
                                 />
                                 <CustomButton
@@ -592,7 +586,6 @@ const JobDetails = props => {
                                   textColor={Color.white}
                                   width={windowWidth * 0.25}
                                   height={windowHeight * 0.04}
-                                  // marginTop={moderateScale(10, 0.3)}
                                   bgColor={
                                     userRole == 'Qbid Member'
                                       ? Color.blue
@@ -604,7 +597,6 @@ const JobDetails = props => {
                                   fontSize={moderateScale(11, 0.6)}
                                   onPress={() => {
                                     changeStatus('reject', item?.id);
-                                    // setModalVisible(false);
                                   }}
                                 />
                               </View>
@@ -665,7 +657,6 @@ const JobDetails = props => {
                       height={windowHeight * 0.07}
                       marginTop={moderateScale(20, 0.3)}
                       onPress={() => {
-                        // setBidDone(true);
                         toggleModal();
                       }}
                       bgColor={

@@ -29,16 +29,16 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import JobCard from '../Components/JobCard';
 import {Get} from '../Axios/AxiosInterceptorFunction';
 import {useIsFocused} from '@react-navigation/native';
-import GetLocation from 'react-native-get-location'
+import GetLocation from 'react-native-get-location';
 import NoData from '../Components/NoData';
-import { setLocation } from '../Store/slices/common';
+import {setLocation} from '../Store/slices/common';
 
 const NegotiatorHomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
   const userData = useSelector(state => state.commonReducer.userData);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const [searchData, setSearchData] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -49,7 +49,22 @@ const NegotiatorHomeScreen = () => {
   const [working, setWorking] = useState([]);
   const [jobPosting, setJobPosting] = useState([]);
   const isFocused = useIsFocused();
-  const [isLocation ,setIsLocation]=useState(false)
+  const [isLocation, setIsLocation] = useState(false);
+  // const [recommand ,setRecommand] =useState([])
+
+  // const getRecommand =async () => {
+
+  //   const url = 'auth/negotiator/quote/recommended'
+  //   setIsLoading(true)
+  //   const response =await Get(url ,token)
+  //  return  console.log("🚀 ~ file: NegotiatorHomeScreen.js:61 ~ getRecommand ~ response:", response?.data?.quote_info)
+
+  //  setIsLoading(false)
+  //   if(response != undefined){
+  //     setRecommand()
+
+  //   }
+  // }
 
   const getProposal = async () => {
     setIsLoading(true);
@@ -60,10 +75,9 @@ const NegotiatorHomeScreen = () => {
       Get('auth/negotiator/hiring/list', token),
     ]);
     setIsLoading(false);
-
     if (response1 != undefined) {
       ![null, undefined, ''].includes(response2?.data?.quote_info) &&
-        setRecommended(response1?.data?.quote_info?.data);
+        setRecommended(response1?.data?.quote_info);
     }
     if (response2 != undefined) {
       ![null, undefined, ''].includes(response2?.data?.quote_info) &&
@@ -85,30 +99,26 @@ const NegotiatorHomeScreen = () => {
     });
   }, []);
 
-  const getLocation =() => {
-
+  const getLocation = () => {
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
       timeout: 60000,
-      isLocation
-  })
-  .then(location => {
-    setIsLocation(location)
-    dispatch(setLocation(location))
-    
-      
-  })
-  .catch(error => {
-      const { code, message } = error;
-      console.warn(code, message);
-  })
-  }
-  
+      isLocation,
+    })
+      .then(location => {
+        setIsLocation(location);
+        dispatch(setLocation(location));
+      })
+      .catch(error => {
+        const {code, message} = error;
+        console.warn(code, message);
+      });
+  };
+
   useEffect(() => {
-    // console.log('inside useEffect ==============>')
-    getLocation()
-  }, [])
-  
+    getLocation();
+  }, []);
+
   return (
     <ScreenBoiler
       statusBarBackgroundColor={

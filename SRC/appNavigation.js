@@ -49,7 +49,7 @@ const AppNavigator = () => {
   const walkThrough = useSelector(state => state.authReducer.userWalkThrough);
   const isVerified = useSelector(state => state.authReducer.isVerified);
   const token = useSelector(state => state.authReducer.token);
-  console.log("🚀 ~ file: appNavigation.js:52 ~ AppNavigator ~ token:", token)
+  // console.log("🚀 ~ file: appNavigation.js:52 ~ AppNavigator ~ token:", token)
   const selectedRole = useSelector(state => state.commonReducer.selectedRole);
   console.log("🚀 ~ file: appNavigation.js:53 ~ AppNavigator ~ selectedRole:", selectedRole)
   const isMileage = useSelector(state => state.authReducer.isMileage)
