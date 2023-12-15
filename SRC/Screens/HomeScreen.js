@@ -42,7 +42,6 @@ const HomeScreen = () => {
   const [multiImages, setMultiImages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const isFocused = useIsFocused();
-  // const [selectedStatus, setSelectedStatus] = useState('');
   const [visible, setVisible] = useState(false);
   const [myQuotes, setMyQuotes] = useState([]);
   const [proposals, setProposals] = useState([]);
@@ -62,6 +61,7 @@ const HomeScreen = () => {
     ]);
     setIsLoading(false);
     if (response1 != undefined) {
+    console.log("🚀 ~ file: HomeScreen.js:64 ~ getAllData ~ response1:", response1?.data)
     
       setNegotiator(response1?.data?.negotitator_info)
     }
@@ -209,6 +209,7 @@ const HomeScreen = () => {
                   />
                 );
               }}
+              // data={[]}
               data={negotiator.slice(0,5)}
               horizontal
               showsHorizontalScrollIndicator={false}

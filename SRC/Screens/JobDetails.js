@@ -42,6 +42,7 @@ const JobDetails = props => {
   console.log('🚀 ~ file: JobDetails.js:42 ~ JobDetails ~ data1:', data1);
 
   const user = useSelector(state => state.commonReducer.userData);
+  console.log("🚀 ~ file: JobDetails.js:45 ~ JobDetails ~ user:", user)
   const token = useSelector(state => state.authReducer.token);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const UserCoverLetterArray = useSelector(
@@ -318,7 +319,7 @@ const JobDetails = props => {
               </CustomText>
               <View style={styles.row}>
                 <Detailcards
-                  data={'Chris'}
+                  data={data?.user_info?.first_name}
                   iconName={'vcard'}
                   title={'Member Name'}
                   iconType={FontAwesome}
@@ -368,7 +369,6 @@ const JobDetails = props => {
                       color: Color.white,
                       fontSize: moderateScale(17, 0.6),
                       marginVertical: moderateScale(10, 0.3),
-
                     }}>
                     {`You will earn`}
                   </CustomText>
@@ -376,30 +376,33 @@ const JobDetails = props => {
                     style={{
                       width: windowWidth * 0.2,
                       height: windowHeight * 0.08,
-                      paddingHorizontal:moderateScale(10,.6),
+                      paddingHorizontal: moderateScale(10, 0.6),
                       backgroundColor: 'white',
-                      justifyContent:'center',
-                      alignItems:'center',
+                      justifyContent: 'center',
+                      alignItems: 'center',
                       borderRadius: moderateScale(10, 0.6),
                     }}>
                     <View>
-                    <CustomText
-                      isBold
-                      style={{
-                        color: Color.black,
-                        fontSize: moderateScale(17, 0.6),
-                       
-                      }}>
-                      {data1?.quote_info?.negotiator_amount ? `${numeral(
-                        data1?.quote_info?.negotiator_amount,
-                      ).format('$0,0a')}` : `${numeral(
-                        ((data?.quoted_price - data?.asking_price)*data?.offering_percentage)/100
-                      ).format('$0,0a')}` }
-                    </CustomText>
+                      <CustomText
+                        isBold
+                        style={{
+                          color: Color.black,
+                          fontSize: moderateScale(17, 0.6),
+                        }}>
+                        {data1?.quote_info?.negotiator_amount
+                          ? `${numeral(
+                              data1?.quote_info?.negotiator_amount,
+                            ).format('$0,0a')}`
+                          : `${numeral(
+                              ((data?.quoted_price - data?.asking_price) *
+                                data?.offering_percentage) /
+                                100,
+                            ).format('$0,0a')}`}
+                      </CustomText>
                     </View>
                   </View>
                 </>
-              ) }
+              )}
               {userRole != 'Qbid Member' && (
                 <>
                   <CustomText
@@ -524,7 +527,6 @@ const JobDetails = props => {
                       paddingBottom: moderateScale(30, 0.6),
                     }}
                     renderItem={({item, index}) => {
-
                       return (
                         <>
                           <BidderDetail
@@ -617,11 +619,11 @@ const JobDetails = props => {
                       fontSize: moderateScale(17, 0.6),
                       marginVertical: moderateScale(20, 0.3),
                     }}>
-                    Your Bid Detail
+                    Your Bid Details
                   </CustomText>
                   <BidderDetail
                     item={{
-                      photo: require('../Assets/Images/man1.jpg'),
+                      image:user?.photo,
                       name: user?.first_name,
                       rating: user?.rating,
                       description: userData?.coverletter
@@ -722,7 +724,9 @@ const JobDetails = props => {
               viewWidth={0.75}
               inputWidth={0.68}
               border={1}
-              borderColor={Color.blue}
+              borderColor={
+                userRole == 'Qbid Negotiator' ? Color.blue : Color.black
+              }
               backgroundColor={'#FFFFFF'}
               marginTop={moderateScale(15, 0.6)}
               color={Color.themeColor}
@@ -738,7 +742,9 @@ const JobDetails = props => {
               viewWidth={0.75}
               inputWidth={0.68}
               border={1}
-              borderColor={Color.blue}
+              borderColor={
+                userRole == 'Qbid Negotiator' ? Color.blue : Color.black
+              }
               backgroundColor={'#FFFFFF'}
               marginTop={moderateScale(15, 0.6)}
               color={Color.themeColor}
@@ -754,7 +760,9 @@ const JobDetails = props => {
               viewWidth={0.75}
               inputWidth={0.68}
               border={1}
-              borderColor={Color.blue}
+              borderColor={
+                userRole == 'Qbid Negotiator' ? Color.blue : Color.black
+              }
               backgroundColor={'#FFFFFF'}
               marginTop={moderateScale(15, 0.6)}
               color={Color.themeColor}
@@ -766,7 +774,9 @@ const JobDetails = props => {
               array={UserCoverLetterArray}
               backgroundColor={'white'}
               item={coverletterRole}
-              borderColor={Color.blue}
+              borderColor={
+                userRole == 'Qbid Negotiator' ? Color.blue : Color.black
+              }
               borderWidth={1}
               marginTop={moderateScale(20, 0.6)}
               setItem={setCoverLetterRole}
@@ -788,7 +798,9 @@ const JobDetails = props => {
               viewWidth={0.75}
               inputWidth={0.66}
               border={1}
-              borderColor={Color.blue}
+              borderColor={
+                userRole == 'Qbid Negotiator' ? Color.blue : Color.black
+              }
               backgroundColor={'#FFFFFF'}
               marginTop={moderateScale(15, 0.6)}
               color={Color.themeColor}

@@ -86,10 +86,7 @@ const SeeAllScreen = props => {
     const response = await Get(url, token);
     setIsLoading(false);
     if (response != undefined) {
-       console.log(
-        '🚀 ~ file: HomeScreen.js:97 ~ filterQuotes ~ response:',
-        response?.data?.quote_info[0]?.images,
-      );
+      
       setNewArray(response?.data?.quote_info);
     }
   };
@@ -108,7 +105,6 @@ const SeeAllScreen = props => {
         response?.data,
       );
       if (type == 'quotes') {
-        //  console.log('Here')
         value == 'loadMore'
           ? setNewArray(prev => [...prev, ...response?.data?.quote_info?.data])
           : setNewArray(response?.data?.quote_info?.data);
@@ -217,14 +213,12 @@ const SeeAllScreen = props => {
                   style={{
                     alignItems: 'center',
                     justifyContent: 'center',
-                    // backgroundColor:'red',
                     height: windowHeight * 0.5,
                   }}>
                   <NoData
                     style={{
                       width: windowWidth * 0.95,
                       height: windowHeight * 0.3,
-                      // backgroundColor: 'green',
                       alignItems: 'center',
                       justifyContent: 'center',
                     }}
