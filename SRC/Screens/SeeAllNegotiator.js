@@ -64,14 +64,14 @@ const SeeAllNegotiator = props => {
     const response = await Get(url, token);
     type1 == 'loadMore' ? setLoadMore(false) : setIsLoading(false);
     if (response != undefined) {
-        return console.log(
+         console.log(
         '🚀 ~ file: SeeAllNegotiator.js:74 ~ getData ~ response:',
         response?.data,
       );
       if(type == 'Working On'){
         type1 == 'loadMore'
-        ? setNewArray(prev => [...prev, ...response?.data?.quote_info])
-        : setNewArray(response?.data?.hiring_info?.data);
+        ? setNewArray(prev => [...prev, ...response?.data?.quote_info?.data])
+        : setNewArray(response?.data?.quote_info?.data);
       }
       else if (type != 'job posts') {
         type1 == 'loadMore'
