@@ -1,5 +1,5 @@
 // export const baseUrl = "https://ddc8-113-203-241-45.ngrok-free.app";
-export const baseUrl = "https://qbid.ad-wize.com";
+export const baseUrl = "https://qbid.ad-wize.net";
 export const imageUrl = `${baseUrl}/api/images/`;
 export const profilePicUrl = `${baseUrl}/uploads`
 

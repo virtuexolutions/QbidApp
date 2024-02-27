@@ -26,7 +26,7 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import ReviewModal from './ReviewModal';
 
 const MyQouteCard = ({item}) => {
-  console.log("🚀 ~ file: MyQouteCard.js:29 ~ MyQouteCard ~ item:", item?.status)
+  // console.log("🚀 ~ file: MyQouteCard.js:29 ~ MyQouteCard ~ item:", item?.status)
   const token = useSelector(state => state.authReducer.token);
   const [modalVisible, setModalVisible] = useState(false);
   const [cmpLoading, setCmpLoading] = useState(false);

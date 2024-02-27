@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   ToastAndroid,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
@@ -19,8 +20,9 @@ import CustomText from '../Components/CustomText';
 import Color from '../Assets/Utilities/Color';
 import ShowMoreAndShowLessText from '../Components/ShowMoreAndShowLessText';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Entypo from 'react-native-vector-icons/Entypo';
-import {Icon} from 'native-base';
+import Entypo from 'react-native-vector-icons/Entypo'
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import {Center, Icon} from 'native-base';
 import MarkCheckWithText from '../Components/MarkCheckWithText';
 import TextInputWithTitle from '../Components/TextInputWithTitle';
 import CustomButton from '../Components/CustomButton';
@@ -36,13 +38,14 @@ import {useIsFocused} from '@react-navigation/native';
 import NoData from '../Components/NoData';
 import {validateEmail} from '../Config';
 import ImageView from 'react-native-image-viewing';
+import ImagePickerModal from '../Components/ImagePickerModal';
 
 const JobDetails = props => {
   const data1 = props?.route?.params?.item;
   console.log('🚀 ~ file: JobDetails.js:42 ~ JobDetails ~ data1:', data1);
 
   const user = useSelector(state => state.commonReducer.userData);
-  console.log("🚀 ~ file: JobDetails.js:45 ~ JobDetails ~ user:", user)
+  console.log('🚀 ~ file: JobDetails.js:45 ~ JobDetails ~ user:', user);
   const token = useSelector(state => state.authReducer.token);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const UserCoverLetterArray = useSelector(
@@ -50,20 +53,26 @@ const JobDetails = props => {
   );
 
   const [data, setData] = useState(data1);
-  console.log("🚀 ~ file: JobDetails.js:52 ~ JobDetails ~ data:", data)
+  console.log('🚀 ~ file: JobDetails.js:52 ~ JobDetails ~ data:', data);
   const [checked, setChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [bidDone, setBidDone] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [fullName, setFullName] = useState('');
-  const [Email, setEmail] = useState('');
-  const [number, setNumber] = useState('');
+  const [fullName, setFullName] = useState(user?.first_name);
+  const [Email, setEmail] = useState(user?.email);
+  const [number, setNumber] = useState(user?.phone);
   const [desc, setDesc] = useState('');
   const isFocused = useIsFocused();
   const [coverletterRole, setCoverLetterRole] = useState('Expertise In');
   const [userData, setUserData] = useState({});
   const [imageModalVisible, setImageModalVisible] = useState(false);
   const [finalImagesArray, setFinalImagesArray] = useState([]);
+  const [imagePickerVisible, setImagePickerVisible] = useState(false);
+  // const [image, setImage] = useState({});
+  const [multiImages, setMultiImages] = useState([]);
+  console.log("🚀 ~ JobDetails ~ multiImages:", multiImages)
+
+  //  console.log("🚀 ~ JobDetails ~ image:", image)
 
   const bidDetails = async () => {
     const url = `auth/negotiator/quote_detail/${
@@ -102,6 +111,7 @@ const JobDetails = props => {
 
   const bidNow = async () => {
     const url = 'auth/negotiator/bid';
+    const formData = new FormData();
     const body = {
       quote_id: data?.id,
       fullname: fullName,
@@ -138,6 +148,9 @@ const JobDetails = props => {
       return Platform.OS == 'android'
         ? ToastAndroid.show('Description is too short', ToastAndroid.SHORT)
         : Alert.alert('Description is too short');
+    }
+    for (let key in body) {
+      formData.append(key, body[key]);
     }
 
     setIsLoading(true);
@@ -326,13 +339,13 @@ const JobDetails = props => {
                   iconType={FontAwesome}
                   marginTop={moderateScale(10, 0.3)}
                 />
-                <Detailcards
+                {/* <Detailcards
                   data={numeral(data?.asking_price).format('$0,0a')}
                   iconName={'calculator'}
                   title={'Expected Qoute'}
                   iconType={Entypo}
                   marginTop={moderateScale(10, 0.3)}
-                />
+                /> */}
                 <Detailcards
                   data={data?.city}
                   iconName={'building'}
@@ -362,7 +375,7 @@ const JobDetails = props => {
                   marginTop={moderateScale(30, 0.3)}
                 />
               </View>
-              {userRole != 'Qbid Member' && (
+              {/* {userRole != 'Qbid Member' && (
                 <>
                   <CustomText
                     isBold
@@ -403,7 +416,7 @@ const JobDetails = props => {
                     </View>
                   </View>
                 </>
-              )}
+              )} */}
               {userRole != 'Qbid Member' && (
                 <>
                   <CustomText
@@ -624,7 +637,7 @@ const JobDetails = props => {
                   </CustomText>
                   <BidderDetail
                     item={{
-                      image:user?.photo,
+                      image: user?.photo,
                       name: user?.first_name,
                       rating: user?.rating,
                       description: userData?.coverletter
@@ -654,7 +667,7 @@ const JobDetails = props => {
                     />
 
                     <CustomButton
-                      text={'Bid Now'}
+                      text={'Bid on this Job Now'}
                       textColor={Color.white}
                       width={windowWidth * 0.92}
                       height={windowHeight * 0.07}
@@ -700,11 +713,18 @@ const JobDetails = props => {
         <View
           style={{
             width: windowWidth * 0.9,
-            height: windowHeight * 0.75,
+           
+            height: windowHeight * 0.9,
             borderRadius: moderateScale(15, 0.3),
             backgroundColor: '#f2fce4',
-            alignItems: 'center',
+           
           }}>
+            <ScrollView
+            contentContainerStyle={{
+              paddingVertical : moderateScale(5,0.6),
+              alignItems: 'center',
+            }}
+            >
           <View style={{marginTop: moderateScale(20, 0.3)}}>
             <CustomText
               isBold
@@ -789,6 +809,8 @@ const JobDetails = props => {
                 width: windowWidth * 0.75,
               }}
             />
+
+          
             <TextInputWithTitle
               multiline={true}
               secureText={false}
@@ -808,6 +830,75 @@ const JobDetails = props => {
               placeholderColor={Color.themeLightGray}
               borderRadius={moderateScale(25, 0.3)}
             />
+             <CustomText
+                style={[
+                  styles.title,
+                  {
+                    marginTop: moderateScale(10, 0.3),
+                    width: windowWidth * 0.25,
+                  },
+                ]}
+                isBold={true}
+                children={'attachments'}
+              />
+          
+           <View style={styles.imagesContainer}>
+            <FlatList
+              horizontal
+              data={multiImages}
+              showsHorizontalScrollIndicator={false}
+              style={{
+                flexGrow: 0,
+              }}
+              renderItem={({item, index}) => {
+                return (
+                  <View
+                    style={[
+                      styles.addImageContainer,
+                      {borderWidth: 0, borderRadius: moderateScale(10, 0.3)},
+                    ]}>
+                    <Icon
+                      name={'close'}
+                      as={FontAwesome}
+                      color={Color.themeColor}
+                      size={moderateScale(12, 0.3)}
+                      style={{
+                        position: 'absolute',
+                        right: 1,
+                        top: 1,
+                        zIndex: 1,
+                      }}
+                      onPress={() => {
+                        let newArray = [...multiImages];
+                        newArray.splice(index, 1);
+                        setMultiImages(newArray);
+                      }}
+                    />
+                    <CustomImage
+                      source={{uri: item?.uri}}
+                      resizeMode={'stretch'}
+                      style={{
+                        width: moderateScale(50, 0.3),
+                        height: moderateScale(60, 0.3),
+                      }}
+                    />
+                  </View>
+                );
+              }}
+            />
+
+            <View style={styles.addImageContainer}>
+              <Icon
+                name={'plus'}
+                as={AntDesign}
+                color={Color.themeColor}
+                size={moderateScale(30, 0.3)}
+                onPress={() => {
+                  setImagePickerVisible(true);
+                }}
+              />
+            </View>
+          </View>
 
             <CustomButton
               text={
@@ -820,7 +911,7 @@ const JobDetails = props => {
               textColor={Color.white}
               width={windowWidth * 0.45}
               height={windowHeight * 0.06}
-              marginTop={moderateScale(30, 0.3)}
+              marginTop={moderateScale(5, 0.3)}
               onPress={() => {
                 bidNow();
               }}
@@ -833,7 +924,15 @@ const JobDetails = props => {
               }
               borderRadius={moderateScale(30, 0.3)}
             />
+           
+             <ImagePickerModal
+        show={imagePickerVisible}
+        setShow={setImagePickerVisible}
+        setMultiImages={setMultiImages}
+        // setFileObject={setImage}
+      />
           </View>
+          </ScrollView>
         </View>
       </Modal>
     </ScreenBoiler>
@@ -850,11 +949,65 @@ const styles = ScaledSheet.create({
     fontSize: moderateScale(10, 0.6),
     marginTop: moderateScale(20, 0.3),
   },
+  imagesContainer: {
+    marginTop: moderateScale(10, 0.3),
+    width: windowWidth * 0.8,
+    // marginLeft: moderateScale(10, 0.3),
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    alignSelf : 'center',
+    // backgroundColor : 'red'
+  },
+  addImageContainer: {
+    marginTop : moderateScale(10,0.3),
+    width: windowWidth * 0.14,
+    backgroundColor: Color.white,
+    borderRadius: moderateScale(5, 0.3),
+    borderWidth: 2,
+    borderColor: Color.blue,
+    height: windowHeight * 0.07,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: moderateScale(10, 0.3),
+    // marginTop: moderateScale(5, 0.3),
+    shadowColor: Color.themeColor,
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+
+    elevation: 9,
+    overflow: 'hidden',
+  },
+  attachmentContainer : {
+    backgroundColor: Color.white,
+    borderColor: Color.black,
+    borderWidth: 1,
+    height: windowHeight * 0.08,
+    width: windowHeight * 0.13,
+    borderRadius: moderateScale(10,0.6),
+    textAlign: 'center',
+    alignItems : 'center',
+    marginRight : moderateScale(10,0.3),
+    // paddingTop: moderateScale(5, 0.6),
+   },
   row: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     width: windowWidth * 0.95,
     // backgroundColor : 'red',
     justifyContent: 'space-between',
+  },
+  title: {
+    fontSize: moderateScale(15, 0.6),
+    color: '#353434',
+    // backgroundColor:'red',
+    width: windowWidth * 0.9,
+    marginleft: moderateScale(10, 0.3),
+    // textAlign: 'left',
+    // paddingHorizontal:moderateScale(10,.6),
+    marginTop: moderateScale(15, 0.3),
   },
 });

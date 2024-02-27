@@ -205,6 +205,20 @@ const Settings = () => {
             // isGradientp
             borderRadius={moderateScale(30, 0.3)}
           />
+           {/* <CustomButton
+            isBold
+            text={'Help'}
+            textColor={Color.themeDarkGray}
+            width={windowWidth * 0.9}
+            height={windowHeight * 0.07}
+            marginTop={moderateScale(10, 0.3)}
+            onPress={() => {
+              // navigationService.navigate('Support');
+            }}
+            bgColor={Color.white}
+            // isGradient
+            borderRadius={moderateScale(30, 0.3)}
+          /> */}
           <CustomButton
             isBold
             text={'Terms And Condition'}
@@ -219,6 +233,7 @@ const Settings = () => {
             // isGradient
             borderRadius={moderateScale(30, 0.3)}
           />
+           
           <CustomButton
             isBold
             text={'Support'}

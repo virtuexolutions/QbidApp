@@ -175,7 +175,7 @@ const Signup = () => {
     }
   };
 
-  const UserRoleArray = ['Qbid Negotiator', 'Qbid Member', 'Business Qbidder'];
+  const UserRoleArray = [ 'Qbid Member', 'Business Qbidder'];
   useEffect(() => {
     dispatch(setSelectedRole(selectedRole));
   }, [selectedRole]);

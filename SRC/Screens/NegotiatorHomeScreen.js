@@ -51,6 +51,8 @@ const NegotiatorHomeScreen = () => {
   const [jobPosting, setJobPosting] = useState([]);
   const isFocused = useIsFocused();
   const [isLocation, setIsLocation] = useState(false);
+  const [bidList, setBidList] = useState([]);
+  console.log('🚀 ~ NegotiatorHomeScreen ~ bidList:', bidList);
   // const [recommand ,setRecommand] =useState([])
 
   // const getRecommand =async () => {
@@ -70,25 +72,38 @@ const NegotiatorHomeScreen = () => {
   const getProposal = async () => {
     setIsLoading(true);
 
-    const [response1, response2, response3] = await Promise.all([
+    const [response1, response2, response3, response4] = await Promise.all([
       Get('auth/negotiator/quote/recommended', token),
       Get('auth/negotiator/quote/working', token),
+      Get('auth/my_bid_list', token),
       Get('auth/negotiator/hiring/list', token),
     ]);
     setIsLoading(false);
     if (response1 != undefined) {
+      // console.log(response1?.data?.quote_info);
       ![null, undefined, ''].includes(response2?.data?.quote_info) &&
         setRecommended(response1?.data?.quote_info);
     }
     if (response2 != undefined) {
-       console.log("🚀 ~ file: NegotiatorHomeScreen.js:83 ~ getProposal ~ response2:", response2?.data)
+      console.log(
+        '🚀 ~ file: NegotiatorHomeScreen.js:83 ~ getProposal ~ response2:',
+        response2?.data?.quote_info?.data,
+      );
       ![null, undefined, ''].includes(response2?.data?.quote_info) &&
         setWorking(response2?.data?.quote_info?.data);
       // setWorking(prev => [...prev, ...response2?.data?.hiring_info?.data]);
     }
     if (response3 != undefined) {
-      console.log("🚀 ~ file: NegotiatorHomeScreen.js:89 ~ getProposal ~ response3:",response3?.data?.hiring_info?.data?.length)
-      setJobPosting(response3?.data?.hiring_info?.data);
+      // console.log('🚀 ~ getProposal ~ response3:', response3?.data);
+      setBidList(response3?.data?.quote_info);
+    }
+
+    if (response4 != undefined) {
+      console.log(
+        '🚀 ~ file: NegotiatorHomeScreen.js:89 ~ getProposal ~ response3:',
+        response4?.data?.hiring_info?.data,
+      );
+      setJobPosting(response4?.data?.hiring_info?.data);
     }
   };
 
@@ -109,7 +124,10 @@ const NegotiatorHomeScreen = () => {
       isLocation,
     })
       .then(location => {
-        console.log("🚀 ~ file: NegotiatorHomeScreen.js:119 ~ getLocation ~ location:", location)
+        console.log(
+          '🚀 ~ file: NegotiatorHomeScreen.js:119 ~ getLocation ~ location:',
+          location,
+        );
         setIsLocation(location);
         dispatch(setLocation(location));
       })
@@ -299,7 +317,7 @@ const NegotiatorHomeScreen = () => {
               <View style={styles.recommendedContainer}>
                 <View style={styles.row}>
                   <CustomText isBold style={styles.heading}>
-                    Recommended
+                    QBIDS Open for Bid
                   </CustomText>
                   <CustomText
                     onPress={() => {
@@ -344,11 +362,10 @@ const NegotiatorHomeScreen = () => {
                   }}
                 />
               </View>
-
               <View style={styles.recommendedContainer}>
                 <View style={styles.row}>
                   <CustomText isBold style={styles.heading}>
-                    Working On
+                    accpeted qbids
                   </CustomText>
                   <CustomText
                     onPress={() => {
@@ -388,7 +405,59 @@ const NegotiatorHomeScreen = () => {
                         onPress={() => {
                           navigationService.navigate('JobDetails', {
                             item,
-                            type: 'working',
+                          });
+                        }}
+                      />
+                    );
+                  }}
+                />
+              </View>
+            
+
+              <View style={styles.recommendedContainer}>
+                <View style={styles.row}>
+                  <CustomText isBold style={styles.heading}>
+                    QBids Waiting Approvals
+                  </CustomText>
+                  <CustomText
+                    onPress={() => {
+                      navigationService.navigate('SeeAllNegotiator', {
+                        type: 'applied Jobs',
+                        data: working,
+                      });
+                    }}
+                    style={styles.viewall}>
+                    View all
+                  </CustomText>
+                </View>
+
+                <FlatList
+                  ListEmptyComponent={() => {
+                    return (
+                      <NoData
+                        style={{
+                          width: windowWidth * 0.95,
+                          height: windowHeight * 0.18,
+                          alignItems: 'center',
+                        }}
+                      />
+                    );
+                  }}
+                  // data={bidList && bidList.reverse().slice(0,5)}
+                  data={bidList.reverse().slice(0, 5)}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={{
+                    paddingHorizontal: moderateScale(15, 0.3),
+                  }}
+                  renderItem={({item, index}) => {
+                    return (
+                      <JobCard
+                        key={index}
+                        item={item}
+                        onPress={() => {
+                          navigationService.navigate('JobDetails', {
+                            item,
                           });
                         }}
                       />
@@ -397,15 +466,16 @@ const NegotiatorHomeScreen = () => {
                 />
               </View>
 
+             
               <View style={styles.recommendedContainer}>
                 <View style={styles.row}>
                   <CustomText isBold style={styles.heading}>
-                    Job Requests
+                    job requests
                   </CustomText>
                   <CustomText
                     onPress={() => {
                       navigationService.navigate('SeeAllNegotiator', {
-                        type: 'job posts',
+                        type: 'Job Request',
                         data: jobPosting,
                       });
                     }}
@@ -433,7 +503,13 @@ const NegotiatorHomeScreen = () => {
                     );
                   }}
                   renderItem={({item, index}) => {
-                    return <JobCard key={index} item={item} getProposal={getProposal}/>;
+                    return (
+                      <JobCard
+                        key={index}
+                        item={item}
+                        getProposal={getProposal}
+                      />
+                    );
                   }}
                 />
               </View>
@@ -446,7 +522,8 @@ const NegotiatorHomeScreen = () => {
           statusArray={[
             {name: 'Recommended'},
             {name: 'Working On'},
-            {name: 'Seeking Help'},
+            {name: 'Job Request'},
+            {name: 'applied Jobs'},
           ]}
           data={selectedStatus}
           setData={setSelectedStatus}

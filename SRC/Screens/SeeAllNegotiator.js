@@ -26,7 +26,7 @@ const SeeAllNegotiator = props => {
   const token = useSelector(state => state.authReducer.token);
    console.log(
     '🚀 ~ file: SeeAllNegotiator.js:30 ~ SeeAllNegotiator ~ token:',
-    type, data,
+    type
   );
 
   const scrollViewRef = useRef();
@@ -55,11 +55,14 @@ const SeeAllNegotiator = props => {
 
   const getData = async type1 => {
     const url =
-      type == 'Recommended'
-        ? `auth/negotiator/quote/recommended?page=${pageNum}`
-        : type == 'Working On'
-        ? `auth/negotiator/quote/working?page=${pageNum}`
-        : `auth/negotiator/hiring/list?page=${pageNum}`;
+    type == 'Recommended'
+    ? `auth/negotiator/quote/recommended?page=${pageNum}`
+    : type == 'Working On'
+    ? `auth/negotiator/quote/working?page=${pageNum}`
+    :  type == 'Job Request' ? `auth/negotiator/hiring/list?page=${pageNum}`
+    : 'auth/my_bid_list'
+    ;
+    return console.log("🚀 ~ getData ~ url:", url)
     type1 == 'loadMore' ? setLoadMore(true) : setIsLoading(true);
     const response = await Get(url, token);
     type1 == 'loadMore' ? setLoadMore(false) : setIsLoading(false);
