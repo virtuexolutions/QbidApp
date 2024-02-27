@@ -80,29 +80,29 @@ const NegotiatorHomeScreen = () => {
     ]);
     setIsLoading(false);
     if (response1 != undefined) {
-      // console.log(response1?.data?.quote_info);
-      ![null, undefined, ''].includes(response2?.data?.quote_info) &&
-        setRecommended(response1?.data?.quote_info);
+    //  return console.log(response1?.data?.quote_info?.data);
+      ![null, undefined, ''].includes(response2?.data?.quote_info?.data) &&
+        setRecommended(response1?.data?.quote_info?.data);
     }
     if (response2 != undefined) {
-      console.log(
-        '🚀 ~ file: NegotiatorHomeScreen.js:83 ~ getProposal ~ response2:',
-        response2?.data?.quote_info?.data,
-      );
-      ![null, undefined, ''].includes(response2?.data?.quote_info) &&
+      // console.log(
+      //   '🚀 ~ file: NegotiatorHomeScreen.js:83 ~ getProposal ~ response2:',
+      //   response2?.data?.quote_info?.data,
+      // );
+      ![null, undefined, ''].includes(response2?.data?.quote_info?.data) &&
         setWorking(response2?.data?.quote_info?.data);
       // setWorking(prev => [...prev, ...response2?.data?.hiring_info?.data]);
     }
     if (response3 != undefined) {
-      // console.log('🚀 ~ getProposal ~ response3:', response3?.data);
+     console.log('🚀 ~ getProposal ~ response3:', response3?.data);
       setBidList(response3?.data?.quote_info);
     }
 
     if (response4 != undefined) {
-      console.log(
-        '🚀 ~ file: NegotiatorHomeScreen.js:89 ~ getProposal ~ response3:',
-        response4?.data?.hiring_info?.data,
-      );
+    //  return console.log(
+    //     '🚀 ~ file: NegotiatorHomeScreen.js:89 ~ getProposal ~ response3:',
+    //     response4?.data?.hiring_info?.data,
+    //   );
       setJobPosting(response4?.data?.hiring_info?.data);
     }
   };
@@ -332,7 +332,7 @@ const NegotiatorHomeScreen = () => {
                 </View>
 
                 <FlatList
-                  data={recommended?.reverse().slice(0, 5)}
+                  data={recommended}
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={{
@@ -391,7 +391,7 @@ const NegotiatorHomeScreen = () => {
                       />
                     );
                   }}
-                  data={working.reverse().slice(0, 5)}
+                  data={working}
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={{
@@ -444,7 +444,7 @@ const NegotiatorHomeScreen = () => {
                     );
                   }}
                   // data={bidList && bidList.reverse().slice(0,5)}
-                  data={bidList.reverse().slice(0, 5)}
+                  data={bidList}
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={{
@@ -485,7 +485,7 @@ const NegotiatorHomeScreen = () => {
                 </View>
 
                 <FlatList
-                  data={jobPosting.reverse().slice(0, 5)}
+                  data={jobPosting}
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={{

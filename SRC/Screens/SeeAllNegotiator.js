@@ -1,4 +1,4 @@
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState, useRef} from 'react';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import Color from '../Assets/Utilities/Color';
@@ -16,6 +16,8 @@ import {useEffect} from 'react';
 import {ActivityIndicator} from 'react-native';
 import Card from '../Components/Card';
 import NoData from '../Components/NoData';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {Icon} from 'native-base';
 
 const SeeAllNegotiator = props => {
   const type = props?.route?.params?.type;
@@ -23,10 +25,11 @@ const SeeAllNegotiator = props => {
 
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
+  console.log("🚀 ~ SeeAllNegotiator ~ userRole:", userRole)
   const token = useSelector(state => state.authReducer.token);
-   console.log(
+  console.log(
     '🚀 ~ file: SeeAllNegotiator.js:30 ~ SeeAllNegotiator ~ token:',
-    type
+    type,
   );
 
   const scrollViewRef = useRef();
@@ -45,6 +48,7 @@ const SeeAllNegotiator = props => {
     const url = `auth/negotiator/search/${type}`;
     const body = {search: searchData};
 
+    console.log("🚀 ~ searchQuotes ~ body:", body)
     setIsLoading(true);
     const response = await Post(url, body, apiHeader(token));
     setIsLoading(false);
@@ -55,28 +59,27 @@ const SeeAllNegotiator = props => {
 
   const getData = async type1 => {
     const url =
-    type == 'Recommended'
-    ? `auth/negotiator/quote/recommended?page=${pageNum}`
-    : type == 'Working On'
-    ? `auth/negotiator/quote/working?page=${pageNum}`
-    :  type == 'Job Request' ? `auth/negotiator/hiring/list?page=${pageNum}`
-    : 'auth/my_bid_list'
-    ;
-    return console.log("🚀 ~ getData ~ url:", url)
+      type == 'Recommended'
+        ? `auth/negotiator/quote/recommended?page=${pageNum}`
+        : type == 'Working On'
+        ? `auth/negotiator/quote/working?page=${pageNum}`
+        : type == 'Job Request'
+        ? `auth/negotiator/hiring/list?page=${pageNum}`
+        : 'auth/my_bid_list';
+    console.log('🚀 ~ getData ~ url:', url);
     type1 == 'loadMore' ? setLoadMore(true) : setIsLoading(true);
     const response = await Get(url, token);
     type1 == 'loadMore' ? setLoadMore(false) : setIsLoading(false);
     if (response != undefined) {
-         console.log(
+      console.log(
         '🚀 ~ file: SeeAllNegotiator.js:74 ~ getData ~ response:',
         response?.data,
       );
-      if(type == 'Working On'){
+      if (type == 'Working On' || type == 'Recommended') {
         type1 == 'loadMore'
-        ? setNewArray(prev => [...prev, ...response?.data?.quote_info?.data])
-        : setNewArray(response?.data?.quote_info?.data);
-      }
-      else if (type != 'job posts') {
+          ? setNewArray(prev => [...prev, ...response?.data?.quote_info?.data])
+          : setNewArray(response?.data?.quote_info?.data);
+      } else if (type == 'applied Jobs') {
         type1 == 'loadMore'
           ? setNewArray(prev => [...prev, ...response?.data?.quote_info])
           : setNewArray(response?.data?.quote_info);
@@ -102,9 +105,8 @@ const SeeAllNegotiator = props => {
     }
   };
 
-  useEffect(() => {
-    searchQuotes();
-  }, [searchData]);
+  // useEffect(() => {
+  // }, [searchData]);
 
   useEffect(() => {
     if (pageNum == 1) {
@@ -150,15 +152,15 @@ const SeeAllNegotiator = props => {
         }>
         <View
           style={{
-            width: windowWidth * 0.93,
+            width: windowWidth * 0.9,
 
             flexDirection: 'row',
-            justifyContent: 'center',
+            justifyContent: 'space-between',
             alignItems: 'center',
             alignSelf: 'center',
           }}>
           <SearchContainer
-            width={windowWidth * 0.85}
+            width={windowWidth * 0.75}
             input
             inputStyle={{
               height: windowHeight * 0.05,
@@ -172,6 +174,26 @@ const SeeAllNegotiator = props => {
             data={searchData}
             setData={setSearchData}
           />
+          <TouchableOpacity
+            activeOpacity={0.9}
+            onPress={searchQuotes}
+            style={{
+              width: moderateScale(40, 0.6),
+              height: windowHeight * 0.06,
+              backgroundColor: '#fff',
+              borderRadius: moderateScale(25, 0.6),
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Icon
+              name={'search'}
+              as={FontAwesome}
+              size={moderateScale(17, 0.3)}
+              color={Color.themeLightGray}
+              onPress={searchQuotes}
+              // style={{backgroundColor : 'red'}}
+            />
+          </TouchableOpacity>
         </View>
 
         {isLoading ? (

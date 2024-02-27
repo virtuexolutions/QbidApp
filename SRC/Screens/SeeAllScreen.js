@@ -29,6 +29,7 @@ const SeeAllScreen = props => {
   // console.log("🚀 ~ file: SeeAllScreen.js:29 ~ SeeAllScreen ~ token:", token)
 
   const type = props?.route?.params?.type;
+  console.log("🚀 ~ SeeAllScreen ~ type:", type)
   const data = props?.route?.params?.data;
 
   const [searchData, setSearchData] = useState('');
