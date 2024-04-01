@@ -42,6 +42,7 @@ import MileRange from './Screens/MileRange';
 import DrawerScreen from './Screens/DrawerScreen';
 import YourJobes from './Screens/YourJobes';
 import CompleteJobes from './Screens/CompleteJobes';
+import CreateNewHelp from './Screens/CreateNewHelp';
 
 const AppNavigator = () => {
   // const isLogin = false;
@@ -107,6 +108,7 @@ const AppNavigator = () => {
           <RootNav.Screen name="JobDetails" component={JobDetails} />
           <RootNav.Screen name="MyAccounts" component={MyAccounts} />
           <RootNav.Screen name="ChangePassword" component={ChangePassword} />
+          <RootNav.Screen name="CreateNewHelp" component={CreateNewHelp} />
         </RootNav.Navigator>
       </NavigationContainer>
     );

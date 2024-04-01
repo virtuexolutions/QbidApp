@@ -99,6 +99,26 @@ const requestManagePermission = async () => {
   }
 };
 
+// const requestNotificationPermission = async () => {
+//   try {
+//     const granted = await PermissionsAndroid.request(
+//       PermissionsAndroid.PERMISSIONS.ACCESS_NOTIFICATION_POLICY,
+//       {
+//         title: 'Notification access required',
+//         message: 'This App needs to Access your notification',
+//       },
+//     );
+//     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+//       console.log('You can use the notificaiton');
+//     } else {
+//       console.log('notificaiton permission denied');
+//     }
+//   } catch (err) {
+//     console.warn(err);
+//   }
+// };
+
+
 
 const apiHeader = (token, isFormData) => {
   if (token && !isFormData) {

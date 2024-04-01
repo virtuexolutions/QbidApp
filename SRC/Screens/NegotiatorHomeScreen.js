@@ -32,10 +32,13 @@ import {useIsFocused} from '@react-navigation/native';
 import GetLocation from 'react-native-get-location';
 import NoData from '../Components/NoData';
 import {setLocation} from '../Store/slices/common';
+import CustomImage from '../Components/CustomImage';
+import AcceptedHelpRequestCard from '../Components/AcceptedHelpRequestCard';
 
 const NegotiatorHomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
+  console.log("🚀 ~ NegotiatorHomeScreen ~ token:", token)
   const userData = useSelector(state => state.commonReducer.userData);
   // console.log("🚀 ~ file: NegotiatorHomeScreen.js:40 ~ NegotiatorHomeScreen ~ userData:", userData)
 
@@ -53,6 +56,7 @@ const NegotiatorHomeScreen = () => {
   const [isLocation, setIsLocation] = useState(false);
   const [bidList, setBidList] = useState([]);
   console.log('🚀 ~ NegotiatorHomeScreen ~ bidList:', bidList);
+  const [helpBidList ,setHelpBidList] =useState([])
   // const [recommand ,setRecommand] =useState([])
 
   // const getRecommand =async () => {
@@ -72,38 +76,46 @@ const NegotiatorHomeScreen = () => {
   const getProposal = async () => {
     setIsLoading(true);
 
-    const [response1, response2, response3, response4] = await Promise.all([
+    const [response1, response2, response3, response4 ,response5] = await Promise.all([
       Get('auth/negotiator/quote/recommended', token),
       Get('auth/negotiator/quote/working', token),
       Get('auth/my_bid_list', token),
       Get('auth/negotiator/hiring/list', token),
+      Get('auth/negotiator/quote_help',token)
     ]);
     setIsLoading(false);
     if (response1 != undefined) {
-    //  return console.log(response1?.data?.quote_info?.data);
+      //  return console.log(response1?.data?.quote_info?.data);
       ![null, undefined, ''].includes(response2?.data?.quote_info?.data) &&
         setRecommended(response1?.data?.quote_info?.data);
     }
     if (response2 != undefined) {
-      // console.log(
-      //   '🚀 ~ file: NegotiatorHomeScreen.js:83 ~ getProposal ~ response2:',
-      //   response2?.data?.quote_info?.data,
-      // );
+      console.log(
+        '🚀 ~ file: NegotiatorHomeScreen.js:83 ~ getProposal ~ response2:=========> ',
+        response2?.data?.quote_info?.data,
+      );
       ![null, undefined, ''].includes(response2?.data?.quote_info?.data) &&
         setWorking(response2?.data?.quote_info?.data);
       // setWorking(prev => [...prev, ...response2?.data?.hiring_info?.data]);
     }
     if (response3 != undefined) {
-     console.log('🚀 ~ getProposal ~ response3:', response3?.data);
+      console.log('🚀 ~ getProposal ~ response3:', response3?.data);
       setBidList(response3?.data?.quote_info);
     }
 
     if (response4 != undefined) {
-    //  return console.log(
-    //     '🚀 ~ file: NegotiatorHomeScreen.js:89 ~ getProposal ~ response3:',
-    //     response4?.data?.hiring_info?.data,
-    //   );
+      //  return console.log(
+      //     '🚀 ~ file: NegotiatorHomeScreen.js:89 ~ getProposal ~ response3:',
+      //     response4?.data?.hiring_info?.data,
+      //   );
       setJobPosting(response4?.data?.hiring_info?.data);
+    }
+    if (response5 != undefined) {
+      //  return console.log(
+      //     '🚀 ~ file: NegotiatorHomeScreen.js:89 ~ getProposal ~ response5===> here:',
+      //     response5?.data?.quote_info?.data
+      //   );
+        setHelpBidList(response5?.data?.quote_info?.data)
     }
   };
 
@@ -412,7 +424,6 @@ const NegotiatorHomeScreen = () => {
                   }}
                 />
               </View>
-            
 
               <View style={styles.recommendedContainer}>
                 <View style={styles.row}>
@@ -466,7 +477,6 @@ const NegotiatorHomeScreen = () => {
                 />
               </View>
 
-             
               <View style={styles.recommendedContainer}>
                 <View style={styles.row}>
                   <CustomText isBold style={styles.heading}>
@@ -509,6 +519,49 @@ const NegotiatorHomeScreen = () => {
                         item={item}
                         getProposal={getProposal}
                       />
+                    );
+                  }}
+                />
+              </View>
+
+              <View style={styles.recommendedContainer}>
+                <View style={styles.row}>
+                  <CustomText isBold style={styles.heading}>
+                   Accepted  help qbids                 
+                    </CustomText>
+                  <CustomText
+                    onPress={() => {
+                      navigationService.navigate('SeeAllNegotiator', {
+                        type: 'help Request',
+                        data: jobPosting,
+                      });
+                    }}
+                    style={styles.viewall}>
+                    View all
+                  </CustomText>
+                </View>
+
+                <FlatList
+                  data={helpBidList}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={{
+                    paddingHorizontal: moderateScale(15, 0.3),
+                  }}
+                  ListEmptyComponent={() => {
+                    return (
+                      <NoData
+                        style={{
+                          width: windowWidth * 0.95,
+                          height: windowHeight * 0.18,
+                          alignItems: 'center',
+                        }}
+                      />
+                    );
+                  }}
+                  renderItem={({item, index}) => {
+                    return (
+                      <AcceptedHelpRequestCard  item={item}/>
                     );
                   }}
                 />

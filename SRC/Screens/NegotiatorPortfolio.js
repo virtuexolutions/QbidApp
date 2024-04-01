@@ -46,18 +46,13 @@ import navigationService from '../navigationService';
 
 const NegotiatorPortfolio = props => {
   const fromSearch = props?.route?.params?.fromSearch;
+  console.log('🚀 ~ NegotiatorPortfolio ~ fromSearch----------------->from protfolio:', fromSearch);
   const item = props?.route?.params?.item;
-  console.log(
-    '🚀 ~ file: NegotiatorPortfolio.js:50 ~ NegotiatorPortfolio ~ item:',
-    item,
-  );
+  console.log('🚀 ~ NegotiatorPortfolio ~ item=====--=====-----> from protfolio:', item);
+
+  // const data = props?.route?.params?.data
 
   const userdata = useSelector(state => state.commonReducer.userData);
-  // console.log(
-  //   '🚀 ~ file: NegotiatorPortfolio.js:50 ~ NegotiatorPortfolio ~ item:',
-  //   userdata,
-  // );
-  // console.log("🚀 ~ file: NegotiatorPortfolio.js:52 ~ NegotiatorPortfolio ~ userdata:", userdata?.photo)
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
@@ -443,7 +438,7 @@ const NegotiatorPortfolio = props => {
                 source={
                   fromSearch
                     ? {uri: item?.photo ? item?.photo : item?.user_info?.photo}
-                    :{uri: userdata?.photo}
+                    : {uri: userdata?.photo}
                 }
                 style={styles.image}
               />
@@ -780,7 +775,7 @@ const NegotiatorPortfolio = props => {
               }}
             />
           </View>
-          {userRole == 'Qbid Member' && (
+          {userRole == 'Qbid Member'  &&  (
             <CustomButton
               text={'Hire Now'}
               textColor={Color.white}

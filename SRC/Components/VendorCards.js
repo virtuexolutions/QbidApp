@@ -15,10 +15,10 @@ import {TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 const VendorCards = ({item}) => {
-  console.log(
-    '🚀 ~ file: VendorCards.js:18 ~ VendorCards ~ item:',
-    item?.user_info,
-  );
+  // console.log(
+  //   '🚀 ~ file: VendorCards.js:18 ~ VendorCards ~ item:',
+  //   item,
+  // );
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
   const token = useSelector(state => state.authReducer.token);

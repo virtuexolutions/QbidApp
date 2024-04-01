@@ -20,7 +20,7 @@ import CustomText from '../Components/CustomText';
 import Color from '../Assets/Utilities/Color';
 import ShowMoreAndShowLessText from '../Components/ShowMoreAndShowLessText';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Entypo from 'react-native-vector-icons/Entypo'
+import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {Center, Icon} from 'native-base';
 import MarkCheckWithText from '../Components/MarkCheckWithText';
@@ -42,10 +42,8 @@ import ImagePickerModal from '../Components/ImagePickerModal';
 
 const JobDetails = props => {
   const data1 = props?.route?.params?.item;
-  console.log('🚀 ~ file: JobDetails.js:42 ~ JobDetails ~ data1:', data1);
-
+    const type = props?.route?.params?.type;
   const user = useSelector(state => state.commonReducer.userData);
-  console.log('🚀 ~ file: JobDetails.js:45 ~ JobDetails ~ user:', user);
   const token = useSelector(state => state.authReducer.token);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const UserCoverLetterArray = useSelector(
@@ -53,7 +51,6 @@ const JobDetails = props => {
   );
 
   const [data, setData] = useState(data1);
-  console.log('🚀 ~ file: JobDetails.js:52 ~ JobDetails ~ data:', data);
   const [checked, setChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [bidDone, setBidDone] = useState(false);
@@ -68,11 +65,10 @@ const JobDetails = props => {
   const [imageModalVisible, setImageModalVisible] = useState(false);
   const [finalImagesArray, setFinalImagesArray] = useState([]);
   const [imagePickerVisible, setImagePickerVisible] = useState(false);
-  // const [image, setImage] = useState({});
   const [multiImages, setMultiImages] = useState([]);
-  console.log("🚀 ~ JobDetails ~ multiImages:", multiImages)
 
-  //  console.log("🚀 ~ JobDetails ~ image:", image)
+
+
 
   const bidDetails = async () => {
     const url = `auth/negotiator/quote_detail/${
@@ -229,6 +225,7 @@ const JobDetails = props => {
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
+                  // backgroundColor :'red'
                 }}>
                 <View
                   style={{
@@ -252,11 +249,13 @@ const JobDetails = props => {
                 <View
                   style={{
                     marginLeft: moderateScale(5, 0.3),
+                    // backgroundColor :'green'
                   }}>
                   <CustomText
                     isBold
                     style={{
                       color: Color.white,
+                      // backgroundColor :'red',
                       fontSize: moderateScale(17, 0.6),
                     }}>
                     {data?.title}
@@ -294,15 +293,18 @@ const JobDetails = props => {
                     style={{
                       fontSize: moderateScale(8, 0.6),
                       color: Color.white,
+                      // backgroundColor : 'red',
                       marginLeft: moderateScale(3, 0.3),
                     }}>
                     {data?.status}
                   </CustomText>
                 </View>
               </View>
-              <ShowMoreAndShowLessText minTextLength={50} style={styles.desc}>
-                {data?.notes ? data?.notes : data?.coverletter}
-              </ShowMoreAndShowLessText>
+              {type == 'quote' && (
+                <ShowMoreAndShowLessText minTextLength={50} style={styles.desc}>
+                  {data?.notes ? data?.notes : data?.coverletter}
+                </ShowMoreAndShowLessText>
+              )}
               <CustomText
                 onPress={() => {
                   if (finalImagesArray.length > 0) {
@@ -516,7 +518,7 @@ const JobDetails = props => {
                       marginBottom: moderateScale(10, 0.3),
                       marginTop: moderateScale(20, 0.3),
                     }}>
-                    Applied Negotiators
+                Applied Negotiators
                   </CustomText>
                   <FlatList
                     data={
@@ -541,6 +543,7 @@ const JobDetails = props => {
                       paddingBottom: moderateScale(30, 0.6),
                     }}
                     renderItem={({item, index}) => {
+                      console.log("🚀 ~ JobDetails ~ ======>:", item)
                       return (
                         <>
                           <BidderDetail
@@ -713,124 +716,121 @@ const JobDetails = props => {
         <View
           style={{
             width: windowWidth * 0.9,
-           
+
             height: windowHeight * 0.9,
             borderRadius: moderateScale(15, 0.3),
             backgroundColor: '#f2fce4',
-           
           }}>
-            <ScrollView
+          <ScrollView
             contentContainerStyle={{
-              paddingVertical : moderateScale(5,0.6),
+              paddingVertical: moderateScale(5, 0.6),
               alignItems: 'center',
-            }}
-            >
-          <View style={{marginTop: moderateScale(20, 0.3)}}>
-            <CustomText
-              isBold
-              style={{
-                fontSize: moderateScale(14, 0.6),
-              }}>
-              QBid Proposal
-            </CustomText>
-          </View>
+            }}>
+            <View style={{marginTop: moderateScale(20, 0.3)}}>
+              <CustomText
+                isBold
+                style={{
+                  fontSize: moderateScale(14, 0.6),
+                }}>
+                QBid Proposal
+              </CustomText>
+            </View>
 
-          <View style={{marginTop: moderateScale(10, 0.3)}}>
-            <TextInputWithTitle
-              secureText={false}
-              placeholder={'Full Name'}
-              setText={setFullName}
-              value={fullName}
-              viewHeight={0.06}
-              viewWidth={0.75}
-              inputWidth={0.68}
-              border={1}
-              borderColor={
-                userRole == 'Qbid Negotiator' ? Color.blue : Color.black
-              }
-              backgroundColor={'#FFFFFF'}
-              marginTop={moderateScale(15, 0.6)}
-              color={Color.themeColor}
-              placeholderColor={Color.themeLightGray}
-              borderRadius={moderateScale(25, 0.3)}
-            />
-            <TextInputWithTitle
-              secureText={false}
-              placeholder={'Enter your Email'}
-              setText={setEmail}
-              value={Email}
-              viewHeight={0.06}
-              viewWidth={0.75}
-              inputWidth={0.68}
-              border={1}
-              borderColor={
-                userRole == 'Qbid Negotiator' ? Color.blue : Color.black
-              }
-              backgroundColor={'#FFFFFF'}
-              marginTop={moderateScale(15, 0.6)}
-              color={Color.themeColor}
-              placeholderColor={Color.themeLightGray}
-              borderRadius={moderateScale(25, 0.3)}
-            />
-            <TextInputWithTitle
-              secureText={false}
-              placeholder={'Phone Number'}
-              setText={setNumber}
-              value={number}
-              viewHeight={0.06}
-              viewWidth={0.75}
-              inputWidth={0.68}
-              border={1}
-              borderColor={
-                userRole == 'Qbid Negotiator' ? Color.blue : Color.black
-              }
-              backgroundColor={'#FFFFFF'}
-              marginTop={moderateScale(15, 0.6)}
-              color={Color.themeColor}
-              placeholderColor={Color.themeLightGray}
-              borderRadius={moderateScale(25, 0.3)}
-              keyboardType={'numeric'}
-            />
-            <DropDownSingleSelect
-              array={UserCoverLetterArray}
-              backgroundColor={'white'}
-              item={coverletterRole}
-              borderColor={
-                userRole == 'Qbid Negotiator' ? Color.blue : Color.black
-              }
-              borderWidth={1}
-              marginTop={moderateScale(20, 0.6)}
-              setItem={setCoverLetterRole}
-              placeholder={coverletterRole}
-              placeholderColor={Color.themeLightGray}
-              width={windowWidth * 0.75}
-              dropDownHeight={windowHeight * 0.06}
-              dropdownStyle={{
-                width: windowWidth * 0.75,
-              }}
-            />
+            <View style={{marginTop: moderateScale(10, 0.3)}}>
+              <TextInputWithTitle
+                secureText={false}
+                placeholder={'Full Name'}
+                setText={setFullName}
+                value={fullName}
+                viewHeight={0.06}
+                viewWidth={0.75}
+                inputWidth={0.68}
+                border={1}
+                borderColor={
+                  userRole == 'Qbid Negotiator' ? Color.blue : Color.black
+                }
+                backgroundColor={'#FFFFFF'}
+                marginTop={moderateScale(15, 0.6)}
+                color={Color.themeColor}
+                placeholderColor={Color.themeLightGray}
+                borderRadius={moderateScale(25, 0.3)}
+              />
+              <TextInputWithTitle
+                secureText={false}
+                placeholder={'Enter your Email'}
+                setText={setEmail}
+                value={Email}
+                viewHeight={0.06}
+                viewWidth={0.75}
+                inputWidth={0.68}
+                border={1}
+                borderColor={
+                  userRole == 'Qbid Negotiator' ? Color.blue : Color.black
+                }
+                backgroundColor={'#FFFFFF'}
+                marginTop={moderateScale(15, 0.6)}
+                color={Color.themeColor}
+                placeholderColor={Color.themeLightGray}
+                borderRadius={moderateScale(25, 0.3)}
+              />
+              <TextInputWithTitle
+                secureText={false}
+                placeholder={'Phone Number'}
+                setText={setNumber}
+                value={number}
+                viewHeight={0.06}
+                viewWidth={0.75}
+                inputWidth={0.68}
+                border={1}
+                borderColor={
+                  userRole == 'Qbid Negotiator' ? Color.blue : Color.black
+                }
+                backgroundColor={'#FFFFFF'}
+                marginTop={moderateScale(15, 0.6)}
+                color={Color.themeColor}
+                placeholderColor={Color.themeLightGray}
+                borderRadius={moderateScale(25, 0.3)}
+                keyboardType={'numeric'}
+              />
+              <DropDownSingleSelect
+                array={UserCoverLetterArray}
+                backgroundColor={'white'}
+                item={coverletterRole}
+                borderColor={
+                  userRole == 'Qbid Negotiator' ? Color.blue : Color.black
+                }
+                borderWidth={1}
+                marginTop={moderateScale(20, 0.6)}
+                setItem={setCoverLetterRole}
+                placeholder={coverletterRole}
+                placeholderColor={Color.themeLightGray}
+                width={windowWidth * 0.75}
+                dropDownHeight={windowHeight * 0.06}
+                dropdownStyle={{
+                  width: windowWidth * 0.75,
+                }}
+              />
 
-          
-            <TextInputWithTitle
-              multiline={true}
-              secureText={false}
-              placeholder={'Cover Letter'}
-              setText={setDesc}
-              value={desc}
-              viewHeight={0.15}
-              viewWidth={0.75}
-              inputWidth={0.66}
-              border={1}
-              borderColor={
-                userRole == 'Qbid Negotiator' ? Color.blue : Color.black
-              }
-              backgroundColor={'#FFFFFF'}
-              marginTop={moderateScale(15, 0.6)}
-              color={Color.themeColor}
-              placeholderColor={Color.themeLightGray}
-              borderRadius={moderateScale(25, 0.3)}
-            />
-             <CustomText
+              <TextInputWithTitle
+                multiline={true}
+                secureText={false}
+                placeholder={'Cover Letter'}
+                setText={setDesc}
+                value={desc}
+                viewHeight={0.15}
+                viewWidth={0.75}
+                inputWidth={0.66}
+                border={1}
+                borderColor={
+                  userRole == 'Qbid Negotiator' ? Color.blue : Color.black
+                }
+                backgroundColor={'#FFFFFF'}
+                marginTop={moderateScale(15, 0.6)}
+                color={Color.themeColor}
+                placeholderColor={Color.themeLightGray}
+                borderRadius={moderateScale(25, 0.3)}
+              />
+              <CustomText
                 style={[
                   styles.title,
                   {
@@ -841,97 +841,100 @@ const JobDetails = props => {
                 isBold={true}
                 children={'attachments'}
               />
-          
-           <View style={styles.imagesContainer}>
-            <FlatList
-              horizontal
-              data={multiImages}
-              showsHorizontalScrollIndicator={false}
-              style={{
-                flexGrow: 0,
-              }}
-              renderItem={({item, index}) => {
-                return (
-                  <View
-                    style={[
-                      styles.addImageContainer,
-                      {borderWidth: 0, borderRadius: moderateScale(10, 0.3)},
-                    ]}>
-                    <Icon
-                      name={'close'}
-                      as={FontAwesome}
-                      color={Color.themeColor}
-                      size={moderateScale(12, 0.3)}
-                      style={{
-                        position: 'absolute',
-                        right: 1,
-                        top: 1,
-                        zIndex: 1,
-                      }}
-                      onPress={() => {
-                        let newArray = [...multiImages];
-                        newArray.splice(index, 1);
-                        setMultiImages(newArray);
-                      }}
-                    />
-                    <CustomImage
-                      source={{uri: item?.uri}}
-                      resizeMode={'stretch'}
-                      style={{
-                        width: moderateScale(50, 0.3),
-                        height: moderateScale(60, 0.3),
-                      }}
-                    />
-                  </View>
-                );
-              }}
-            />
 
-            <View style={styles.addImageContainer}>
-              <Icon
-                name={'plus'}
-                as={AntDesign}
-                color={Color.themeColor}
-                size={moderateScale(30, 0.3)}
+              <View style={styles.imagesContainer}>
+                <FlatList
+                  horizontal
+                  data={multiImages}
+                  showsHorizontalScrollIndicator={false}
+                  style={{
+                    flexGrow: 0,
+                  }}
+                  renderItem={({item, index}) => {
+                    return (
+                      <View
+                        style={[
+                          styles.addImageContainer,
+                          {
+                            borderWidth: 0,
+                            borderRadius: moderateScale(10, 0.3),
+                          },
+                        ]}>
+                        <Icon
+                          name={'close'}
+                          as={FontAwesome}
+                          color={Color.themeColor}
+                          size={moderateScale(12, 0.3)}
+                          style={{
+                            position: 'absolute',
+                            right: 1,
+                            top: 1,
+                            zIndex: 1,
+                          }}
+                          onPress={() => {
+                            let newArray = [...multiImages];
+                            newArray.splice(index, 1);
+                            setMultiImages(newArray);
+                          }}
+                        />
+                        <CustomImage
+                          source={{uri: item?.uri}}
+                          resizeMode={'stretch'}
+                          style={{
+                            width: moderateScale(50, 0.3),
+                            height: moderateScale(60, 0.3),
+                          }}
+                        />
+                      </View>
+                    );
+                  }}
+                />
+
+                <View style={styles.addImageContainer}>
+                  <Icon
+                    name={'plus'}
+                    as={AntDesign}
+                    color={Color.themeColor}
+                    size={moderateScale(30, 0.3)}
+                    onPress={() => {
+                      setImagePickerVisible(true);
+                    }}
+                  />
+                </View>
+              </View>
+
+              <CustomButton
+                text={
+                  isLoading ? (
+                    <ActivityIndicator color={'#FFFFFF'} size={'small'} />
+                  ) : (
+                    'Done'
+                  )
+                }
+                textColor={Color.white}
+                width={windowWidth * 0.45}
+                height={windowHeight * 0.06}
+                marginTop={moderateScale(5, 0.3)}
                 onPress={() => {
-                  setImagePickerVisible(true);
+                  bidNow();
                 }}
+                bgColor={
+                  userRole == 'Qbid Member'
+                    ? Color.blue
+                    : userRole == 'Qbid Negotiator'
+                    ? Color.themeColor
+                    : Color.black
+                }
+                borderRadius={moderateScale(30, 0.3)}
+              />
+
+              <ImagePickerModal
+                show={imagePickerVisible}
+                setShow={setImagePickerVisible}
+                setMultiImages={setMultiImages}
+                // setFileObject={setImage}
               />
             </View>
-          </View>
-
-            <CustomButton
-              text={
-                isLoading ? (
-                  <ActivityIndicator color={'#FFFFFF'} size={'small'} />
-                ) : (
-                  'Done'
-                )
-              }
-              textColor={Color.white}
-              width={windowWidth * 0.45}
-              height={windowHeight * 0.06}
-              marginTop={moderateScale(5, 0.3)}
-              onPress={() => {
-                bidNow();
-              }}
-              bgColor={
-                userRole == 'Qbid Member'
-                  ? Color.blue
-                  : userRole == 'Qbid Negotiator'
-                  ? Color.themeColor
-                  : Color.black
-              }
-              borderRadius={moderateScale(30, 0.3)}
-            />
-           
-             <ImagePickerModal
-        show={imagePickerVisible}
-        setShow={setImagePickerVisible}
-        setMultiImages={setMultiImages}
-        // setFileObject={setImage}
-      />
-          </View>
           </ScrollView>
         </View>
       </Modal>
@@ -955,11 +958,11 @@ const styles = ScaledSheet.create({
     // marginLeft: moderateScale(10, 0.3),
     flexWrap: 'wrap',
     flexDirection: 'row',
-    alignSelf : 'center',
+    alignSelf: 'center',
     // backgroundColor : 'red'
   },
   addImageContainer: {
-    marginTop : moderateScale(10,0.3),
+    marginTop: moderateScale(10, 0.3),
     width: windowWidth * 0.14,
     backgroundColor: Color.white,
     borderRadius: moderateScale(5, 0.3),
@@ -981,18 +984,18 @@ const styles = ScaledSheet.create({
     elevation: 9,
     overflow: 'hidden',
   },
-  attachmentContainer : {
+  attachmentContainer: {
     backgroundColor: Color.white,
     borderColor: Color.black,
     borderWidth: 1,
     height: windowHeight * 0.08,
     width: windowHeight * 0.13,
-    borderRadius: moderateScale(10,0.6),
+    borderRadius: moderateScale(10, 0.6),
     textAlign: 'center',
-    alignItems : 'center',
-    marginRight : moderateScale(10,0.3),
+    alignItems: 'center',
+    marginRight: moderateScale(10, 0.3),
     // paddingTop: moderateScale(5, 0.6),
-   },
+  },
   row: {
     flexDirection: 'row',
     flexWrap: 'wrap',

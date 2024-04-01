@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import moment from 'moment';
@@ -10,9 +10,20 @@ import Color from '../Assets/Utilities/Color';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomText from '../Components/CustomText';
 import {useSelector} from 'react-redux';
+import {useState} from 'react';
+import HelpRequestModal from '../Components/HelpRequestModal';
+import {Get} from '../Axios/AxiosInterceptorFunction';
+import {useEffect} from 'react';
+import { useIsFocused } from '@react-navigation/native';
 
 const NotificationScreen = () => {
+  const isFocused = useIsFocused()
   const userRole = useSelector(state => state.commonReducer.selectedRole);
+  const token = useSelector(state => state.authReducer.token);
+  const [selected, setSelected] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [helpNotification, setHelpNotification] = useState([]);
 
   const dummyData = [
     {
@@ -97,23 +108,37 @@ const NotificationScreen = () => {
     },
   ];
 
+  const helpNotify = async () => {
+    const url = 'auth/negotiator/notification';
+    setIsLoading(true);
+    const response = await Get(url, token);
+    setIsLoading(false);
+    if (response != undefined) {
+    console.log("🚀 ~ helpNotification ~ response:============>", JSON.stringify(response?.data ,null ,2))
+      setHelpNotification(response?.data?.notification_info);
+    }
+  };
+  useEffect(() => {
+    helpNotify();
+  }, isFocused);
+
   return (
     <ScreenBoiler
       showHeader={true}
       statusBarBackgroundColor={
         userRole == 'Qbid Member'
-        ? Color.themeBgColor
-        : userRole == 'Qbid Negotiator'
-        ? Color.themeBgColorNegotiator
-        : Color.themebgBusinessQbidder
+          ? Color.themeBgColor
+          : userRole == 'Qbid Negotiator'
+          ? Color.themeBgColorNegotiator
+          : Color.themebgBusinessQbidder
       }
       statusBarContentStyle={'light-content'}
       headerColor={
         userRole == 'Qbid Member'
-      ? Color.themeBgColor
-      : userRole == 'Qbid Negotiator'
-      ? Color.themeBgColorNegotiator
-      : Color.themebgBusinessQbidder
+          ? Color.themeBgColor
+          : userRole == 'Qbid Negotiator'
+          ? Color.themeBgColorNegotiator
+          : Color.themebgBusinessQbidder
       }>
       <LinearGradient
         style={{
@@ -123,13 +148,21 @@ const NotificationScreen = () => {
         end={{x: 1, y: 0}}
         colors={
           userRole == 'Qbid Member'
-      ? Color.themeBgColor
-      : userRole == 'Qbid Negotiator'
-      ? Color.themeBgColorNegotiator
-      : Color.themebgBusinessQbidder
+            ? Color.themeBgColor
+            : userRole == 'Qbid Negotiator'
+            ? Color.themeBgColorNegotiator
+            : Color.themebgBusinessQbidder
         }>
+          {
+            isLoading ? <View style={{
+              justifyContent:'center',
+              alignItems :'center',
+              height : windowHeight*0.8
+            }}>
+              <ActivityIndicator size={'large'} color={Color.white} />
+            </View>:
         <FlatList
-          data={dummyData}
+          data={userRole == 'Qbid Member' ? dummyData : helpNotification}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             paddingBottom: moderateScale(40, 0.3),
@@ -141,14 +174,32 @@ const NotificationScreen = () => {
             // backgroundColor : Color.themeColor
           }}
           renderItem={({item, index}) => {
+            console.log("🚀 ~ NotificationScreen ~ item=======>:", item)
             return (
               <NotificationCard
-                image={item.image}
-                name={item.name}
-                text={item.text}
-                unread={item.unread}
-                time={item.time}
-                onPress={item.onPress}
+                image={
+                  userRole != 'Qbid Member'
+                    ? item?.user_info?.photo
+                    : item?.image
+                }
+                name={
+                  userRole != 'Qbid Member'
+                    ? `${item?.user_info?.first_name}${item?.user_info?.last_name}`
+                    : item?.name
+                }
+                text={ userRole != 'Qbid Member'? item?.body :item.text}
+                unread={ item.unread}
+                time={
+                  userRole != 'Qbid Member'
+                    ? moment(item.created_at).format('ll')
+                    : item?.time
+                }
+                onPress={() => {
+                  setModalVisible(true);
+                  setSelected(item);
+                }}
+                // onPress={item.onPress}
+                item={item}
               />
             );
           }}
@@ -165,6 +216,16 @@ const NotificationScreen = () => {
             );
           }}
         />
+          }
+
+        {userRole != 'Qbid Member' && (
+          <HelpRequestModal
+            setModalVisible={setModalVisible}
+            modalVisible={modalVisible}
+            // item={helpNotification}
+            selected={selected}
+          />
+        )}
       </LinearGradient>
     </ScreenBoiler>
   );
