@@ -70,6 +70,7 @@ const HomeScreen = () => {
     if (response2 != undefined) {
       setMyQuotes(response2?.data?.quote_info?.data);
     }
+      console.log("🚀 ~ getAllData ~ response2:", response2.data.quote_info?.data)
     if (response3 != undefined) {
       console.log(
         '🚀 ~ getAllData ~ response3:',

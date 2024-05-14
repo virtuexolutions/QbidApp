@@ -133,7 +133,7 @@ const MainContainer = () => {
     //     //  dispatch(SetFCMToken(_token));
     //    })
     //    .catch(() => console.log("token error"));
-    // GetPermission();
+    GetPermission();
   }, []);
 
   const [isloading] = useloader(true);

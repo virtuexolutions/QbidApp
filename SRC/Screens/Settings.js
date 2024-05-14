@@ -181,13 +181,13 @@ const Settings = () => {
           {userRole != 'Qbid Member' && (
             <CustomButton
               isBold
-              text={'your jobes'}
+              text={'your jobs'}
               textColor={Color.themeDarkGray}
               width={windowWidth * 0.9}
               height={windowHeight * 0.07}
               marginTop={moderateScale(10, 0.3)}
               onPress={() => {
-                navigationService.navigate('YourJobes');
+                navigationService.navigate('YourJobs');
                 // console.log('here');
               }}
               bgColor={Color.white}

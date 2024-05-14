@@ -90,10 +90,10 @@ const NegotiatorHomeScreen = () => {
         setRecommended(response1?.data?.quote_info?.data);
     }
     if (response2 != undefined) {
-      console.log(
-        '🚀 ~ file: NegotiatorHomeScreen.js:83 ~ getProposal ~ response2:=========> ',
-        response2?.data?.quote_info?.data,
-      );
+      // console.log(
+      //   '🚀 ~ file: NegotiatorHomeScreen.js:83 ~ getProposal ~ response2:=========> ',
+      //   response2?.data?.quote_info?.data,
+      // );
       ![null, undefined, ''].includes(response2?.data?.quote_info?.data) &&
         setWorking(response2?.data?.quote_info?.data);
       // setWorking(prev => [...prev, ...response2?.data?.hiring_info?.data]);
@@ -111,10 +111,10 @@ const NegotiatorHomeScreen = () => {
       setJobPosting(response4?.data?.hiring_info?.data);
     }
     if (response5 != undefined) {
-      //  return console.log(
-      //     '🚀 ~ file: NegotiatorHomeScreen.js:89 ~ getProposal ~ response5===> here:',
-      //     response5?.data?.quote_info?.data
-      //   );
+       console.log(
+          '🚀 ~ file: NegotiatorHomeScreen.js:89 ~ getProposal ~ response5===> here:',
+          response5?.data?.quote_info?.data
+        );
         setHelpBidList(response5?.data?.quote_info?.data)
     }
   };
@@ -527,7 +527,7 @@ const NegotiatorHomeScreen = () => {
               <View style={styles.recommendedContainer}>
                 <View style={styles.row}>
                   <CustomText isBold style={styles.heading}>
-                   Accepted  help qbids                 
+                   Accpeted  help qbids                 
                     </CustomText>
                   <CustomText
                     onPress={() => {

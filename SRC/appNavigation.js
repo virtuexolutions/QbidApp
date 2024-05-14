@@ -40,8 +40,8 @@ import TermsAndConditions from './Screens/TermsAndConditions';
 import Support from './Screens/Support';
 import MileRange from './Screens/MileRange';
 import DrawerScreen from './Screens/DrawerScreen';
-import YourJobes from './Screens/YourJobes';
-import CompleteJobes from './Screens/CompleteJobes';
+import YourJobs from './Screens/YourJobs';
+import CompleteJobs from './Screens/CompleteJobs';
 import CreateNewHelp from './Screens/CreateNewHelp';
 
 const AppNavigator = () => {
@@ -89,8 +89,8 @@ const AppNavigator = () => {
             component={TermsAndConditions}
           />
           <RootNav.Screen name="Support" component={Support} />
-          <RootNav.Screen name="YourJobes" component={YourJobes} />
-          <RootNav.Screen name="CompleteJobes" component={CompleteJobes} />
+          <RootNav.Screen name="YourJobs" component={YourJobs} />
+          <RootNav.Screen name="CompleteJobs" component={CompleteJobs} />
 
           <RootNav.Screen
             name="SeeAllNegotiator"

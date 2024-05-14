@@ -111,7 +111,8 @@ const ImagePickerModal = props => {
       }
     }
     launchCamera(options, response => {
-      if (Platform.OS == 'ios') {
+    // return console.log("Response from Camera Launch", response)     
+     if (Platform.OS == 'ios') {
         setShow(false);
       }
       // if (response.didCancel) {
@@ -138,6 +139,9 @@ const ImagePickerModal = props => {
           ]);
       }
     });
+      console.log("🚀 ~ openCamera ~ response:", response)
+    console.log("🚀 ~ openCamera ~ response:", response)
+    console.log("🚀 ~ openCamera ~ response:", response)
   };
 
   return (

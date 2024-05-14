@@ -26,7 +26,7 @@ import Card from '../Components/Card';
 import NoData from '../Components/NoData';
 import CustomImage from '../Components/CustomImage';
 
-const YourJobes = props => {
+const YourJobs = props => {
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
@@ -50,7 +50,7 @@ const YourJobes = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
   const [newArray, setNewArray] = useState([]);
-  const [completedjobescards, setCompletedjobescards] = useState('');
+  const [completedJobscards, setCompletedJobscards] = useState('');
 
   // console.log("🚀 ~ file: SeeAllNegotiator.js:46 ~ SeeAllNegotiator ~ newArray:", newArray)
   const handleScroll = event => {
@@ -66,19 +66,19 @@ const YourJobes = props => {
       // console.log('Reached the end of ScrollView');
     }
   };
-    const completedjobes = async()=>{
+    const completedJobs = async()=>{
   const url ='auth/negotiator/quote/complete'
   setIsLoading(true)
   const response = await Get('auth/negotiator/quote/complete' , token)
-  console.log("🚀 ~ file: YourJobes.js:73 ~ completedjobes ~ response:", response?.data?.quote_info?.data)
+  console.log("🚀 ~ file: YourJobs.js:73 ~ completedJobs ~ response:", response?.data?.quote_info?.data)
   setIsLoading(false)
   if(response != undefined){
-    setCompletedjobescards(response?.data?.quote_info?.data)
+    setCompletedJobscards(response?.data?.quote_info?.data)
   }
     }
 
     useEffect(() => {
-      completedjobes()
+      completedJobs()
     }, [])
 
   // const dummydata = [
@@ -149,7 +149,7 @@ const YourJobes = props => {
             : Color.themebgBusinessQbidder
         }>
         <CustomText isBold style={styles.heading}>
-          completed Jobes
+          completed Jobs
         </CustomText>
 
         {isLoading ? (
@@ -187,7 +187,7 @@ const YourJobes = props => {
             ref={scrollViewRef}
             onScroll={handleScroll}
             scrollEventThrottle={16}
-            data={completedjobescards}
+            data={completedJobscards}
             numColumns={type != 'Seeking Help' ? 2 : 1}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{
@@ -201,7 +201,7 @@ const YourJobes = props => {
               return type != 'Seeking Help' ? (
                 <TouchableOpacity
                   onPress={() =>
-                    navigationService.navigate('CompleteJobes', {item: item})
+                    navigationService.navigate('CompleteJobs', {item: item})
                   }
                   style={{
                     flexDirection: 'row',
@@ -314,7 +314,7 @@ const YourJobes = props => {
   );
 };
 
-export default YourJobes;
+export default YourJobs;
 
 const styles = ScaledSheet.create({
   header: {

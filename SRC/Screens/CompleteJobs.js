@@ -38,9 +38,9 @@ import {validateEmail} from '../Config';
 import moment from 'moment';
 import {SliderBox} from 'react-native-image-slider-box';
 
-const CompleteJobes = props => {
+const CompleteJobs = props => {
   const data1 = props?.route?.params?.item;
-  console.log("🚀 ~ file: CompleteJobes.js:43 ~ CompleteJobes ~ data1:", data1)
+  console.log("🚀 ~ file: CompleteJobs.js:43 ~ CompleteJobs ~ data1:", data1)
 
   
   const user = useSelector(state => state.commonReducer.userData);
@@ -312,7 +312,7 @@ const CompleteJobes = props => {
   );
 };
 
-export default CompleteJobes;
+export default CompleteJobs;
 
 const styles = ScaledSheet.create({
   desc: {
