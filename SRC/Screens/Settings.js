@@ -21,6 +21,7 @@ import ImageView from 'react-native-image-viewing';
 import moment from 'moment/moment';
 import navigationService from '../navigationService';
 import {setUserLogOut} from '../Store/slices/common';
+import HelpModal from '../Components/HelpModal';
 
 const Settings = () => {
   const user = useSelector(state => state.commonReducer.userData);
@@ -29,6 +30,9 @@ const Settings = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  // console.log("🚀 ~ Settings ~ isVisible:", isVisible)
+  const [modalVisible ,setModalVisible] = useState(false)
+  console.log("🚀 ~ Settings ~ modalVisible:", modalVisible)
   const [data, setData] = useState([]);
 
   // const getApplication = ()=>{
@@ -152,7 +156,7 @@ const Settings = () => {
               height={windowHeight * 0.07}
               marginTop={moderateScale(10, 0.3)}
               onPress={() => {
-                navigationService.navigate('MileRange',{fromSetting:true});
+                navigationService.navigate('MileRange', {fromSetting: true});
               }}
               bgColor={Color.white}
               // isGradient
@@ -177,13 +181,13 @@ const Settings = () => {
           {userRole != 'Qbid Member' && (
             <CustomButton
               isBold
-              text={'your jobes'}
+              text={'your jobs'}
               textColor={Color.themeDarkGray}
               width={windowWidth * 0.9}
               height={windowHeight * 0.07}
               marginTop={moderateScale(10, 0.3)}
               onPress={() => {
-                navigationService.navigate('YourJobes');
+                navigationService.navigate('YourJobs');
                 // console.log('here');
               }}
               bgColor={Color.white}
@@ -207,6 +211,22 @@ const Settings = () => {
           />
           <CustomButton
             isBold
+            text={'Help'}
+            textColor={Color.themeDarkGray}
+            width={windowWidth * 0.9}
+            height={windowHeight * 0.07}
+            marginTop={moderateScale(10, 0.3)}
+            onPress={() => {
+              console.log('help clicked');
+              setModalVisible(true);
+            }}
+            bgColor={Color.white}
+            // isGradient
+            borderRadius={moderateScale(30, 0.3)}
+          />
+            <HelpModal modalVisible={modalVisible} setModalVisible={setModalVisible}/>
+          <CustomButton
+            isBold
             text={'Terms And Condition'}
             textColor={Color.themeDarkGray}
             width={windowWidth * 0.9}
@@ -219,6 +239,7 @@ const Settings = () => {
             // isGradient
             borderRadius={moderateScale(30, 0.3)}
           />
+
           <CustomButton
             isBold
             text={'Support'}
@@ -242,8 +263,8 @@ const Settings = () => {
             marginTop={moderateScale(10, 0.3)}
             onPress={() => {
               dispatch(setUserLogOut());
-              dispatch(setUserLogoutAuth());       
-              dispatch(setMilageRing(false))
+              dispatch(setUserLogoutAuth());
+              dispatch(setMilageRing(false));
             }}
             bgColor={Color.white}
             // isGradient
@@ -257,7 +278,8 @@ const Settings = () => {
           onRequestClose={() => {
             setIsVisible(false);
           }}
-        />
+          />
+
       </LinearGradient>
     </ScreenBoiler>
   );

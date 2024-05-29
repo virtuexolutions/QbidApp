@@ -25,13 +25,15 @@ import {ActivityIndicator} from 'react-native';
 import Card from '../Components/Card';
 import NoData from '../Components/NoData';
 import CustomImage from '../Components/CustomImage';
+import DropDownSingleSelect from '../Components/DropDownSingleSelect';
+import { useIsFocused } from '@react-navigation/native';
 
-const YourJobes = props => {
+const YourJobs = props => {
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
-  // console.log("🚀 ~ file: SeeAllNegotiator.js:30 ~ SeeAllNegotiator ~ token:", token)
-
+  console.log("🚀 ~ file: SeeAllNegotiator.js:30 ~ SeeAllNegotiator ~ token:", token)
+  const isFocused = useIsFocused();
   const type = props?.route?.params?.type;
   console.log(
     '🚀 ~ file: SeeAllNegotiator.js:33 ~ SeeAllNegotiator ~ type:',
@@ -50,7 +52,10 @@ const YourJobes = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
   const [newArray, setNewArray] = useState([]);
-  const [completedjobescards, setCompletedjobescards] = useState('');
+  const [completedJobscards, setCompletedJobscards] = useState('');
+  const [ item ,setItem]=useState('all')
+  console.log("🚀 ~ YourJobs ~ item==================>:", item)
+
 
   // console.log("🚀 ~ file: SeeAllNegotiator.js:46 ~ SeeAllNegotiator ~ newArray:", newArray)
   const handleScroll = event => {
@@ -66,20 +71,24 @@ const YourJobes = props => {
       // console.log('Reached the end of ScrollView');
     }
   };
-    const completedjobes = async()=>{
-  const url ='auth/negotiator/quote/complete'
+    const completedJobs = async()=>{
+  const url =`auth/negotiator/quote/complete?status=${item}`;
+  console.log("🚀 ~ completedJobs ~ url:", url)
   setIsLoading(true)
-  const response = await Get('auth/negotiator/quote/complete' , token)
-  console.log("🚀 ~ file: YourJobes.js:73 ~ completedjobes ~ response:", response?.data?.quote_info?.data)
+  const response = await Get(url , token)
+
   setIsLoading(false)
+ console.log("🚀 ~ file: YourJobs.js:73 ~ completedJobs ~ response:", JSON.stringify(response?.data,null,2))
   if(response != undefined){
-    setCompletedjobescards(response?.data?.quote_info?.data)
+    setCompletedJobscards(response?.data?.quote_info?.data)
   }
     }
 
     useEffect(() => {
-      completedjobes()
-    }, [])
+      completedJobs()
+    }, [isFocused ,item])
+
+
 
   // const dummydata = [
   //   {
@@ -148,9 +157,36 @@ const YourJobes = props => {
             ? Color.themeBgColorNegotiator
             : Color.themebgBusinessQbidder
         }>
-        <CustomText isBold style={styles.heading}>
-          completed Jobes
-        </CustomText>
+        {/* <CustomText isBold style={styles.heading}>
+          completed Jobs
+        </CustomText> */}
+        
+        <DropDownSingleSelect
+          array={
+            [
+                  'complete',
+                  // 'reject',
+                  'pending',
+                  'accept',
+                  'ongoing',
+                  'review'
+                  // 'waiting for approval',
+                ]
+           
+          }
+          backgroundColor={Color.white}
+          item={item}
+          setItem={setItem}
+          placeholder={'Choose any category'}
+          width={windowWidth * 0.9}
+          dropdownStyle={{
+            width: windowWidth * 0.95,
+            borderBottomWidth: 0,
+            marginTop: moderateScale(30, 0.3),
+            marginHorizontal :moderateScale(15,.3)
+          }}
+        />
+     
 
         {isLoading ? (
           <View
@@ -187,7 +223,7 @@ const YourJobes = props => {
             ref={scrollViewRef}
             onScroll={handleScroll}
             scrollEventThrottle={16}
-            data={completedjobescards}
+            data={completedJobscards}
             numColumns={type != 'Seeking Help' ? 2 : 1}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{
@@ -201,7 +237,7 @@ const YourJobes = props => {
               return type != 'Seeking Help' ? (
                 <TouchableOpacity
                   onPress={() =>
-                    navigationService.navigate('CompleteJobes', {item: item})
+                    navigationService.navigate('CompleteJobs', {item: item})
                   }
                   style={{
                     flexDirection: 'row',
@@ -314,7 +350,7 @@ const YourJobes = props => {
   );
 };
 
-export default YourJobes;
+export default YourJobs;
 
 const styles = ScaledSheet.create({
   header: {

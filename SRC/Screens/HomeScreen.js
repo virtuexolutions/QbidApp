@@ -30,13 +30,16 @@ import {Get, Post} from '../Axios/AxiosInterceptorFunction';
 import {useIsFocused} from '@react-navigation/native';
 import NoData from '../Components/NoData';
 import VendorCards from '../Components/VendorCards';
-import CustomStatusModal1 from '../Components/CustomStatusModal1';
+import HelpCard from '../Components/HelpCard';
+// import SkeeingHelpCard from '../Components/SkeeingHelpCard';
 
 const HomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
+  const userData = useSelector(state => state.commonReducer.userData);
+  console.log("🚀 ~ HomeScreen ~ userData-=======================:", userData)
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
-  console.log("🚀 ~ file: HomeScreen.js:39 ~ HomeScreen ~ token:", token)
+  console.log("🚀 ~ HomeScreen ~ token:==============>", token)
   const [searchData, setSearchData] = useState('');
   const [showMultiImageModal, setShowMultiImageModal] = useState(false);
   const [multiImages, setMultiImages] = useState([]);
@@ -49,25 +52,32 @@ const HomeScreen = () => {
   const [modalVisible2, setModalVisible2] = useState(false);
   const [modalVisible3, setModalVisible3] = useState(false);
   const [selectedData1, setSelectedData1] = useState('');
-  const [negotiator, setNegotiator] = useState([])
+  const [negotiator, setNegotiator] = useState([]);
   const [selectedData2, setSelectedData2] = useState('');
   const [selectedData3, setSelectedData3] = useState('');
+  const [helpResponse, setHelpResponse] = useState([]);
 
   const getAllData = async () => {
     setIsLoading(true);
-    const [response1, response2] = await Promise.all([
+    const [response1, response2, response3] = await Promise.all([
       Get('auth/member/negotiator', token),
       Get('auth/member/quote', token),
+      Get('auth/member/quote_help', token),
     ]);
     setIsLoading(false);
     if (response1 != undefined) {
-    console.log("🚀 ~ file: HomeScreen.js:64 ~ getAllData ~ response1:", response1?.data)
-    
-      setNegotiator(response1?.data?.negotitator_info)
+      setNegotiator(response1?.data?.negotitator_info);
     }
     if (response2 != undefined) {
-  
       setMyQuotes(response2?.data?.quote_info?.data);
+    }
+      console.log("🚀 ~ getAllData ~ response2:", response2.data.quote_info?.data)
+    if (response3 != undefined) {
+      console.log(
+        '🚀 ~ getAllData ~ response3:',
+        JSON.stringify(response3?.data?.quote_info?.data, null, 2),
+      );
+      setHelpResponse(response3?.data?.quote_info?.data);
     }
   };
 
@@ -77,7 +87,7 @@ const HomeScreen = () => {
   //   const response = await Get(url, token);
   //   setIsLoading(false);
   //   if (response != undefined) {
-    
+
   //     setMyQuotes(response?.data?.quote_info);
   //   }
   // };
@@ -97,10 +107,7 @@ const HomeScreen = () => {
       setVisible(true);
     });
   }, []);
-  
-  
-  
- 
+
   return (
     <ScreenBoiler
       statusBarBackgroundColor={Color.themeBgColor}
@@ -129,7 +136,7 @@ const HomeScreen = () => {
               width: windowWidth * 0.93,
               flexDirection: 'row',
               justifyContent: 'space-between',
-              paddingHorizontal:moderateScale(10,.6),
+              paddingHorizontal: moderateScale(10, 0.6),
               alignItems: 'center',
             }}>
             <SearchContainer
@@ -141,13 +148,14 @@ const HomeScreen = () => {
                   //       ToastAndroid.SHORT,
                   //     )
                   //   :
-                     Alert.alert('Please select any category');
+                  Alert.alert('Please select any category');
                 } else {
-                  navigationService.navigate('SeeAllScreen',{type:selectedData1});
+                  navigationService.navigate('SeeAllScreen', {
+                    type: selectedData1,
+                  });
                 }
               }}
               width={windowWidth * 0.8}
-         
               inputStyle={{
                 height: windowHeight * 0.05,
               }}
@@ -162,7 +170,7 @@ const HomeScreen = () => {
             <Icon
               name={'sound-mix'}
               as={Entypo}
-              size={moderateScale(18  , 0.3)}
+              size={moderateScale(18, 0.3)}
               color={Color.themeDarkGray}
               onPress={() => {
                 setModalVisible1(true);
@@ -183,7 +191,6 @@ const HomeScreen = () => {
               style={styles.viewall}>
               View all
             </CustomText>
-           
           </View>
 
           {isLoading ? (
@@ -209,8 +216,7 @@ const HomeScreen = () => {
                   />
                 );
               }}
-              // data={[]}
-              data={negotiator.slice(0,5)}
+              data={negotiator.slice(0, 5)}
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{
@@ -250,7 +256,6 @@ const HomeScreen = () => {
                 style={styles.viewall}>
                 View all
               </CustomText>
-            
             </View>
           </View>
           {isLoading ? (
@@ -276,20 +281,83 @@ const HomeScreen = () => {
                   />
                 );
               }}
+              // data={myQuotes
+              //   ?.filter(item => item?.type == null)
+              //   .reverse()
+              //   .slice(0, 5)}
               data={
                 myQuotes?.length > 5
                   ? myQuotes.reverse().slice(0, 5)
                   : myQuotes.reverse()
               }
-              // data={[]}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{
                 paddingHorizontal: moderateScale(15, 0.3),
                 paddingTop: moderateScale(20, 0.3),
               }}
               renderItem={({item, index}) => {
-                // console.log("🚀 ~ file: HomeScreen.r:512 ~ HomeScreen ~ item:", item)
-                return <MyQouteCard item={item} key={index} />;
+                return <MyQouteCard item={item} key={index} type={'quote'} />;
+              }}
+            />
+          )}
+          <View style={styles.row}>
+            <CustomText style={styles.header} isBold>
+              seeking help
+            </CustomText>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <CustomText
+                onPress={() => {
+                  navigationService.navigate('SeeAllScreen', {
+                    type: 'help',
+                    data: myQuotes,
+                  });
+                }}
+                style={styles.viewall}>
+                View all
+              </CustomText>
+            </View>
+          </View>
+          {isLoading ? (
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: windowWidth,
+                height: windowHeight * 0.3,
+              }}>
+              <ActivityIndicator color={'white'} size={'large'} />
+            </View>
+          ) : (
+            <FlatList
+              ListEmptyComponent={() => {
+                return (
+                  <NoData
+                    style={{
+                      height: windowHeight * 0.2,
+                      width: windowWidth * 0.5,
+                      alignItems: 'center',
+                    }}
+                  />
+                );
+              }}
+              data={helpResponse}
+              // data={myQuotes.filter(item => item?.type == 'help')}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingHorizontal: moderateScale(15, 0.3),
+                paddingTop: moderateScale(20, 0.3),
+              }}
+              renderItem={({item, index}) => {
+                // console.log(
+                //   '🚀 ~ HomeScreen ~ item================>response3 here:',
+                //   item,
+                // );
+                return <HelpCard item={item} />;
               }}
             />
           )}
@@ -312,7 +380,7 @@ const HomeScreen = () => {
         text={'filter negotiator level'}
       />
       <CustomStatusModal
-      isModalVisible={modalVisible3}
+        isModalVisible={modalVisible3}
         setModalVisible={setModalVisible3}
         statusArray={[
           {name: 'Completed'},

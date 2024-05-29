@@ -128,16 +128,19 @@ const Header = props => {
             width: moderateScale(40, 0.3),
             height: moderateScale(40, 0.3),
             borderRadius: moderateScale(20, 0.3),
-            backgroundColor: Color.green,
-            overflow: 'hidden',
+            backgroundColor: Color.white,
+            overflow: userRole == 'Qbid Member' ? 'visible' : 'hidden',
           }}>
           <CustomImage
             onPress={() => {
               userRole == 'Qbid Member'
-                ? navigationN.navigate('MyAccounts')
+                ? alert('Action required')
                 : navigationN.navigate('NegotiatorPortfolio');
             }}
             source={
+              userRole == 'Qbid Member'
+              ? require('../Assets/Images/Group.png')
+              :
               user?.photo
                 ? {uri: `${user?.photo}`}
                 : require('../Assets/Images/man1.jpg')

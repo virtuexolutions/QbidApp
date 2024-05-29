@@ -25,8 +25,7 @@ import {ActivityIndicator} from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import ReviewModal from './ReviewModal';
 
-const MyQouteCard = ({item}) => {
-  console.log("🚀 ~ file: MyQouteCard.js:29 ~ MyQouteCard ~ item:", item?.status)
+const MyQouteCard = ({item, type}) => {
   const token = useSelector(state => state.authReducer.token);
   const [modalVisible, setModalVisible] = useState(false);
   const [cmpLoading, setCmpLoading] = useState(false);
@@ -57,7 +56,7 @@ const MyQouteCard = ({item}) => {
       activeOpacity={0.9}
       style={styles.card}
       onPress={() => {
-        navigationService.navigate('JobDetails', {item: item});
+        navigationService.navigate('JobDetails', {item: item, type: true});
       }}>
       <View
         style={{
@@ -104,7 +103,6 @@ const MyQouteCard = ({item}) => {
             item?.images.length > 0
               ? {uri: item?.images[0]?.image}
               : require('../Assets/Images/dummyman2.png')
-          
           }
           style={{
             width: '100%',
@@ -130,7 +128,6 @@ const MyQouteCard = ({item}) => {
             fontSize: moderateScale(14, 0.3),
             width: windowWidth * 0.3,
           }}>
-            
           {item?.title}
         </CustomText>
 
@@ -208,17 +205,22 @@ const MyQouteCard = ({item}) => {
             textColor={Color.white}
             marginTop={moderateScale(2, 0.3)}
             onPress={() => {
-              buttonName  == 'Review'  && rbRef.open();
+              buttonName == 'Review' && rbRef.open();
               buttonName == 'Complete' && markCompleted();
             }}
-            bgColor={Color.blue} 
+            bgColor={Color.blue}
             borderRadius={moderateScale(30, 0.3)}
             alignSelf={'flex-end'}
             fontSize={moderateScale(9, 0.3)}
           />
         )}
       </View>
-      <ReviewModal setRef={setRbRef} item={item} rbRef={rbRef} setbuttonName={setbuttonName} />
+      <ReviewModal
+        setRef={setRbRef}
+        item={item}
+        rbRef={rbRef}
+        setbuttonName={setbuttonName}
+      />
     </TouchableOpacity>
   );
 };

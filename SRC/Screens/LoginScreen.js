@@ -40,7 +40,7 @@ const LoginScreen = () => {
   
   const [translateY, setTranslateY] = useState(0);
 
-  const servicesArray = ['Qbid Negotiator', 'Qbid Member',
+  const servicesArray = [ 'Qbid Member',
    'Business Qbidder'
   ];
 
@@ -98,7 +98,8 @@ const LoginScreen = () => {
     const response = await Post(url, body, apiHeader());
     setIsLoading(false);
     if (response != undefined) {
-      console.log(
+  
+    console.log(
         '🚀  file: LoginScreen.js:139  Login ~ response:',
         response?.data,
       );
