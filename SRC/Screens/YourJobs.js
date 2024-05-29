@@ -25,13 +25,15 @@ import {ActivityIndicator} from 'react-native';
 import Card from '../Components/Card';
 import NoData from '../Components/NoData';
 import CustomImage from '../Components/CustomImage';
+import DropDownSingleSelect from '../Components/DropDownSingleSelect';
+import { useIsFocused } from '@react-navigation/native';
 
 const YourJobs = props => {
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
-  // console.log("🚀 ~ file: SeeAllNegotiator.js:30 ~ SeeAllNegotiator ~ token:", token)
-
+  console.log("🚀 ~ file: SeeAllNegotiator.js:30 ~ SeeAllNegotiator ~ token:", token)
+  const isFocused = useIsFocused();
   const type = props?.route?.params?.type;
   console.log(
     '🚀 ~ file: SeeAllNegotiator.js:33 ~ SeeAllNegotiator ~ type:',
@@ -51,6 +53,9 @@ const YourJobs = props => {
   const [loadMore, setLoadMore] = useState(false);
   const [newArray, setNewArray] = useState([]);
   const [completedJobscards, setCompletedJobscards] = useState('');
+  const [ item ,setItem]=useState('all')
+  console.log("🚀 ~ YourJobs ~ item==================>:", item)
+
 
   // console.log("🚀 ~ file: SeeAllNegotiator.js:46 ~ SeeAllNegotiator ~ newArray:", newArray)
   const handleScroll = event => {
@@ -67,11 +72,13 @@ const YourJobs = props => {
     }
   };
     const completedJobs = async()=>{
-  const url ='auth/negotiator/quote/complete'
+  const url =`auth/negotiator/quote/complete?status=${item}`;
+  console.log("🚀 ~ completedJobs ~ url:", url)
   setIsLoading(true)
-  const response = await Get('auth/negotiator/quote/complete' , token)
-  console.log("🚀 ~ file: YourJobs.js:73 ~ completedJobs ~ response:", response?.data?.quote_info?.data)
+  const response = await Get(url , token)
+
   setIsLoading(false)
+ console.log("🚀 ~ file: YourJobs.js:73 ~ completedJobs ~ response:", JSON.stringify(response?.data,null,2))
   if(response != undefined){
     setCompletedJobscards(response?.data?.quote_info?.data)
   }
@@ -79,7 +86,9 @@ const YourJobs = props => {
 
     useEffect(() => {
       completedJobs()
-    }, [])
+    }, [isFocused ,item])
+
+
 
   // const dummydata = [
   //   {
@@ -148,9 +157,36 @@ const YourJobs = props => {
             ? Color.themeBgColorNegotiator
             : Color.themebgBusinessQbidder
         }>
-        <CustomText isBold style={styles.heading}>
+        {/* <CustomText isBold style={styles.heading}>
           completed Jobs
-        </CustomText>
+        </CustomText> */}
+        
+        <DropDownSingleSelect
+          array={
+            [
+                  'complete',
+                  // 'reject',
+                  'pending',
+                  'accept',
+                  'ongoing',
+                  'review'
+                  // 'waiting for approval',
+                ]
+           
+          }
+          backgroundColor={Color.white}
+          item={item}
+          setItem={setItem}
+          placeholder={'Choose any category'}
+          width={windowWidth * 0.9}
+          dropdownStyle={{
+            width: windowWidth * 0.95,
+            borderBottomWidth: 0,
+            marginTop: moderateScale(30, 0.3),
+            marginHorizontal :moderateScale(15,.3)
+          }}
+        />
+     
 
         {isLoading ? (
           <View

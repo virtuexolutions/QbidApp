@@ -38,7 +38,7 @@ import AcceptedHelpRequestCard from '../Components/AcceptedHelpRequestCard';
 const NegotiatorHomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
-  console.log("🚀 ~ NegotiatorHomeScreen ~ token:", token)
+  console.log('🚀 ~ NegotiatorHomeScreen ~ token:', token);
   const userData = useSelector(state => state.commonReducer.userData);
   // console.log("🚀 ~ file: NegotiatorHomeScreen.js:40 ~ NegotiatorHomeScreen ~ userData:", userData)
 
@@ -56,7 +56,7 @@ const NegotiatorHomeScreen = () => {
   const [isLocation, setIsLocation] = useState(false);
   const [bidList, setBidList] = useState([]);
   console.log('🚀 ~ NegotiatorHomeScreen ~ bidList:', bidList);
-  const [helpBidList ,setHelpBidList] =useState([])
+  const [helpBidList, setHelpBidList] = useState([]);
   // const [recommand ,setRecommand] =useState([])
 
   // const getRecommand =async () => {
@@ -76,13 +76,14 @@ const NegotiatorHomeScreen = () => {
   const getProposal = async () => {
     setIsLoading(true);
 
-    const [response1, response2, response3, response4 ,response5] = await Promise.all([
-      Get('auth/negotiator/quote/recommended', token),
-      Get('auth/negotiator/quote/working', token),
-      Get('auth/my_bid_list', token),
-      Get('auth/negotiator/hiring/list', token),
-      Get('auth/negotiator/quote_help',token)
-    ]);
+    const [response1, response2, response3, response4, response5] =
+      await Promise.all([
+        Get('auth/negotiator/quote/recommended', token),
+        Get('auth/negotiator/quote/working', token),
+        Get('auth/my_bid_list', token),
+        Get('auth/negotiator/hiring/list', token),
+        Get('auth/negotiator/quote_help', token),
+      ]);
     setIsLoading(false);
     if (response1 != undefined) {
       //  return console.log(response1?.data?.quote_info?.data);
@@ -90,10 +91,10 @@ const NegotiatorHomeScreen = () => {
         setRecommended(response1?.data?.quote_info?.data);
     }
     if (response2 != undefined) {
-      // console.log(
-      //   '🚀 ~ file: NegotiatorHomeScreen.js:83 ~ getProposal ~ response2:=========> ',
-      //   response2?.data?.quote_info?.data,
-      // );
+      console.log(
+        '🚀 ~ file: NegotiatorHomeScreen.js:83 ~ getProposal ~ response2:=========> ',
+        response2?.data?.quote_info?.data,
+      );
       ![null, undefined, ''].includes(response2?.data?.quote_info?.data) &&
         setWorking(response2?.data?.quote_info?.data);
       // setWorking(prev => [...prev, ...response2?.data?.hiring_info?.data]);
@@ -111,11 +112,11 @@ const NegotiatorHomeScreen = () => {
       setJobPosting(response4?.data?.hiring_info?.data);
     }
     if (response5 != undefined) {
-       console.log(
-          '🚀 ~ file: NegotiatorHomeScreen.js:89 ~ getProposal ~ response5===> here:',
-          response5?.data?.quote_info?.data
-        );
-        setHelpBidList(response5?.data?.quote_info?.data)
+      console.log(
+        '🚀 ~ file: NegotiatorHomeScreen.js:89 ~ getProposal ~ response5===> here:',
+        response5?.data?.quote_info?.data,
+      );
+      setHelpBidList(response5?.data?.quote_info?.data);
     }
   };
 
@@ -527,8 +528,8 @@ const NegotiatorHomeScreen = () => {
               <View style={styles.recommendedContainer}>
                 <View style={styles.row}>
                   <CustomText isBold style={styles.heading}>
-                   Accpeted  help qbids                 
-                    </CustomText>
+                    Accpeted help qbids
+                  </CustomText>
                   <CustomText
                     onPress={() => {
                       navigationService.navigate('SeeAllNegotiator', {
@@ -560,9 +561,7 @@ const NegotiatorHomeScreen = () => {
                     );
                   }}
                   renderItem={({item, index}) => {
-                    return (
-                      <AcceptedHelpRequestCard  item={item}/>
-                    );
+                    return <AcceptedHelpRequestCard item={item} />;
                   }}
                 />
               </View>

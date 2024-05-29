@@ -119,6 +119,7 @@ const NotificationScreen = () => {
     }
   };
   useEffect(() => {
+    userRole != 'Qbid Member' 
     helpNotify();
   }, isFocused);
 

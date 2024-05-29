@@ -113,7 +113,7 @@ const MainContainer = () => {
                                 //  }, []);
                                 // fcm ends
 
-                                useEffect(() => {
+useEffect(() => {
     async function GetPermission() {
       await requestCameraPermission();
       await requestWritePermission();
@@ -123,8 +123,6 @@ const MainContainer = () => {
       
       
     }
-
-
     // console.log('hererererer');
     //  messaging()
     //    .getToken()

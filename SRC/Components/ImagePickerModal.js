@@ -20,33 +20,40 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import CustomText from '../Components/CustomText';
-import {windowHeight, windowWidth} from '../Utillity/utils';
+import { windowHeight, windowWidth} from '../Utillity/utils';
 import Color from '../Assets/Utilities/Color';
 import {useSelector} from 'react-redux';
 
-const requestCameraPermission = async () => {
-  try {
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.CAMERA,
-      {
-        title: 'Camera Permission',
-        message:
-          'App needs access to your camera ' +
-          'so you can take awesome pictures.',
-      },
-    );
-    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-    } else {
-    }
-  } catch (err) {
-    console.warn(err);
-  }
-};
+
 
 const ImagePickerModal = props => {
   let {show, setShow, setFileObject, setMultiImages, crop} = props;
 
   const userRole = useSelector(state => state.commonReducer.selectedRole);
+  const requestCameraPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: 'Camera Permission',
+          message:
+            'App needs access to your camera ' +
+            'so you can take awesome pictures.',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        return true
+        console.log('You can use the camera');
+        // openCamera()
+      } else {
+        // ToastAndroid.show('Camera permission denied' , ToastAndroid.SHORT)
+        // setShow(false)
+        return false
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
 
   const openGallery = () => {
     let options = {
@@ -105,43 +112,66 @@ const ImagePickerModal = props => {
       saveToPhotos: true,
     };
     if (Platform.OS === 'android') {
-      if (PermissionsAndroid.PERMISSIONS.CAMERA) {
+    //   if (PermissionsAndroid.PERMISSIONS.CAMERA == null) {
+    //     console.log('herer camera permissio null===============');
+    //   }
+    //  else
+      if (PermissionsAndroid.PERMISSIONS.CAMERA == true) {
+        console.log('herer');
       } else {
-        await requestCameraPermission();
+      const permissionResponse = await requestCameraPermission();
+      if (permissionResponse == true) {
+        console.log('camera permission granted')
       }
-    }
+      else {
+      ToastAndroid.show('Camera permission rejected' ,ToastAndroid.SHORT)
+     return setShow(false)
+      }
+    } 
+  }
+    
+    
     launchCamera(options, response => {
-    // return console.log("Response from Camera Launch", response)     
-     if (Platform.OS == 'ios') {
+      console.log("Response from Camera Launch", response)
+     
+      try {
+      if (Platform.OS == 'ios') {
         setShow(false);
       }
-      // if (response.didCancel) {
-      // } else if (response.error) {
-      // } else if (response.customButton) {
-      //   Alert.alert(response.customButton);
-      // }
-      else {
-        setFileObject &&
-          setFileObject({
-            uri: response?.assets[0]?.uri,
-            type: response?.assets[0]?.type,
-            name: response?.assets[0]?.fileName,
-          });
-
-        setMultiImages &&
-          setMultiImages(x => [
-            ...x,
-            {
+      if (response.didCancel) {
+        } else if (response.error) {
+          } else if (response.customButton) {
+        }
+        else {
+          // if (response == undefined) {
+          //   console.log('response is undefiend');
+          // } else {
+            setFileObject &&
+            setFileObject({
               uri: response?.assets[0]?.uri,
               type: response?.assets[0]?.type,
               name: response?.assets[0]?.fileName,
-            },
-          ]);
+            });
+          // }
+          // if (response == undefined) {
+          //   console.log('response is undefiend');
+          // } else {
+            setMultiImages &&
+            setMultiImages(x => [
+                ...x,
+                {
+                  uri: response?.assets[0]?.uri,
+                  type: response?.assets[0]?.type,
+                  name: response?.assets[0]?.fileName,
+                },
+              ]);
+            // }
+          }
+      
+      } catch (error) {
+        console.log('response is undefined=================>', error);
       }
     });
-      console.log("🚀 ~ openCamera ~ response:", response)
-    console.log("🚀 ~ openCamera ~ response:", response)
-    console.log("🚀 ~ openCamera ~ response:", response)
   };
 
   return (

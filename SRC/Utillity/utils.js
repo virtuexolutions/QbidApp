@@ -30,8 +30,9 @@ const requestCameraPermission = async () => {
       {
         title: 'Camera Permission',
         message:
-          'Breakaway App needs access to your camera ' +
+          'Qbid needs access to your camera ' +
           'so you can take awesome pictures.',
+          
       },
     );
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {

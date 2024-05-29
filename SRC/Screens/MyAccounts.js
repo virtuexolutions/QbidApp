@@ -79,9 +79,12 @@ const MyAccounts = props => {
             uri: `${user?.photo}`,
           },
         ]
-      : [require('../Assets/Images/man1.jpg')];
+        : [require('../Assets/Images/man1.jpg')];
+        
+        console.log("🚀 ~ MyAccounts ~ user:", user)
+      console.log("🚀 ~ EditProfile ~ imageObject:", imageObject)
 
-  const EditProfile = async () => {
+      const EditProfile = async () => {
     const params = {
       first_name: firstName,
       last_name: lastName,

@@ -79,6 +79,7 @@ const JobDetails = props => {
     setIsLoading(false);
 
     if (response != undefined) {
+      // console.log("🚀 ~ bidDetails ~ response=============>:", response?.data)
       setData(response?.data?.quote_info);
 
       const mainuserData = response?.data?.quote_info?.bids?.find(
@@ -154,6 +155,7 @@ const JobDetails = props => {
     setIsLoading(false);
 
     if (response != undefined) {
+      console.log("🚀 ~ bidNow ~ response======================>:", response?.data)
       setBidDone(true);
       setModalVisible(!isModalVisible);
     }
