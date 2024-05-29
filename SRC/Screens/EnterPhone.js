@@ -27,6 +27,7 @@ const EnterPhone = props => {
   const SelecteduserRole = useSelector(
     state => state.commonReducer.selectedRole,
   );
+  console.log(SelecteduserRole)
   const fromForgot = props?.route?.params?.fromForgot;
   // console.log('here=>', fromForgot);
   const [phone, setPhone] = useState('');
@@ -54,7 +55,6 @@ const EnterPhone = props => {
       navigationService.navigate('VerifyNumber', {
         phoneNumber: `${phone}`,
       });
-
     }
   };
 
