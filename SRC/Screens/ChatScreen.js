@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import moment from 'moment';
 import {FlatList} from 'native-base';
@@ -13,13 +13,25 @@ import SearchContainer from '../Components/SearchContainer';
 import {useState} from 'react';
 import ChatCard from '../Components/ChatCard';
 import {useSelector} from 'react-redux';
+import { GiftedChat } from 'react-native-gifted-chat'
+import { Get } from '../Axios/AxiosInterceptorFunction';
 
 const ChatScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
+  const user = useSelector(state => state.commonReducer.userData);
+  console.log("🚀 ~ ChatScreen ~ user:", user?.id , user?.first_name)
+
+  const token = useSelector(state => state.authReducer.token);
+
   const [searchData, setSearchData] = useState('');
+  const [selectedChat,setSelectedChat]=useState({})
+  const [chatData ,setChatData] =useState([])
+  const [isLoading ,setIsLoading]=useState(false)
+  // console.log("🚀 ~ ChatScreen ~ messages==========>:", messages)
 
   const chatListingData = [
     {
+      id :1,
       name: 'Walter A. Jones',
       image: require('../Assets/Images/dummyman1.png'),
       lastMessage: 'hello bro how are you',
@@ -29,6 +41,7 @@ const ChatScreen = () => {
       // time : moment().format()
     },
     {
+      id :2,
       name: 'Josephine A. Suarez',
       image: require('../Assets/Images/dummyman2.png'),
       lastMessage:
@@ -38,6 +51,7 @@ const ChatScreen = () => {
       time: moment('2023-02-15').format('YYYY-MM-DD'),
     },
     {
+      id :3,
       name: 'Ronald N. Voegele',
       image: require('../Assets/Images/dummyman3.png'),
       lastMessage: '??',
@@ -46,6 +60,7 @@ const ChatScreen = () => {
       time: moment('2023-01-14').format('YYYY-MM-DD'),
     },
     {
+      id :4,
       name: 'Josephine A. Suarez',
       image: require('../Assets/Images/dummyman4.png'),
       lastMessage: 'Loved to work with you thanks',
@@ -54,6 +69,7 @@ const ChatScreen = () => {
       time: moment('2023-02-20').format('YYYY-MM-DD'),
     },
     {
+      id :5,
       name: 'Josephine A. Suarez',
       image: require('../Assets/Images/dummyman5.png'),
       lastMessage: 'there?',
@@ -62,6 +78,7 @@ const ChatScreen = () => {
       time: moment('2023-02-16').format('YYYY-MM-DD'),
     },
     {
+      id :6,
       name: 'Josephine A. Suarez',
       image: require('../Assets/Images/dummyman6.png'),
       lastMessage: 'please update me about my money',
@@ -70,6 +87,7 @@ const ChatScreen = () => {
       time: moment('2023-02-10').format('YYYY-MM-DD'),
     },
     {
+      id :7,
       name: 'Walter A. Jones',
       image: require('../Assets/Images/dummyman1.png'),
       lastMessage: 'hello bro how are you',
@@ -79,6 +97,7 @@ const ChatScreen = () => {
       // time : moment().format()
     },
     {
+      id :8,
       name: 'Josephine A. Suarez',
       image: require('../Assets/Images/dummyman2.png'),
       lastMessage:
@@ -88,6 +107,7 @@ const ChatScreen = () => {
       time: moment('2023-02-15').format('YYYY-MM-DD'),
     },
     {
+      id :9,
       name: 'Ronald N. Voegele',
       image: require('../Assets/Images/dummyman3.png'),
       lastMessage: '??',
@@ -96,6 +116,7 @@ const ChatScreen = () => {
       time: moment('2023-01-14').format('YYYY-MM-DD'),
     },
     {
+      id :10,
       name: 'Walter A. Jones',
       image: require('../Assets/Images/dummyman1.png'),
       lastMessage: 'hello bro how are you',
@@ -104,7 +125,7 @@ const ChatScreen = () => {
       time: moment('2023-02-10').format('YYYY-MM-DD'),
       // time : moment().format()
     },
-    {
+    {  id :11,
       name: 'Josephine A. Suarez',
       image: require('../Assets/Images/dummyman2.png'),
       lastMessage:
@@ -114,6 +135,23 @@ const ChatScreen = () => {
       time: moment('2023-02-15').format('YYYY-MM-DD'),
     },
   ];
+
+
+  const chatList = async () => {
+    const url = `auth/chat_list`;
+    setIsLoading(true);
+    const response = await Get(url, token);
+    setIsLoading(false);
+    if (response != undefined) {
+          console.log("🚀 ~kamal == = == == == =   >> > >> >> from updatedmember :", JSON.stringify(response?.data ,null ,2))
+          setChatData(response?.data?.data)
+    }
+  }
+
+  useEffect(() => {
+    chatList() 
+  },[])
+  
   return (
     <ScreenBoiler
       showHeader={true}
@@ -163,7 +201,7 @@ const ChatScreen = () => {
         />
 
         <FlatList
-          data={chatListingData}
+          data={chatData}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             paddingBottom: moderateScale(100, 0.3),
@@ -176,13 +214,16 @@ const ChatScreen = () => {
           }}
           renderItem={({item, index}) => {
             return (
+            
               <ChatCard
-                date={item?.time}
-                image={item?.image}
-                lastmessage={item?.lastMessage}
-                name={item?.name}
+                date={item?.created_at}
+                image={item?.user?.photo}
+                lastmessage={item?.message?.text}
+                name={`${item?.user?.first_name} ${item?.user?.last_name}`}
                 unread={item?.unread}
                 unreadCount={item?.unreadCount}
+                target_id={item?.user?.id}
+              conversationId={item?.id}
               />
             );
           }}

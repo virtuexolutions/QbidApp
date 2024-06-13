@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   socket: null,
+  pusherInstance :null
 };
 
 const socketSlice = createSlice({
@@ -16,6 +17,10 @@ const socketSlice = createSlice({
       );
       state.socket = action.payload;
     },
+    setPusherInstance(state,action){
+      state.pusherInstance = action.payload
+    },
+    
   },
 });
 

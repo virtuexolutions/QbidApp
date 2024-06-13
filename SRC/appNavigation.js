@@ -43,6 +43,7 @@ import DrawerScreen from './Screens/DrawerScreen';
 import YourJobs from './Screens/YourJobs';
 import CompleteJobs from './Screens/CompleteJobs';
 import CreateNewHelp from './Screens/CreateNewHelp';
+import MessagesScreen from './Screens/MessagesScreen';
 
 const AppNavigator = () => {
   // const isLogin = false;
@@ -109,6 +110,8 @@ const AppNavigator = () => {
           <RootNav.Screen name="MyAccounts" component={MyAccounts} />
           <RootNav.Screen name="ChangePassword" component={ChangePassword} />
           <RootNav.Screen name="CreateNewHelp" component={CreateNewHelp} />
+          <RootNav.Screen name="MessagesScreen" component={MessagesScreen} />
+
         </RootNav.Navigator>
       </NavigationContainer>
     );

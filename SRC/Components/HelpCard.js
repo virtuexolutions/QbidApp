@@ -9,7 +9,7 @@ import navigationService from '../navigationService';
 import AskingModal from '../Components/AskingModal';
 
 const HelpCard = ({item}) => {
-  console.log("🚀 ~ HelpCard ~ item============>:", item)
+  // console.log("🚀 ~ HelpCard ~ item============>:", item)
   const [modalVisible, setModalVisible] = useState(false);
   return (
     <>

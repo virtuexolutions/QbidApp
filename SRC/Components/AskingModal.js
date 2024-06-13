@@ -22,7 +22,7 @@ import { useNavigation } from '@react-navigation/native';
 const AskingModal = ({modalVisible, setModalVisible, item}) => {
   const token = useSelector(state => state.authReducer.token);
   const navigation = useNavigation()
-  console.log('🚀 ~ AskingModal ~ item:', item);
+  // console.log('🚀 ~ AskingModal ~ item:', item);
   const [isLoading, setIsLoading] = useState(false);
 
   const helpQuoteWithdraw = async () => {

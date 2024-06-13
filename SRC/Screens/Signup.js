@@ -167,6 +167,7 @@ const Signup = () => {
     const response = await Post(url, formData, apiHeader());
     setIsLoading(false);
     if (response != undefined) {
+    //  return console.log("🚀 ~ Register ~ response:", response)
       dispatch(setUserData(response?.data?.user_info));
       dispatch(setSelectedRole(response?.data?.user_info?.role));
       dispatch(setUserLogin(response?.data?.token));

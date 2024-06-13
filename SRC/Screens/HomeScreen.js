@@ -36,10 +36,10 @@ import HelpCard from '../Components/HelpCard';
 const HomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const userData = useSelector(state => state.commonReducer.userData);
-  console.log("🚀 ~ HomeScreen ~ userData-=======================:", userData)
+  // console.log("🚀 ~ HomeScreen ~ userData-=======================:", userData)
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
-  console.log("🚀 ~ HomeScreen ~ token:==============>", token)
+  // console.log("🚀 ~ HomeScreen ~ token:==============>", token)
   const [searchData, setSearchData] = useState('');
   const [showMultiImageModal, setShowMultiImageModal] = useState(false);
   const [multiImages, setMultiImages] = useState([]);
@@ -71,12 +71,12 @@ const HomeScreen = () => {
     if (response2 != undefined) {
       setMyQuotes(response2?.data?.quote_info?.data);
     }
-      console.log("🚀 ~ getAllData ~ response2:", response2.data.quote_info?.data)
+      // console.log("🚀 ~ getAllData ~ response2:", response2.data.quote_info?.data)
     if (response3 != undefined) {
-      console.log(
-        '🚀 ~ getAllData ~ response3:',
-        JSON.stringify(response3?.data?.quote_info?.data, null, 2),
-      );
+      // console.log(
+      //   '🚀 ~ getAllData ~ response3:',
+      //   JSON.stringify(response3?.data?.quote_info?.data, null, 2),
+      // );
       setHelpResponse(response3?.data?.quote_info?.data);
     }
   };
