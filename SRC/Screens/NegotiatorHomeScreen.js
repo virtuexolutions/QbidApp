@@ -105,10 +105,10 @@ const NegotiatorHomeScreen = () => {
     }
 
     if (response4 != undefined) {
-      //  return console.log(
-      //     '🚀 ~ file: NegotiatorHomeScreen.js:89 ~ getProposal ~ response3:',
-      //     response4?.data?.hiring_info?.data,
-      //   );
+      console.log(
+          '🚀 ~ file: NegotiatorHomeScreen.js:89 ~ getProposal ~ response3:',
+          response4?.data?.hiring_info?.data,
+        );
       setJobPosting(response4?.data?.hiring_info?.data);
     }
     if (response5 != undefined) {

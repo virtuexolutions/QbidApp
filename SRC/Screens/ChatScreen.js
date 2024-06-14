@@ -19,7 +19,7 @@ import { Get } from '../Axios/AxiosInterceptorFunction';
 const ChatScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const user = useSelector(state => state.commonReducer.userData);
-  console.log("🚀 ~ ChatScreen ~ user:", user?.id , user?.first_name)
+  // console.log("🚀 ~ ChatScreen ~ user:", user?.id , user?.first_name)
 
   const token = useSelector(state => state.authReducer.token);
 
@@ -149,6 +149,7 @@ const ChatScreen = () => {
   }
 
   useEffect(() => {
+    console.log('hello kamal hgai ')
     chatList() 
   },[])
   

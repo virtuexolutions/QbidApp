@@ -64,11 +64,14 @@ const HomeScreen = () => {
       Get('auth/member/quote', token),
       Get('auth/member/quote_help', token),
     ]);
+    
     setIsLoading(false);
     if (response1 != undefined) {
+      // console.log("🚀 ~ getAllData ~ response1 =========== >>>>>>>>>>>:", response1?.data)
       setNegotiator(response1?.data?.negotitator_info);
     }
     if (response2 != undefined) {
+      // console.log("🚀 ~ getAllData ~ response2 ====== >> >>>>>>>>>:", response2?.data?.quote_info?.data)
       setMyQuotes(response2?.data?.quote_info?.data);
     }
       // console.log("🚀 ~ getAllData ~ response2:", response2.data.quote_info?.data)
