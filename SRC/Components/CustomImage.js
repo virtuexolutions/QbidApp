@@ -9,7 +9,6 @@ const CustomImage = (props) => {
     style,
     onPress,
   } = props;
-    // console.log("🚀 ~ file: CustomImage.js:12 ~ CustomImage ~ source:", source)
   const [errorLoadingProfileImage, setErrorLoadingProfileImage] =
     useState(false);
   return (

@@ -39,7 +39,7 @@ const Support = () => {
   const [loading, setLoading] = useState(false);
   const [supportData, setSupportData] = useState();
   const [submitLoading, setSubmitLoading] = useState(false);
-  const navigation = useNavigation()
+  const navigation = useNavigation();
 
   const GetSupportData = async () => {
     const url = 'auth/support';
@@ -47,7 +47,6 @@ const Support = () => {
     const response = await Get(url, token);
     setLoading(false);
     if (response != undefined) {
-      console.log(response?.data);
       setSupportData(response?.data);
     }
   };
@@ -79,31 +78,29 @@ const Support = () => {
     }
     if (isNaN(phone) || phone.length < 10) {
       return Platform.OS == 'android'
-      ? ToastAndroid.show(`phone number in not valid`, ToastAndroid.SHORT)
-      : alert(`phone number in not valid`);
+        ? ToastAndroid.show(`phone number in not valid`, ToastAndroid.SHORT)
+        : alert(`phone number in not valid`);
     }
     if (!validateEmail(email)) {
       return Platform.OS == 'android'
-      ? ToastAndroid.show(`please enter a valid email`, ToastAndroid.SHORT)
-      : alert(`please enter a valid email`);
+        ? ToastAndroid.show(`please enter a valid email`, ToastAndroid.SHORT)
+        : alert(`please enter a valid email`);
     }
     if (message.length < 50) {
       return Platform.OS == 'android'
-      ? ToastAndroid.show(`Description is too short`, ToastAndroid.SHORT)
-      : alert(`Description is too short`);
+        ? ToastAndroid.show(`Description is too short`, ToastAndroid.SHORT)
+        : alert(`Description is too short`);
     }
-    
-    console.log("🚀 ~ file: Support.js:72 ~ sendQuestion ~ body:", body)
+
     setLoading(true);
 
     const response = await Post(url, body, apiHeader(token));
     setLoading(false);
     if (response != undefined) {
-      console.log("🚀 ~ file: Support.js:98 ~ sendQuestion ~ response:", response?.data)
       Platform.OS == 'android'
         ? ToastAndroid.show('Your query sent Successfully', ToastAndroid.SHORT)
         : alert('Your query sent Successfully');
-        navigation.goBack()
+      navigation.goBack();
       // navigationService.navigate('HomeScreen');
     }
   };
@@ -296,7 +293,7 @@ const Support = () => {
                   'Send'
                 )
               }
-              fontSize={moderateScale(16,.6)}
+              fontSize={moderateScale(16, 0.6)}
               textColor={Color.white}
               width={windowWidth * 0.85}
               height={windowHeight * 0.06}

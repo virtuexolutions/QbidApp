@@ -16,9 +16,7 @@ import CustomButton from './CustomButton';
 import { ActivityIndicator } from 'react-native';
 
 const ReviewModal = ({setRef,rbRef, item, setbuttonName}) => {
-  // console.log("🚀 ~ file: ReviewModal.js:18 ~ ReviewModal ~ item:", item)
   const token = useSelector(state => state.authReducer.token);
-  // console.log('🚀 ~ file: ReviewModal.js:17 ~ ReviewModal ~ token:', token);
   const [loading, setLoading] = useState(false);
   const [review, setReview] = useState('');
   const [rating, setRating] = useState(0);
@@ -37,7 +35,6 @@ const ReviewModal = ({setRef,rbRef, item, setbuttonName}) => {
     const response = await Post(url, body, apiHeader(token));
     setLoading(false);
     if (response != undefined) {
-      console.log("🚀 ~ file: ReviewModal.js:40 ~ sendReview ~ response:", response?.data)
     
       Platform.OS == 'android'? ToastAndroid.show('Review sent',ToastAndroid.SHORT) : Alert.alert('Review sent')
      setRating(0)
@@ -88,7 +85,6 @@ const ReviewModal = ({setRef,rbRef, item, setbuttonName}) => {
             defaultRating={0}
             onFinishRating={rating => {
               setRating(rating);
-              // console.log('Rating====>>>>', rating);
             }}
           />
         </View>

@@ -21,7 +21,6 @@ const SubscriptionCard = ({
   currentPlan,
   loader,
 }) => {
-  // console.log(currentPlan);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
 
 

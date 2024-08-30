@@ -42,8 +42,9 @@ import ImagePickerModal from '../Components/ImagePickerModal';
 
 const JobDetails = props => {
   const data1 = props?.route?.params?.item;
-    const type = props?.route?.params?.type;
+  const type = props?.route?.params?.type;
   const user = useSelector(state => state.commonReducer.userData);
+  // console.log('🚀 ~ JobDetails ~ user:', user);
   const token = useSelector(state => state.authReducer.token);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const UserCoverLetterArray = useSelector(
@@ -66,9 +67,8 @@ const JobDetails = props => {
   const [finalImagesArray, setFinalImagesArray] = useState([]);
   const [imagePickerVisible, setImagePickerVisible] = useState(false);
   const [multiImages, setMultiImages] = useState([]);
-
-
-
+  const [attachmentImage, setAttachmentImage] = useState({});
+  // console.log("🚀 ~ JobDetails ~ attachmentImage:", attachmentImage)
 
   const bidDetails = async () => {
     const url = `auth/negotiator/quote_detail/${
@@ -79,7 +79,6 @@ const JobDetails = props => {
     setIsLoading(false);
 
     if (response != undefined) {
-      console.log("🚀 ~ bidDetails ~ response=============>:", response?.data)
       setData(response?.data?.quote_info);
 
       const mainuserData = response?.data?.quote_info?.bids?.find(
@@ -117,6 +116,7 @@ const JobDetails = props => {
       expertise: coverletterRole,
       coverletter: desc,
     };
+    //  console.log("🚀 ~ bidNow ~ body:", body)
 
     for (let key in body) {
       if (body[key] == '') {
@@ -141,21 +141,36 @@ const JobDetails = props => {
         ? ToastAndroid.show('Please select any role', ToastAndroid.SHORT)
         : Alert.alert('Please select any role');
     }
-    if (desc.length < 100) {
+    if (desc == '') {
       return Platform.OS == 'android'
-        ? ToastAndroid.show('Description is too short', ToastAndroid.SHORT)
-        : Alert.alert('Description is too short');
+        ? ToastAndroid.show('coverLetter is empty ', ToastAndroid.SHORT)
+        : Alert.alert('coverLetter is empty ');
     }
+    // if (desc.length < 100) {
+    //   return Platform.OS == 'android'
+    //     ? ToastAndroid.show('Description is too short', ToastAndroid.SHORT)
+    //     : Alert.alert('Description is too short');
+    // }
     for (let key in body) {
       formData.append(key, body[key]);
     }
+    multiImages?.map((item, index) =>
+      formData.append(`images[${index}]`, item),
+    );
+
+    // formData.append('attachment', attachmentImage);
 
     setIsLoading(true);
-    const response = await Post(url, body, apiHeader(token));
+    const response = await Post(url, formData, apiHeader(token));
     setIsLoading(false);
+    console.log('🚀 ~ bidNow ~ formData:', JSON.stringify(formData, null, 2));
 
     if (response != undefined) {
-      console.log("🚀 ~ bidNow ~ response======================>:", response?.data)
+      // console.log(
+      //   '🚀 ~ bidNow ~ response:',
+      //   JSON.stringify(response?.data, null, 2),
+      // );
+
       setBidDone(true);
       setModalVisible(!isModalVisible);
     }
@@ -367,7 +382,7 @@ const JobDetails = props => {
                 <Detailcards
                   data={numeral(data?.quoted_price).format('$0,0a')}
                   iconName={'calculator'}
-                  title={'Vendor Qoute'}
+                  title={'Orginal Price '}
                   iconType={Entypo}
                   marginTop={moderateScale(30, 0.3)}
                 />
@@ -520,7 +535,7 @@ const JobDetails = props => {
                       marginBottom: moderateScale(10, 0.3),
                       marginTop: moderateScale(20, 0.3),
                     }}>
-                Applied Negotiators
+                    The Best Quote for your Project
                   </CustomText>
                   <FlatList
                     data={
@@ -545,18 +560,18 @@ const JobDetails = props => {
                       paddingBottom: moderateScale(30, 0.6),
                     }}
                     renderItem={({item, index}) => {
-                      console.log("🚀 ~ JobDetails ~ ======>:", item)
                       return (
                         <>
                           <BidderDetail
                             item={{
                               image: item?.user_info?.photo,
-                              name: item?.user_info?.first_name,
+                              name: item?.user_info?.company_name,
                               rating: item?.rating,
                               review: data1?.review,
                               description: item?.coverletter,
                               status: item?.status,
                               id: item?.id,
+                              attachment: item?.images,
                             }}
                           />
                           {data?.status == 'pending' &&
@@ -648,8 +663,10 @@ const JobDetails = props => {
                       description: userData?.coverletter
                         ? userData?.coverletter
                         : desc,
-                      status: data?.status,
+                      // status: data?.status,
+                      status: data?.bids?.status,
                       id: data?.id,
+                      // attachment :
                     }}
                   />
                 </>
@@ -853,6 +870,10 @@ const JobDetails = props => {
                     flexGrow: 0,
                   }}
                   renderItem={({item, index}) => {
+                    console.log(
+                      '🚀 ~ JobDetails ~ item ================= < here :',
+                      item,
+                    );
                     return (
                       <View
                         style={[
@@ -874,13 +895,16 @@ const JobDetails = props => {
                             zIndex: 1,
                           }}
                           onPress={() => {
+                            // setAttachmentImage({})
                             let newArray = [...multiImages];
                             newArray.splice(index, 1);
                             setMultiImages(newArray);
                           }}
                         />
                         <CustomImage
+                          // source={require('../Assets/Images/dummyman1.png')}
                           source={{uri: item?.uri}}
+                          // source={{uri :attachmentImage?.uri}}
                           resizeMode={'stretch'}
                           style={{
                             width: moderateScale(50, 0.3),
@@ -891,7 +915,6 @@ const JobDetails = props => {
                     );
                   }}
                 />
-
                 <View style={styles.addImageContainer}>
                   <Icon
                     name={'plus'}
@@ -928,13 +951,14 @@ const JobDetails = props => {
                     : Color.black
                 }
                 borderRadius={moderateScale(30, 0.3)}
+                disabled={isLoading ? true : false}
               />
 
               <ImagePickerModal
                 show={imagePickerVisible}
                 setShow={setImagePickerVisible}
                 setMultiImages={setMultiImages}
-                // setFileObject={setImage}
+                // setFileObject={setAttachmentImage}
               />
             </View>
           </ScrollView>

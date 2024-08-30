@@ -7,9 +7,10 @@ import CustomText from './CustomText';
 import CustomButton from './CustomButton';
 import navigationService from '../navigationService';
 import AskingModal from '../Components/AskingModal';
+import { useNavigation } from '@react-navigation/native';
 
-const HelpCard = ({item}) => {
-  // console.log("🚀 ~ HelpCard ~ item============>:", item)
+const HelpCard = ({item}) => { 
+  const navigation =useNavigation()
   const [modalVisible, setModalVisible] = useState(false);
   return (
     <>
@@ -49,14 +50,13 @@ const HelpCard = ({item}) => {
           <CustomImage
             onPress={() => {
               item?.status == 'accepted' &&
-                navigationService.navigate('NegotiatorPortfolio',{item:item?.bid?.user_info, fromSearch:true})
+              navigation.navigate('NegotiatorPortfolio',{item:item?.negotiator_info, fromSearch:true})
                 
             }}
             style={{
               height: '100%',
               width: '100%',
             }}
-            // source={require('../Assets/Images/dummyman1.png')}
             source={
               item?.user_info?.photo
                 ? {uri: item?.user_info?.photo}

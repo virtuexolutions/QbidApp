@@ -26,38 +26,30 @@ import Card from '../Components/Card';
 import NoData from '../Components/NoData';
 import CustomImage from '../Components/CustomImage';
 import DropDownSingleSelect from '../Components/DropDownSingleSelect';
-import { useIsFocused } from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 
 const YourJobs = props => {
+  const type = props?.route?.params?.type;
+  const data = props?.route?.params?.data;
+
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
-  console.log("🚀 ~ file: SeeAllNegotiator.js:30 ~ SeeAllNegotiator ~ token:", token)
-  const isFocused = useIsFocused();
-  const type = props?.route?.params?.type;
-  console.log(
-    '🚀 ~ file: SeeAllNegotiator.js:33 ~ SeeAllNegotiator ~ type:',
-    type,
-  );
-  const data = props?.route?.params?.data;
 
+  const isFocused = useIsFocused();
   const scrollViewRef = useRef();
 
   const [searchData, setSearchData] = useState('');
   const [showSearch, setShowSearch] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState('');
-
   const [pageNum, setpageNum] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
   const [newArray, setNewArray] = useState([]);
   const [completedJobscards, setCompletedJobscards] = useState('');
-  const [ item ,setItem]=useState('all')
-  console.log("🚀 ~ YourJobs ~ item==================>:", item)
+  const [item, setItem] = useState('all');
 
-
-  // console.log("🚀 ~ file: SeeAllNegotiator.js:46 ~ SeeAllNegotiator ~ newArray:", newArray)
   const handleScroll = event => {
     const currentOffset = event.nativeEvent.contentOffset.y;
     const maxOffset =
@@ -71,60 +63,23 @@ const YourJobs = props => {
       // console.log('Reached the end of ScrollView');
     }
   };
-    const completedJobs = async()=>{
-  const url =`auth/negotiator/quote/complete?status=${item}`;
-  console.log("🚀 ~ completedJobs ~ url:", url)
-  setIsLoading(true)
-  const response = await Get(url , token)
+  const completedJobs = async () => {
+    const url = `auth/negotiator/quote/complete?status=${item}`;
+    setIsLoading(true);
+    const response = await Get(url, token);
 
-  setIsLoading(false)
- console.log("🚀 ~ file: YourJobs.js:73 ~ completedJobs ~ response:", JSON.stringify(response?.data,null,2))
-  if(response != undefined){
-    setCompletedJobscards(response?.data?.quote_info?.data)
-  }
+    setIsLoading(false);
+   
+    if (response != undefined) {
+      setCompletedJobscards(response?.data?.quote_info?.data);
     }
+  };
 
-    useEffect(() => {
-      completedJobs()
-    }, [isFocused ,item])
+  useEffect(() => {
+    completedJobs();
+  }, [isFocused, item]);
 
-
-
-  // const dummydata = [
-  //   {
-  //     title: 'autorepair',
-  //     name: 'john',
-  //     image: require('../Assets/Images/man1.jpg'),
-  //     quoted_price: 20,
-  //     offering_percentage: 10,
-  //     notes: 'kfdkshdfgdshgfsbdfnbcnvbxncvkjtrhtuerht',
-  //   },
-  //   {
-  //     title: 'plumbing project',
-  //     name: 'alexender',
-  //     image: require('../Assets/Images/man1.jpg'),
-  //     offering_percentage: 15,
-  //     quoted_price: 20,
-  //     notes: 'kfdkshdfgdshgfsbdfnbcnvbxncvkjtrhtuerht',
-  //   },
-  //   {
-  //     title: 'autorepair',
-  //     name: 'matthew',
-  //     image: require('../Assets/Images/man1.jpg'),
-  //     offering_percentage: 10,
-  //     quoted_price: 20,
-  //     notes: 'kfdkshdfgdshgfsbdfnbcnvbxncvkjtrhtuerht',
-  //   },
-  //   {
-  //     title: 'autorepair',
-  //     name: 'john',
-  //     image: require('../Assets/Images/man1.jpg'),
-  //     quoted_price: 20,
-  //     offering_percentage: 10,
-  //     notes: 'kfdkshdfgdshgfsbdfnbcnvbxncvkjtrhtuerht',
-  //   },
-    
-  // ];
+  
   return (
     <ScreenBoiler
       statusBarBackgroundColor={
@@ -160,20 +115,17 @@ const YourJobs = props => {
         {/* <CustomText isBold style={styles.heading}>
           completed Jobs
         </CustomText> */}
-        
+
         <DropDownSingleSelect
-          array={
-            [
-                  'complete',
-                  // 'reject',
-                  'pending',
-                  'accept',
-                  'ongoing',
-                  'review'
-                  // 'waiting for approval',
-                ]
-           
-          }
+          array={[
+            'completed',
+            // 'reject',
+            'pending',
+            'accepted',
+            'onGoing',
+            'review',
+            // 'waiting for approval',
+          ]}
           backgroundColor={Color.white}
           item={item}
           setItem={setItem}
@@ -183,10 +135,9 @@ const YourJobs = props => {
             width: windowWidth * 0.95,
             borderBottomWidth: 0,
             marginTop: moderateScale(30, 0.3),
-            marginHorizontal :moderateScale(15,.3)
+            marginHorizontal: moderateScale(15, 0.3),
           }}
         />
-     
 
         {isLoading ? (
           <View
@@ -232,7 +183,7 @@ const YourJobs = props => {
               paddingBottom: moderateScale(80, 0.6),
             }}
             renderItem={({item, index}) => {
-              console.log("🚀 ~ file: SeeAllNegotiator.js:230 ~ SeeAllNegotiator ~ item:", item)
+              
               console.log(index % 2 == 0);
               return type != 'Seeking Help' ? (
                 <TouchableOpacity
@@ -262,16 +213,16 @@ const YourJobs = props => {
                         height: '100%',
                         width: '100%',
                       }}
-                      source={{ uri : item?.user_info?.photo}}
+                      source={{uri: item?.user_info?.photo}}
                       // {uri: user?.photo}
                     />
                   </View>
                   <View
                     style={{
-                      paddingTop:moderateScale(15,0.3),
+                      paddingTop: moderateScale(15, 0.3),
                       paddingHorizontal: moderateScale(10, 0.3),
                       // alignItems:'center',
-                      justifyContent:'center'
+                      justifyContent: 'center',
                     }}>
                     <View
                       style={{
@@ -286,20 +237,20 @@ const YourJobs = props => {
                           color: Color.black,
                           fontSize: moderateScale(12, 0.6),
                           // textTransform: 'uppercase',
-                          width:windowWidth*0.2,
+                          width: windowWidth * 0.2,
                           // backgroundColor:'red',
                           // paddingRight: moderateScale(10, 0.3),
                         }}>
                         {item?.user_info?.first_name}
                       </CustomText>
-                        </View>
+                    </View>
                     <CustomText
                       style={{
                         color: Color.black,
                         fontSize: moderateScale(12, 0.6),
                         width: windowWidth * 0.75,
                       }}>
-                     earning
+                      earning
                     </CustomText>
                     <CustomText
                       style={{
@@ -307,7 +258,7 @@ const YourJobs = props => {
                         fontSize: moderateScale(12, 0.6),
                         width: windowWidth * 0.75,
                       }}>
-                     {item?.user_info?.total_earning}
+                      {item?.user_info?.total_earning}
                     </CustomText>
                   </View>
                 </TouchableOpacity>

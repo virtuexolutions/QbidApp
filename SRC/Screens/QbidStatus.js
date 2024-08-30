@@ -8,7 +8,6 @@ import Color from '../Assets/Utilities/Color';
 
 const QbidStatus = (props) => {
     const data = props?.route?.params?.data;
-    console.log("🚀 ~ file: QbidStatus.js:11 ~ QbidStatus ~ data", data)
   return (
     <ScreenBoiler
     statusBarBackgroundColor={Color.themeColor}

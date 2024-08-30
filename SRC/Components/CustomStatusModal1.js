@@ -122,7 +122,6 @@ const CustomStatusModal1 = ({
                     return (
                       <TouchableOpacity
                         onPress={() => {
-                          // console.log(filters?.hasOwnProperty(item?.name));
                           if (filters?.hasOwnProperty(item?.name)) {
                             if (filters[item?.name]?.includes(i)) {
                               setFilters(prev => {
@@ -142,7 +141,6 @@ const CustomStatusModal1 = ({
                             setFilters(prev => {
                               return {...prev, [item?.name]: [i]};
                             });
-                            // console.log('Hello2', filters[item?.name]);
                           }
                         }}
                         style={{

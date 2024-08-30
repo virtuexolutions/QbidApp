@@ -16,13 +16,12 @@ import Modal from 'react-native-modal';
 import CustomText from './CustomText';
 import CustomButton from './CustomButton';
 import navigationService from '../navigationService';
-import { Post } from '../Axios/AxiosInterceptorFunction';
-import { useNavigation } from '@react-navigation/native';
+import {Post} from '../Axios/AxiosInterceptorFunction';
+import {useNavigation} from '@react-navigation/native';
 
 const AskingModal = ({modalVisible, setModalVisible, item}) => {
   const token = useSelector(state => state.authReducer.token);
-  const navigation = useNavigation()
-  // console.log('🚀 ~ AskingModal ~ item:', item);
+  const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
 
   const helpQuoteWithdraw = async () => {
@@ -30,20 +29,14 @@ const AskingModal = ({modalVisible, setModalVisible, item}) => {
     const body = {
       quote_id: item?.id,
     };
-   console.log('🚀 ~ helpQuoteWithdraw ~ body:', body);
-
     setIsLoading(true);
     const response = await Post(url, body, apiHeader(token));
     setIsLoading(false);
     if (response != undefined) {
-     console.log(
-        '🚀 ~ file: CreateNew.js:81 ~ publishQuote ~ response:',
-        response?.data,
-      );
       Platform.OS == 'android'
         ? ToastAndroid.show('Bid Withdrawing sucessfully', ToastAndroid.SHORT)
         : alert('Bid Withdrawing sucessfully');
-        setModalVisible(false)
+      setModalVisible(false);
       navigation.navigate('CreateNew');
     }
   };
@@ -51,10 +44,6 @@ const AskingModal = ({modalVisible, setModalVisible, item}) => {
   return (
     <Modal
       hasBackdrop={true}
-      // style={{
-      //   justifyContent: 'center',
-      //   alignItems: 'center',
-      // }}
       isVisible={modalVisible}
       onBackdropPress={() => {
         setModalVisible(false);
@@ -127,7 +116,6 @@ const styles = StyleSheet.create({
   main: {
     backgroundColor: Color.white,
     borderRadius: moderateScale(20, 0.3),
-    // padding: moderateScale(10, 0.6),
     height: windowHeight * 0.2,
     width: windowWidth * 0.8,
     borderWidth: moderateScale(2, 0.6),
@@ -135,8 +123,6 @@ const styles = StyleSheet.create({
     marginHorizontal: moderateScale(20, 0.6),
     overflow: 'hidden',
     alignItems: 'center',
-
-    // backgroundColor : 'red'
   },
   image: {
     height: windowHeight * 0.1,

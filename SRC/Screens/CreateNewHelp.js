@@ -25,7 +25,6 @@ import {useNavigation} from '@react-navigation/native';
 
 const CreateNewHelp = props => {
   const item = props?.route?.params?.item;
-  console.log('🚀 ~ CreateNewHelp ~ item=========>:', item?.negotiator_tip , item?.offered_price);
 
   const location = useSelector(state => state.commonReducer.location);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
@@ -61,7 +60,6 @@ const CreateNewHelp = props => {
       service_preference: selectedService,
       description: description,
     };
-    //  return  console.log("🚀 ~ updateHelpQuote ~ body:", body)
 
     for (let key in body) {
       if (body[key] == '') {
@@ -83,10 +81,7 @@ const CreateNewHelp = props => {
     const response = await Post(url, body, apiHeader(token));
     setIsLoading(false);
     if (response != undefined) {
-      console.log(
-        '🚀 ~ file: CreateNew.js:81 ~ publishQuote ~ response:',
-        response?.data,
-      );
+   
       setCity('');
       setNegotiatorOfferedPrice(0);
       setNegotiatorTip(0);

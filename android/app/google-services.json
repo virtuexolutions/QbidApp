@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "1078642211938",
-    "project_id": "qbid-13b66",
-    "storage_bucket": "qbid-13b66.appspot.com"
+    "project_number": "736335053166",
+    "project_id": "qbid-4bd7a",
+    "storage_bucket": "qbid-4bd7a.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1078642211938:android:3c7bd203bcd721e4d0e53b",
+        "mobilesdk_app_id": "1:736335053166:android:c8e7ced7011f986810017f",
         "android_client_info": {
           "package_name": "com.qbid"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCV7faFOvPggZKFx9dLckTRrPSzctii3uE"
+          "current_key": "AIzaSyBEwYttKm9axyvtiZ8YrDhFKDgfXUURneE"
         }
       ],
       "services": {

@@ -25,14 +25,13 @@ import HelpModal from '../Components/HelpModal';
 
 const Settings = () => {
   const user = useSelector(state => state.commonReducer.userData);
-  // console.log("🚀 ~ file: Settings.js:22 ~ Settings ~ user:", user?.photo)
   const userRole = useSelector(state => state.commonReducer.selectedRole);
+
   const dispatch = useDispatch();
+
   const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  // console.log("🚀 ~ Settings ~ isVisible:", isVisible)
-  const [modalVisible ,setModalVisible] = useState(false)
-  console.log("🚀 ~ Settings ~ modalVisible:", modalVisible)
+  const [modalVisible, setModalVisible] = useState(false);
   const [data, setData] = useState([]);
 
   // const getApplication = ()=>{
@@ -188,10 +187,8 @@ const Settings = () => {
               marginTop={moderateScale(10, 0.3)}
               onPress={() => {
                 navigationService.navigate('YourJobs');
-                // console.log('here');
               }}
               bgColor={Color.white}
-              // isGradient
               borderRadius={moderateScale(30, 0.3)}
             />
           )}
@@ -206,25 +203,29 @@ const Settings = () => {
               navigationService.navigate('ChangePassword');
             }}
             bgColor={Color.white}
-            // isGradientp
             borderRadius={moderateScale(30, 0.3)}
           />
-          <CustomButton
-            isBold
-            text={'Help'}
-            textColor={Color.themeDarkGray}
-            width={windowWidth * 0.9}
-            height={windowHeight * 0.07}
-            marginTop={moderateScale(10, 0.3)}
-            onPress={() => {
-              console.log('help clicked');
-              setModalVisible(true);
-            }}
-            bgColor={Color.white}
-            // isGradient
-            borderRadius={moderateScale(30, 0.3)}
+          {userRole == 'Qbid Member' && (
+            <CustomButton
+              isBold
+              text={'Help'}
+              textColor={Color.themeDarkGray}
+              width={windowWidth * 0.9}
+              height={windowHeight * 0.07}
+              marginTop={moderateScale(10, 0.3)}
+              onPress={() => {
+                console.log('help clicked');
+                setModalVisible(true);
+              }}
+              bgColor={Color.white}
+              // isGradient
+              borderRadius={moderateScale(30, 0.3)}
+            />
+          )}
+          <HelpModal
+            modalVisible={modalVisible}
+            setModalVisible={setModalVisible}
           />
-            <HelpModal modalVisible={modalVisible} setModalVisible={setModalVisible}/>
           <CustomButton
             isBold
             text={'Terms And Condition'}
@@ -278,8 +279,7 @@ const Settings = () => {
           onRequestClose={() => {
             setIsVisible(false);
           }}
-          />
-
+        />
       </LinearGradient>
     </ScreenBoiler>
   );

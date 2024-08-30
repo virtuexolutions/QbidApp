@@ -7,10 +7,7 @@ import {windowHeight, windowWidth} from '../Utillity/utils';
 import Color from '../Assets/Utilities/Color';
 
 const AcceptedHelpRequestCard = ({item}) => {
-  console.log(
-    '🚀 ~ AcceptedHelpRequestCard ~ item:',
-    item,
-  );
+ 
   return (
     <View style={styles.container}>                                            
       <View style={styles.imageContainer}>

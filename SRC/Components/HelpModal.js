@@ -25,27 +25,21 @@ import {Post} from '../Axios/AxiosInterceptorFunction';
 const HelpModal = ({modalVisible, setModalVisible}) => {
   const token = useSelector(state => state.authReducer.token);
   const userData = useSelector(state => state.commonReducer.userData);
-
-  // console.log('🚀 ~ HelpModal ~ userData:', userData);
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
+
   const [isLoading, setIsLoading] = useState(false);
-
   const [selectedService, setSelectedService] = useState('');
-  // console.log('🚀 ~ selectedService==========:)', selectedService);
-
+  
   const help = async () => {
     const url = 'auth/member/quote_help';
     const body = {
-      // user_id: userData?.id,
       service_preference: selectedService,
     };
-    // console.log("🚀 ~ help ~ body:", body)
   
     setIsLoading(true);
     const response = await Post(url, body, apiHeader(token));
     setIsLoading(false);
     if (response != undefined) {
-      // console.log('🚀 ~ help ~ response:', response?.data);
       Platform.OS == 'android'
         ? ToastAndroid.show(
             'help request send successfully',
@@ -61,10 +55,7 @@ const HelpModal = ({modalVisible, setModalVisible}) => {
   return (
     <Modal
       hasBackdrop={true}
-      // style={{
-      //   justifyContent: 'center',
-      //   alignItems: 'center',
-      // }}
+     
       isVisible={modalVisible}
       onBackdropPress={() => {
         setModalVisible(false);

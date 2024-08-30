@@ -20,7 +20,6 @@ const Subscription = (props) => {
   const user = useSelector(state => state.commonReducer.userData);
   const token = useSelector(state => state.authReducer.token);
   const fromStores = props?.route?.params?.fromStores ;
-  // console.log("🚀 ~ file: Subscription.js:20 ~ Subscription ~ fromStores", fromStores)
   
   const [isLoading, setIsLoading] = useState(false);
 

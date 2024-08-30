@@ -14,13 +14,12 @@ import numeral from 'numeral';
 import {Post} from '../Axios/AxiosInterceptorFunction';
 
 const SeekingHelpCard = ({fromSeeAll, style, onPress, item}) => {
-  // console.log('🚀 ~ file: JobCard.js:15 ~ JobCard ~ item:', item);
   const token = useSelector(state => state.authReducer.token);
+  const userRole = useSelector(state => state.commonReducer.selectedRole);
 
   const [loading, setLoading] = useState(false);
 
   const [modalVisible, setModalVisible] = useState(false);
-  const userRole = useSelector(state => state.commonReducer.selectedRole);
 
  
 

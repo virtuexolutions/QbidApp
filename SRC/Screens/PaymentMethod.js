@@ -48,10 +48,6 @@ const PaymentMethod = props => {
   const user = useSelector(state => state.commonReducer.userData);
   const token = useSelector(state => state.authReducer.token);
 
-  console.log(
-    '🚀 ~ file: PaymentMethod.js:37 ~ PaymentMethod ~ user',
-    JSON.stringify(user, null, 2),
-  );
   const dispatch = useDispatch();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -94,11 +90,7 @@ const PaymentMethod = props => {
     const responseData = await createToken({
       type: 'Card',
     });
-    console.log(
-      '🚀 ~ file: AddCard.js:90 ~ addCard ~ responseData',
-      responseData,
-    );
-
+ 
     if (responseData.error) {
       setIsLoading(false);
       console.log(responseData.error);

@@ -46,10 +46,7 @@ import navigationService from '../navigationService';
 
 const NegotiatorPortfolio = props => {
   const fromSearch = props?.route?.params?.fromSearch;
-  console.log('🚀 ~ NegotiatorPortfolio ~ fromSearch----------------->from protfolio:', fromSearch);
   const item = props?.route?.params?.item;
-  console.log('🚀 ~ NegotiatorPortfolio ~ item=====--=====-----> from protfolio:', item);
-
   // const data = props?.route?.params?.data
 
   const userdata = useSelector(state => state.commonReducer.userData);
@@ -58,6 +55,7 @@ const NegotiatorPortfolio = props => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
 
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const [image, setImage] = useState({});
   const [showModal, setShowModal] = useState(false);
@@ -78,7 +76,6 @@ const NegotiatorPortfolio = props => {
       ? true
       : false,
   );
-  const dispatch = useDispatch();
 
   const [firstName, setFirstName] = useState(
     fromSearch
@@ -165,7 +162,6 @@ const NegotiatorPortfolio = props => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [review, setReview] = useState('');
-  // console.log("🚀 ~ file: NegotiatorPortfolio.js:116 ~ NegotiatorPortfolio ~ setReview:", setReview)
 
   const updateProfile = async () => {
     const url = 'auth/negotiator/profile_update';
@@ -199,7 +195,6 @@ const NegotiatorPortfolio = props => {
     const response = await Post(url, body, apiHeader(token));
     setIsLoading(false);
     if (response?.data?.success) {
-      //  console.log("🚀 ~ file: NegotiatorPortfolio.js:151 ~ updateProfile ~ response:", response?.data)
       setEditProfile(false);
       dispatch(setUserData(response?.data?.user));
     }
@@ -221,7 +216,6 @@ const NegotiatorPortfolio = props => {
 
     setIsLoading(true);
     const response = await Get('auth/review', token);
-    // console.log("🚀 ~ file: NegotiatorPortfolio.js:157 ~ reviews ~ response:", response)
     setIsLoading(false);
 
     if (response != undefined) {
@@ -234,20 +228,12 @@ const NegotiatorPortfolio = props => {
     const body = {
       status: availibility == true ? 'inactive' : 'active',
     };
-    console.log(
-      '🚀 ~ file: NegotiatorPortfolio.js:219 ~ handleAvailiblity ~ body:',
-      body,
-    );
 
     setIsLoading(true);
     const response = await Post(url, body, apiHeader(token));
     setIsLoading(false);
 
     if (response != undefined) {
-      console.log(
-        '🚀 ~ file: NegotiatorPortfolio.js:192 ~ changeProfileImage ~ response:',
-        response?.data,
-      );
       dispatch(
         setUserData({
           ...response?.data?.user,
@@ -268,8 +254,6 @@ const NegotiatorPortfolio = props => {
     setIsLoading(false);
 
     if (response != undefined) {
-      //  console.log("🚀 ~ file: NegotiatorPortfolio.js:192 ~ changeProfileImage ~ response:", response?.data)
-
       dispatch(setUserData(response?.data?.user));
       Platform.OS == 'android'
         ? ToastAndroid.show(`${type} updated successfully`, ToastAndroid.SHORT)
@@ -775,7 +759,7 @@ const NegotiatorPortfolio = props => {
               }}
             />
           </View>
-          {userRole == 'Qbid Member'  &&  (
+          {userRole == 'Qbid Member' && (
             <CustomButton
               text={'Hire Now'}
               textColor={Color.white}
@@ -796,7 +780,7 @@ const NegotiatorPortfolio = props => {
                   id: item?.id,
                 });
               }}
-              disabled={item?.status == 'active' ? false : true}
+              disabled={!fromSearch && item?.status == 'active' ? false : true}
             />
           )}
         </ScrollView>

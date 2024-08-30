@@ -14,37 +14,32 @@ import {ActivityIndicator} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const NegotiatorCard = ({item, fromSeeAll}) => {
-  // console.log('🚀 ~ file: NegotiatorCard.js:16 ~ NegotiatorCard ~ item:', item);
   const token = useSelector(state => state.authReducer.token);
-  // console.log("🚀 ~ file: NegotiatorCard.js:18 ~ NegotiatorCard ~ token:", token)
   const [isLoading, setIsLoading] = useState(false);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [contactButton, setContactButton] = useState(false);
-
+  
   const approveRequest = async status => {
     const url = '';
     setIsLoading(true);
     const response = await Post(url, {status: status}, apiHeader(token));
     setIsLoading(false);
-
+    
     if (response != undefined) {
-      // console.log("🚀 ~ file: HomeScreen.js:85 ~ approveRequest ~ response:", response?.data)
       toggleModal();
     }
   };
-
+  
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
-
-  // console.log('Proposal', item);
+  
   return (
     <>
       <View
         style={{
           width: fromSeeAll ? windowWidth * 0.46 : windowWidth * 0.5,
-          // height: windowHeight * 0.25,
           paddingVertical: moderateScale(10, 0.6),
           backgroundColor: Color.blue,
           margin: moderateScale(5, 0.3),

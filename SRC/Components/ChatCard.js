@@ -1,7 +1,7 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {moderateScale} from 'react-native-size-matters';
-import {windowWidth} from '../Utillity/utils';
+import {apiHeader, windowWidth} from '../Utillity/utils';
 import CustomImage from './CustomImage';
 import CustomText from './CustomText';
 import Color from '../Assets/Utilities/Color';
@@ -10,6 +10,8 @@ import {useState} from 'react';
 import {useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
+import {Get, Post} from '../Axios/AxiosInterceptorFunction';
+import {Token} from '@stripe/stripe-react-native';
 
 const ChatCard = ({
   name,
@@ -21,20 +23,33 @@ const ChatCard = ({
   target_id,
   conversationId,
 }) => {
-  console.log('🚀 ~ ChatCard ~ target_id=============>:', target_id);
-  const navigation = useNavigation();
+  const token = useSelector(state => state.authReducer.token);
+
   const userRole = useSelector(state => state.commonReducer.selectedRole);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigation = useNavigation();
+
+  const ReadMessages = async () => {
+    const url = `auth/message_read/${conversationId}`;
+    setIsLoading(true);
+    const response = await Get(url, token);
+    setIsLoading(false);
+    if (response != undefined) {
+    
+      navigation.navigate('MessagesScreen', {
+        data: target_id,
+        name: name,
+        image: image,
+        conversationId: conversationId,
+      });
+    }
+  };
+
 
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate('MessagesScreen', {
-          data: target_id,
-          name: name,
-          image: image,
-          conversationId: conversationId,
-        });
-        // console.log('kamaaaaaaaaaaaaaaaaaaaaal')
+        ReadMessages();
       }}
       activeOpacity={0.8}
       style={{
@@ -85,7 +100,7 @@ const ChatCard = ({
           width: windowWidth * 0.2,
           marginTop: moderateScale(5, 0.3),
         }}>
-        <CustomText
+        {/* <CustomText
           isBold
           style={{
             fontSize: moderateScale(9, 0.3),
@@ -96,8 +111,8 @@ const ChatCard = ({
           {moment.duration(moment().diff(date)).asDays() >= 6
             ? moment(date).format('ll')
             : moment(date).fromNow()}
-        </CustomText>
-        {unread && (
+        </CustomText> */}
+        {unreadCount > 0 && (
           <View
             style={{
               width: moderateScale(15, 0.3),
@@ -121,6 +136,7 @@ const ChatCard = ({
                 fontSize: moderateScale(11, 0.3),
                 color: Color.white,
               }}>
+              {/* 5 */}
               {unreadCount}
             </CustomText>
           </View>

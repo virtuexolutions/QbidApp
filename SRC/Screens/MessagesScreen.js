@@ -19,159 +19,43 @@ import CustomImage from '../Components/CustomImage';
 import {Pusher} from '@pusher/pusher-websocket-react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Get, Post} from '../Axios/AxiosInterceptorFunction';
-import {setPusherInstance} from '../Store/slices/socket';
-// import {
-//   height,
-//   width,
-// } from 'deprecated-react-native-prop-types/DeprecatedImagePropType';
-// import {Pusher} from '@pusher/pusher-websocket-react-native';
-// import CustomTextInput from '../Components/CustomTextInput';
+import {setPusherInstance} from '../Store/slices/socket';;
 
 const MessagesScreen = props => {
   const target_id = props?.route?.params?.data;
-  // console.log("🚀 ~ MessagesScreen ~ data:=============", data)
-  const conversationId =props?.route?.params?.conversationId
+  const conversationId = props?.route?.params?.conversationId;
   const name = props?.route?.params?.name;
   const image = props?.route?.params?.image;
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const user = useSelector(state => state.commonReducer.userData);
-  console.log("🚀 ~ MessagesScreen ~ user:", user?.id)
   const token = useSelector(state => state.authReducer.token);
 
   const navigation = useNavigation();
   const pusher = Pusher.getInstance();
   let myChannel = null;
   const dispatch = useDispatch();
+
   const [searchData, setSearchData] = useState('');
   const [messages, setMessages] = useState([]);
-  console.log("🚀 ~ MessagesScreen ~ messages:", messages)
-  const [isLoading ,setIsLoading] =useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+
   
-  const chatListingData = [
-    {
-      name: 'Walter A. Jones',
-      image: require('../Assets/Images/dummyman1.png'),
-      lastMessage: 'hello bro how are you',
-      unread: true,
-      unreadCount: 4,
-      time: moment('2023-02-10').format('YYYY-MM-DD'),
-      // time : moment().format()
-    },
-    {
-      name: 'Josephine A. Suarez',
-      image: require('../Assets/Images/dummyman2.png'),
-      lastMessage:
-        'Will you please nupdate me about my last Qbid about vehicle parts',
-      unread: false,
-      // unreadCount : 4,
-      time: moment('2023-02-15').format('YYYY-MM-DD'),
-    },
-    {
-      name: 'Ronald N. Voegele',
-      image: require('../Assets/Images/dummyman3.png'),
-      lastMessage: '??',
-      unread: true,
-      unreadCount: 2,
-      time: moment('2023-01-14').format('YYYY-MM-DD'),
-    },
-    {
-      name: 'Josephine A. Suarez',
-      image: require('../Assets/Images/dummyman4.png'),
-      lastMessage: 'Loved to work with you thanks',
-      unread: true,
-      unreadCount: 6,
-      time: moment('2023-02-20').format('YYYY-MM-DD'),
-    },
-    {
-      name: 'Josephine A. Suarez',
-      image: require('../Assets/Images/dummyman5.png'),
-      lastMessage: 'there?',
-      unread: false,
-      // unreadCount : 1,
-      time: moment('2023-02-16').format('YYYY-MM-DD'),
-    },
-    {
-      name: 'Josephine A. Suarez',
-      image: require('../Assets/Images/dummyman6.png'),
-      lastMessage: 'please update me about my money',
-      unread: true,
-      unreadCount: 4,
-      time: moment('2023-02-10').format('YYYY-MM-DD'),
-    },
-    {
-      name: 'Walter A. Jones',
-      image: require('../Assets/Images/dummyman1.png'),
-      lastMessage: 'hello bro how are you',
-      unread: true,
-      unreadCount: 4,
-      time: moment('2023-02-10').format('YYYY-MM-DD'),
-      // time : moment().format()
-    },
-    {
-      name: 'Josephine A. Suarez',
-      image: require('../Assets/Images/dummyman2.png'),
-      lastMessage:
-        'Will you please nupdate me about my last Qbid about vehicle parts',
-      unread: false,
-      // unreadCount : 4,
-      time: moment('2023-02-15').format('YYYY-MM-DD'),
-    },
-    {
-      name: 'Ronald N. Voegele',
-      image: require('../Assets/Images/dummyman3.png'),
-      lastMessage: '??',
-      unread: true,
-      unreadCount: 2,
-      time: moment('2023-01-14').format('YYYY-MM-DD'),
-    },
-    {
-      name: 'Walter A. Jones',
-      image: require('../Assets/Images/dummyman1.png'),
-      lastMessage: 'hello bro how are you',
-      unread: true,
-      unreadCount: 4,
-      time: moment('2023-02-10').format('YYYY-MM-DD'),
-      // time : moment().format()
-    },
-    {
-      name: 'Josephine A. Suarez',
-      image: require('../Assets/Images/dummyman2.png'),
-      lastMessage:
-        'Will you please nupdate me about my last Qbid about vehicle parts',
-      unread: false,
-      // unreadCount : 4,
-      time: moment('2023-02-15').format('YYYY-MM-DD'),
-    },
-  ];
-  // useEffect(() => {
-  //   setMessages([
-  //     {
-  //       _id: 1,
-  //       text: 'Hello developer',
-  //       createdAt: new Date(),
-  //       user: {
-  //         _id: 1,
-  //         name: 'React Native',
-  //         avatar: require('../Assets/Images/dummyman1.png'),
-  //       },
-  //     },
-  //     {
-  //       _id: 3,
-  //       text: 'Hello ',
-  //       createdAt: new Date(),
-  //       user: {
-  //         _id: 2,
-  //         name: 'React Native',
-  //         avatar: require('../Assets/Images/dummyman1.png'),
-  //       },
-  //     },
-  //   ]);
-  // }, []);
+  const ReadMessages = async () => {
+    const url = `auth/message_read/${conversationId}`;
+    setIsLoading(true);
+    const response = await Get(url, token);
+    setIsLoading(false);
+    if (response != undefined) {
+      console.log(
+        '🚀 ~ success ========================== >>>>>>>>>>  :',
+        response?.data,
+      );
+    }
+  };
+
   const onSend = useCallback(
     (messages = []) => {
-    console.log("🚀 ~ MessagesScreen ~ messages:", messages)
       const newMessage = {
-      
         text: messages[0].text,
         createdAt: new Date(),
         user: {
@@ -181,11 +65,10 @@ const MessagesScreen = props => {
         },
       };
 
-  //  console.log('kamalllllllllllllll======>',JSON.stringify(newMessage,null,2));
       setMessages(previousMessages =>
         GiftedChat.append(previousMessages, newMessage),
       );
-      startChat({chat_id: conversationId, target_id: target_id , ...newMessage}); 
+      startChat({chat_id: conversationId, target_id: target_id, ...newMessage});
     },
     [messages],
   );
@@ -198,41 +81,39 @@ const MessagesScreen = props => {
           apiKey: '2cbabf5fca8e6316ecfe',
           cluster: 'ap2',
         });
-    
 
         myChannel = await pusher.subscribe({
           channelName: `my-channel-${conversationId}`,
           onSubscriptionSucceeded: (channelName, conversationId) => {
             // dispatch(setPusherInstance(pusher));
-            console.log(`And here are the channel members: ${myChannel}`)
-            console.log("🚀 ~ file: SelectedChat.js:77 ~ connectPusher ~ myChannel==================> :",channelName)
-            console.log(`Subscribed to ${JSON.stringify(channelName , null ,2)}`);
+            // console.log(`And here are the channel members: ${myChannel}`);
+            // console.log(
+            //   '🚀 ~ file: SelectedChat.js:77 ~ connectPusher ~ myChannel==================> :',
+            //   channelName,
+            // );
+            // console.log(
+            //   `Subscribed to ${JSON.stringify(channelName, null, 2)}`,
+            // );
           },
           onEvent: event => {
-            // console.log(
-            //   '🚀 ~ file: SelectedChat.js:127 ~ connectPusher ~ event==========>:',
-            //   event?.data,
-            // );
-             console.log('Got channel event:', event.data);
-            const dataString = JSON.parse(event.data);
             console.log(
-              '🚀 ~ file: SelectedChat.js:116 ~ connectPusher ~ dataString:',
-              dataString?.message,
-             
-          
+              '🚀 ~ file: SelectedChat.js:127 ~ connectPusher ~ event==========>:',
+              event?.data,
             );
+            // console.log('Got channel event:', event.data);
+            const dataString = JSON.parse(event.data);
+
             if (dataString?.message.target_id == user?.id) {
+              console.log('🚀 ~rrrrrrrrrrrrrr :', user?.id, user?.first_name);
               //  alert('here' , user?._id)
               setMessages(previousMessages =>
                 GiftedChat.append(previousMessages, dataString?.message),
-
-                
               );
-             
+              ReadMessages();
             }
           },
         });
-      
+
         await pusher.connect();
       } catch (e) {
         console.log(`ERROR: ${e}`);
@@ -240,64 +121,45 @@ const MessagesScreen = props => {
     }
     connectPusher();
 
-      getChatListingData();
+    getChatListingData();
     return async () => {
       await pusher.unsubscribe({channelName: `my-channel-${conversationId}`});
     };
   }, []);
 
-    const startChat = async (body) => {
-      // const body = {
-      //   // _id: 1,
-      //   target_id:data,
-      //   chat_id:user?.id,
-      //   text: messages[0]?.text,
-      //   createdAt: messages[0]?.createdAt,
-      //   user: {
-      //     _id: user?.id,
-      //     name: user?.first_name,
-      //     avatar: user?.photo,
-      //   },
-      // }
-  console.log("🚀 ~ file: SelectedChat.js:63 ~ startChat ~ body:", JSON.stringify(body ,null ,2))
-
-      const url = 'auth/send_message';
-      const response = await Post(url, body, apiHeader(token));
-      if (response != undefined) {
-          console.log('response=================', response?.data);
-      }
-    };
+  const startChat = async body => {
+    const url = 'auth/send_message';
+    const response = await Post(url, body, apiHeader(token));
+    if (response != undefined) {
+    }
+  };
 
   const getChatListingData = async () => {
-      const url = `auth/message_list/${conversationId}`;
-      // console.log("🚀 ~ getChatListingData ~ url:", url)
-      setIsLoading(true);
-      const response = await Get(url, token);
-      setIsLoading(false);
-      if (response != undefined) {
-          console.log("🚀 ~message_list == == = == =   >> > > >> > > >:", JSON.stringify(response?.data ,null ,2))
-        const finalData = response?.data?.data.reverse()
-        setMessages(finalData)
+    const url = `auth/message_list/${conversationId}`;
 
+    setIsLoading(true);
+    const response = await Get(url, token);
+    setIsLoading(false);
+    if (response != undefined) {
+      const finalData = response?.data?.data.reverse();
+      setMessages(finalData);
 
+      // const parsedResult = [];
+      // response?.data?.ChatRoom.map((item, index) => {
+      //   return parsedResult.push(JSON.parse(item));
+      //   });
+      // return console.log("🚀 ~ getChatListingData ~ parsedResult ===== >>>>.:", parsedResult)
+      // setMessages(parsedResult.reverse());
 
-        // const parsedResult = [];
-        // response?.data?.ChatRoom.map((item, index) => {
-        //   return parsedResult.push(JSON.parse(item));
-        //   });
-        // return console.log("🚀 ~ getChatListingData ~ parsedResult ===== >>>>.:", parsedResult)
-        // setMessages(parsedResult.reverse());
-
-        // JSON.parse(response?.data?.ChatRoom)
-        // console.log( 'here is the chat data  ===============   >> >> > > > > > >> > ', response?.data)
-        // console.log(JSON.stringify(response?.data[0]?.chat_room, null, 2));
-        // setMess(response?.data);
-      }
+      // JSON.parse(response?.data?.ChatRoom)
+      // console.log( 'here is the chat data  ===============   >> >> > > > > > >> > ', response?.data)
+      // console.log(JSON.stringify(response?.data[0]?.chat_room, null, 2));
+      // setMess(response?.data);
     }
+  };
 
   return (
     <ScreenBoiler
-      //   showHeader={true}
       statusBarBackgroundColor={
         userRole == 'Qbid Member'
           ? Color.themeBgColor
@@ -308,7 +170,6 @@ const MessagesScreen = props => {
       statusBarContentStyle={'light-content'}>
       <LinearGradient
         style={{
-          // width: windowWidth,
           height: windowHeight * 0.97,
         }}
         start={{x: 0, y: 0}}
@@ -332,7 +193,7 @@ const MessagesScreen = props => {
           />
           <View style={styles.image}>
             <CustomImage
-              source={{uri :image}}
+              source={{uri: image}}
               style={{
                 width: '100%',
                 height: '100%',
@@ -347,29 +208,24 @@ const MessagesScreen = props => {
             <CustomText isBold style={styles.text}>
               {name}
             </CustomText>
-            <CustomText style={styles.text2}>from</CustomText>
+            {/* <CustomText style={styles.text2}>from</CustomText> */}
           </View>
         </View>
         <GiftedChat
-          textInputStyle={{       
+          textInputStyle={{
             color: Color.black,
             marginTop: moderateScale(5, 0.3),
           }}
           placeholderTextColor={Color.lightGrey}
-          // renderAvatar={props => <RenderAvatar {...props} />}
-          //   renderMessageText={props => <MessageText {...props} />}
-          // renderActions={renderActions}
-          //   renderInputToolbar={props => (
-          //     <CustomTextInput data={data} setMessages={setMessages} />
-          //   )}
           messages={messages}
           isTyping={false}
           onSend={messages => onSend(messages)}
+          key={item => item?.id}
           user={{
             _id: user?.id,
             name: user?.first_name,
-          avatar:user?.photo
-           }}
+            avatar: user?.photo,
+          }}
         />
       </LinearGradient>
     </ScreenBoiler>
@@ -394,12 +250,9 @@ const styles = ScaledSheet.create({
   },
   text: {
     fontSize: moderateScale(12, 0.6),
-    // justifyContent :'center'
-    // backgroundColor :'red',
     paddingTop: moderateScale(5, 0.6),
   },
   row: {
-    // backgroundColor :'red',
     width: windowWidth,
     height: windowHeight * 0.06,
     paddingHorizontal: moderateScale(10, 0.6),
@@ -409,6 +262,5 @@ const styles = ScaledSheet.create({
   text2: {
     fontSize: moderateScale(10, 0.6),
     marginTop: moderateScale(-3, 0.6),
-    // backgroundColor :'green'
   },
 });

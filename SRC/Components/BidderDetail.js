@@ -1,5 +1,8 @@
 import React, {useState} from 'react';
-import {View, Image, ScrollView} from 'react-native';
+import {
+  View,
+  Image,
+} from 'react-native';
 import {ScaledSheet, moderateScale} from 'react-native-size-matters';
 import CustomText from '../Components/CustomText';
 import Constants from '../Assets/Utilities/Constants';
@@ -8,18 +11,19 @@ import Color from '../Assets/Utilities/Color';
 import moment from 'moment';
 import RatingComponent from './RatingComponent';
 import {useSelector} from 'react-redux';
-import CustomButton from './CustomButton';
-import {Post} from '../Axios/AxiosInterceptorFunction';
-import {ActivityIndicator} from 'react-native';
-import { FlatList } from 'react-native';
+import {FlatList} from 'react-native';
 import CustomImage from './CustomImage';
+import ImageView from 'react-native-image-viewing';
 
 const BidderDetail = ({item, photo, title, date, message}) => {
-
-  // console.log('🚀 ~ file: BidderDetail.js:16 ~ BidderDetail ~ item:', item);
-  const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
+  const userRole = useSelector(state => state.commonReducer.selectedRole);
   const [isLoading, setIsLoading] = useState(false);
+  const [imageModalVisible, setImageModalVisible] = useState(false);
+
+  const imagesArray = item?.attachment?.map((item, index) => {
+    return {uri: item?.image};
+  });
 
   return (
     <View
@@ -90,6 +94,27 @@ const BidderDetail = ({item, photo, title, date, message}) => {
         ]}>
         {item?.description}
       </CustomText>
+      {item?.attachment?.length > 0 && (
+        <CustomText
+          onPress={() => {
+            console.log('hfjshfjkkjsdfjhs');
+            // if (finalImagesArray.length > 0) {
+            setImageModalVisible(true);
+            // } else {
+            //   return Platform.OS == 'android'
+            //     ? ToastAndroid.show('No attachments', ToastAndroid.SHORT)
+            //     : Alert.alert('No Attachments');
+            // }
+          }}
+          isBold
+          style={{
+            color: Color.blue,
+            fontSize: moderateScale(12, 0.6),
+            marginTop: moderateScale(10, 0.3),
+          }}>
+          Attachments...
+        </CustomText>
+      )}
       <FlatList
         data={item?.review}
         renderItem={({item, index}) => {
@@ -112,7 +137,8 @@ const BidderDetail = ({item, photo, title, date, message}) => {
                   {item?.user_info?.first_name}
                 </CustomText>
                 <CustomText style={styles.text2}>{item?.text}</CustomText>
-                <CustomText style={[styles.text2,{color:Color.veryLightGray}]}>
+                <CustomText
+                  style={[styles.text2, {color: Color.veryLightGray}]}>
                   {moment().format('MMM Do, YYYY')}
                 </CustomText>
               </View>
@@ -121,6 +147,12 @@ const BidderDetail = ({item, photo, title, date, message}) => {
         }}
       />
 
+      <ImageView
+        images={imagesArray}
+        imageIndex={0}
+        visible={imageModalVisible}
+        onRequestClose={() => setImageModalVisible(false)}
+      />
       <View
         style={{
           position: 'absolute',
@@ -144,7 +176,6 @@ const BidderDetail = ({item, photo, title, date, message}) => {
         />
         <CustomText
           style={{
-            // backgroundColor: 'orange',
             fontSize: moderateScale(8, 0.6),
             color: Color.white,
             marginLeft: moderateScale(3, 0.3),
@@ -162,8 +193,6 @@ const BidderDetail = ({item, photo, title, date, message}) => {
 const styles = ScaledSheet.create({
   container: {
     width: windowWidth * 0.91,
-    // height: windowHeight * 0.3,
-    // marginTop: moderateScale(20, 0.3),
     marginRight: moderateScale(10, 0.3),
     borderWidth: 1,
     borderColor: Color.lightGrey,
@@ -171,8 +200,6 @@ const styles = ScaledSheet.create({
     borderRadius: moderateScale(5, 0.3),
     padding: moderateScale(10, 0.3),
     marginVertical: moderateScale(5, 0.6),
-    // paddingHorizontal: moderateScale(15, 0.3),
-    // marginBottom: moderateScale(20, 0.3),
   },
   image: {
     width: windowWidth * 0.11,
@@ -180,30 +207,29 @@ const styles = ScaledSheet.create({
 
     borderRadius: moderateScale((windowWidth * 0.11) / 2, 0.3),
   },
-  heading1:{
+  heading1: {
     color: Color.black,
     fontSize: moderateScale(17, 0.6),
     textTransform: 'uppercase',
     marginTop: moderateScale(10, 0.6),
   },
-  view:{
+  view: {
     flexDirection: 'row',
     marginVertical: moderateScale(10, 0.3),
     paddingHorizontal: moderateScale(10, 0.3),
-    // backgroundColor:'red'
   },
-  mainview:{
+  mainview: {
     height: windowHeight * 0.06,
     width: windowHeight * 0.06,
     borderRadius: (windowHeight * 0.06) / 2,
     overflow: 'hidden',
   },
-  text:{
+  text: {
     color: Color.black,
     fontSize: moderateScale(13, 0.6),
     textTransform: 'uppercase',
   },
-  text2:{
+  text2: {
     color: Color.black,
     fontSize: moderateScale(12, 0.6),
     width: windowWidth * 0.75,

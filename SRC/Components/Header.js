@@ -40,7 +40,6 @@ const Header = props => {
 
   const [searchText, setSearchText] = useState('');
   const user = useSelector(state => state.commonReducer.userData);
-  // console.log("🚀 ~ file: Header.js:43 ~ Header ~ user:", user)
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
   const statusArray = [

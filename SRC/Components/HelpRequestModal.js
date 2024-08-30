@@ -1,4 +1,11 @@
-import {StyleSheet, Text, View, Platform, ToastAndroid, ActivityIndicator} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Platform,
+  ToastAndroid,
+  ActivityIndicator,
+} from 'react-native';
 import React from 'react';
 import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
 import {moderateScale} from 'react-native-size-matters';
@@ -12,11 +19,9 @@ import {Post} from '../Axios/AxiosInterceptorFunction';
 import Color from '../Assets/Utilities/Color';
 
 const HelpRequestModal = ({modalVisible, setModalVisible, selected}) => {
-  console.log("🚀 ~ selected:=============>", selected)
   const userData = useSelector(state => state.commonReducer.userData);
   const token = useSelector(state => state.authReducer.token);
   const [loading, setLoading] = useState(false);
-  
 
   const changeStatus = async value => {
     const url = `auth/negotiator/bid_help_quote`;
@@ -28,12 +33,7 @@ const HelpRequestModal = ({modalVisible, setModalVisible, selected}) => {
     const response = await Post(url, body, apiHeader(token));
     setLoading(false);
     if (response != undefined) {
-console.log("🚀 ~ changeStatus ~ response:", response?.data)
-      // console.log(
-      //   '🚀 ~ changeStatus ~ response===============>:',
-      //   response?.data,
-      // );
-           setModalVisible(false);
+      setModalVisible(false);
     }
   };
 
@@ -100,8 +100,13 @@ console.log("🚀 ~ changeStatus ~ response:", response?.data)
         <View style={styles.row}>
           <CustomButton
             isBold
-            text={loading ? <ActivityIndicator size={'small'} color={Color.white} /> : 
-              'Accept'}
+            text={
+              loading ? (
+                <ActivityIndicator size={'small'} color={Color.white} />
+              ) : (
+                'Accept'
+              )
+            }
             textColor={Color.white}
             width={windowWidth * 0.25}
             height={windowHeight * 0.04}
@@ -115,8 +120,13 @@ console.log("🚀 ~ changeStatus ~ response:", response?.data)
           />
           <CustomButton
             isBold
-            text={loading ? <ActivityIndicator size={'small'} color={Color.white} /> : 
-            'Decline'}
+            text={
+              loading ? (
+                <ActivityIndicator size={'small'} color={Color.white} />
+              ) : (
+                'Decline'
+              )
+            }
             textColor={Color.white}
             width={windowWidth * 0.25}
             height={windowHeight * 0.04}
@@ -125,7 +135,6 @@ console.log("🚀 ~ changeStatus ~ response:", response?.data)
             borderRadius={moderateScale(30, 0.3)}
             fontSize={moderateScale(11, 0.6)}
             onPress={() => {
-              
               changeStatus('reject');
             }}
           />

@@ -100,24 +100,26 @@ const requestManagePermission = async () => {
   }
 };
 
-// const requestNotificationPermission = async () => {
-//   try {
-//     const granted = await PermissionsAndroid.request(
-//       PermissionsAndroid.PERMISSIONS.ACCESS_NOTIFICATION_POLICY,
-//       {
-//         title: 'Notification access required',
-//         message: 'This App needs to Access your notification',
-//       },
-//     );
-//     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-//       console.log('You can use the notificaiton');
-//     } else {
-//       console.log('notificaiton permission denied');
-//     }
-//   } catch (err) {
-//     console.warn(err);
-//   }
-// };
+const requestNotificationPermission = async () => {
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.ACCESS_NOTIFICATION_POLICY,
+      {
+        title: 'Notification access required',
+        message: 'This App needs to Access your notification',
+      },
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log('You can use the notificaiton');
+    } else {
+      console.log('notificaiton permission denied');
+    }
+  } catch (err) {
+    console.warn(err);
+  }
+};
+// import {PermissionsAndroid} from 'react-native';
+// PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
 
 
 
@@ -174,6 +176,7 @@ export {
   requestWritePermission,
   requestManagePermission,
   requestReadPermission,
+  requestNotificationPermission,
   apiHeader,
   sleep,
   wait,

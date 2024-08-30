@@ -20,7 +20,11 @@ import {ScrollView} from 'native-base';
 import {Post} from '../Axios/AxiosInterceptorFunction';
 import {validateEmail} from '../Config';
 import {setSelectedRole, setUserData} from '../Store/slices/common';
-import { setMilageRing, setUserToken, setWalkThrough} from '../Store/slices/auth';
+import {
+  setMilageRing,
+  setUserToken,
+  setWalkThrough,
+} from '../Store/slices/auth';
 import {useDispatch, useSelector} from 'react-redux';
 import DropDownSingleSelect from '../Components/DropDownSingleSelect';
 import navigationService from '../navigationService';
@@ -32,17 +36,17 @@ const LoginScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [selectedRole, setSelectedType] = useState(userRole ?  userRole : 'Qbid Member');
+  const [selectedRole, setSelectedType] = useState(
+    userRole ? userRole : 'Qbid Member',
+  );
   const [images, setImages] = useState([]);
   const [scale, setScale] = useState(1);
   const [previousScale, setPreviousScale] = useState(1);
   const [translateX, setTranslateX] = useState(0);
-  
+
   const [translateY, setTranslateY] = useState(0);
 
-  const servicesArray = [ 'Qbid Member',
-   'Business Qbidder'
-  ];
+  const servicesArray = ['Qbid Member', 'Business Qbidder'];
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
@@ -98,11 +102,6 @@ const LoginScreen = () => {
     const response = await Post(url, body, apiHeader());
     setIsLoading(false);
     if (response != undefined) {
-  
-    console.log(
-        '🚀  file: LoginScreen.js:139  Login ~ response:',
-        response?.data,
-      );
       if (selectedRole == response?.data?.user_info?.role) {
         dispatch(
           setUserData({
@@ -112,8 +111,15 @@ const LoginScreen = () => {
         );
         dispatch(setSelectedRole(response?.data?.user_info?.role));
         dispatch(setUserToken({token: response?.data?.token}));
-        dispatch(setMilageRing(['', null, 'null', undefined, 0 ].includes(response?.data?.user_info?.radius) ? false: true))
-
+        dispatch(
+          setMilageRing(
+            ['', null, 'null', undefined, 0].includes(
+              response?.data?.user_info?.radius,
+            )
+              ? false
+              : true,
+          ),
+        );
       } else {
         return Platform.OS == 'android'
           ? ToastAndroid.show('unauthenticated', ToastAndroid.SHORT)

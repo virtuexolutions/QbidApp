@@ -43,6 +43,7 @@ const Signup = () => {
   const [selectedRole, setselectedRole] = useState(
     userRole ? userRole : 'Qbid Member',
   );
+  console.log('hfjsdhfjsdjkf' ,selectedRole)
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [companyName, setCompanyName] = useState(''); 
@@ -74,6 +75,7 @@ const Signup = () => {
       password: password,
       confirm_password: confirmPassword,
       role: selectedRole,
+      company_name :companyName,
     };
 
     for (let key in body) {
@@ -122,14 +124,14 @@ const Signup = () => {
         : Alert.alert('Password does not match');
     }
 
-    if (selectedRole == 'Qbid Negotiator') {
+    if (selectedRole == 'Qbid Negotiator' || selectedRole == 'Business Qbidder' ) {
       if (companyName == '') {
         return Platform.OS == 'android'
           ? ToastAndroid.show(
-              'company name is not a number',
+              'company name is required',
               ToastAndroid.SHORT,
             )
-          : Alert.alert('company name is not a number');
+          : Alert.alert('company name required');
       }
     }
 
@@ -162,12 +164,10 @@ const Signup = () => {
     }
 
     const url = 'register';
-    console.log('🚀 ~ file: Signup.js:149 ~ Register ~ formData:', formData);
     setIsLoading(true);
     const response = await Post(url, formData, apiHeader());
     setIsLoading(false);
     if (response != undefined) {
-    //  return console.log("🚀 ~ Register ~ response:", response)
       dispatch(setUserData(response?.data?.user_info));
       dispatch(setSelectedRole(response?.data?.user_info?.role));
       dispatch(setUserLogin(response?.data?.token));
@@ -297,7 +297,7 @@ const Signup = () => {
             placeholderColor={Color.themeLightGray}
             borderRadius={moderateScale(25, 0.3)}
           />
-          {userRole == 'Qbid Negotiator' && (
+          {userRole == 'Qbid Negotiator' || userRole == 'Business Qbidder' && (
             <>
               <TextInputWithTitle
                 titleText={'Company Name'}

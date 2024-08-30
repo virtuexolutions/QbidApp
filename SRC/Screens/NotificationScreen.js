@@ -14,10 +14,11 @@ import {useState} from 'react';
 import HelpRequestModal from '../Components/HelpRequestModal';
 import {Get} from '../Axios/AxiosInterceptorFunction';
 import {useEffect} from 'react';
-import { useIsFocused } from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
+import messaging from '@react-native-firebase/messaging'
 
 const NotificationScreen = () => {
-  const isFocused = useIsFocused()
+  const isFocused = useIsFocused();
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
   const [selected, setSelected] = useState({});
@@ -114,14 +115,31 @@ const NotificationScreen = () => {
     const response = await Get(url, token);
     setIsLoading(false);
     if (response != undefined) {
-    console.log("🚀 ~ helpNotification ~ response:============>", JSON.stringify(response?.data ,null ,2))
+      console.log(
+        '🚀 ~ helpNotify ~ response:',
+        JSON.stringify(response?.data, null, 2),
+      );
       setHelpNotification(response?.data?.notification_info);
     }
   };
   useEffect(() => {
-    userRole != 'Qbid Member' 
-    helpNotify();
-  }, isFocused);
+    if (userRole != 'Qbid Member') {
+      helpNotify();
+    }
+  }, [isFocused]);
+
+  // useEffect(() => {
+    
+  // }, []);
+
+  const getDeviceToken = async () => {
+    const token = await messaging().getToken();
+    console, log('device token here ==== >>>>> >>>', token);
+  };
+
+  useEffect(() => {
+    getDeviceToken();
+  }, []);
 
   return (
     <ScreenBoiler
@@ -154,70 +172,73 @@ const NotificationScreen = () => {
             ? Color.themeBgColorNegotiator
             : Color.themebgBusinessQbidder
         }>
-          {
-            isLoading ? <View style={{
-              justifyContent:'center',
-              alignItems :'center',
-              height : windowHeight*0.8
+        {isLoading ? (
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: windowHeight * 0.8,
             }}>
-              <ActivityIndicator size={'large'} color={Color.white} />
-            </View>:
-        <FlatList
-          data={userRole == 'Qbid Member' ? dummyData : helpNotification}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingBottom: moderateScale(40, 0.3),
-            paddingTop: moderateScale(20, 0.3),
-            alignItems: 'center',
-          }}
-          style={{
-            minHeight: windowHeight * 0.9,
-            // backgroundColor : Color.themeColor
-          }}
-          renderItem={({item, index}) => {
-            console.log("🚀 ~ NotificationScreen ~ item=======>:", item)
-            return (
-              <NotificationCard
-                image={
-                  userRole != 'Qbid Member'
-                    ? item?.user_info?.photo
-                    : item?.image
-                }
-                name={
-                  userRole != 'Qbid Member'
-                    ? `${item?.user_info?.first_name}${item?.user_info?.last_name}`
-                    : item?.name
-                }
-                text={ userRole != 'Qbid Member'? item?.body :item.text}
-                unread={ item.unread}
-                time={
-                  userRole != 'Qbid Member'
-                    ? moment(item.created_at).format('ll')
-                    : item?.time
-                }
-                onPress={() => {
-                  setModalVisible(true);
-                  setSelected(item);
-                }}
-                // onPress={item.onPress}
-                item={item}
-              />
-            );
-          }}
-          ListHeaderComponent={() => {
-            return (
-              <CustomText
-                isBold
-                style={[
-                  styles.header,
-                  userRole != 'Qbid Member' && {color: Color.white},
-                ]}>
-                Notifications
-              </CustomText>
-            );
-          }}
-        />
-          }
+            <ActivityIndicator size={'large'} color={Color.white} />
+          </View>
+        ) : (
+          <FlatList
+            data={userRole == 'Qbid Member' ? dummyData : helpNotification}
+            showsVerticalScrollIndicator={false}
+            key={item => item?.id}
+            contentContainerStyle={{
+              paddingBottom: moderateScale(40, 0.3),
+              paddingTop: moderateScale(20, 0.3),
+              alignItems: 'center',
+            }}
+            style={{
+              minHeight: windowHeight * 0.9,
+              // backgroundColor : Color.themeColor
+            }}
+            renderItem={({item, index}) => {
+              // console.log("🚀 ~ NotificationScreen ~ item=======>:", item)
+              return (
+                <NotificationCard
+                  image={
+                    userRole != 'Qbid Member'
+                      ? item?.user_info?.photo
+                      : item?.image
+                  }
+                  name={
+                    userRole != 'Qbid Member'
+                      ? `${item?.user_info?.first_name}${item?.user_info?.last_name}`
+                      : item?.name
+                  }
+                  text={userRole != 'Qbid Member' ? item?.body : item.text}
+                  unread={item.unread}
+                  time={
+                    userRole != 'Qbid Member'
+                      ? moment(item.created_at).format('ll')
+                      : item?.time
+                  }
+                  onPress={() => {
+                    setModalVisible(true);
+                    setSelected(item);
+                  }}
+                  // onPress={item.onPress}
+                  item={item}
+                />
+              );
+            }}
+            ListHeaderComponent={() => {
+              return (
+                <CustomText
+                  isBold
+                  style={[
+                    styles.header,
+                    userRole != 'Qbid Member' && {color: Color.white},
+                  ]}>
+                  Notifications
+                </CustomText>
+              );
+            }}
+          />
+        )}
 
         {userRole != 'Qbid Member' && (
           <HelpRequestModal

@@ -40,8 +40,6 @@ import {SliderBox} from 'react-native-image-slider-box';
 
 const CompleteJobs = props => {
   const data1 = props?.route?.params?.item;
-  console.log("🚀 ~ file: CompleteJobs.js:43 ~ CompleteJobs ~ data1:", data1)
-
   
   const user = useSelector(state => state.commonReducer.userData);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
@@ -49,23 +47,7 @@ const CompleteJobs = props => {
 
   const [images, setImages] = useState([])
 
-  // const dummydata = [
-  //   {
-  //     name: 'john',
-  //     image: require('../Assets/Images/man1.jpg'),
-  //     comment: 'hello every one',
-  //   },
-  //   {
-  //     name: 'john',
-  //     image: require('../Assets/Images/man1.jpg'),
-  //     comment: 'hhfjshdfjhskdfhjkshd',
-  //   },
-  //   {
-  //     name: 'john',
-  //     image: require('../Assets/Images/man1.jpg'),
-  //     comment: 'hello eltjikrejti reauthu ierterhtrtvery one',
-  //   },
-  // ];
+
 
   useEffect(() => {
     setImages(data1?.images.map((item)=>{return ({uri:item?.image})}))
@@ -74,13 +56,6 @@ const CompleteJobs = props => {
   }, [])
   
 
-  // const imagesSilder = [
-  //   require('../Assets/Images/man1.jpg'),
-  //   require('../Assets/Images/man2.jpg'),
-  //   require('../Assets/Images/man3.jpg'),
-  //   require('../Assets/Images/master.png'),
-  //   require('../Assets/Images/user3.jpg'),
-  // ];
 
 
   return (
@@ -121,8 +96,6 @@ const CompleteJobs = props => {
           style={styles.sectionContainer}
           contentContainerStyle={{
             paddingBottom: moderateScale(80, 0.6),
-            // paddingTop: moderateScale(40, 0.6),
-            // paddingHorizontal: moderateScale(5, 0.6),
           }}>
           <View>
             <SliderBox
@@ -136,7 +109,6 @@ const CompleteJobs = props => {
                 fontSize: moderateScale(20, 0.6),
                 paddingVertical: moderateScale(20, 0.3),
                 color: Color.white,
-                // backgroundColor:'green',
                 paddingHorizontal:moderateScale(10,0.6)
               }}
               isBold>
@@ -161,13 +133,10 @@ const CompleteJobs = props => {
                 </CustomText>
               </View>
               <View
-                style={[
-                  styles.views,
-                  {
-                    // marginHorizontal: moderateScale(30, 0.3),
-                    // width: windowWidth * 0.28,
-                  },
-                ]}>
+                style={
+                  styles.views
+                  
+                  }>
                 <CustomText
                   style={[
                     styles.viewText,
@@ -180,7 +149,7 @@ const CompleteJobs = props => {
                  asking price
                 </CustomText>
                 <CustomText style={styles.viewText} isBold>
-                {data1?. asking_price}
+                {data1?.asking_price}
                  
                   {/* {data1?.notes} */}
                 </CustomText>

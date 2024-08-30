@@ -26,12 +26,13 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import ReviewModal from './ReviewModal';
 
 const MyQouteCard = ({item, type}) => {
+  console.log("🚀 ~ MyQouteCard ~ item:", item?.status)
   const token = useSelector(state => state.authReducer.token);
   const [modalVisible, setModalVisible] = useState(false);
   const [cmpLoading, setCmpLoading] = useState(false);
   const [rbRef, setRbRef] = useState(null);
   const [buttonName, setbuttonName] = useState(
-    item?.status == 'accepted'
+    item?.status == 'onGoing'
       ? 'Complete'
       : item?.status == 'completed' && [0, undefined].includes(item?.rating)
       ? 'Review'
@@ -83,9 +84,14 @@ const MyQouteCard = ({item, type}) => {
           {item?.status}
         </CustomText>
         <CustomImage
-          source={require('../Assets/Images/bedge1.png')}
+          source={
+          
+              
+              require('../Assets/Images/bedge1.png')
+          }
           resizeMode={'stretch'}
           style={{
+            tintColor :  item?.status == 'onGoing' ? 'green' :'red ',
             width: '100%',
             height: '100%',
           }}
@@ -147,7 +153,7 @@ const MyQouteCard = ({item, type}) => {
         </CustomText>
 
         <CustomText numberOfLines={1} style={styles.entity} isBold>
-          Vendor Price :{' '}
+          Orginal Price :{' '}
           {
             <CustomText
               style={{
@@ -159,7 +165,7 @@ const MyQouteCard = ({item, type}) => {
           }
         </CustomText>
         <CustomText numberOfLines={1} style={styles.entity} isBold>
-          Negotiator Price :{' '}
+          Qbid Price :{' '}
           {
             <CustomText
               style={{

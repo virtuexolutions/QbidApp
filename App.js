@@ -3,7 +3,9 @@ import {Platform} from 'react-native';
 import {PersistGate} from 'redux-persist/integration/react';
 import {Provider, useDispatch, useSelector} from 'react-redux';
 import {StripeProvider} from '@stripe/stripe-react-native';
-// import messaging, { firebase } from '@react-native-firebase/messaging';
+import messaging, { firebase } from '@react-native-firebase/messaging';
+import PushNotification, {Notifications} from 'react-native-push-notification'
+import {PermissionsAndroid} from 'react-native';
 import {NativeBaseProvider} from 'native-base';
 import {store, persistor} from './SRC/Store/index';
 import {stripeKey} from './SRC/Config';
@@ -11,13 +13,15 @@ import {
   requestCameraPermission,
   requestLocationPermission,
   requestManagePermission,
+  requestNotificationPermission,
   requestReadPermission,
   requestWritePermission,
 } from './SRC/Utillity/utils';
 import SplashScreen from './SRC/Screens/SplashScreen';
 import AppNavigator from './SRC/appNavigation';
-import AddCard from './SRC/Screens/AddCard';
+// import AddCard from './SRC/Screens/AddCard';
 
+  
 
 
 const App = () => {
@@ -34,6 +38,31 @@ const App = () => {
 
 
   // console.reportErrorsAsExceptions = false;
+
+
+
+
+ const requestUserPermission = async () =>{
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+  
+    if (enabled) {
+      console.log('Authorization status:', authStatus);
+    }
+  }
+
+  
+
+useEffect(()=>{
+
+
+  requestUserPermission()
+},[])
+
+
+
   return (
     <StripeProvider
     publishableKey={"pk_test_qblFNYngBkEdjEZ16jxxoWSM"}
@@ -56,62 +85,61 @@ const MainContainer = () => {
   // firebase.initializeApp(servicesConfig);
 
 
- 
-
-  
-  
   // fcm
   //  useEffect(() => {
-    //    Notifications.registerRemoteNotifications();
-    //    // app opened
-    //    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
-      //      Notifications.postLocalNotification({
-        //        title: remoteMessage.notification.title,
-        //        body: remoteMessage.notification.body,
-        //      });
+  //      Notifications. ;
+  //      // app opened
+  //      const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+  //          Notifications.postLocalNotification({
+  //              title: remoteMessage.notification.title,
+  //              body: remoteMessage.notification.body,
+  //            });
         
-        //      Notifications.events().registerNotificationOpened(
-          //        (notification: Notification, completion) => {
-            //          if (remoteMessage?.data?.flag == "Chat") {
-              //            navigationService.navigate("ChatScreen", {
-                //              roomId: remoteMessage?.data?.roomId,
-                //            });
-                //          }
-                //          completion();
-                //        }
-                //      );
-                //    });
+  //            Notifications.events().registerNotificationOpened(
+  //                (notification: Notification, completion) => {
+  //                    if (remoteMessage?.data?.flag == "Chat") {
+  //                        navigationService.navigate("ChatScreen", {
+  //                            roomId: remoteMessage?.data?.roomId,
+  //                          });
+  //                        }
+  //                        completion();
+  //                      }
+  //                    );
+  //                  });
                 
-                //    // app opened from background
-                //    messaging().onNotificationOpenedApp((remoteMessage) => {
-                  //      if (remoteMessage?.data?.flag == "Chat") {
-                    //        navigationService.navigate("ChatScreen", {
-                      //          roomId: remoteMessage?.data?.roomId,
-                      //        });
-                      //      }
-                      //    });
+  //                  // app opened from background
+  //                  messaging().onNotificationOpenedApp((remoteMessage) => {
+  //                      if (remoteMessage?.data?.flag == "Chat") {
+  //                          navigationService.navigate("ChatScreen", {
+  //                              roomId: remoteMessage?.data?.roomId,
+  //                            });
+  //                          }
+  //                        });
                       
-                      //    // when app is in quite state
-                      //    messaging()
-                      //      .getInitialNotification()
-                      //      .then((remoteMessage) => {
-                        //        if (remoteMessage) {
-                          //          if (remoteMessage?.data?.flag == "Chat") {
-                            //            navigationService.navigate("ChatScreen", {
-                              //              roomId: remoteMessage?.data?.roomId,
-                              //            });
-                              //          }
-                              //        }
-                              //      });
+  //                        // when app is in quite state
+  //                        messaging()
+  //                          .getInitialNotification()
+  //                          .then((remoteMessage) => {
+  //                              if (remoteMessage) {
+  //                                  if (remoteMessage?.data?.flag == "Chat") {
+  //                                      navigationService.navigate("ChatScreen", {
+  //                                          roomId: remoteMessage?.data?.roomId,
+  //                                        });
+  //                                      }
+  //                                    }
+  //                                  });
                               
-                              //    // Register background handler
-                              //    messaging().setBackgroundMessageHandler(async (remoteMessage) => {
-                                //      console.log("Message handled in the background!", remoteMessage);
-                                //    });
+  //                                // Register background handler
+  //                                messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+  //                                    console.log("Message handled in the background!", remoteMessage);
+  //                                  });
                                 
-                                //    return unsubscribe;
-                                //  }, []);
+  //                                  return unsubscribe;
+  //                                }, []);
                                 // fcm ends
+
+
+                                
 
 useEffect(() => {
     async function GetPermission() {
@@ -119,18 +147,19 @@ useEffect(() => {
       await requestWritePermission();
       await requestLocationPermission();
       await requestReadPermission();
+    await  requestUserPermission
+  //  await   requestNotificationPermission()
       // await requestManagePermission();
       
       
     }
-    // console.log('hererererer');
-    //  messaging()
-    //    .getToken()
-    //    .then((_token) => {
-    //      console.log("🚀 ~ .then ~ _token:", _token)
-    //     //  dispatch(SetFCMToken(_token));
-    //    })
-    //    .catch(() => console.log("token error"));
+    console.log('>hererererer');
+     messaging().getToken()
+       .then((_token) => {
+         console.log("🚀 ~mg here ================  .then ~ _token:", _token)
+        //  dispatch(SetFCMToken(_token));
+       })
+       .catch(() => console.log("token error"));
     GetPermission();
   }, []);
 

@@ -34,17 +34,18 @@ import HelpCard from '../Components/HelpCard';
 // import SkeeingHelpCard from '../Components/SkeeingHelpCard';
 
 const HomeScreen = () => {
+  const isFocused = useIsFocused(); 
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const userData = useSelector(state => state.commonReducer.userData);
-  // console.log("🚀 ~ HomeScreen ~ userData-=======================:", userData)
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
-  // console.log("🚀 ~ HomeScreen ~ token:==============>", token)
+  console.log("🚀 ~ HomeScreen ~ token:", token)
+ 
+ 
   const [searchData, setSearchData] = useState('');
   const [showMultiImageModal, setShowMultiImageModal] = useState(false);
   const [multiImages, setMultiImages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const isFocused = useIsFocused();
   const [visible, setVisible] = useState(false);
   const [myQuotes, setMyQuotes] = useState([]);
   const [proposals, setProposals] = useState([]);
@@ -64,22 +65,15 @@ const HomeScreen = () => {
       Get('auth/member/quote', token),
       Get('auth/member/quote_help', token),
     ]);
-    
+
     setIsLoading(false);
     if (response1 != undefined) {
-      // console.log("🚀 ~ getAllData ~ response1 =========== >>>>>>>>>>>:", response1?.data)
       setNegotiator(response1?.data?.negotitator_info);
     }
     if (response2 != undefined) {
-      // console.log("🚀 ~ getAllData ~ response2 ====== >> >>>>>>>>>:", response2?.data?.quote_info?.data)
       setMyQuotes(response2?.data?.quote_info?.data);
     }
-      // console.log("🚀 ~ getAllData ~ response2:", response2.data.quote_info?.data)
     if (response3 != undefined) {
-      // console.log(
-      //   '🚀 ~ getAllData ~ response3:',
-      //   JSON.stringify(response3?.data?.quote_info?.data, null, 2),
-      // );
       setHelpResponse(response3?.data?.quote_info?.data);
     }
   };
@@ -182,7 +176,7 @@ const HomeScreen = () => {
           </View>
           <View style={styles.row}>
             <CustomText isBold style={styles.header}>
-              Popular negotiator
+              Popular Business 
             </CustomText>
             <CustomText
               onPress={() => {
@@ -356,10 +350,7 @@ const HomeScreen = () => {
                 paddingTop: moderateScale(20, 0.3),
               }}
               renderItem={({item, index}) => {
-                // console.log(
-                //   '🚀 ~ HomeScreen ~ item================>response3 here:',
-                //   item,
-                // );
+                
                 return <HelpCard item={item} />;
               }}
             />

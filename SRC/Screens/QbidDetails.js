@@ -9,7 +9,6 @@ import { ScrollView } from 'native-base'
 
 const QbidDetails = (props) => {
   const data = props?.route?.params?.data;
-  console.log("🚀 ~ file: QbidDetails.js:9 ~ QbidDetails ~ data", data)
   return (
     <ScreenBoiler
     statusBarBackgroundColor={Color.themeColor}

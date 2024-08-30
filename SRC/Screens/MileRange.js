@@ -26,12 +26,6 @@ const MileRange = props => {
   const fromSetting = props?.route?.params?.fromSetting;
   const token = useSelector(state => state.authReducer.token);
   const location = useSelector(state => state.commonReducer.location);
-  
-  console.log(
-    '🚀 ~ file: MileRange.js:20 ~ MileRange ~ fromSetting:',
-    fromSetting,
-  );
-
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -47,10 +41,6 @@ const MileRange = props => {
       timeout: 60000,
     })
       .then(location => {
-        console.log(
-          '🚀 ~ file: MileRange.js:37 ~ getLocation ~ location:',
-          location,
-        );
         dispatch(setLocation(location));
       })
       .catch(error => {
@@ -70,11 +60,6 @@ const MileRange = props => {
     const response = await Get(url, token);
     setIsLoading(false);
     if (response != undefined) {
-      console.log(
-        '🚀 ~ file: MileRange.js:29 ~ setMileage ~ response:',
-        response?.data,
-        url,
-      );
       dispatch(setMilageRing(true));
       fromSetting && navigation.goBack();
     }
@@ -142,12 +127,10 @@ const MileRange = props => {
           }}>
           <Slider
             onChange={data => {
-              // console.log(data);
               setMiles(data);
               setDollar(data);
             }}
             onPointerUpCapture={() => {
-              // console.log('up');
             }}
             w="85%"
             size="lg"

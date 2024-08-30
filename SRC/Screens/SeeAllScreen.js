@@ -26,16 +26,13 @@ const SeeAllScreen = props => {
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
-  // console.log("🚀 ~ file: SeeAllScreen.js:29 ~ SeeAllScreen ~ token:", token)
 
   const type = props?.route?.params?.type;
-  console.log("🚀 ~ SeeAllScreen ~ type:", type)
   const data = props?.route?.params?.data;
 
   const [searchData, setSearchData] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState('');
-  console.log("🚀 ~ file: SeeAllScreen.js:37 ~ SeeAllScreen ~ selectedStatus:", selectedStatus)
   const [isLoading, setIsLoading] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
   const [newArray, setNewArray] = useState([]);
@@ -43,10 +40,6 @@ const SeeAllScreen = props => {
   const scrollViewRef = useRef();
   const [filterVisible, setFilterVisible] = useState(false);
   const [filters, setFilters] = useState({level: [], expertise: []});
-  console.log(
-    '🚀 ~ file: SeeAllScreen.js:45 ~ SeeAllScreen ~ filters:',
-    filters,
-  );
 
   const handleScroll = event => {
     const currentOffset = event.nativeEvent.contentOffset.y;
@@ -65,29 +58,22 @@ const SeeAllScreen = props => {
       ...filters,
       search: searchData,
     };
-    console.log('🚀 ~ file: SeeAllScreen.js:69 ~ searchCards ~ body:', body);
     setIsLoading(true);
     const response = await Post(url, body, apiHeader(token));
     setIsLoading(false);
 
     if (response != undefined) {
-      console.log(
-        '🚀 ~ file: SeeAllScreen.js:73 ~ searchCards ~ response:',
-        response?.data,
-      );
-
       setNewArray(response?.data?.negotiator_info);
     }
   };
 
   const filterQuotes = async () => {
-    console.log('in filter quotes=======>>>>')
+    console.log('in filter quotes=======>>>>');
     const url = `auth/member/search_type?status=${selectedStatus}&title=${searchData}`;
     setIsLoading(true);
     const response = await Get(url, token);
     setIsLoading(false);
     if (response != undefined) {
-      
       setNewArray(response?.data?.quote_info);
     }
   };
@@ -101,10 +87,7 @@ const SeeAllScreen = props => {
     value == 'loadMore' ? setLoadMore(false) : setIsLoading(false);
 
     if (response != undefined) {
-      console.log(
-        '🚀 ~ file: SeeAllScreen.js:100 ~ getData ~ response:',
-        response?.data,
-      );
+      
       if (type == 'quotes') {
         value == 'loadMore'
           ? setNewArray(prev => [...prev, ...response?.data?.quote_info?.data])

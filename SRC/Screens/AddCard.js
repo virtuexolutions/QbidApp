@@ -44,10 +44,9 @@ const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 const AddCard = () => {
-  const userRole = useSelector(state => state.commonReducer.selectedRole);
-  // console.log("🚀 ~ file: AddCard.js:48 ~ AddCard ~ userRole:", userRole)
-  const token = useSelector(state => state.authReducer.token);
   const dispatch = useDispatch();
+  const userRole = useSelector(state => state.commonReducer.selectedRole);
+  const token = useSelector(state => state.authReducer.token);
   const {userData} = useSelector(state => state.commonReducer);
   
   const [isLoading, setIsLoading] = useState(false);
@@ -77,7 +76,6 @@ const AddCard = () => {
     //       : alert(`${key} is required`);
     //   }
     // }
-    // console.log("🚀 ~ file: AddCard.js:91 ~ addCard ~ billingDetails", billingDetails)
     setIsLoading(true);
     const responseData = await createToken({
       type: 'Card',
@@ -90,15 +88,10 @@ const AddCard = () => {
       //   billingDetails,
       // }
     });
-    // console.log(
-    //   '🚀 ~ file: AddCard.js:90 ~ addCard ~ responseData',
-    //   JSON.stringify(responseData, null, 2),
-    // );
-
+    
     if (responseData.error) {
       setIsLoading(false);
-      // console.log(responseData.error);
-    }
+     }
     if (responseData != undefined) {
       // userRole == 'Business Qbidder' ? navigationService.navigate('MileRange', {fromLogin : true}) :
       dispatch(setUserToken({token: 'dasdawradawdawrtfeasfzs'}));

@@ -25,17 +25,11 @@ import {useNavigation} from '@react-navigation/native';
 
 const CreateNew = props => {
   const hire = props?.route?.params?.hire;
-  console.log('🚀 ~ file: CreateNew.js:29 ~ CreateNew ~ hire:', hire);
-  const negotiater_id = props?.route?.params?.id;
-  console.log(
-    '🚀 ~ file: CreateNew.js:30 ~ CreateNew ~ negotiater_id:',
-    negotiater_id,
-  );
+ const negotiater_id = props?.route?.params?.id;
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
   const location = useSelector(state => state.commonReducer.location);
-  console.log("🚀 ~ file: CreateNew.js:38 ~ CreateNew ~ location:", location)
 
   const [qouteTitle, setQouteTitle] = useState('');
   const [city, setCity] = useState('');
@@ -63,7 +57,6 @@ const CreateNew = props => {
       asking_price: askingPrice,
       offering_percentage: offeringPercent,
       service_preference: selectedService,
-      notes: description,
     };
     const body2 = {
       quoted_price: vendorQoutedPrice,
@@ -91,13 +84,16 @@ const CreateNew = props => {
       }
     }
 
-    if (description.length < 100) {
-      return Platform.OS == 'android'
-        ? ToastAndroid.show(
-            `Description should be greater than 100 letters`,
-            ToastAndroid.SHORT,
-          )
-        : Alert.alert(`Description should be greater than 100 letters`);
+    if (!['' , undefined , null].includes(description)) {
+      // return Platform.OS == 'android'
+      //   ? ToastAndroid.show(
+      //       `Description should be greater than 100 letters`,
+      //       ToastAndroid.SHORT,
+      //     )
+      //   : Alert.alert(`Description should be greater than 100 letters`);
+    formData.append('notes' , description)
+
+
     }
 
     if (multiImages.length == 0) {

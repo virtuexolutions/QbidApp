@@ -25,12 +25,7 @@ const SeeAllNegotiator = props => {
 
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
-  console.log("🚀 ~ SeeAllNegotiator ~ userRole:", userRole)
   const token = useSelector(state => state.authReducer.token);
-  console.log(
-    '🚀 ~ file: SeeAllNegotiator.js:30 ~ SeeAllNegotiator ~ token:',
-    type,
-  );
 
   const scrollViewRef = useRef();
 
@@ -38,7 +33,6 @@ const SeeAllNegotiator = props => {
   const [showSearch, setShowSearch] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState('');
-
   const [pageNum, setpageNum] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
@@ -47,8 +41,6 @@ const SeeAllNegotiator = props => {
   const searchQuotes = async () => {
     const url = `auth/negotiator/search/${type}`;
     const body = {search: searchData};
-
-    console.log("🚀 ~ searchQuotes ~ body:", body)
     setIsLoading(true);
     const response = await Post(url, body, apiHeader(token));
     setIsLoading(false);
@@ -66,15 +58,10 @@ const SeeAllNegotiator = props => {
         : type == 'Job Request'
         ? `auth/negotiator/hiring/list?page=${pageNum}`
         : 'auth/my_bid_list';
-    console.log('🚀 ~ getData ~ url:', url);
     type1 == 'loadMore' ? setLoadMore(true) : setIsLoading(true);
     const response = await Get(url, token);
     type1 == 'loadMore' ? setLoadMore(false) : setIsLoading(false);
     if (response != undefined) {
-      console.log(
-        '🚀 ~ file: SeeAllNegotiator.js:74 ~ getData ~ response:',
-        response?.data,
-      );
       if (type == 'Working On' || type == 'Recommended') {
         type1 == 'loadMore'
           ? setNewArray(prev => [...prev, ...response?.data?.quote_info?.data])
@@ -101,7 +88,6 @@ const SeeAllNegotiator = props => {
     if (currentOffset >= maxOffset) {
       // You've reached the end of the ScrollView
       setpageNum(prev => prev + 1);
-      // console.log('Reached the end of ScrollView');
     }
   };
 

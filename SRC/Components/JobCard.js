@@ -22,7 +22,6 @@ import {Post} from '../Axios/AxiosInterceptorFunction';
 import ImageView from 'react-native-image-viewing';
 
 const JobCard = ({fromSeeAll, style, onPress, item, getProposal}) => {
-  // console.log("🚀 ~ file: JobCard.js:25 ~ JobCard ~ item:", item?.quote_info?.images)
   const token = useSelector(state => state.authReducer.token);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
 
@@ -44,10 +43,7 @@ const JobCard = ({fromSeeAll, style, onPress, item, getProposal}) => {
     const response = await Post(url, {status: value}, apiHeader(token));
     value == 'onGoing' ? setLoading(false) : setDeclineLoading(false);
     if (response != undefined) {
-      console.log(
-        '🚀 ~ file: JobCard.js:38 ~ changeStatus ~ response:',
-        response?.data,
-      );
+     
       setModalVisible(false);
       getProposal()
     }
@@ -146,7 +142,7 @@ const JobCard = ({fromSeeAll, style, onPress, item, getProposal}) => {
               style={{
                 fontSize: moderateScale(8, 0.6),
               }}>
-              Vendor Qoute
+             Business Quote 
             </CustomText>
           </View>
           <View

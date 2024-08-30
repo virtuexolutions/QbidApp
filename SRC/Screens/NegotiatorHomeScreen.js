@@ -38,9 +38,7 @@ import AcceptedHelpRequestCard from '../Components/AcceptedHelpRequestCard';
 const NegotiatorHomeScreen = () => {
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
-  console.log('🚀 ~ NegotiatorHomeScreen ~ token:', token);
   const userData = useSelector(state => state.commonReducer.userData);
-  // console.log("🚀 ~ file: NegotiatorHomeScreen.js:40 ~ NegotiatorHomeScreen ~ userData:", userData)
 
   const dispatch = useDispatch();
 
@@ -55,10 +53,8 @@ const NegotiatorHomeScreen = () => {
   const isFocused = useIsFocused();
   const [isLocation, setIsLocation] = useState(false);
   const [bidList, setBidList] = useState([]);
-  console.log('🚀 ~ NegotiatorHomeScreen ~ bidList:', bidList);
   const [helpBidList, setHelpBidList] = useState([]);
-  // const [recommand ,setRecommand] =useState([])
-
+  
   // const getRecommand =async () => {
 
   //   const url = 'auth/negotiator/quote/recommended'
@@ -86,36 +82,23 @@ const NegotiatorHomeScreen = () => {
       ]);
     setIsLoading(false);
     if (response1 != undefined) {
-      //  return console.log(response1?.data?.quote_info?.data);
       ![null, undefined, ''].includes(response2?.data?.quote_info?.data) &&
         setRecommended(response1?.data?.quote_info?.data);
     }
     if (response2 != undefined) {
-      console.log(
-        '🚀 ~ file: NegotiatorHomeScreen.js:83 ~ getProposal ~ response2:=========> ',
-        response2?.data?.quote_info?.data,
-      );
+    
       ![null, undefined, ''].includes(response2?.data?.quote_info?.data) &&
         setWorking(response2?.data?.quote_info?.data);
       // setWorking(prev => [...prev, ...response2?.data?.hiring_info?.data]);
     }
     if (response3 != undefined) {
-      console.log('🚀 ~ getProposal ~ response3:', response3?.data);
       setBidList(response3?.data?.quote_info);
     }
 
     if (response4 != undefined) {
-      console.log(
-          '🚀 ~ file: NegotiatorHomeScreen.js:89 ~ getProposal ~ response3:',
-          response4?.data?.hiring_info?.data,
-        );
       setJobPosting(response4?.data?.hiring_info?.data);
     }
     if (response5 != undefined) {
-      console.log(
-        '🚀 ~ file: NegotiatorHomeScreen.js:89 ~ getProposal ~ response5===> here:',
-        response5?.data?.quote_info?.data,
-      );
       setHelpBidList(response5?.data?.quote_info?.data);
     }
   };
@@ -137,10 +120,7 @@ const NegotiatorHomeScreen = () => {
       isLocation,
     })
       .then(location => {
-        console.log(
-          '🚀 ~ file: NegotiatorHomeScreen.js:119 ~ getLocation ~ location:',
-          location,
-        );
+     
         setIsLocation(location);
         dispatch(setLocation(location));
       })
