@@ -1,5 +1,9 @@
 import React, {useEffect, useState} from 'react';
+<<<<<<< Updated upstream
 import {Platform} from 'react-native';
+=======
+import {Alert, Platform} from 'react-native';
+>>>>>>> Stashed changes
 import {PersistGate} from 'redux-persist/integration/react';
 import {Provider, useDispatch, useSelector} from 'react-redux';
 import {StripeProvider} from '@stripe/stripe-react-native';
@@ -21,8 +25,18 @@ import SplashScreen from './SRC/Screens/SplashScreen';
 import AppNavigator from './SRC/appNavigation';
 // import AddCard from './SRC/Screens/AddCard';
 
+<<<<<<< Updated upstream
   
 
+=======
+messaging().setBackgroundMessageHandler(async remoteMessage => {
+  console.log('Message handled in the background!', remoteMessage);
+  PushNotification.localNotification({
+    title: remoteMessage.data.title || 'New Message',
+    message: remoteMessage.data.body || 'You have received a new message',
+  });
+});
+>>>>>>> Stashed changes
 
 const App = () => {
   // const [publishableKey, setPublishableKey] = useState('');
@@ -61,6 +75,25 @@ useEffect(()=>{
   requestUserPermission()
 },[])
 
+<<<<<<< Updated upstream
+=======
+  useEffect(() => {
+    requestUserPermission();
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      console.log('A new FCM message arrived:', remoteMessage);
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+    messaging()
+      .getInitialNotification()
+      .then(remoteMessage => {
+        console.log('🚀 ~ useEffect ~ remoteMessage:', remoteMessage);
+        if (remoteMessage && remoteMessage.data?.screen) {
+          navigation.navigate(remoteMessage.data.screen, {
+            messageData: remoteMessage.data,
+          });
+        }
+      });
+>>>>>>> Stashed changes
 
 
   return (
@@ -154,9 +187,16 @@ useEffect(() => {
       
     }
     console.log('>hererererer');
+<<<<<<< Updated upstream
      messaging().getToken()
        .then((_token) => {
          console.log("🚀 ~mg here ================  .then ~ _token:", _token)
+=======
+    messaging()
+      .getToken()
+      .then(_token => {
+        console.log('🚀 ~mg here ================  .then ~ _token:', _token);
+>>>>>>> Stashed changes
         //  dispatch(SetFCMToken(_token));
        })
        .catch(() => console.log("token error"));
