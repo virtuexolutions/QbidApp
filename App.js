@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useId, useState} from 'react';
 import {Alert, Platform} from 'react-native';
 import {PersistGate} from 'redux-persist/integration/react';
 import {Provider, useDispatch, useSelector} from 'react-redux';
@@ -18,6 +18,7 @@ import {
 import SplashScreen from './SRC/Screens/SplashScreen';
 import AppNavigator from './SRC/appNavigation';
 // import AddCard from './SRC/Screens/AddCard';
+import { SetFCMToken } from './SRC/Store/slices/auth';
 
 messaging().setBackgroundMessageHandler(async remoteMessage => {
   console.log('Message handled in the background!', remoteMessage);
@@ -26,7 +27,6 @@ messaging().setBackgroundMessageHandler(async remoteMessage => {
     message: remoteMessage.data.body || 'You have received a new message',
   });
 });
-
 const App = () => {
   // const [publishableKey, setPublishableKey] = useState('');
 
@@ -57,7 +57,8 @@ const App = () => {
     requestUserPermission();
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       console.log('A new FCM message arrived:', remoteMessage);
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      // Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      Alert.alert(remoteMessage.notification.title, remoteMessage.notification.body);
     });
     messaging()
       .getInitialNotification()
@@ -164,7 +165,8 @@ const MainContainer = () => {
     messaging()
       .getToken()
       .then(_token => {
-        console.log('🚀 ~mg here ================  .then ~ _token:', _token);
+        console.log('🚀 ~mg here ======= =========  .then ~ _token:', _token);
+       dispatch( SetFCMToken({fcmToken: _token}));
         //  dispatch(SetFCMToken(_token));
       })
       .catch(() => console.log('token error'));

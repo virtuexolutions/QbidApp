@@ -35,6 +35,8 @@ import {validateEmail} from '../Config';
 import {Post} from '../Axios/AxiosInterceptorFunction';
 
 const Signup = () => {
+  const fcmToken = useSelector(state => state.authReducer.fcmToken);
+  console.log("🚀 ~ Signup ~ fcmToken:", fcmToken)
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const dispatch = useDispatch();
@@ -75,7 +77,8 @@ const Signup = () => {
       password: password,
       confirm_password: confirmPassword,
       role: selectedRole,
-      company_name :companyName,
+      device_token: fcmToken
+      // company_name :companyName,
     };
 
     for (let key in body) {
@@ -134,7 +137,10 @@ const Signup = () => {
           : Alert.alert('company name required');
       }
     }
-
+if(selectedRole == 'Business Qbidder'){
+      // company_name :companyName,
+  formData.append('company_name', companyName)
+}
     if (
       selectedRole != 'Qbid Member' &&
       (language.length == 0 || services.length == 0)
@@ -153,7 +159,8 @@ const Signup = () => {
         formData.append(`expertise[${index}]`, item),
       );
     }
-
+    
+//  return  console.log("🚀 ~ Register ~ formData:", JSON.stringify(formData, null, 2))
     if (!checked) {
       return Platform.OS == 'android'
         ? ToastAndroid.show(
