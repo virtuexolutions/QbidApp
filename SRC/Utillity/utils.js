@@ -32,7 +32,6 @@ const requestCameraPermission = async () => {
         message:
           'Qbid needs access to your camera ' +
           'so you can take awesome pictures.',
-          
       },
     );
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
@@ -120,8 +119,6 @@ const requestNotificationPermission = async () => {
 };
 // import {PermissionsAndroid} from 'react-native';
 // PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
-
-
 
 const apiHeader = (token, isFormData) => {
   if (token && !isFormData) {
