@@ -20,11 +20,14 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 import CustomButton from '../Components/CustomButton';
 import {Icon, ScrollView} from 'native-base';
 import {
+  SetFCMToken,
   setMilageRing,
   setUserLogin,
   setUserToken,
   setWalkThrough,
 } from '../Store/slices/auth';
+import messaging, {firebase} from '@react-native-firebase/messaging';
+
 import {useDispatch, useSelector} from 'react-redux';
 import DropDownSingleSelect from '../Components/DropDownSingleSelect';
 import navigationService from '../navigationService';
@@ -188,6 +191,20 @@ if(selectedRole == 'Business Qbidder'){
     dispatch(setSelectedRole(selectedRole));
   }, [selectedRole]);
 
+  useEffect(() =>{
+  if(fcmToken == null){
+    console.log('Condition matched === .');
+    messaging()
+    .getToken()
+    .then(_token => {
+      console.log('🚀 Sign Up_token:', _token);
+     dispatch( SetFCMToken({fcmToken: _token}));
+      //  dispatch(SetFCMToken(_token));
+    })
+    .catch(() => console.log('token error'));
+
+  }
+  },[])
   return (
     <>
       <CustomStatusBar
