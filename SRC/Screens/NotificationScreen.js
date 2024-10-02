@@ -15,7 +15,7 @@ import HelpRequestModal from '../Components/HelpRequestModal';
 import {Get} from '../Axios/AxiosInterceptorFunction';
 import {useEffect} from 'react';
 import {useIsFocused} from '@react-navigation/native';
-import messaging from '@react-native-firebase/messaging'
+import messaging from '@react-native-firebase/messaging';
 
 const NotificationScreen = () => {
   const isFocused = useIsFocused();
@@ -129,7 +129,7 @@ const NotificationScreen = () => {
   }, [isFocused]);
 
   // useEffect(() => {
-    
+
   // }, []);
 
   const getDeviceToken = async () => {

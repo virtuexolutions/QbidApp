@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, Platform} from 'react-native';
+import {Alert, Alert, Platform} from 'react-native';
 import {PersistGate} from 'redux-persist/integration/react';
 import {Provider, useDispatch, useSelector} from 'react-redux';
 import {StripeProvider} from '@stripe/stripe-react-native';
+import messaging, {firebase} from '@react-native-firebase/messaging';
+import PushNotification, {Notifications} from 'react-native-push-notification';
 import messaging, {firebase} from '@react-native-firebase/messaging';
 import PushNotification, {Notifications} from 'react-native-push-notification';
 import {PermissionsAndroid} from 'react-native';
@@ -51,30 +53,17 @@ const App = () => {
     if (enabled) {
       console.log('Authorization status:', authStatus);
     }
-  };
+  }
 
-  useEffect(() => {
-    requestUserPermission();
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      console.log('A new FCM message arrived:', remoteMessage);
-           Alert.alert(remoteMessage.notification.title, remoteMessage.notification.body);
-    });
-    messaging()
-      .getInitialNotification()
-      .then(remoteMessage => {
-        console.log('🚀 ~ useEffect ~ remoteMessage:', remoteMessage);
-        if (remoteMessage && remoteMessage.data?.screen) {
-          navigation.navigate(remoteMessage.data.screen, {
-            messageData: remoteMessage.data,
-          });
-        }
-      });
+  
 
-    return () => {
-      console.log('Unsubscribing from onMessage');
-      unsubscribe();
-    };
-  }, []);
+useEffect(()=>{
+
+
+  requestUserPermission()
+},[])
+
+
 
   return (
     <StripeProvider
@@ -166,10 +155,8 @@ const MainContainer = () => {
       .then(_token => {
         console.log('🚀 ~mg here ================  .then ~ _token:', _token);
         //  dispatch(SetFCMToken(_token));
-       dispatch( SetFCMToken({fcmToken: _token}));
-s
-      })
-      .catch(() => console.log('token error'));
+       })
+       .catch(() => console.log("token error"));
     GetPermission();
   }, []);
 

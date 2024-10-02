@@ -34,14 +34,13 @@ import HelpCard from '../Components/HelpCard';
 // import SkeeingHelpCard from '../Components/SkeeingHelpCard';
 
 const HomeScreen = () => {
-  const isFocused = useIsFocused(); 
+  const isFocused = useIsFocused();
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const userData = useSelector(state => state.commonReducer.userData);
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
-  console.log("🚀 ~ HomeScreen ~ token:", token)
- 
- 
+  console.log('🚀 ~ HomeScreen ~ token:', token);
+
   const [searchData, setSearchData] = useState('');
   const [showMultiImageModal, setShowMultiImageModal] = useState(false);
   const [multiImages, setMultiImages] = useState([]);
@@ -176,7 +175,7 @@ const HomeScreen = () => {
           </View>
           <View style={styles.row}>
             <CustomText isBold style={styles.header}>
-              Popular Business 
+              Popular Business
             </CustomText>
             <CustomText
               onPress={() => {
@@ -350,7 +349,6 @@ const HomeScreen = () => {
                 paddingTop: moderateScale(20, 0.3),
               }}
               renderItem={({item, index}) => {
-                
                 return <HelpCard item={item} />;
               }}
             />
