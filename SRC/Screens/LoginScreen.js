@@ -32,12 +32,13 @@ import navigationService from '../navigationService';
 const LoginScreen = () => {
   const dispatch = useDispatch();
   const userRole = useSelector(state => state.commonReducer.selectedRole);
+  console.log("🚀 ~ LoginScreen ~ userRole:", userRole)
 
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [selectedRole, setSelectedType] = useState(
-    userRole ? userRole : 'Qbid Member',
+    userRole  ? userRole  : 'Qbid Member',
   );
   const [images, setImages] = useState([]);
   const [scale, setScale] = useState(1);
@@ -184,7 +185,7 @@ const LoginScreen = () => {
           <DropDownSingleSelect
             array={servicesArray}
             item={selectedRole}
-            setItem={setSelectedType}
+            setItem={setSelectedType }
             placeholder={selectedRole}
             width={windowWidth * 0.9}
             dropDownHeight={windowHeight * 0.06}

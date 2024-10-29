@@ -44,7 +44,7 @@ const JobDetails = props => {
   const data1 = props?.route?.params?.item;
   const type = props?.route?.params?.type;
   const user = useSelector(state => state.commonReducer.userData);
-  // console.log('🚀 ~ JobDetails ~ user:', user);
+  console.log('🚀 ~ JobDetails ~ user:', user);
   const token = useSelector(state => state.authReducer.token);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const UserCoverLetterArray = useSelector(
