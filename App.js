@@ -1,10 +1,16 @@
-import React, {useEffect, useId, useState} from 'react';
-import {Alert, Platform} from 'react-native';
+import React, {useEffect, useId, useRef, useState} from 'react';
+import {
+  Alert,
+  Modal,
+  Platform,
+  View,
+  Animated,
+  PanResponder,
+  TouchableOpacity,
+} from 'react-native';
 import {PersistGate} from 'redux-persist/integration/react';
 import {Provider, useDispatch, useSelector} from 'react-redux';
 import {StripeProvider} from '@stripe/stripe-react-native';
-import messaging, {firebase} from '@react-native-firebase/messaging';
-import PushNotification, {Notifications} from 'react-native-push-notification';
 import messaging, {firebase} from '@react-native-firebase/messaging';
 import PushNotification, {Notifications} from 'react-native-push-notification';
 import {PermissionsAndroid} from 'react-native';
@@ -16,11 +22,17 @@ import {
   requestLocationPermission,
   requestReadPermission,
   requestWritePermission,
+  windowHeight,
+  windowWidth,
 } from './SRC/Utillity/utils';
 import SplashScreen from './SRC/Screens/SplashScreen';
 import AppNavigator from './SRC/appNavigation';
 // import AddCard from './SRC/Screens/AddCard';
 import {SetFCMToken} from './SRC/Store/slices/auth';
+import CustomText from './SRC/Components/CustomText';
+import {moderateScale} from 'react-native-size-matters';
+import CustomImage from './SRC/Components/CustomImage';
+import {height} from 'deprecated-react-native-prop-types/DeprecatedImagePropType';
 
 messaging().setBackgroundMessageHandler(async remoteMessage => {
   console.log('Message handled in the background!', remoteMessage);
@@ -59,16 +71,26 @@ const App = () => {
     requestUserPermission();
   }, []);
 
+  const [notification, setNotification] = useState();
+  const [notificationModal, setNotificationModal] = useState(false);
+  console.log('🚀 ~ App ~ notificationModal:', notificationModal);
+
   useEffect(() => {
     requestUserPermission();
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       console.log('A new FCM message arrived:', remoteMessage);
       // Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-      Alert.alert(
-        remoteMessage.notification.title,
-        remoteMessage.notification.body,
-      );
+      setNotificationModal(true);
+      setNotification({
+        title: remoteMessage.notification.title,
+        body: remoteMessage.notification.body,
+      });
+      // Alert.alert(
+      //   remoteMessage.notification.title,
+      //   remoteMessage.notification.body,
+      // );
     });
+
     messaging()
       .getInitialNotification()
       .then(remoteMessage => {
@@ -94,6 +116,50 @@ const App = () => {
           </NativeBaseProvider>
         </PersistGate>
       </Provider>
+      {notificationModal === true && (
+        <TouchableOpacity
+          onPress={() => setNotificationModal(false)}
+          style={{
+            width: windowWidth * 0.95,
+            height: windowHeight * 0.08,
+            backgroundColor: 'white',
+            alignSelf: 'center',
+            borderRadius: moderateScale(15, 0.6),
+            position: 'absolute',
+            top: 30,
+          }}>
+          <View
+            style={{
+              justifyContent: 'flex-start',
+              alignItems: 'center',
+              paddingHorizontal: moderateScale(15, 0.6),
+              flexDirection: 'row',
+              marginTop: moderateScale(10, 0.6),
+            }}>
+            <View
+              style={{
+                height: moderateScale(40, 0.6),
+                width: moderateScale(40, 0.6),
+              }}>
+              <CustomImage
+                style={{width: '100%', height: '100%'}}
+                resizeMode={'cover'}
+                source={require('./SRC/Assets/Images/notification.png')}
+              />
+            </View>
+            <View style={{width: windowWidth * 0.8}}>
+              <CustomText isBold style={{fontSize: moderateScale(14, 0.3)}}>
+                {notification?.title}
+              </CustomText>
+              <CustomText
+                numberOfLines={1}
+                style={{fontSize: moderateScale(12, 0.3)}}>
+                {notification?.body}
+              </CustomText>
+            </View>
+          </View>
+        </TouchableOpacity>
+      )}
     </StripeProvider>
   );
 };
@@ -101,7 +167,6 @@ const App = () => {
 const MainContainer = () => {
   const dispatch = useDispatch();
   // firebase.initializeApp(servicesConfig);
-
   // fcm
   //  useEffect(() => {
   //      Notifications. ;
