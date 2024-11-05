@@ -85,10 +85,10 @@ const App = () => {
         title: remoteMessage.notification.title,
         body: remoteMessage.notification.body,
       });
-      // Alert.alert(
-      //   remoteMessage.notification.title,
-      //   remoteMessage.notification.body,
-      // );
+      const timer = setTimeout(() => {
+        setNotificationModal(false);
+      }, 3000);
+      return () => clearTimeout(timer);
     });
 
     messaging()
@@ -102,6 +102,16 @@ const App = () => {
         }
       });
   });
+
+  // useEffect(() => {
+  //   useEffect(() => {
+  //     const timer = setTimeout(() => {
+  //       setNotificationModal(false);
+  //     }, 3000);
+
+  //     return () => clearTimeout(timer);
+  //   }, [notificationModal]);
+  // });
 
   return (
     <StripeProvider
@@ -118,6 +128,7 @@ const App = () => {
       </Provider>
       {notificationModal === true && (
         <TouchableOpacity
+          activeOpacity={0.9}
           onPress={() => setNotificationModal(false)}
           style={{
             width: windowWidth * 0.95,

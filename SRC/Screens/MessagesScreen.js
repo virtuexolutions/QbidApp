@@ -1,4 +1,10 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {
+  KeyboardAvoidingView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {useCallback, useEffect} from 'react';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import moment from 'moment';
@@ -13,21 +19,31 @@ import SearchContainer from '../Components/SearchContainer';
 import {useState} from 'react';
 import ChatCard from '../Components/ChatCard';
 import {useDispatch, useSelector} from 'react-redux';
-import {GiftedChat} from 'react-native-gifted-chat';
+import {
+  Bubble,
+  Composer,
+  GiftedChat,
+  InputToolbar,
+  Send,
+} from 'react-native-gifted-chat';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CustomImage from '../Components/CustomImage';
 import {Pusher} from '@pusher/pusher-websocket-react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Get, Post} from '../Axios/AxiosInterceptorFunction';
-import {setPusherInstance} from '../Store/slices/socket';;
+import {setPusherInstance} from '../Store/slices/socket';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const MessagesScreen = props => {
   const target_id = props?.route?.params?.data;
+  console.log('🚀 ~ MessagesScreen ~ target_id:', target_id);
   const conversationId = props?.route?.params?.conversationId;
+  console.log('🚀 ~ MessagesScreen ~ conversationId:', conversationId);
   const name = props?.route?.params?.name;
   const image = props?.route?.params?.image;
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const user = useSelector(state => state.commonReducer.userData);
+  console.log('🚀 ~ MessagesScreen ~ user:', user);
   const token = useSelector(state => state.authReducer.token);
 
   const navigation = useNavigation();
@@ -39,7 +55,6 @@ const MessagesScreen = props => {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  
   const ReadMessages = async () => {
     const url = `auth/message_read/${conversationId}`;
     setIsLoading(true);
@@ -211,22 +226,106 @@ const MessagesScreen = props => {
             {/* <CustomText style={styles.text2}>from</CustomText> */}
           </View>
         </View>
-        <GiftedChat
-          textInputStyle={{
-            color: Color.black,
-            marginTop: moderateScale(5, 0.3),
-          }}
-          placeholderTextColor={Color.lightGrey}
-          messages={messages}
-          isTyping={false}
-          onSend={messages => onSend(messages)}
-          key={item => item?.id}
-          user={{
-            _id: user?.id,
-            name: user?.first_name,
-            avatar: user?.photo,
-          }}
-        />
+        <KeyboardAvoidingView
+          style={{flex: 1}}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}>
+          <GiftedChat
+            keyboardShouldPersistTaps={'always'}
+            alignTop
+            textInputStyle={{
+              color: Color.black,
+              marginTop: moderateScale(5, 0.3),
+            }}
+            renderBubble={props => (
+              <Bubble
+                {...props}
+                containerStyle={{
+                  left: {
+                    marginTop: moderateScale(10, 0.6),
+                  },
+                  right: {
+                    marginTop: moderateScale(10, 0.6),
+                  },
+                }}
+                wrapperStyle={{
+                  right: {
+                    borderRadius: moderateScale(20, 0.6),
+                    paddingVertical: moderateScale(8, 0.6),
+                    paddingHorizontal: moderateScale(15, 0.6),
+                    borderTopLeftRadius: moderateScale(15, 0.6),
+                    borderTopRightRadius: 0,
+                    borderBottomLeftRadius: moderateScale(15, 0.6),
+                    borderBottomRightRadius: moderateScale(15, 0.6),
+                    backgroundColor: Color.lightGreen,
+                  },
+                  left: {
+                    backgroundColor: Color.lightGrey,
+                    borderTopLeftRadius: moderateScale(15, 0.6),
+                    borderTopRightRadius: moderateScale(15, 0.6),
+                    borderBottomLeftRadius: moderateScale(15, 0.6),
+                    borderBottomRightRadius: 0,
+                    paddingVertical: moderateScale(8, 0.6),
+                    paddingHorizontal: moderateScale(15, 0.6),
+                  },
+                }}
+              />
+            )}
+            renderSend={props => (
+              <Send
+                {...props}
+                containerStyle={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginRight: moderateScale(15, 0.6),
+                  width: moderateScale(40, 0.6),
+                  bottom: 3,
+                }}>
+                <Icon
+                  name="send"
+                  as={FontAwesome}
+                  color={Color.blue}
+                  size={moderateScale(22, 0.6)}
+                />
+              </Send>
+            )}
+            renderInputToolbar={props => (
+              <InputToolbar
+                {...props}
+                containerStyle={{
+                  flexDirection: 'row',
+                  alignItems: 'flex-start',
+                  backgroundColor: Color.white,
+                  height: moderateScale(50, 0.6),
+                  justifyContent: 'center',
+                  marginHorizontal: moderateScale(6, 0.6),
+                  borderRadius: moderateScale(12, 0.6),
+                  bottom: 10,
+                }}>
+                <Composer
+                  {...props}
+                  textInputStyle={{
+                    flex: 1,
+                    color: 'black',
+                    padding: 10,
+                    alignSelf: 'flex-start',
+                  }}
+                />
+              </InputToolbar>
+            )}
+            alwaysShowSend
+            placeholderTextColor={Color.darkGray}
+            messages={messages}
+            isTyping={false}
+            onSend={messages => onSend(messages)}
+            key={item => item?.id}
+            user={{
+              _id: user?.id,
+              name: user?.first_name,
+              avatar: user?.photo,
+            }}
+          />
+        </KeyboardAvoidingView>
       </LinearGradient>
     </ScreenBoiler>
   );
