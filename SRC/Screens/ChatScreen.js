@@ -29,14 +29,12 @@ const ChatScreen = () => {
   const [chatData, setChatData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  
   const chatList = async () => {
     const url = `auth/chat_list`;
     setIsLoading(true);
     const response = await Get(url, token);
     setIsLoading(false);
     if (response != undefined) {
-     
       setChatData(response?.data?.data);
     }
   };
@@ -93,11 +91,15 @@ const ChatScreen = () => {
           setData={setSearchData}
         />
         {isLoading ? (
-          <ActivityIndicator  style={{
-            // backgroundColor :'red',
-            width :windowWidth,
-            height :windowHeight*0.7
-          }}size={'large'} color={Color.white} />
+          <ActivityIndicator
+            style={{
+              // backgroundColor :'red',
+              width: windowWidth,
+              height: windowHeight * 0.7,
+            }}
+            size={'large'}
+            color={Color.white}
+          />
         ) : (
           <FlatList
             data={chatData}
