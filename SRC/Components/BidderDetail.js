@@ -1,8 +1,5 @@
 import React, {useState} from 'react';
-import {
-  View,
-  Image,
-} from 'react-native';
+import {View, Image, TouchableOpacity} from 'react-native';
 import {ScaledSheet, moderateScale} from 'react-native-size-matters';
 import CustomText from '../Components/CustomText';
 import Constants from '../Assets/Utilities/Constants';
@@ -14,9 +11,13 @@ import {useSelector} from 'react-redux';
 import {FlatList} from 'react-native';
 import CustomImage from './CustomImage';
 import ImageView from 'react-native-image-viewing';
+import {Icon} from 'native-base';
+import Feather from 'react-native-vector-icons/Feather';
+import {useNavigation} from '@react-navigation/native';
 
 const BidderDetail = ({item, photo, title, date, message}) => {
   const token = useSelector(state => state.authReducer.token);
+  const navigation = useNavigation();
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const [isLoading, setIsLoading] = useState(false);
   const [imageModalVisible, setImageModalVisible] = useState(false);
@@ -161,6 +162,21 @@ const BidderDetail = ({item, photo, title, date, message}) => {
           flexDirection: 'row',
           alignItems: 'center',
         }}>
+        {/* <TouchableOpacity
+          style={{
+            position: 'absolute',
+            right: -25,
+          }}
+          onPress={() => {
+            navigation.navigate('')
+          }}>
+          <Icon
+            name={'edit'}
+            as={Feather}
+            size={moderateScale(10, 0.6)}
+            color={Color.black}
+          />
+        </TouchableOpacity> */}
         <View
           style={{
             width: moderateScale(6, 0.6),
@@ -174,6 +190,7 @@ const BidderDetail = ({item, photo, title, date, message}) => {
                 : Color.black,
           }}
         />
+
         <CustomText
           style={{
             fontSize: moderateScale(8, 0.6),

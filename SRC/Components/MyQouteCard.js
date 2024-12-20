@@ -26,7 +26,7 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import ReviewModal from './ReviewModal';
 
 const MyQouteCard = ({item, type}) => {
-  console.log("🚀 ~ MyQouteCard ~ item:", item?.status)
+  console.log('🚀 ~ MyQouteCard ~ item:', item?.status);
   const token = useSelector(state => state.authReducer.token);
   const [modalVisible, setModalVisible] = useState(false);
   const [cmpLoading, setCmpLoading] = useState(false);
@@ -84,14 +84,10 @@ const MyQouteCard = ({item, type}) => {
           {item?.status}
         </CustomText>
         <CustomImage
-          source={
-          
-              
-              require('../Assets/Images/bedge1.png')
-          }
+          source={require('../Assets/Images/bedge1.png')}
           resizeMode={'stretch'}
           style={{
-            tintColor :  item?.status == 'onGoing' ? 'green' :'red ',
+            tintColor: item?.status == 'onGoing' ? 'green' : 'red ',
             width: '100%',
             height: '100%',
           }}

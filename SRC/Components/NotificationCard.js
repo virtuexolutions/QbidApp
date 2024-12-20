@@ -27,7 +27,7 @@ const NotificationCard = ({image, text, name, time, unread, onPress, item}) => {
         ]}>
         <View style={styles.image}>
           <CustomImage
-            source={userRole == 'Qbid Member' ? item?.image :{uri: image}}
+            source={{uri: image}}
 
             style={styles.imageBg}
           />

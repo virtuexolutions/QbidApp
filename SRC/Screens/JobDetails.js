@@ -34,24 +34,25 @@ import Modal from 'react-native-modal';
 import DropDownSingleSelect from '../Components/DropDownSingleSelect';
 import {Get, Post} from '../Axios/AxiosInterceptorFunction';
 import numeral from 'numeral';
-import {useIsFocused} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import NoData from '../Components/NoData';
 import {validateEmail} from '../Config';
 import ImageView from 'react-native-image-viewing';
 import ImagePickerModal from '../Components/ImagePickerModal';
+import {mode} from 'native-base/lib/typescript/theme/tools';
+import Feather from 'react-native-vector-icons/Feather';
 
 const JobDetails = props => {
   const data1 = props?.route?.params?.item;
   const type = props?.route?.params?.type;
   const user = useSelector(state => state.commonReducer.userData);
-  // console.log('🚀 ~ JobDetails ~ user:', user);
   const token = useSelector(state => state.authReducer.token);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const UserCoverLetterArray = useSelector(
     state => state.commonReducer.servicesArray,
   );
-
-  const [data, setData] = useState(data1);
+  const navigation = useNavigation();
+  const [data, setData] = useState();
   const [checked, setChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [bidDone, setBidDone] = useState(false);
@@ -59,16 +60,26 @@ const JobDetails = props => {
   const [fullName, setFullName] = useState(user?.first_name);
   const [Email, setEmail] = useState(user?.email);
   const [number, setNumber] = useState(user?.phone);
-  const [desc, setDesc] = useState('');
+  const [desc, setDesc] = useState(isBidUpdate ? userData?.coverletter : '');
   const isFocused = useIsFocused();
-  const [coverletterRole, setCoverLetterRole] = useState('Expertise In');
+  const [coverletterRole, setCoverLetterRole] = useState(
+    userData?.expertise  ? userData?.expertise : 'Expertise In',
+  );
+  console.log(
+    '🚀 ~ JobDetails ~ coverletterRole:',
+    userData?.expertise  ? userData?.expertise : 'Expertise In',
+  );
   const [userData, setUserData] = useState({});
   const [imageModalVisible, setImageModalVisible] = useState(false);
   const [finalImagesArray, setFinalImagesArray] = useState([]);
   const [imagePickerVisible, setImagePickerVisible] = useState(false);
+  const [isBidUpdate, setISbidUpdate] = useState(false);
+  console.log('🚀 ~ JobDetails ~ isBidUpdate:', isBidUpdate);
+  // const [multiImages, setMultiImages] = useState(
+  //   bidDone ? Object.keys(data1?.bids[0])?.images : [],
+  // );
   const [multiImages, setMultiImages] = useState([]);
   const [attachmentImage, setAttachmentImage] = useState({});
-  // console.log("🚀 ~ JobDetails ~ attachmentImage:", attachmentImage)
 
   const bidDetails = async () => {
     const url = `auth/negotiator/quote_detail/${
@@ -116,7 +127,6 @@ const JobDetails = props => {
       expertise: coverletterRole,
       coverletter: desc,
     };
-    //  console.log("🚀 ~ bidNow ~ body:", body)
 
     for (let key in body) {
       if (body[key] == '') {
@@ -163,16 +173,71 @@ const JobDetails = props => {
     setIsLoading(true);
     const response = await Post(url, formData, apiHeader(token));
     setIsLoading(false);
-    console.log('🚀 ~ bidNow ~ formData:', JSON.stringify(formData, null, 2));
 
     if (response != undefined) {
-      // console.log(
-      //   '🚀 ~ bidNow ~ response:',
-      //   JSON.stringify(response?.data, null, 2),
-      // );
-
       setBidDone(true);
       setModalVisible(!isModalVisible);
+    }
+  };
+  const UpdateBid = async () => {
+    const url = 'auth/negotiator/bid';
+    const formData = new FormData();
+    const body = {
+      quote_id: data?.id,
+      fullname: fullName,
+      email: Email,
+      phone: number,
+      expertise: coverletterRole,
+      coverletter: desc,
+    };
+
+    for (let key in body) {
+      if (body[key] == '') {
+        return Platform.OS == 'android'
+          ? ToastAndroid.show(`${key} is required`, ToastAndroid.SHORT)
+          : Alert.alert(`${key} is required`);
+      }
+    }
+
+    if (isNaN(number)) {
+      return Platform.OS == 'android'
+        ? ToastAndroid.show('phone is not a number', ToastAndroid.SHORT)
+        : Alert.alert('phone is not a number');
+    }
+    if (!validateEmail(Email)) {
+      return Platform.OS == 'android'
+        ? ToastAndroid.show('email is not validate', ToastAndroid.SHORT)
+        : Alert.alert('email is not validate');
+    }
+    if (coverletterRole == 'Expertise In') {
+      return Platform.OS == 'android'
+        ? ToastAndroid.show('Please select any role', ToastAndroid.SHORT)
+        : Alert.alert('Please select any role');
+    }
+    if (desc == '') {
+      return Platform.OS == 'android'
+        ? ToastAndroid.show('coverLetter is empty ', ToastAndroid.SHORT)
+        : Alert.alert('coverLetter is empty ');
+    }
+    // if (desc.length < 100) {
+    //   return Platform.OS == 'android'
+    //     ? ToastAndroid.show('Description is too short', ToastAndroid.SHORT)
+    //     : Alert.alert('Description is too short');
+    // }
+    for (let key in body) {
+      formData.append(key, body[key]);
+    }
+    multiImages?.map((item, index) =>
+      formData.append(`images[${index}]`, item),
+    );
+
+    // formData.append('attachment', attachmentImage)
+
+    setIsLoading(true);
+    const response = await Post(url, formData, apiHeader(token));
+    setIsLoading(false);
+
+    if (response != undefined) {
     }
   };
 
@@ -218,6 +283,7 @@ const JobDetails = props => {
             : Color.themebgBusinessQbidder
         }>
         <ScrollView
+          scrollEnabled={false}
           showsVerticalScrollIndicator={false}
           style={styles.sectionContainer}
           contentContainerStyle={{
@@ -285,6 +351,36 @@ const JobDetails = props => {
                     {data?.service_preference}
                   </CustomText>
                 </View>
+                {userRole != 'Business Qbidder' && (
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate('CreateNew', {
+                        fromupdatequote: true,
+                        data: data1,
+                      });
+                    }}
+                    style={{
+                      position: 'absolute',
+                      right: 20,
+                      top: 2,
+                      flexDirection: 'row',
+                    }}>
+                    <Icon
+                      name={'edit'}
+                      as={Feather}
+                      size={moderateScale(15, 0.6)}
+                      color={Color.blue}
+                    />
+                    <CustomText
+                      style={{
+                        fontSize: moderateScale(8, 0.6),
+                        color: Color.white,
+                        paddingTop: moderateScale(2, 0.6),
+                      }}>
+                      quote update
+                    </CustomText>
+                  </TouchableOpacity>
+                )}
                 <View
                   style={{
                     flexDirection: 'row',
@@ -306,6 +402,7 @@ const JobDetails = props => {
                           : Color.black,
                     }}
                   />
+
                   <CustomText
                     style={{
                       fontSize: moderateScale(8, 0.6),
@@ -322,6 +419,7 @@ const JobDetails = props => {
                   {data?.notes ? data?.notes : data?.coverletter}
                 </ShowMoreAndShowLessText>
               )}
+
               <CustomText
                 onPress={() => {
                   if (finalImagesArray.length > 0) {
@@ -379,13 +477,15 @@ const JobDetails = props => {
                   iconType={FontAwesome}
                   marginTop={moderateScale(30, 0.3)}
                 />
-                <Detailcards
-                  data={numeral(data?.quoted_price).format('$0,0a')}
-                  iconName={'calculator'}
-                  title={'Orginal Price '}
-                  iconType={Entypo}
-                  marginTop={moderateScale(30, 0.3)}
-                />
+                {userRole != 'Business Qbidder' && (
+                  <Detailcards
+                    data={numeral(data?.quoted_price).format('$0,0a')}
+                    iconName={'calculator'}
+                    title={'Orginal Price '}
+                    iconType={Entypo}
+                    marginTop={moderateScale(30, 0.3)}
+                  />
+                )}
                 <Detailcards
                   data={data?.service_preference}
                   iconName={'briefcase'}
@@ -538,6 +638,8 @@ const JobDetails = props => {
                     The Best Quote for your Project
                   </CustomText>
                   <FlatList
+                    key={item => item?.id}
+                    // scrollEnabled={false}
                     data={
                       data?.bids?.some(item => item?.status == 'accept')
                         ? [data?.bids?.find(item => item?.status == 'accept')]
@@ -669,6 +771,26 @@ const JobDetails = props => {
                       // attachment :
                     }}
                   />
+                  <CustomButton
+                    text={'Update Bid'}
+                    textColor={Color.white}
+                    width={windowWidth * 0.92}
+                    height={windowHeight * 0.07}
+                    marginTop={moderateScale(20, 0.3)}
+                    onPress={() => {
+                      toggleModal();
+                      setISbidUpdate(true);
+                    }}
+                    bgColor={
+                      userRole == 'Qbid Member'
+                        ? Color.blue
+                        : userRole == 'Qbid Negotiator'
+                        ? Color.themeColor
+                        : Color.black
+                    }
+                    borderRadius={moderateScale(30, 0.3)}
+                    alignSelf={'flex-start'}
+                  />
                 </>
               ) : (
                 data1?.type != 'specific' && (
@@ -741,6 +863,7 @@ const JobDetails = props => {
             backgroundColor: '#f2fce4',
           }}>
           <ScrollView
+            scrollEnabled={false}
             contentContainerStyle={{
               paddingVertical: moderateScale(5, 0.6),
               alignItems: 'center',
@@ -833,7 +956,9 @@ const JobDetails = props => {
               <TextInputWithTitle
                 multiline={true}
                 secureText={false}
-                placeholder={'Cover Letter'}
+                placeholder={
+                  'Optional but PS the additional info to help you get a deal'
+                }
                 setText={setDesc}
                 value={desc}
                 viewHeight={0.15}
@@ -870,10 +995,6 @@ const JobDetails = props => {
                     flexGrow: 0,
                   }}
                   renderItem={({item, index}) => {
-                    console.log(
-                      '🚀 ~ JobDetails ~ item ================= < here :',
-                      item,
-                    );
                     return (
                       <View
                         style={[
@@ -903,7 +1024,7 @@ const JobDetails = props => {
                         />
                         <CustomImage
                           // source={require('../Assets/Images/dummyman1.png')}
-                          source={{uri: item?.uri}}
+                          source={{uri: bidDone ? item?.image : item?.uri}}
                           // source={{uri :attachmentImage?.uri}}
                           resizeMode={'stretch'}
                           style={{
@@ -932,6 +1053,10 @@ const JobDetails = props => {
                 text={
                   isLoading ? (
                     <ActivityIndicator color={'#FFFFFF'} size={'small'} />
+                  ) : userRole != 'Qbid Member' &&
+                    bidDone &&
+                    data1?.type != 'specific' ? (
+                    'Update'
                   ) : (
                     'Done'
                   )

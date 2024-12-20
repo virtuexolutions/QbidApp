@@ -25,21 +25,40 @@ import {useNavigation} from '@react-navigation/native';
 
 const CreateNew = props => {
   const hire = props?.route?.params?.hire;
- const negotiater_id = props?.route?.params?.id;
+  const quoteData = props?.route?.params?.data;
+  console.log('🚀 ~ CreateNew ~ quoteData:', quoteData?.id);
+  const fromupdatequote = props?.route?.params?.fromupdatequote;
+
+  const negotiater_id = props?.route?.params?.id;
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
+  console.log('🚀 ~ CreateNew ~ token:', token);
   const location = useSelector(state => state.commonReducer.location);
 
-  const [qouteTitle, setQouteTitle] = useState('');
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('');
-  const [vendorQoutedPrice, setVendorQoutedPrice] = useState(0);
-  const [askingPrice, setAskingPrice] = useState(0);
-  const [offeringPercent, setOfferingPercent] = useState(0);
-  const [selectedService, setSelectedService] = useState('');
-  const [description, setDescription] = useState('');
-  const [multiImages, setMultiImages] = useState([]);
+  const [qouteTitle, setQouteTitle] = useState(
+    fromupdatequote ? quoteData?.title : '',
+  );
+  const [city, setCity] = useState(fromupdatequote ? quoteData?.city : '');
+  const [state, setState] = useState(fromupdatequote ? quoteData?.state : '');
+  const [vendorQoutedPrice, setVendorQoutedPrice] = useState(
+    fromupdatequote ? quoteData?.quoted_price : 0,
+  );
+  const [askingPrice, setAskingPrice] = useState(
+    fromupdatequote ? quoteData?.asking_price : 0,
+  );
+  const [offeringPercent, setOfferingPercent] = useState(
+    fromupdatequote ? quoteData?.offering_percentage : 0,
+  );
+  const [selectedService, setSelectedService] = useState(
+    fromupdatequote ? quoteData?.service_preference : '',
+  );
+  const [description, setDescription] = useState(
+    fromupdatequote ? quoteData?.notes : '',
+  );
+  const [multiImages, setMultiImages] = useState(
+    fromupdatequote ? quoteData?.images : [],
+  );
   const [showMultiImageModal, setShowMultiImageModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
@@ -84,16 +103,8 @@ const CreateNew = props => {
       }
     }
 
-    if (!['' , undefined , null].includes(description)) {
-      // return Platform.OS == 'android'
-      //   ? ToastAndroid.show(
-      //       `Description should be greater than 100 letters`,
-      //       ToastAndroid.SHORT,
-      //     )
-      //   : Alert.alert(`Description should be greater than 100 letters`);
-    formData.append('notes' , description)
-
-
+    if (!['', undefined, null].includes(description)) {
+      formData.append('notes', description);
     }
 
     if (multiImages.length == 0) {
@@ -119,17 +130,72 @@ const CreateNew = props => {
       setState('');
       setSelectedService('');
       setVendorQoutedPrice(0);
+      navigation.goBack();
+    }
+  };
 
-      // console.log(
-      //   '🚀 ~ file: CreateNew.js:81 ~ publishQuote ~ response:',
-      //   response?.data,
-      // );
+  const updateQuote = async () => {
+    const url = `auth/member/quote_update/${quoteData?.id}`;
+    const body = {
+      lat: location?.latitude,
+      lng: location?.longitude,
+      title: qouteTitle,
+      city: city,
+      type: 'general',
+      state: state,
+      quoted_price: vendorQoutedPrice,
+      asking_price: askingPrice,
+      offering_percentage: offeringPercent,
+      service_preference: selectedService,
+      notes: 'sahiddiasdyasdiy',
+    };
+    const body2 = {
+      quoted_price: vendorQoutedPrice,
+      asking_price: askingPrice,
+      offering_percentage: offeringPercent,
+    };
+
+    const formData = new FormData();
+
+    if (multiImages.length == 0) {
+      return Platform.OS == 'android'
+        ? ToastAndroid.show(`add atleast one image `, ToastAndroid.SHORT)
+        : Alert.alert(`add atleast one image `);
+    }
+
+    multiImages?.map((item, index) =>
+      formData.append(`images[${index}]`, item),
+    );
+    for (let key in body) {
+      if (body[key] == '') {
+        return Platform.OS == 'android'
+          ? ToastAndroid.show(`${key} is required`, ToastAndroid.SHORT)
+          : Alert.alert(`${key} is required`);
+      } else {
+        formData.append(key, body[key]);
+      }
+    }
+    //
+    //  return  console.log('====================== from data', JSON.stringify(formData ,null ,2));
+    setIsLoading(true);
+    const response = await Post(url, formData, apiHeader(token, true));
+    setIsLoading(false);
+    return console.log('🚀 ~ updateQuote ~ response:', response);
+    if (response != undefined) {
+      setCity('');
+      setAskingPrice(0);
+      setDescription('');
+      setMultiImages([]);
+      setOfferingPercent(0);
+      setQouteTitle('');
+      setState('');
+      setSelectedService('');
+      setVendorQoutedPrice(0);
       navigation.goBack();
     }
   };
 
   const sendRequest = async () => {
-    console.log('In send request======>>>>');
     const url = 'auth/member/hiring/create';
     const body = {
       negotiator_id: negotiater_id,
@@ -175,20 +241,10 @@ const CreateNew = props => {
       formData.append(`images[${index}]`, item),
     );
 
-    console.log(
-      '🚀 ~ file: CreateNew.js:160 ~ sendRequest ~ formData:',
-      formData,
-    );
     setIsLoading(true);
     const response = await Post(url, formData, apiHeader(token));
     setIsLoading(false);
     if (response != undefined) {
-      // hire = false;
-      // negotiater_id = undefined
-      console.log(
-        '🚀 ~ file: CreateNew.js:164 ~ sendRequest ~ response:',
-        response?.data,
-      );
       setCity('');
       setAskingPrice(0);
       setDescription('');
@@ -334,9 +390,9 @@ const CreateNew = props => {
           />
 
           <TextInputWithTitle
-            titleText={'Asking Price '}
+            titleText={'My Budget'}
             secureText={false}
-            placeholder={'Asking Price'}
+            placeholder={'My Budget'}
             setText={setAskingPrice}
             value={askingPrice}
             viewHeight={0.07}
@@ -431,7 +487,7 @@ const CreateNew = props => {
                       }}
                     />
                     <CustomImage
-                      source={{uri: item?.uri}}
+                      source={{uri: fromupdatequote ? item?.image : item?.uri}}
                       resizeMode={'stretch'}
                       style={{
                         width: moderateScale(50, 0.3),
@@ -476,6 +532,8 @@ const CreateNew = props => {
             text={
               isLoading ? (
                 <ActivityIndicator color={'#FFFFFF'} size={'small'} />
+              ) : fromupdatequote ? (
+                'Quote update'
               ) : (
                 'Publish'
               )
@@ -485,8 +543,11 @@ const CreateNew = props => {
             height={windowHeight * 0.07}
             marginTop={moderateScale(20, 0.3)}
             onPress={() => {
-              // console.log('here');
-              hire ? sendRequest() : publishQuote();
+              hire
+                ? sendRequest()
+                : fromupdatequote
+                ? updateQuote()
+                : publishQuote();
             }}
             bgColor={
               userRole == 'Qbid Member'

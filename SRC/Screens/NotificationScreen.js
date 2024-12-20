@@ -25,6 +25,7 @@ const NotificationScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [helpNotification, setHelpNotification] = useState([]);
+  const [memberNotifications, setMemberNotifications] = useState([]);
 
   const dummyData = [
     {
@@ -132,6 +133,22 @@ const NotificationScreen = () => {
     
   // }, []);
 
+  const getNotifications = async () =>{
+    const url = 'auth/negotiator/notification';
+    setIsLoading(true);
+    const response = await Get(url, token);
+    console.log("🚀 ~ getNotifications ~ response:", JSON.stringify(response?.data,null, 2))
+    setIsLoading(false);
+    if(response != undefined){
+      setMemberNotifications(response?.data?.notification_info);
+    }
+  }
+
+  useEffect(()=>{
+    if(userRole =="Qbid Member" ){
+      getNotifications();
+    }
+  },[isFocused])
   const getDeviceToken = async () => {
     const token = await messaging().getToken();
     console, log('device token here ==== >>>>> >>>', token);
@@ -183,7 +200,7 @@ const NotificationScreen = () => {
           </View>
         ) : (
           <FlatList
-            data={userRole == 'Qbid Member' ? dummyData : helpNotification}
+            data={userRole == 'Qbid Member' ? memberNotifications : helpNotification}
             showsVerticalScrollIndicator={false}
             key={item => item?.id}
             contentContainerStyle={{
@@ -200,21 +217,25 @@ const NotificationScreen = () => {
               return (
                 <NotificationCard
                   image={
-                    userRole != 'Qbid Member'
-                      ? item?.user_info?.photo
-                      : item?.image
+                    // userRole != 'Qbid Member'
+                      // ? item?.user_info?.photo
+                      item?.user_info?.photo
+                      // : item?.image
                   }
-                  name={
-                    userRole != 'Qbid Member'
-                      ? `${item?.user_info?.first_name}${item?.user_info?.last_name}`
-                      : item?.name
-                  }
-                  text={userRole != 'Qbid Member' ? item?.body : item.text}
+                  // name={
+                  //   userRole != 'Qbid Member'
+                  //     ? `${item?.user_info?.first_name}${item?.user_info?.last_name}`
+                  //     : item?.name
+                  // }
+                  name={`${item?.user_info?.first_name}${item?.user_info?.last_name}`}
+                  // text={userRole != 'Qbid Member' ? item?.body : item.text}
+                  text={item?.body}
                   unread={item.unread}
                   time={
-                    userRole != 'Qbid Member'
-                      ? moment(item.created_at).format('ll')
-                      : item?.time
+                    // userRole != 'Qbid Member'
+                    //   ? moment(item.created_at).format('ll')
+                    //   : moment(item.created_at).format('ll')
+                      moment(item.created_at).format('ll')
                   }
                   onPress={() => {
                     setModalVisible(true);

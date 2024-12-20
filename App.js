@@ -3,8 +3,8 @@ import {Platform} from 'react-native';
 import {PersistGate} from 'redux-persist/integration/react';
 import {Provider, useDispatch, useSelector} from 'react-redux';
 import {StripeProvider} from '@stripe/stripe-react-native';
-import messaging, { firebase } from '@react-native-firebase/messaging';
-import PushNotification, {Notifications} from 'react-native-push-notification'
+import messaging, {firebase} from '@react-native-firebase/messaging';
+import PushNotification, {Notifications} from 'react-native-push-notification';
 import {PermissionsAndroid} from 'react-native';
 import {NativeBaseProvider} from 'native-base';
 import {store, persistor} from './SRC/Store/index';
@@ -21,9 +21,6 @@ import SplashScreen from './SRC/Screens/SplashScreen';
 import AppNavigator from './SRC/appNavigation';
 // import AddCard from './SRC/Screens/AddCard';
 
-  
-
-
 const App = () => {
   // const [publishableKey, setPublishableKey] = useState('');
 
@@ -36,46 +33,36 @@ const App = () => {
   //   fetchPublishableKey();
   // }, []);
 
-
   // console.reportErrorsAsExceptions = false;
 
-
-
-
- const requestUserPermission = async () =>{
+  const requestUserPermission = async () => {
     const authStatus = await messaging().requestPermission();
     const enabled =
       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
       authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-  
+
     if (enabled) {
       console.log('Authorization status:', authStatus);
     }
-  }
+  };
 
-  
-
-useEffect(()=>{
-
-
-  requestUserPermission()
-},[])
-
-
+  useEffect(() => {
+    requestUserPermission();
+  }, []);
 
   return (
     <StripeProvider
-    publishableKey={"pk_test_qblFNYngBkEdjEZ16jxxoWSM"}
-    // merchantIdentifier="merchant.identifier" // required for Apple Pay
-    // urlScheme="your-url-scheme" // required for 3D Secure and bank redirects
-  >
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <NativeBaseProvider>
-          <MainContainer />
-        </NativeBaseProvider>
-      </PersistGate>
-    </Provider>
+      publishableKey={'pk_test_qblFNYngBkEdjEZ16jxxoWSM'}
+      // merchantIdentifier="merchant.identifier" // required for Apple Pay
+      // urlScheme="your-url-scheme" // required for 3D Secure and bank redirects
+    >
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <NativeBaseProvider>
+            <MainContainer />
+          </NativeBaseProvider>
+        </PersistGate>
+      </Provider>
     </StripeProvider>
   );
 };
@@ -83,7 +70,6 @@ useEffect(()=>{
 const MainContainer = () => {
   const dispatch = useDispatch();
   // firebase.initializeApp(servicesConfig);
-
 
   // fcm
   //  useEffect(() => {
@@ -94,7 +80,7 @@ const MainContainer = () => {
   //              title: remoteMessage.notification.title,
   //              body: remoteMessage.notification.body,
   //            });
-        
+
   //            Notifications.events().registerNotificationOpened(
   //                (notification: Notification, completion) => {
   //                    if (remoteMessage?.data?.flag == "Chat") {
@@ -106,7 +92,7 @@ const MainContainer = () => {
   //                      }
   //                    );
   //                  });
-                
+
   //                  // app opened from background
   //                  messaging().onNotificationOpenedApp((remoteMessage) => {
   //                      if (remoteMessage?.data?.flag == "Chat") {
@@ -115,7 +101,7 @@ const MainContainer = () => {
   //                            });
   //                          }
   //                        });
-                      
+
   //                        // when app is in quite state
   //                        messaging()
   //                          .getInitialNotification()
@@ -128,38 +114,34 @@ const MainContainer = () => {
   //                                      }
   //                                    }
   //                                  });
-                              
+
   //                                // Register background handler
   //                                messaging().setBackgroundMessageHandler(async (remoteMessage) => {
   //                                    console.log("Message handled in the background!", remoteMessage);
   //                                  });
-                                
+
   //                                  return unsubscribe;
   //                                }, []);
-                                // fcm ends
+  // fcm ends
 
-
-                                
-
-useEffect(() => {
+  useEffect(() => {
     async function GetPermission() {
       await requestCameraPermission();
       await requestWritePermission();
       await requestLocationPermission();
       await requestReadPermission();
-    await  requestUserPermission
-  //  await   requestNotificationPermission()
+      // await requestUserPermission();
+      //  await   requestNotificationPermission()
       // await requestManagePermission();
-      
-      
     }
     console.log('>hererererer');
-     messaging().getToken()
-       .then((_token) => {
-         console.log("🚀 ~mg here ================  .then ~ _token:", _token)
+    messaging()
+      .getToken()
+      .then(_token => {
+        console.log('🚀 ~mg here ================  .then ~ _token:', _token);
         //  dispatch(SetFCMToken(_token));
-       })
-       .catch(() => console.log("token error"));
+      })
+      .catch(() => console.log('token error'));
     GetPermission();
   }, []);
 
@@ -168,6 +150,8 @@ useEffect(() => {
     return <SplashScreen />;
   }
   return <AppNavigator />;
+
+  // return <AppNavigator />;
 };
 
 const useloader = value => {

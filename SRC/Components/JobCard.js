@@ -127,7 +127,7 @@ const JobCard = ({fromSeeAll, style, onPress, item, getProposal}) => {
         </CustomText>
         <View style={styles.row}>
           <View>
-            <CustomText
+            {/* <CustomText
               isBold
               style={{
                 fontSize: moderateScale(9, 0.6),
@@ -137,7 +137,7 @@ const JobCard = ({fromSeeAll, style, onPress, item, getProposal}) => {
                   ? item?.quoted_price
                   : item?.quote_info?.quoted_price,
               ).format('$0,0a')}
-            </CustomText>
+            </CustomText> */}
             <CustomText
               style={{
                 fontSize: moderateScale(8, 0.6),
@@ -175,7 +175,7 @@ const JobCard = ({fromSeeAll, style, onPress, item, getProposal}) => {
           textColor={Color.white}
           width={fromSeeAll && windowWidth * 0.19}
           height={fromSeeAll && windowHeight * 0.03}
-          marginTop={moderateScale(10, 0.3)}
+          marginTop={moderateScale(-8, 0.3)}
           onPress={() => {
             onPress ? onPress() : setModalVisible(!modalVisible);
           }}
