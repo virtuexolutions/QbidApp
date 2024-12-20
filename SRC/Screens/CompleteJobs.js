@@ -1,6 +1,7 @@
 import {
   Alert,
   FlatList,
+  Image,
   Platform,
   StyleSheet,
   Text,
@@ -37,6 +38,7 @@ import NoData from '../Components/NoData';
 import {validateEmail} from '../Config';
 import moment from 'moment';
 import {SliderBox} from 'react-native-image-slider-box';
+import ImageSlider from 'react-native-image-slider';
 
 const CompleteJobs = props => {
   const data1 = props?.route?.params?.item;
@@ -46,11 +48,12 @@ const CompleteJobs = props => {
   const token = useSelector(state => state.authReducer.token);
 
   const [images, setImages] = useState([])
+  console.log("🚀 ~ CompleteJobs ~ images:", images)
 
 
 
   useEffect(() => {
-    setImages(data1?.images.map((item)=>{return ({uri:item?.image})}))
+    setImages(data1?.images?.map((item)=>{return ({uri:item?.image})}))
   
     
   }, [])
@@ -98,12 +101,23 @@ const CompleteJobs = props => {
             paddingBottom: moderateScale(80, 0.6),
           }}>
           <View>
-            <SliderBox
+        <ImageSlider
+         loopBothSides
+         autoPlayWithInterval={3000}
+         images={images}
+         customSlide={({ index, item, style, width }) => (
+           // It's important to put style here because it's got offset inside
+           <View key={index} style={[style,{width: windowWidth , height: windowHeight * 0.25}]}>
+          <Image source={item} style={{width: "100%", height: "100%"}} />
+           </View>
+         )}
+        />
+            {/* <SliderBox
               autoplay={false}
               images={images}
               sliderBoxHeight={230}
               parentWidth={355}
-            />
+            /> */}
             <CustomText
               style={{
                 fontSize: moderateScale(20, 0.6),

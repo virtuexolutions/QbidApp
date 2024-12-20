@@ -21,6 +21,7 @@ import {Post} from '../Axios/AxiosInterceptorFunction';
 import {validateEmail} from '../Config';
 import {setSelectedRole, setUserData} from '../Store/slices/common';
 import {
+  SetFCMToken,
   setMilageRing,
   setUserToken,
   setWalkThrough,
@@ -28,14 +29,18 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import DropDownSingleSelect from '../Components/DropDownSingleSelect';
 import navigationService from '../navigationService';
+import messaging from '@react-native-firebase/messaging';
 
 const LoginScreen = () => {
   const dispatch = useDispatch();
   const userRole = useSelector(state => state.commonReducer.selectedRole);
+  console.log('🚀 ~ LoginScreen ~ userRole:', userRole);
 
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [device_token, setDeviceToken] = useState(null);
+  console.log('🚀 ~ LoginScreen ~ device_token:', device_token);
   const [selectedRole, setSelectedType] = useState(
     userRole ? userRole : 'Qbid Member',
   );
@@ -43,10 +48,36 @@ const LoginScreen = () => {
   const [scale, setScale] = useState(1);
   const [previousScale, setPreviousScale] = useState(1);
   const [translateX, setTranslateX] = useState(0);
+  const fcmToken = useSelector(state => state.authReducer.fcmToken);
+  console.log(
+    '🚀 ~ LoginScreen ==================== >>> ~ fcmToken:',
+    fcmToken,
+  );
 
   const [translateY, setTranslateY] = useState(0);
 
   const servicesArray = ['Qbid Member', 'Business Qbidder'];
+
+  // const getDeviceToken = async () => {
+  //   const token = await messaging().getToken();
+  //   setDeviceToken(token);
+  //   console, log('device token here ==== >>>>> >>>', token);
+  // };
+
+  useEffect(() => {
+    // if(fcmToken == null
+    console.log('Condition matched === . nmgggggggggggggg');
+    messaging()
+      .getToken()
+      .then(_token => {
+        console.log('🚀 Srrrrrrrrrrrrrrrrrr:', _token);
+        setDeviceToken(_token);
+        dispatch(SetFCMToken({fcmToken: _token}));
+      })
+      .catch(e => console.log('token error', e));
+
+    // }
+  }, []);
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
@@ -73,8 +104,8 @@ const LoginScreen = () => {
     const body = {
       email: email,
       password: password,
+      device_token: device_token,
     };
-
     for (let key in body) {
       if (body[key] == '') {
         return Platform.OS == 'android'

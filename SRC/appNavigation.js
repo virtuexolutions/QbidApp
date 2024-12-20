@@ -53,8 +53,11 @@ const AppNavigator = () => {
   const token = useSelector(state => state.authReducer.token);
   // console.log("🚀 ~ file: appNavigation.js:52 ~ AppNavigator ~ token:", token)
   const selectedRole = useSelector(state => state.commonReducer.selectedRole);
-  console.log("🚀 ~ file: appNavigation.js:53 ~ AppNavigator ~ selectedRole:", selectedRole)
-  const isMileage = useSelector(state => state.authReducer.isMileage)
+  console.log(
+    '🚀 ~ file: appNavigation.js:53 ~ AppNavigator ~ selectedRole:',
+    selectedRole,
+  );
+  const isMileage = useSelector(state => state.authReducer.isMileage);
 
   const RootNav = createNativeStackNavigator();
   const RootNavLogged = createNativeStackNavigator();
@@ -63,7 +66,9 @@ const AppNavigator = () => {
     const firstScreen =
       walkThrough == false
         ? 'Walkthrough'
-        : (token != null && selectedRole == 'Business Qbidder' && isMileage == false) 
+        : token != null &&
+          selectedRole == 'Business Qbidder' &&
+          isMileage == false
         ? 'MileRange'
         : token != null
         ? 'TabNavigation'
@@ -92,7 +97,6 @@ const AppNavigator = () => {
           <RootNav.Screen name="Support" component={Support} />
           <RootNav.Screen name="YourJobs" component={YourJobs} />
           <RootNav.Screen name="CompleteJobs" component={CompleteJobs} />
-
           <RootNav.Screen
             name="SeeAllNegotiator"
             component={SeeAllNegotiator}
@@ -111,7 +115,6 @@ const AppNavigator = () => {
           <RootNav.Screen name="ChangePassword" component={ChangePassword} />
           <RootNav.Screen name="CreateNewHelp" component={CreateNewHelp} />
           <RootNav.Screen name="MessagesScreen" component={MessagesScreen} />
-
         </RootNav.Navigator>
       </NavigationContainer>
     );

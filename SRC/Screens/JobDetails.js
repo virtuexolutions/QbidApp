@@ -39,7 +39,7 @@ import NoData from '../Components/NoData';
 import {validateEmail} from '../Config';
 import ImageView from 'react-native-image-viewing';
 import ImagePickerModal from '../Components/ImagePickerModal';
-import {mode} from 'native-base/lib/typescript/theme/tools';
+import {mode} from 'native-base/lib/typescript/theme/tools';s
 import Feather from 'react-native-vector-icons/Feather';
 
 const JobDetails = props => {
@@ -63,11 +63,11 @@ const JobDetails = props => {
   const [desc, setDesc] = useState(isBidUpdate ? userData?.coverletter : '');
   const isFocused = useIsFocused();
   const [coverletterRole, setCoverLetterRole] = useState(
-    userData?.expertise  ? userData?.expertise : 'Expertise In',
+    userData?.expertise ? userData?.expertise : 'Expertise In',
   );
   console.log(
     '🚀 ~ JobDetails ~ coverletterRole:',
-    userData?.expertise  ? userData?.expertise : 'Expertise In',
+    userData?.expertise ? userData?.expertise : 'Expertise In',
   );
   const [userData, setUserData] = useState({});
   const [imageModalVisible, setImageModalVisible] = useState(false);
