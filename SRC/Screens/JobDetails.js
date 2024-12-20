@@ -527,16 +527,54 @@ const JobDetails = props => {
 
               {userRole == 'Qbid Member' && data1?.type != 'specific' ? (
                 <>
-                  <CustomText
-                    isBold
+                  <View
                     style={{
-                      color: Color.white,
-                      fontSize: moderateScale(17, 0.6),
-                      marginBottom: moderateScale(10, 0.3),
-                      marginTop: moderateScale(20, 0.3),
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
                     }}>
-                    The Best Quote for your Project
-                  </CustomText>
+                    <CustomText
+                      isBold
+                      style={{
+                        color: Color.white,
+                        fontSize: moderateScale(14, 0.6),
+                        marginBottom: moderateScale(10, 0.3),
+                        marginTop: moderateScale(20, 0.3),
+                      }}>
+                      The Best Quote for your Project
+                    </CustomText>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        marginRight: moderateScale(15, 0.6),
+                      }}>
+                      <CustomText
+                        isBold
+                        style={{
+                          color: Color.white,
+                          fontSize: moderateScale(13, 0.6),
+                          marginBottom: moderateScale(10, 0.3),
+                          marginTop: moderateScale(20, 0.3),
+                          color: Color.blue,
+                        }}>
+                        Total Bids :
+                      </CustomText>
+                      <CustomText
+                        isBold
+                        style={{
+                          color: Color.white,
+                          fontSize: moderateScale(13, 0.6),
+                          marginBottom: moderateScale(10, 0.3),
+                          marginTop: moderateScale(20, 0.3),
+                          color: Color.white,
+                          marginLeft: moderateScale(7, 0.6),
+                        }}>
+                        {data?.bids?.length}
+                      </CustomText>
+                    </View>
+                  </View>
                   <FlatList
                     data={
                       data?.bids?.some(item => item?.status == 'accept')

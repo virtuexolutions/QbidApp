@@ -216,6 +216,7 @@ const NegotiatorPortfolio = props => {
 
     setIsLoading(true);
     const response = await Get('auth/review', token);
+    console.log('🚀 ~ reviews ~ response:', response?.data);
     setIsLoading(false);
 
     if (response != undefined) {
