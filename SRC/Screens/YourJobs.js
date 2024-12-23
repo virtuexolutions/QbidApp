@@ -69,7 +69,7 @@ const YourJobs = props => {
     const response = await Get(url, token);
 
     setIsLoading(false);
-   
+
     if (response != undefined) {
       setCompletedJobscards(response?.data?.quote_info?.data);
     }
@@ -79,7 +79,6 @@ const YourJobs = props => {
     completedJobs();
   }, [isFocused, item]);
 
-  
   return (
     <ScreenBoiler
       statusBarBackgroundColor={
@@ -183,7 +182,6 @@ const YourJobs = props => {
               paddingBottom: moderateScale(80, 0.6),
             }}
             renderItem={({item, index}) => {
-              
               console.log(index % 2 == 0);
               return type != 'Seeking Help' ? (
                 <TouchableOpacity

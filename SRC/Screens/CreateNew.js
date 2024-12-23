@@ -26,6 +26,7 @@ import {useNavigation} from '@react-navigation/native';
 const CreateNew = props => {
   const hire = props?.route?.params?.hire;
   const quoteData = props?.route?.params?.data;
+  console.log('🚀 ~ CreateNew ~ quoteData:', quoteData);
   console.log('🚀 ~ CreateNew ~ quoteData:', quoteData?.id);
   const fromupdatequote = props?.route?.params?.fromupdatequote;
 
@@ -56,9 +57,7 @@ const CreateNew = props => {
   const [description, setDescription] = useState(
     fromupdatequote ? quoteData?.notes : '',
   );
-  const [multiImages, setMultiImages] = useState(
-    fromupdatequote ? quoteData?.images : [],
-  );
+  const [multiImages, setMultiImages] = useState([]);
   const [showMultiImageModal, setShowMultiImageModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
@@ -180,7 +179,7 @@ const CreateNew = props => {
     setIsLoading(true);
     const response = await Post(url, formData, apiHeader(token, true));
     setIsLoading(false);
-    return console.log('🚀 ~ updateQuote ~ response:', response);
+    console.log('🚀 ~ updateQuote ~ response:', response?.data);
     if (response != undefined) {
       setCity('');
       setAskingPrice(0);
@@ -192,6 +191,9 @@ const CreateNew = props => {
       setSelectedService('');
       setVendorQoutedPrice(0);
       navigation.goBack();
+      Platform.OS == 'android'
+        ? ToastAndroid.show('quote updates succesfully ', ToastAndroid.SHORT)
+        : alert.alert('quote updates succesfully');
     }
   };
 
@@ -454,7 +456,136 @@ const CreateNew = props => {
             ]}>
             Upload vendor Qouted list
           </CustomText>
-          <View style={styles.imagesContainer}>
+          {fromupdatequote && (
+            <View
+              style={{
+                flexDirection: 'row',
+                width: windowWidth * 0.9,
+                paddingHorizontal: moderateScale(10, 0.6),
+                justifyContent: 'flex-start',
+                flexWrap: 'wrap',
+                alignItems: 'flex-start',
+                paddingVertical: moderateScale(15, 0.6),
+              }}>
+              <View style={[styles.imagesContainer]}>
+                <FlatList
+                  horizontal
+                  data={quoteData?.images}
+                  showsHorizontalScrollIndicator={false}
+                  style={{
+                    flexGrow: 0,
+                  }}
+                  renderItem={({item, index}) => {
+                    return (
+                      <View
+                        style={[
+                          styles.addImageContainer,
+                          {
+                            borderWidth: 0,
+                            borderRadius: moderateScale(10, 0.3),
+                          },
+                        ]}>
+                        <Icon
+                          name={'close'}
+                          as={FontAwesome}
+                          color={Color.themeColor}
+                          size={moderateScale(12, 0.3)}
+                          style={{
+                            position: 'absolute',
+                            right: 1,
+                            top: 1,
+                            zIndex: 1,
+                          }}
+                          onPress={() => {
+                            // setAttachmentImage({})
+                            let newArray = [...multiImages];
+                            newArray.splice(index, 1);
+                            setMultiImages(newArray);
+                          }}
+                        />
+                        <CustomImage
+                          source={{
+                            uri: quoteData ? item?.image : item?.uri,
+                          }}
+                          // source={{uri :attachmentImage?.uri}}
+                          resizeMode={'stretch'}
+                          style={{
+                            width: moderateScale(50, 0.3),
+                            height: moderateScale(60, 0.3),
+                          }}
+                        />
+                      </View>
+                    );
+                  }}
+                />
+              </View>
+              <View style={styles.imagesContainer}>
+                <FlatList
+                  horizontal
+                  data={multiImages}
+                  showsHorizontalScrollIndicator={false}
+                  style={{
+                    flexGrow: 0,
+                  }}
+                  renderItem={({item, index}) => {
+                    return (
+                      <View
+                        style={[
+                          styles.addImageContainer,
+                          {
+                            borderWidth: 0,
+                            borderRadius: moderateScale(10, 0.3),
+                          },
+                        ]}>
+                        <Icon
+                          name={'close'}
+                          as={FontAwesome}
+                          color={Color.themeColor}
+                          size={moderateScale(12, 0.3)}
+                          style={{
+                            position: 'absolute',
+                            right: 1,
+                            top: 1,
+                            zIndex: 1,
+                          }}
+                          onPress={() => {
+                            // setAttachmentImage({})
+                            let newArray = [...multiImages];
+                            newArray.splice(index, 1);
+                            setMultiImages(newArray);
+                          }}
+                        />
+                        <CustomImage
+                          // source={require('../Assets/Images/dummyman1.png')}
+                          source={{
+                            uri: item?.uri,
+                          }}
+                          // source={{uri :attachmentImage?.uri}}
+                          resizeMode={'stretch'}
+                          style={{
+                            width: moderateScale(50, 0.3),
+                            height: moderateScale(60, 0.3),
+                          }}
+                        />
+                      </View>
+                    );
+                  }}
+                />
+                <View style={styles.addImageContainer}>
+                  <Icon
+                    name={'plus'}
+                    as={AntDesign}
+                    color={Color.themeColor}
+                    size={moderateScale(30, 0.3)}
+                    onPress={() => {
+                      setShowMultiImageModal(true);
+                    }}
+                  />
+                </View>
+              </View>
+            </View>
+          )}
+          {/* <View style={styles.imagesContainer}>
             <FlatList
               horizontal
               data={multiImages}
@@ -510,7 +641,7 @@ const CreateNew = props => {
                 }}
               />
             </View>
-          </View>
+          </View> */}
           <TextInputWithTitle
             titleText={'Special Notes for negotiators'}
             secureText={false}
@@ -607,8 +738,6 @@ const styles = ScaledSheet.create({
   },
   imagesContainer: {
     marginTop: moderateScale(10, 0.3),
-    width: windowWidth * 0.9,
-    marginLeft: moderateScale(10, 0.3),
     flexWrap: 'wrap',
     flexDirection: 'row',
   },

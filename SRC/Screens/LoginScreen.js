@@ -40,6 +40,7 @@ const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [device_token, setDeviceToken] = useState(null);
+  console.log("🚀 ~ LoginScreen ~ device_token:", device_token)
   console.log('🚀 ~ LoginScreen ~ device_token:', device_token);
   const [selectedRole, setSelectedType] = useState(
     userRole ? userRole : 'Qbid Member',

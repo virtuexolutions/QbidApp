@@ -13,7 +13,7 @@ import ScreenBoiler from '../Components/ScreenBoiler';
 import LinearGradient from 'react-native-linear-gradient';
 import {ScrollView} from 'react-native';
 import {moderateScale, ScaledSheet} from 'react-native-size-matters';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
 import CustomImage from '../Components/CustomImage';
 import CustomText from '../Components/CustomText';
@@ -32,52 +32,56 @@ import BidderDetail from '../Components/BidderDetail';
 import Detailcards from '../Components/Detailcards';
 import Modal from 'react-native-modal';
 import DropDownSingleSelect from '../Components/DropDownSingleSelect';
-import {Get, Post} from '../Axios/AxiosInterceptorFunction';
+import {Delete, Get, Post} from '../Axios/AxiosInterceptorFunction';
 import numeral from 'numeral';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import NoData from '../Components/NoData';
 import {validateEmail} from '../Config';
 import ImageView from 'react-native-image-viewing';
 import ImagePickerModal from '../Components/ImagePickerModal';
-import {mode} from 'native-base/lib/typescript/theme/tools';s
+import {mode} from 'native-base/lib/typescript/theme/tools';
 import Feather from 'react-native-vector-icons/Feather';
+import {setBidDetail} from '../Store/slices/common';
 
 const JobDetails = props => {
   const data1 = props?.route?.params?.item;
+  console.log("🚀 ~ JobDetails ~ data1:", data1)
   const type = props?.route?.params?.type;
+  const bidData = useSelector(state => state.commonReducer.bidDetail);
+  console.log('🚀 ~ JobDetails ~ bidData:', bidData?.id);
   const user = useSelector(state => state.commonReducer.userData);
   const token = useSelector(state => state.authReducer.token);
+  console.log("🚀 ~ JobDetails ~ token:", token)
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const UserCoverLetterArray = useSelector(
     state => state.commonReducer.servicesArray,
   );
+
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
+  const dispatch = useDispatch();
+
   const [data, setData] = useState();
   const [checked, setChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [bidDone, setBidDone] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [fullName, setFullName] = useState(user?.first_name);
   const [Email, setEmail] = useState(user?.email);
   const [number, setNumber] = useState(user?.phone);
-  const [desc, setDesc] = useState(isBidUpdate ? userData?.coverletter : '');
-  const isFocused = useIsFocused();
-  const [coverletterRole, setCoverLetterRole] = useState(
-    userData?.expertise ? userData?.expertise : 'Expertise In',
-  );
-  console.log(
-    '🚀 ~ JobDetails ~ coverletterRole:',
-    userData?.expertise ? userData?.expertise : 'Expertise In',
-  );
   const [userData, setUserData] = useState({});
+  // console.log('🚀 ~ JobDetails ~ userData:', userData);
+  console.log('🚀 ~ JobDetails ~ userData:', JSON.stringify(userData,null,2));
+  // const [desc, setDesc] = useState(bidDone == true ? bidData?.coverletter : '');
+  const [desc, setDesc] = useState(userData?.coverletter);
+  const [fullName, setFullName] = useState(user?.first_name);
+  const [coverletterRole, setCoverLetterRole] = useState(
+    bidDone == true ? bidData?.expertise : 'Expertise In',
+  );
   const [imageModalVisible, setImageModalVisible] = useState(false);
   const [finalImagesArray, setFinalImagesArray] = useState([]);
+  console.log("🚀 ~ JobDetails ~ finalImagesArray:", finalImagesArray)
   const [imagePickerVisible, setImagePickerVisible] = useState(false);
-  const [isBidUpdate, setISbidUpdate] = useState(false);
-  console.log('🚀 ~ JobDetails ~ isBidUpdate:', isBidUpdate);
-  // const [multiImages, setMultiImages] = useState(
-  //   bidDone ? Object.keys(data1?.bids[0])?.images : [],
-  // );
+  const [isBidUpdate, setISbidUpdate] = useState(true);
   const [multiImages, setMultiImages] = useState([]);
   const [attachmentImage, setAttachmentImage] = useState({});
 
@@ -102,6 +106,9 @@ const JobDetails = props => {
       if (mainuserData) {
         setBidDone(true);
         setUserData(mainuserData);
+        setDesc(mainuserData?.coverletter)
+        setCoverLetterRole(mainuserData?.expertise)
+        setMultiImages(userData?.images)
       }
     }
   };
@@ -127,7 +134,6 @@ const JobDetails = props => {
       expertise: coverletterRole,
       coverletter: desc,
     };
-
     for (let key in body) {
       if (body[key] == '') {
         return Platform.OS == 'android'
@@ -135,7 +141,6 @@ const JobDetails = props => {
           : Alert.alert(`${key} is required`);
       }
     }
-
     if (isNaN(number)) {
       return Platform.OS == 'android'
         ? ToastAndroid.show('phone is not a number', ToastAndroid.SHORT)
@@ -168,13 +173,15 @@ const JobDetails = props => {
       formData.append(`images[${index}]`, item),
     );
 
-    // formData.append('attachment', attachmentImage);
-
+ 
     setIsLoading(true);
     const response = await Post(url, formData, apiHeader(token));
     setIsLoading(false);
+    console.log("🚀 ~ bidNow ~ response:", JSON.stringify(response?.data?.bid_info, null, 2))
 
     if (response != undefined) {
+      // dispatch(setBidDetail(response?.data?.quote_info));
+
       setBidDone(true);
       setModalVisible(!isModalVisible);
     }
@@ -184,12 +191,14 @@ const JobDetails = props => {
     const formData = new FormData();
     const body = {
       quote_id: data?.id,
+      bid_id: userData?.id,
       fullname: fullName,
       email: Email,
       phone: number,
       expertise: coverletterRole,
       coverletter: desc,
     };
+    console.log("🚀 ~ UpdateBid ~ body.bidData:", bidData?.id)
 
     for (let key in body) {
       if (body[key] == '') {
@@ -233,11 +242,18 @@ const JobDetails = props => {
 
     // formData.append('attachment', attachmentImage)
 
+//  return   console.log("🚀 ~ UpdateBid ~ formData:", JSON.stringify(formData,null,2))
     setIsLoading(true);
     const response = await Post(url, formData, apiHeader(token));
     setIsLoading(false);
+    console.log("🚀 ~ UpdateBid ~ response:", JSON.stringify(response?.data?.bid_info,null,2))
 
     if (response != undefined) {
+      Platform.OS == 'android'
+        ? ToastAndroid.show('bid update succesfully ', ToastAndroid.SHORT)
+        : alert.alert('vid update succesfully ');
+      dispatch(setBidDetail(response?.data?.bid_info));
+      setModalVisible(false);
     }
   };
 
@@ -247,7 +263,19 @@ const JobDetails = props => {
 
   useEffect(() => {
     bidDetails();
-  }, [isFocused]);
+    
+  }, []);
+
+  
+console.log("dESC===>, ", desc, coverletterRole)
+  const imageDelete = async id => {
+    const url = `auth/negotiator/bid_image_delete/${id}`;
+    const response = await Delete(url, apiHeader(token));
+    console.log('🚀 ~ imageDelete ~ response:', response?.data);
+    if (response != undefined) {
+      dispatch(setBidDetail(response?.data?.quote_info));
+    }
+  };
 
   return (
     <ScreenBoiler
@@ -847,12 +875,16 @@ const JobDetails = props => {
       <Modal
         isVisible={isModalVisible}
         onBackdropPress={() => {
-          setFullName('');
-          setEmail('');
-          setNumber('');
-          setCoverLetterRole('');
-          setDesc('');
-          setModalVisible(false);
+      if(userData?.length < 1){
+        setFullName('');
+        setEmail('');
+        setNumber('');
+        setCoverLetterRole('');
+        setDesc('');
+      setModalVisible(false);
+        
+      }
+      setModalVisible(false);
         }}>
         <View
           style={{
@@ -985,68 +1017,140 @@ const JobDetails = props => {
                 isBold={true}
                 children={'attachments'}
               />
-
-              <View style={styles.imagesContainer}>
-                <FlatList
-                  horizontal
-                  data={multiImages}
-                  showsHorizontalScrollIndicator={false}
-                  style={{
-                    flexGrow: 0,
-                  }}
-                  renderItem={({item, index}) => {
-                    return (
-                      <View
-                        style={[
-                          styles.addImageContainer,
-                          {
-                            borderWidth: 0,
-                            borderRadius: moderateScale(10, 0.3),
-                          },
-                        ]}>
+              <View style={{}}>
+                {isBidUpdate && (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      width: windowWidth * 0.8,
+                      paddingHorizontal: moderateScale(10, 0.6),
+                      justifyContent: 'flex-start',
+                      flexWrap: 'wrap',
+                      alignItems: 'flex-start',
+                      paddingVertical: moderateScale(15, 0.6),
+                    }}>
+                    <View style={[styles.imagesContainer]}>
+                      <FlatList
+                        horizontal
+                        data={userData?.images}
+                        showsHorizontalScrollIndicator={false}
+                        style={{
+                          flexGrow: 0,
+                        }}
+                        renderItem={({item, index}) => {
+                          console.log('🚀 ~ JobDetails ~ item:', item);
+                          return (
+                            <View
+                              style={[
+                                styles.addImageContainer,
+                                {
+                                  borderWidth: 0,
+                                  borderRadius: moderateScale(10, 0.3),
+                                },
+                              ]}>
+                              <Icon
+                                name={'close'}
+                                as={FontAwesome}
+                                color={Color.themeColor}
+                                size={moderateScale(12, 0.3)}
+                                style={{
+                                  position: 'absolute',
+                                  right: 1,
+                                  top: 1,
+                                  zIndex: 1,
+                                }}
+                                onPress={() => {
+                                  let newArray =multiImages.filter(item1 => item1?.id !== item?.id );
+                                  // newArray.splice(index, 1);
+                                  
+                                  setMultiImages(newArray);
+                                  imageDelete(item?.id);
+                                  // setAttachmentImage({})
+                                }}
+                              />
+                              <CustomImage
+                                source={{
+                                  // uri: item?.image,
+                                  uri: bidDone ? item?.image : item?.uri,
+                                }}
+                                // source={{uri :attachmentImage?.uri}}
+                                resizeMode={'stretch'}
+                                style={{
+                                  width: moderateScale(50, 0.3),
+                                  height: moderateScale(60, 0.3),
+                                }}
+                              />
+                            </View>
+                          );
+                        }}
+                      />
+                    </View>
+                    <View style={styles.imagesContainer}>
+                      <FlatList
+                        horizontal
+                        data={multiImages}
+                        showsHorizontalScrollIndicator={false}
+                        style={{
+                          flexGrow: 0,
+                        }}
+                        renderItem={({item, index}) => {
+                          return (
+                            <View
+                              style={[
+                                styles.addImageContainer,
+                                {
+                                  borderWidth: 0,
+                                  borderRadius: moderateScale(10, 0.3),
+                                },
+                              ]}>
+                              <Icon
+                                name={'close'}
+                                as={FontAwesome}
+                                color={Color.themeColor}
+                                size={moderateScale(12, 0.3)}
+                                style={{
+                                  position: 'absolute',
+                                  right: 1,
+                                  top: 1,
+                                  zIndex: 1,
+                                }}
+                                onPress={() => {
+                                  // setAttachmentImage({})
+                                  let newArray = [...multiImages];
+                                  newArray.splice(index, 1);
+                                  setMultiImages(newArray);
+                                }}
+                              />
+                              <CustomImage
+                                // source={require('../Assets/Images/dummyman1.png')}
+                                source={{
+                                  uri: item?.uri,
+                                }}
+                                // source={{uri :attachmentImage?.uri}}
+                                resizeMode={'stretch'}
+                                style={{
+                                  width: moderateScale(50, 0.3),
+                                  height: moderateScale(60, 0.3),
+                                }}
+                              />
+                            </View>
+                          );
+                        }}
+                      />
+                      <View style={styles.addImageContainer}>
                         <Icon
-                          name={'close'}
-                          as={FontAwesome}
+                          name={'plus'}
+                          as={AntDesign}
                           color={Color.themeColor}
-                          size={moderateScale(12, 0.3)}
-                          style={{
-                            position: 'absolute',
-                            right: 1,
-                            top: 1,
-                            zIndex: 1,
-                          }}
+                          size={moderateScale(30, 0.3)}
                           onPress={() => {
-                            // setAttachmentImage({})
-                            let newArray = [...multiImages];
-                            newArray.splice(index, 1);
-                            setMultiImages(newArray);
-                          }}
-                        />
-                        <CustomImage
-                          // source={require('../Assets/Images/dummyman1.png')}
-                          source={{uri: bidDone ? item?.image : item?.uri}}
-                          // source={{uri :attachmentImage?.uri}}
-                          resizeMode={'stretch'}
-                          style={{
-                            width: moderateScale(50, 0.3),
-                            height: moderateScale(60, 0.3),
+                            setImagePickerVisible(true);
                           }}
                         />
                       </View>
-                    );
-                  }}
-                />
-                <View style={styles.addImageContainer}>
-                  <Icon
-                    name={'plus'}
-                    as={AntDesign}
-                    color={Color.themeColor}
-                    size={moderateScale(30, 0.3)}
-                    onPress={() => {
-                      setImagePickerVisible(true);
-                    }}
-                  />
-                </View>
+                    </View>
+                  </View>
+                )}
               </View>
 
               <CustomButton
@@ -1066,7 +1170,11 @@ const JobDetails = props => {
                 height={windowHeight * 0.06}
                 marginTop={moderateScale(5, 0.3)}
                 onPress={() => {
-                  bidNow();
+                  userRole != 'Qbid Member' &&
+                  bidDone &&
+                  data1?.type != 'specific'
+                    ? UpdateBid()
+                    : bidNow();
                 }}
                 bgColor={
                   userRole == 'Qbid Member'
@@ -1105,12 +1213,10 @@ const styles = ScaledSheet.create({
   },
   imagesContainer: {
     marginTop: moderateScale(10, 0.3),
-    width: windowWidth * 0.8,
     // marginLeft: moderateScale(10, 0.3),
     flexWrap: 'wrap',
     flexDirection: 'row',
     alignSelf: 'center',
-    // backgroundColor : 'red'
   },
   addImageContainer: {
     marginTop: moderateScale(10, 0.3),

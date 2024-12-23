@@ -29,33 +29,31 @@ const HelpModal = ({modalVisible, setModalVisible}) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [selectedService, setSelectedService] = useState('');
-  
+
   const help = async () => {
     const url = 'auth/member/quote_help';
     const body = {
       service_preference: selectedService,
     };
-  
+
     setIsLoading(true);
     const response = await Post(url, body, apiHeader(token));
     setIsLoading(false);
     if (response != undefined) {
       Platform.OS == 'android'
         ? ToastAndroid.show(
-            'help request send successfully',
+            '“Alert Sent, Specialist would contact you soon',
             ToastAndroid.SHORT,
           )
-        : alert('Help Request Send successfully');
+        : alert('“Alert Sent, Specialist would contact you soon');
       setSelectedService('');
       setModalVisible(false);
-    
     }
   };
 
   return (
     <Modal
       hasBackdrop={true}
-     
       isVisible={modalVisible}
       onBackdropPress={() => {
         setModalVisible(false);

@@ -266,7 +266,7 @@ const HomeScreen = () => {
             </View>
           ) : (
             <FlatList
-              scrollEnabled={fasle}
+              scrollEnabled={false}
               ListEmptyComponent={() => {
                 return (
                   <NoData
