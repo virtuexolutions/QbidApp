@@ -39,6 +39,7 @@ import {validateEmail} from '../Config';
 import moment from 'moment';
 import {SliderBox} from 'react-native-image-slider-box';
 import ImageSlider from 'react-native-image-slider';
+import { Rating } from 'react-native-ratings';
 
 const CompleteJobs = props => {
   const data1 = props?.route?.params?.item;
@@ -81,9 +82,16 @@ const CompleteJobs = props => {
           ? Color.themeBgColorNegotiator
           : Color.themebgBusinessQbidder
       }>
+       <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={styles.sectionContainer}
+          contentContainerStyle={{
+          }}>
       <LinearGradient
         style={{
           height: windowHeight * 0.97,
+          paddingBottom: moderateScale(80, 0.6),
+
         }}
         start={{x: 0, y: 0}}
         end={{x: 1, y: 0}}
@@ -94,12 +102,7 @@ const CompleteJobs = props => {
             ? Color.themeBgColorNegotiator
             : Color.themebgBusinessQbidder
         }>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={styles.sectionContainer}
-          contentContainerStyle={{
-            paddingBottom: moderateScale(80, 0.6),
-          }}>
+       
           <View>
         <ImageSlider
          loopBothSides
@@ -239,6 +242,7 @@ const CompleteJobs = props => {
               <FlatList
                 data={data1?.review}
                 renderItem={({item, index}) => {
+                  console.log("🚀 ~ CompleteJobs ~ item:", JSON.stringify(item,null,2))
                   return (
                     <View style={styles.reviewcard}>
                       <View style={styles.reviewimage}>
@@ -269,12 +273,15 @@ const CompleteJobs = props => {
                             ]}>
                             {item?.user_info?.first_name}
                           </CustomText>
-                          <Icon
+                          <Rating
+                          ratingCount={item?.rating}
+                          />
+                          {/* <Icon
                             name="star"
                             as={FontAwesome}
                             color={'black'}
                             size={15}
-                          />
+                          /> */}
                         </View>
                         <CustomText style={styles.reviewtext}>
                           {item?.text}
@@ -289,8 +296,8 @@ const CompleteJobs = props => {
               />
             </View>
           </View>
-        </ScrollView>
       </LinearGradient>
+        </ScrollView>
     </ScreenBoiler>
   );
 };

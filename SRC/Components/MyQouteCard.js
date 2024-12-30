@@ -156,7 +156,7 @@ const MyQouteCard = ({item, type}) => {
                 fontSize: moderateScale(12, 0.3),
                 color: Color.blue,
               }}>
-              {numeral(item?.quoted_price).format('$0,0a')}
+              {numeral(item?.quoted_price).format('$0,0')}
             </CustomText>
           }
         </CustomText>

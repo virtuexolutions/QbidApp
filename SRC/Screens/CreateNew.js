@@ -26,8 +26,10 @@ import {useNavigation} from '@react-navigation/native';
 const CreateNew = props => {
   const hire = props?.route?.params?.hire;
   const quoteData = props?.route?.params?.data;
-  console.log('🚀 ~ CreateNew ~ quoteData:', quoteData);
+  console.log("🚀 ~ CreateNew ~ quoteData:", quoteData)
+  console.log('🚀 ~ CreateNew ~ quoteData:', quoteData?.images);
   console.log('🚀 ~ CreateNew ~ quoteData:', quoteData?.id);
+  // const fromupdatequote = true;
   const fromupdatequote = props?.route?.params?.fromupdatequote;
 
   const negotiater_id = props?.route?.params?.id;
@@ -36,7 +38,8 @@ const CreateNew = props => {
   const token = useSelector(state => state.authReducer.token);
   console.log('🚀 ~ CreateNew ~ token:', token);
   const location = useSelector(state => state.commonReducer.location);
-
+const [qouteImages, setQuoteImages] = useState(quoteData?.images);
+  console.log("🚀 ~ CreateNew ~ qouteImages:", qouteImages)
   const [qouteTitle, setQouteTitle] = useState(
     fromupdatequote ? quoteData?.title : '',
   );
@@ -156,15 +159,18 @@ const CreateNew = props => {
 
     const formData = new FormData();
 
-    if (multiImages.length == 0) {
-      return Platform.OS == 'android'
-        ? ToastAndroid.show(`add atleast one image `, ToastAndroid.SHORT)
-        : Alert.alert(`add atleast one image `);
-    }
-
-    multiImages?.map((item, index) =>
-      formData.append(`images[${index}]`, item),
-    );
+    // if (multiImages.length == 0) {
+    //   return Platform.OS == 'android'
+    //     ? ToastAndroid.show(`add atleast one image `, ToastAndroid.SHORT)
+    //     : Alert.alert(`add atleast one image `);
+    // }
+if(multiImages?.length > 0){
+  multiImages?.map((item, index) =>
+    formData.append(`images[${index}]`, item),
+  );
+}else{
+  formData.append('images[]',null)
+}
     for (let key in body) {
       if (body[key] == '') {
         return Platform.OS == 'android'
@@ -174,8 +180,7 @@ const CreateNew = props => {
         formData.append(key, body[key]);
       }
     }
-    //
-    //  return  console.log('====================== from data', JSON.stringify(formData ,null ,2));
+    // return console.log("🚀 ~ updateQuote ~ formData:", JSON.stringify(formData,null,2))
     setIsLoading(true);
     const response = await Post(url, formData, apiHeader(token, true));
     setIsLoading(false);
@@ -271,6 +276,8 @@ const CreateNew = props => {
     }
   }, [askingPrice, offeringPercent]);
 
+
+
   return (
     <ScreenBoiler
       statusBarBackgroundColor={
@@ -289,7 +296,7 @@ const CreateNew = props => {
           : Color.themebgBusinessQbidder
       }
       showHeader={true}
-      //  showBack={true}
+       showBack={fromupdatequote}
     >
       <LinearGradient
         style={
@@ -456,7 +463,6 @@ const CreateNew = props => {
             ]}>
             Upload vendor Qouted list
           </CustomText>
-          {fromupdatequote && (
             <View
               style={{
                 flexDirection: 'row',
@@ -467,15 +473,19 @@ const CreateNew = props => {
                 alignItems: 'flex-start',
                 paddingVertical: moderateScale(15, 0.6),
               }}>
+          {fromupdatequote && (
+
               <View style={[styles.imagesContainer]}>
                 <FlatList
                   horizontal
-                  data={quoteData?.images}
+                  data={qouteImages}
                   showsHorizontalScrollIndicator={false}
                   style={{
                     flexGrow: 0,
                   }}
                   renderItem={({item, index}) => {
+                    
+                    console.log("🚀 ~ CreateNew ~ item:", item)
                     return (
                       <View
                         style={[
@@ -498,9 +508,9 @@ const CreateNew = props => {
                           }}
                           onPress={() => {
                             // setAttachmentImage({})
-                            let newArray = [...multiImages];
-                            newArray.splice(index, 1);
-                            setMultiImages(newArray);
+                            setQuoteImages(prevQouteImages => prevQouteImages?.filter(item1 => item1?.id !== item?.id))
+                            // let newArray = [...multiImages];
+                          //  quoteData?.images?.splice(index,1)
                           }}
                         />
                         <CustomImage
@@ -519,6 +529,8 @@ const CreateNew = props => {
                   }}
                 />
               </View>
+          )}
+
               <View style={styles.imagesContainer}>
                 <FlatList
                   horizontal
@@ -528,6 +540,7 @@ const CreateNew = props => {
                     flexGrow: 0,
                   }}
                   renderItem={({item, index}) => {
+                    console.log("🚀 ~ CreateNew ~ item:", item)
                     return (
                       <View
                         style={[
@@ -549,10 +562,9 @@ const CreateNew = props => {
                             zIndex: 1,
                           }}
                           onPress={() => {
-                            // setAttachmentImage({})
-                            let newArray = [...multiImages];
-                            newArray.splice(index, 1);
-                            setMultiImages(newArray);
+
+                           multiImages.splice(index,1);
+                            setMultiImages(prevImages => prevImages?.splice(index,1));
                           }}
                         />
                         <CustomImage
@@ -584,7 +596,6 @@ const CreateNew = props => {
                 </View>
               </View>
             </View>
-          )}
           {/* <View style={styles.imagesContainer}>
             <FlatList
               horizontal

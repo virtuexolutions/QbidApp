@@ -25,6 +25,7 @@ import HelpModal from '../Components/HelpModal';
 
 const Settings = () => {
   const user = useSelector(state => state.commonReducer.userData);
+  console.log("🚀 ~ Settings ~ user:", user)
   const userRole = useSelector(state => state.commonReducer.selectedRole);
 
   const dispatch = useDispatch();

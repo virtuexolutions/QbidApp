@@ -69,6 +69,7 @@ const JobDetails = props => {
   const [Email, setEmail] = useState(user?.email);
   const [number, setNumber] = useState(user?.phone);
   const [userData, setUserData] = useState({});
+  const [bidDataImages, setBidDataImages] = useState([])
   // console.log('🚀 ~ JobDetails ~ userData:', userData);
   console.log('🚀 ~ JobDetails ~ userData:', JSON.stringify(userData,null,2));
   // const [desc, setDesc] = useState(bidDone == true ? bidData?.coverletter : '');
@@ -83,7 +84,7 @@ const JobDetails = props => {
   const [imagePickerVisible, setImagePickerVisible] = useState(false);
   const [isBidUpdate, setISbidUpdate] = useState(true);
   const [multiImages, setMultiImages] = useState([]);
-  const [attachmentImage, setAttachmentImage] = useState({});
+  const [attachmentImage, setAttachmentImage] = useState({}); 
 
   const bidDetails = async () => {
     const url = `auth/negotiator/quote_detail/${
@@ -108,7 +109,8 @@ const JobDetails = props => {
         setUserData(mainuserData);
         setDesc(mainuserData?.coverletter)
         setCoverLetterRole(mainuserData?.expertise)
-        setMultiImages(userData?.images)
+        // setMultiImages(userData?.images)
+        setBidDataImages(userData?.images);
       }
     }
   };
@@ -297,9 +299,20 @@ console.log("dESC===>, ", desc, coverletterRole)
           ? Color.themeBgColorNegotiator
           : Color.themebgBusinessQbidder
       }>
+        <ScrollView
+          scrollEnabled={false}
+          showsVerticalScrollIndicator={false}
+          style={styles.sectionContainer}
+          contentContainerStyle={{
+            
+            // backgroundColor:'redx'
+          }}>
       <LinearGradient
         style={{
           height: windowHeight * 0.97,
+          paddingBottom: moderateScale(80, 0.6),
+            paddingTop: moderateScale(40, 0.6),
+            paddingLeft: moderateScale(15, 0.6),
         }}
         start={{x: 0, y: 0}}
         end={{x: 1, y: 0}}
@@ -310,16 +323,7 @@ console.log("dESC===>, ", desc, coverletterRole)
             ? Color.themeBgColorNegotiator
             : Color.themebgBusinessQbidder
         }>
-        <ScrollView
-          scrollEnabled={false}
-          showsVerticalScrollIndicator={false}
-          style={styles.sectionContainer}
-          contentContainerStyle={{
-            paddingBottom: moderateScale(80, 0.6),
-            paddingTop: moderateScale(40, 0.6),
-            paddingLeft: moderateScale(15, 0.6),
-            // backgroundColor:'redx'
-          }}>
+        
           {isLoading ? (
             <View
               style={{
@@ -862,8 +866,8 @@ console.log("dESC===>, ", desc, coverletterRole)
               )}
             </>
           )}
-        </ScrollView>
       </LinearGradient>
+        </ScrollView>
 
       <ImageView
         images={finalImagesArray}
@@ -1018,7 +1022,6 @@ console.log("dESC===>, ", desc, coverletterRole)
                 children={'attachments'}
               />
               <View style={{}}>
-                {isBidUpdate && (
                   <View
                     style={{
                       flexDirection: 'row',
@@ -1029,10 +1032,12 @@ console.log("dESC===>, ", desc, coverletterRole)
                       alignItems: 'flex-start',
                       paddingVertical: moderateScale(15, 0.6),
                     }}>
+                {isBidUpdate && (
+
                     <View style={[styles.imagesContainer]}>
                       <FlatList
                         horizontal
-                        data={userData?.images}
+                        data={bidDataImages}
                         showsHorizontalScrollIndicator={false}
                         style={{
                           flexGrow: 0,
@@ -1060,10 +1065,10 @@ console.log("dESC===>, ", desc, coverletterRole)
                                   zIndex: 1,
                                 }}
                                 onPress={() => {
-                                  let newArray =multiImages.filter(item1 => item1?.id !== item?.id );
+                                  // let newArray =multiImages.filter(item1 => item1?.id !== item?.id );
                                   // newArray.splice(index, 1);
-                                  
-                                  setMultiImages(newArray);
+                                  setBidDataImages(prevImages => prevImages?.filter(item1 => item1?.id !== item?.id ))
+                                  // setMultiImages(newArray);
                                   imageDelete(item?.id);
                                   // setAttachmentImage({})
                                 }}
@@ -1085,6 +1090,8 @@ console.log("dESC===>, ", desc, coverletterRole)
                         }}
                       />
                     </View>
+                )}
+
                     <View style={styles.imagesContainer}>
                       <FlatList
                         horizontal
@@ -1150,7 +1157,6 @@ console.log("dESC===>, ", desc, coverletterRole)
                       </View>
                     </View>
                   </View>
-                )}
               </View>
 
               <CustomButton
