@@ -14,8 +14,10 @@ import ImageView from 'react-native-image-viewing';
 import {Icon} from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
+import {Post} from '../Axios/AxiosInterceptorFunction';
 
 const BidderDetail = ({item, photo, title, date, message}) => {
+  console.log('🚀 ~ BidderDetail ~ item:', item);
   const token = useSelector(state => state.authReducer.token);
   const navigation = useNavigation();
   const userRole = useSelector(state => state.commonReducer.selectedRole);
@@ -25,6 +27,17 @@ const BidderDetail = ({item, photo, title, date, message}) => {
   const imagesArray = item?.attachment?.map((item, index) => {
     return {uri: item?.image};
   });
+
+  const bidDelete = async () => {
+    const url = `auth/negotiator/bid_delete`;
+    const body = {
+      id: item?.id,
+    };
+    const response = await Post(url, body, apiHeader(token));
+    return console.log('🚀 ~ bidDelete ~ response:', response?.data);
+    if (response != undefined) {
+    }
+  };
 
   return (
     <View
@@ -116,7 +129,7 @@ const BidderDetail = ({item, photo, title, date, message}) => {
           Attachments...
         </CustomText>
       )}
-      <FlatList
+      {/* <FlatList
         data={item?.review}
         renderItem={({item, index}) => {
           return (
@@ -146,7 +159,7 @@ const BidderDetail = ({item, photo, title, date, message}) => {
             </View>
           );
         }}
-      />
+      /> */}
 
       <ImageView
         images={imagesArray}
@@ -203,6 +216,20 @@ const BidderDetail = ({item, photo, title, date, message}) => {
             ? 'Rejected'
             : 'pending'}
         </CustomText>
+
+        <Icon
+          onPress={() => {
+            bidDelete();
+          }}
+          style={{
+            position: 'absolute',
+            right: -25,
+          }}
+          as={Feather}
+          name="trash"
+          size={moderateScale(12, 0.6)}
+          color={Color.white}
+        />
       </View>
     </View>
   );

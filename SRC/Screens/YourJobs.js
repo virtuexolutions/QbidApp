@@ -27,6 +27,7 @@ import NoData from '../Components/NoData';
 import CustomImage from '../Components/CustomImage';
 import DropDownSingleSelect from '../Components/DropDownSingleSelect';
 import {useIsFocused} from '@react-navigation/native';
+import ReviewModal from '../Components/ReviewModal';
 
 const YourJobs = props => {
   const type = props?.route?.params?.type;
@@ -49,7 +50,6 @@ const YourJobs = props => {
   const [newArray, setNewArray] = useState([]);
   const [completedJobscards, setCompletedJobscards] = useState('');
   const [item, setItem] = useState('all');
-
   const handleScroll = event => {
     const currentOffset = event.nativeEvent.contentOffset.y;
     const maxOffset =
@@ -182,6 +182,7 @@ const YourJobs = props => {
               paddingBottom: moderateScale(80, 0.6),
             }}
             renderItem={({item, index}) => {
+              console.log('🚀 ~ YourJobs ~ item:', item?.id);
               console.log(index % 2 == 0);
               return type != 'Seeking Help' ? (
                 <TouchableOpacity

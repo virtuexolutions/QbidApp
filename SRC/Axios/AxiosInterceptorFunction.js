@@ -76,8 +76,11 @@ let Get = async (route, token, showAlert = true) => {
 let Post = async (route, data, headers, showAlert = true) => {
   const apiUrl = URL(route);
   console.log('here is the url =>',apiUrl);
+  console.log('here is the urlsdfhjkhdfjkhsjkf=>',headers);
+
 
   try {
+    console.log('================== > headers')
     return await axios.post(apiUrl, data, headers);
   } catch (error) {
     console.log("error", error.message);

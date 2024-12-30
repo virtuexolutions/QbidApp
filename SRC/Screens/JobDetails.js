@@ -42,16 +42,18 @@ import ImagePickerModal from '../Components/ImagePickerModal';
 import {mode} from 'native-base/lib/typescript/theme/tools';
 import Feather from 'react-native-vector-icons/Feather';
 import {setBidDetail} from '../Store/slices/common';
+import {Rating} from 'react-native-ratings';
 
 const JobDetails = props => {
   const data1 = props?.route?.params?.item;
-  console.log("🚀 ~ JobDetails ~ data1:", data1)
+  console.log('🚀 ~ JobDetails ~ data1:', data1);
   const type = props?.route?.params?.type;
   const bidData = useSelector(state => state.commonReducer.bidDetail);
   console.log('🚀 ~ JobDetails ~ bidData:', bidData?.id);
   const user = useSelector(state => state.commonReducer.userData);
   const token = useSelector(state => state.authReducer.token);
-  console.log("🚀 ~ JobDetails ~ token:", token)
+  console.log('🚀 ~ token:', token);
+  console.log('🚀 ~ JobDetails ~ token:', token);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const UserCoverLetterArray = useSelector(
     state => state.commonReducer.servicesArray,
@@ -69,9 +71,9 @@ const JobDetails = props => {
   const [Email, setEmail] = useState(user?.email);
   const [number, setNumber] = useState(user?.phone);
   const [userData, setUserData] = useState({});
-  const [bidDataImages, setBidDataImages] = useState([])
+  const [bidDataImages, setBidDataImages] = useState([]);
   // console.log('🚀 ~ JobDetails ~ userData:', userData);
-  console.log('🚀 ~ JobDetails ~ userData:', JSON.stringify(userData,null,2));
+  console.log('🚀 ~ JobDetails ~ userData:', JSON.stringify(userData, null, 2));
   // const [desc, setDesc] = useState(bidDone == true ? bidData?.coverletter : '');
   const [desc, setDesc] = useState(userData?.coverletter);
   const [fullName, setFullName] = useState(user?.first_name);
@@ -80,11 +82,11 @@ const JobDetails = props => {
   );
   const [imageModalVisible, setImageModalVisible] = useState(false);
   const [finalImagesArray, setFinalImagesArray] = useState([]);
-  console.log("🚀 ~ JobDetails ~ finalImagesArray:", finalImagesArray)
+  console.log('🚀 ~ JobDetails ~ finalImagesArray:', finalImagesArray);
   const [imagePickerVisible, setImagePickerVisible] = useState(false);
   const [isBidUpdate, setISbidUpdate] = useState(true);
   const [multiImages, setMultiImages] = useState([]);
-  const [attachmentImage, setAttachmentImage] = useState({}); 
+  const [attachmentImage, setAttachmentImage] = useState({});
 
   const bidDetails = async () => {
     const url = `auth/negotiator/quote_detail/${
@@ -107,8 +109,8 @@ const JobDetails = props => {
       if (mainuserData) {
         setBidDone(true);
         setUserData(mainuserData);
-        setDesc(mainuserData?.coverletter)
-        setCoverLetterRole(mainuserData?.expertise)
+        setDesc(mainuserData?.coverletter);
+        setCoverLetterRole(mainuserData?.expertise);
         // setMultiImages(userData?.images)
         setBidDataImages(userData?.images);
       }
@@ -175,11 +177,13 @@ const JobDetails = props => {
       formData.append(`images[${index}]`, item),
     );
 
- 
     setIsLoading(true);
     const response = await Post(url, formData, apiHeader(token));
     setIsLoading(false);
-    console.log("🚀 ~ bidNow ~ response:", JSON.stringify(response?.data?.bid_info, null, 2))
+    console.log(
+      '🚀 ~ bidNow ~ response:',
+      JSON.stringify(response?.data?.bid_info, null, 2),
+    );
 
     if (response != undefined) {
       // dispatch(setBidDetail(response?.data?.quote_info));
@@ -200,7 +204,7 @@ const JobDetails = props => {
       expertise: coverletterRole,
       coverletter: desc,
     };
-    console.log("🚀 ~ UpdateBid ~ body.bidData:", bidData?.id)
+    console.log('🚀 ~ UpdateBid ~ body.bidData:', bidData?.id);
 
     for (let key in body) {
       if (body[key] == '') {
@@ -244,11 +248,14 @@ const JobDetails = props => {
 
     // formData.append('attachment', attachmentImage)
 
-//  return   console.log("🚀 ~ UpdateBid ~ formData:", JSON.stringify(formData,null,2))
+    //  return   console.log("🚀 ~ UpdateBid ~ formData:", JSON.stringify(formData,null,2))
     setIsLoading(true);
     const response = await Post(url, formData, apiHeader(token));
     setIsLoading(false);
-    console.log("🚀 ~ UpdateBid ~ response:", JSON.stringify(response?.data?.bid_info,null,2))
+    console.log(
+      '🚀 ~ UpdateBid ~ response:',
+      JSON.stringify(response?.data?.bid_info, null, 2),
+    );
 
     if (response != undefined) {
       Platform.OS == 'android'
@@ -265,11 +272,9 @@ const JobDetails = props => {
 
   useEffect(() => {
     bidDetails();
-    
   }, []);
 
-  
-console.log("dESC===>, ", desc, coverletterRole)
+  console.log('dESC===>, ', desc, coverletterRole);
   const imageDelete = async id => {
     const url = `auth/negotiator/bid_image_delete/${id}`;
     const response = await Delete(url, apiHeader(token));
@@ -299,31 +304,31 @@ console.log("dESC===>, ", desc, coverletterRole)
           ? Color.themeBgColorNegotiator
           : Color.themebgBusinessQbidder
       }>
-        <ScrollView
-          scrollEnabled={false}
-          showsVerticalScrollIndicator={false}
-          style={styles.sectionContainer}
-          contentContainerStyle={{
-            
+      <ScrollView
+        scrollEnabled={false}
+        showsVerticalScrollIndicator={false}
+        style={styles.sectionContainer}
+        contentContainerStyle={
+          {
             // backgroundColor:'redx'
-          }}>
-      <LinearGradient
-        style={{
-          height: windowHeight * 0.97,
-          paddingBottom: moderateScale(80, 0.6),
+          }
+        }>
+        <LinearGradient
+          style={{
+            height: windowHeight * 0.97,
+            paddingBottom: moderateScale(80, 0.6),
             paddingTop: moderateScale(40, 0.6),
             paddingLeft: moderateScale(15, 0.6),
-        }}
-        start={{x: 0, y: 0}}
-        end={{x: 1, y: 0}}
-        colors={
-          userRole == 'Qbid Member'
-            ? Color.themeBgColor
-            : userRole == 'Qbid Negotiator'
-            ? Color.themeBgColorNegotiator
-            : Color.themebgBusinessQbidder
-        }>
-        
+          }}
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 0}}
+          colors={
+            userRole == 'Qbid Member'
+              ? Color.themeBgColor
+              : userRole == 'Qbid Negotiator'
+              ? Color.themeBgColorNegotiator
+              : Color.themebgBusinessQbidder
+          }>
           {isLoading ? (
             <View
               style={{
@@ -659,122 +664,234 @@ console.log("dESC===>, ", desc, coverletterRole)
 
               {userRole == 'Qbid Member' && data1?.type != 'specific' ? (
                 <>
-                  <CustomText
-                    isBold
+                  <View
                     style={{
-                      color: Color.white,
-                      fontSize: moderateScale(17, 0.6),
-                      marginBottom: moderateScale(10, 0.3),
-                      marginTop: moderateScale(20, 0.3),
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
                     }}>
-                    The Best Quote for your Project
-                  </CustomText>
-                  <FlatList
-                    key={item => item?.id}
-                    // scrollEnabled={false}
-                    data={
-                      data?.bids?.some(item => item?.status == 'accept')
-                        ? [data?.bids?.find(item => item?.status == 'accept')]
-                        : data?.bids
-                    }
-                    ListEmptyComponent={() => {
-                      return (
-                        <NoData
-                          style={{
-                            width: windowWidth * 0.95,
-                            height: windowHeight * 0.18,
-                            // backgroundColor: 'green',
-                            alignItems: 'center',
-                          }}
-                          text={'No requests yet'}
-                        />
-                      );
-                    }}
-                    contentContainerStyle={{
-                      paddingBottom: moderateScale(30, 0.6),
-                    }}
-                    renderItem={({item, index}) => {
-                      return (
-                        <>
-                          <BidderDetail
-                            item={{
-                              image: item?.user_info?.photo,
-                              name: item?.user_info?.company_name,
-                              rating: item?.rating,
-                              review: data1?.review,
-                              description: item?.coverletter,
-                              status: item?.status,
-                              id: item?.id,
-                              attachment: item?.images,
+                    <CustomText
+                      isBold
+                      style={{
+                        color: Color.white,
+                        fontSize: moderateScale(14, 0.6),
+                        marginBottom: moderateScale(10, 0.3),
+                        marginTop: moderateScale(20, 0.3),
+                      }}>
+                      {data?.status != 'review'
+                        ? 'The Best Quote for your Project'
+                        : 'review'}
+                    </CustomText>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        marginRight: moderateScale(15, 0.6),
+                      }}>
+                      <CustomText
+                        isBold
+                        style={{
+                          color: Color.white,
+                          fontSize: moderateScale(13, 0.6),
+                          marginBottom: moderateScale(10, 0.3),
+                          marginTop: moderateScale(20, 0.3),
+                          color: Color.blue,
+                        }}>
+                        {data?.status != 'review'
+                          ? 'Total bids'
+                          : 'total review '}
+                      </CustomText>
+                      <CustomText
+                        isBold
+                        style={{
+                          color: Color.white,
+                          fontSize: moderateScale(13, 0.6),
+                          marginBottom: moderateScale(10, 0.3),
+                          marginTop: moderateScale(20, 0.3),
+                          color: Color.white,
+                          marginLeft: moderateScale(7, 0.6),
+                        }}>
+                        {data?.status != 'review'
+                          ? data?.bids?.length
+                          : data?.review?.length}
+                      </CustomText>
+                    </View>
+                  </View>
+                  {data?.status != 'review' ? (
+                    <FlatList
+                      key={item => item?.id}
+                      // scrollEnabled={false}
+                      data={
+                        data?.bids?.some(item => item?.status == 'accept')
+                          ? [data?.bids?.find(item => item?.status == 'accept')]
+                          : data?.bids
+                      }
+                      ListEmptyComponent={() => {
+                        return (
+                          <NoData
+                            style={{
+                              width: windowWidth * 0.95,
+                              height: windowHeight * 0.18,
+                              // backgroundColor: 'green',
+                              alignItems: 'center',
                             }}
+                            text={'No requests yet'}
                           />
-                          {data?.status == 'pending' &&
-                            item?.status == 'pending' && (
-                              <View
-                                key={index}
+                        );
+                      }}
+                      contentContainerStyle={{
+                        paddingBottom: moderateScale(30, 0.6),
+                      }}
+                      renderItem={({item, index}) => {
+                        return (
+                          <>
+                            <BidderDetail
+                              item={{
+                                image: item?.user_info?.photo,
+                                name: item?.user_info?.company_name,
+                                rating: item?.rating,
+                                review: data1?.review,
+                                description: item?.coverletter,
+                                status: item?.status,
+                                id: item?.id,
+                                attachment: item?.images,
+                              }}
+                            />
+                            {data?.status == 'pending' &&
+                              item?.status == 'pending' && (
+                                <View
+                                  key={index}
+                                  style={{
+                                    flexDirection: 'row',
+                                    // backgroundColor: 'black',
+                                    justifyContent: 'space-between',
+                                    width: windowWidth * 0.55,
+                                    alignSelf: 'center',
+                                    paddingVertical: moderateScale(5, 0.6),
+                                    alignItems: 'center',
+                                    marginBottom: moderateScale(5, 0.6),
+                                  }}>
+                                  <CustomButton
+                                    isBold
+                                    text={
+                                      isLoading ? (
+                                        <ActivityIndicator
+                                          color={'white'}
+                                          size={moderateScale(20, 0.6)}
+                                        />
+                                      ) : (
+                                        'Accept'
+                                      )
+                                    }
+                                    textColor={Color.white}
+                                    width={windowWidth * 0.25}
+                                    height={windowHeight * 0.04}
+                                    bgColor={
+                                      userRole == 'Qbid Member'
+                                        ? Color.blue
+                                        : userRole == 'Qbid Negotiator'
+                                        ? Color.themeColor
+                                        : Color.black
+                                    }
+                                    borderRadius={moderateScale(30, 0.3)}
+                                    fontSize={moderateScale(11, 0.6)}
+                                    onPress={() => {
+                                      changeStatus('accept', item?.id);
+                                    }}
+                                  />
+                                  <CustomButton
+                                    isBold
+                                    text={'Decline'}
+                                    textColor={Color.white}
+                                    width={windowWidth * 0.25}
+                                    height={windowHeight * 0.04}
+                                    bgColor={
+                                      userRole == 'Qbid Member'
+                                        ? Color.blue
+                                        : userRole == 'Qbid Negotiator'
+                                        ? Color.themeColor
+                                        : Color.black
+                                    }
+                                    borderRadius={moderateScale(30, 0.3)}
+                                    fontSize={moderateScale(11, 0.6)}
+                                    onPress={() => {
+                                      changeStatus('reject', item?.id);
+                                    }}
+                                  />
+                                </View>
+                              )}
+                          </>
+                        );
+                      }}
+                    />
+                  ) : (
+                    <FlatList
+                      key={item => item?.id}
+                      // scrollEnabled={false}
+                      data={data?.review}
+                      ListEmptyComponent={() => {
+                        return (
+                          <NoData
+                            style={{
+                              width: windowWidth * 0.95,
+                              height: windowHeight * 0.18,
+                              // backgroundColor: 'green',
+                              alignItems: 'center',
+                            }}
+                            text={'No requests yet'}
+                          />
+                        );
+                      }}
+                      contentContainerStyle={{
+                        paddingBottom: moderateScale(30, 0.6),
+                      }}
+                      renderItem={({item, index}) => {
+                        console.log('🚀 ~ item:', item);
+                        return (
+                          <View style={styles.reviewCard}>
+                            <View></View>
+                            <View style={styles.review_imageContainer}>
+                              <CustomImage
                                 style={{
-                                  flexDirection: 'row',
-                                  // backgroundColor: 'black',
-                                  justifyContent: 'space-between',
-                                  width: windowWidth * 0.55,
-                                  alignSelf: 'center',
-                                  paddingVertical: moderateScale(5, 0.6),
-                                  alignItems: 'center',
-                                  marginBottom: moderateScale(5, 0.6),
-                                }}>
-                                <CustomButton
-                                  isBold
-                                  text={
-                                    isLoading ? (
-                                      <ActivityIndicator
-                                        color={'white'}
-                                        size={moderateScale(20, 0.6)}
-                                      />
-                                    ) : (
-                                      'Accept'
-                                    )
-                                  }
-                                  textColor={Color.white}
-                                  width={windowWidth * 0.25}
-                                  height={windowHeight * 0.04}
-                                  bgColor={
-                                    userRole == 'Qbid Member'
-                                      ? Color.blue
-                                      : userRole == 'Qbid Negotiator'
-                                      ? Color.themeColor
-                                      : Color.black
-                                  }
-                                  borderRadius={moderateScale(30, 0.3)}
-                                  fontSize={moderateScale(11, 0.6)}
-                                  onPress={() => {
-                                    changeStatus('accept', item?.id);
-                                  }}
-                                />
-                                <CustomButton
-                                  isBold
-                                  text={'Decline'}
-                                  textColor={Color.white}
-                                  width={windowWidth * 0.25}
-                                  height={windowHeight * 0.04}
-                                  bgColor={
-                                    userRole == 'Qbid Member'
-                                      ? Color.blue
-                                      : userRole == 'Qbid Negotiator'
-                                      ? Color.themeColor
-                                      : Color.black
-                                  }
-                                  borderRadius={moderateScale(30, 0.3)}
-                                  fontSize={moderateScale(11, 0.6)}
-                                  onPress={() => {
-                                    changeStatus('reject', item?.id);
-                                  }}
-                                />
-                              </View>
-                            )}
-                        </>
-                      );
-                    }}
-                  />
+                                  height: '100%',
+                                  width: '100%',
+                                }}
+                                source={{uri: item?.user_info?.photo}}
+                              />
+                            </View>
+
+                            <View>
+                              <CustomText style={styles.review_text}>
+                                {item?.user_info?.first_name}
+                              </CustomText>
+                              <CustomText
+                                style={[
+                                  styles.review_text,
+                                  {
+                                    color: Color.white,
+                                    fontSize: moderateScale(13, 0.6),
+                                  },
+                                ]}>
+                                {item?.text}
+                              </CustomText>
+                            </View>
+                            <Rating
+                              // tintColor='transparent'
+                              ratingBackgroundColor="red"
+                              style={{
+                                paddingTop: moderateScale(10, 0.6),
+                                backgroundColor: 'transparent',
+                              }}
+                              imageSize={moderateScale(14, 0.6)}
+                              startingValue={item?.rating}
+                              ratingCount={5}
+                            />
+                          </View>
+                        );
+                      }}
+                    />
+                  )}
                 </>
               ) : userRole != 'Qbid Member' &&
                 bidDone &&
@@ -866,8 +983,8 @@ console.log("dESC===>, ", desc, coverletterRole)
               )}
             </>
           )}
-      </LinearGradient>
-        </ScrollView>
+        </LinearGradient>
+      </ScrollView>
 
       <ImageView
         images={finalImagesArray}
@@ -879,16 +996,15 @@ console.log("dESC===>, ", desc, coverletterRole)
       <Modal
         isVisible={isModalVisible}
         onBackdropPress={() => {
-      if(userData?.length < 1){
-        setFullName('');
-        setEmail('');
-        setNumber('');
-        setCoverLetterRole('');
-        setDesc('');
-      setModalVisible(false);
-        
-      }
-      setModalVisible(false);
+          if (userData?.length < 1) {
+            setFullName('');
+            setEmail('');
+            setNumber('');
+            setCoverLetterRole('');
+            setDesc('');
+            setModalVisible(false);
+          }
+          setModalVisible(false);
         }}>
         <View
           style={{
@@ -1022,18 +1138,17 @@ console.log("dESC===>, ", desc, coverletterRole)
                 children={'attachments'}
               />
               <View style={{}}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      width: windowWidth * 0.8,
-                      paddingHorizontal: moderateScale(10, 0.6),
-                      justifyContent: 'flex-start',
-                      flexWrap: 'wrap',
-                      alignItems: 'flex-start',
-                      paddingVertical: moderateScale(15, 0.6),
-                    }}>
-                {isBidUpdate && (
-
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: windowWidth * 0.8,
+                    paddingHorizontal: moderateScale(10, 0.6),
+                    justifyContent: 'flex-start',
+                    flexWrap: 'wrap',
+                    alignItems: 'flex-start',
+                    paddingVertical: moderateScale(15, 0.6),
+                  }}>
+                  {isBidUpdate && (
                     <View style={[styles.imagesContainer]}>
                       <FlatList
                         horizontal
@@ -1067,7 +1182,11 @@ console.log("dESC===>, ", desc, coverletterRole)
                                 onPress={() => {
                                   // let newArray =multiImages.filter(item1 => item1?.id !== item?.id );
                                   // newArray.splice(index, 1);
-                                  setBidDataImages(prevImages => prevImages?.filter(item1 => item1?.id !== item?.id ))
+                                  setBidDataImages(prevImages =>
+                                    prevImages?.filter(
+                                      item1 => item1?.id !== item?.id,
+                                    ),
+                                  );
                                   // setMultiImages(newArray);
                                   imageDelete(item?.id);
                                   // setAttachmentImage({})
@@ -1090,73 +1209,73 @@ console.log("dESC===>, ", desc, coverletterRole)
                         }}
                       />
                     </View>
-                )}
+                  )}
 
-                    <View style={styles.imagesContainer}>
-                      <FlatList
-                        horizontal
-                        data={multiImages}
-                        showsHorizontalScrollIndicator={false}
-                        style={{
-                          flexGrow: 0,
-                        }}
-                        renderItem={({item, index}) => {
-                          return (
-                            <View
-                              style={[
-                                styles.addImageContainer,
-                                {
-                                  borderWidth: 0,
-                                  borderRadius: moderateScale(10, 0.3),
-                                },
-                              ]}>
-                              <Icon
-                                name={'close'}
-                                as={FontAwesome}
-                                color={Color.themeColor}
-                                size={moderateScale(12, 0.3)}
-                                style={{
-                                  position: 'absolute',
-                                  right: 1,
-                                  top: 1,
-                                  zIndex: 1,
-                                }}
-                                onPress={() => {
-                                  // setAttachmentImage({})
-                                  let newArray = [...multiImages];
-                                  newArray.splice(index, 1);
-                                  setMultiImages(newArray);
-                                }}
-                              />
-                              <CustomImage
-                                // source={require('../Assets/Images/dummyman1.png')}
-                                source={{
-                                  uri: item?.uri,
-                                }}
-                                // source={{uri :attachmentImage?.uri}}
-                                resizeMode={'stretch'}
-                                style={{
-                                  width: moderateScale(50, 0.3),
-                                  height: moderateScale(60, 0.3),
-                                }}
-                              />
-                            </View>
-                          );
+                  <View style={styles.imagesContainer}>
+                    <FlatList
+                      horizontal
+                      data={multiImages}
+                      showsHorizontalScrollIndicator={false}
+                      style={{
+                        flexGrow: 0,
+                      }}
+                      renderItem={({item, index}) => {
+                        return (
+                          <View
+                            style={[
+                              styles.addImageContainer,
+                              {
+                                borderWidth: 0,
+                                borderRadius: moderateScale(10, 0.3),
+                              },
+                            ]}>
+                            <Icon
+                              name={'close'}
+                              as={FontAwesome}
+                              color={Color.themeColor}
+                              size={moderateScale(12, 0.3)}
+                              style={{
+                                position: 'absolute',
+                                right: 1,
+                                top: 1,
+                                zIndex: 1,
+                              }}
+                              onPress={() => {
+                                // setAttachmentImage({})
+                                let newArray = [...multiImages];
+                                newArray.splice(index, 1);
+                                setMultiImages(newArray);
+                              }}
+                            />
+                            <CustomImage
+                              // source={require('../Assets/Images/dummyman1.png')}
+                              source={{
+                                uri: item?.uri,
+                              }}
+                              // source={{uri :attachmentImage?.uri}}
+                              resizeMode={'stretch'}
+                              style={{
+                                width: moderateScale(50, 0.3),
+                                height: moderateScale(60, 0.3),
+                              }}
+                            />
+                          </View>
+                        );
+                      }}
+                    />
+                    <View style={styles.addImageContainer}>
+                      <Icon
+                        name={'plus'}
+                        as={AntDesign}
+                        color={Color.themeColor}
+                        size={moderateScale(30, 0.3)}
+                        onPress={() => {
+                          setImagePickerVisible(true);
                         }}
                       />
-                      <View style={styles.addImageContainer}>
-                        <Icon
-                          name={'plus'}
-                          as={AntDesign}
-                          color={Color.themeColor}
-                          size={moderateScale(30, 0.3)}
-                          onPress={() => {
-                            setImagePickerVisible(true);
-                          }}
-                        />
-                      </View>
                     </View>
                   </View>
+                </View>
               </View>
 
               <CustomButton
@@ -1216,6 +1335,25 @@ const styles = ScaledSheet.create({
     color: Color.white,
     fontSize: moderateScale(10, 0.6),
     marginTop: moderateScale(20, 0.3),
+  },
+  reviewCard: {
+    borderWidth: 1,
+    borderColor: Color.white,
+    width: '95%',
+    padding: moderateScale(10, 0.6),
+    flexDirection: 'row',
+  },
+  review_imageContainer: {
+    height: windowHeight * 0.07,
+    width: windowHeight * 0.07,
+    borderRadius: (windowHeight * 0.07) / 2,
+    overflow: 'hidden',
+  },
+  review_text: {
+    fontSize: moderateScale(15, 0.6),
+    color: Color.white,
+    paddingHorizontal: moderateScale(10, 0.6),
+    paddingVertical: moderateScale(5, 0.6),
   },
   imagesContainer: {
     marginTop: moderateScale(10, 0.3),
