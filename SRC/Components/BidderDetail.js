@@ -31,10 +31,12 @@ const BidderDetail = ({item, photo, title, date, message}) => {
   const bidDelete = async () => {
     const url = `auth/negotiator/bid_delete`;
     const body = {
-      id: item?.id,
+      id: item?.bid_id,
     };
+    setIsLoading(true);
     const response = await Post(url, body, apiHeader(token));
-    return console.log('🚀 ~ bidDelete ~ response:', response?.data);
+    setIsLoading(false);
+    console.log('🚀 ~ bidDelete ~ response:', response?.data);
     if (response != undefined) {
     }
   };

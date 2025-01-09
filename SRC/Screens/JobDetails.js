@@ -64,6 +64,7 @@ const JobDetails = props => {
   const dispatch = useDispatch();
 
   const [data, setData] = useState();
+  console.log("🚀 ~ data ============================= >>>>>>>>>>:", data)
   const [checked, setChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [bidDone, setBidDone] = useState(false);
@@ -744,6 +745,7 @@ const JobDetails = props => {
                         paddingBottom: moderateScale(30, 0.6),
                       }}
                       renderItem={({item, index}) => {
+                        console.log("🚀 ~ item ============== > here :", item)
                         return (
                           <>
                             <BidderDetail
@@ -917,6 +919,7 @@ const JobDetails = props => {
                       // status: data?.status,
                       status: data?.bids?.status,
                       id: data?.id,
+                      bid_id : data?.bids[0]?.id
                       // attachment :
                     }}
                   />
