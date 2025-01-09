@@ -22,6 +22,7 @@ const HelpRequestModal = ({modalVisible, setModalVisible, selected}) => {
   const userData = useSelector(state => state.commonReducer.userData);
   const token = useSelector(state => state.authReducer.token);
   const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const changeStatus = async value => {
     const url = `auth/negotiator/bid_help_quote`;
@@ -29,9 +30,10 @@ const HelpRequestModal = ({modalVisible, setModalVisible, selected}) => {
       quote_id: selected?.quote_id,
       status: value,
     };
-    setLoading(true);
+    value == 'accept' ? setLoading(true) : setIsLoading(true);
     const response = await Post(url, body, apiHeader(token));
     setLoading(false);
+    setIsLoading(false);
     if (response != undefined) {
       setModalVisible(false);
     }
@@ -121,7 +123,7 @@ const HelpRequestModal = ({modalVisible, setModalVisible, selected}) => {
           <CustomButton
             isBold
             text={
-              loading ? (
+              isLoading ? (
                 <ActivityIndicator size={'small'} color={Color.white} />
               ) : (
                 'Decline'

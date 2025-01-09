@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
 import {moderateScale} from 'react-native-size-matters';
 import RatingComponent from './RatingComponent';
@@ -24,8 +24,10 @@ import {useSelector} from 'react-redux';
 import {ActivityIndicator} from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import ReviewModal from './ReviewModal';
+import {useIsFocused} from '@react-navigation/native';
 
 const MyQouteCard = ({item, type}) => {
+  const isFocused = useIsFocused();
   console.log('🚀 ~ MyQouteCard ~ item:', item?.status);
   const token = useSelector(state => state.authReducer.token);
   const [modalVisible, setModalVisible] = useState(false);
@@ -51,6 +53,8 @@ const MyQouteCard = ({item, type}) => {
       setbuttonName('Review');
     }
   };
+
+
 
   return (
     <TouchableOpacity
@@ -156,7 +160,7 @@ const MyQouteCard = ({item, type}) => {
                 fontSize: moderateScale(12, 0.3),
                 color: Color.blue,
               }}>
-              {numeral(item?.quoted_price).format('$0,0a')}
+              {item?.quoted_price}
             </CustomText>
           }
         </CustomText>
@@ -168,9 +172,7 @@ const MyQouteCard = ({item, type}) => {
                 fontSize: moderateScale(12, 0.3),
                 color: Color.blue,
               }}>
-              {item?.status == 'pending'
-                ? 'not yet'
-                : numeral(item?.asking_price).format('$0,0a')}
+              {item?.status == 'pending' ? 'not yet' : item?.asking_price}
             </CustomText>
           }
         </CustomText>

@@ -45,13 +45,13 @@ import {setBidDetail} from '../Store/slices/common';
 
 const JobDetails = props => {
   const data1 = props?.route?.params?.item;
-  console.log("🚀 ~ JobDetails ~ data1:", data1)
+  console.log('🚀 ~ JobDetails ~ data1:', data1);
   const type = props?.route?.params?.type;
   const bidData = useSelector(state => state.commonReducer.bidDetail);
   console.log('🚀 ~ JobDetails ~ bidData:', bidData?.id);
   const user = useSelector(state => state.commonReducer.userData);
   const token = useSelector(state => state.authReducer.token);
-  console.log("🚀 ~ JobDetails ~ token:", token)
+  console.log('🚀 ~ JobDetails ~ token:', token);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const UserCoverLetterArray = useSelector(
     state => state.commonReducer.servicesArray,
@@ -62,6 +62,7 @@ const JobDetails = props => {
   const dispatch = useDispatch();
 
   const [data, setData] = useState();
+  console.log("🚀 ~ =================== data ================:", data?.quoted_price)
   const [checked, setChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [bidDone, setBidDone] = useState(false);
@@ -70,7 +71,7 @@ const JobDetails = props => {
   const [number, setNumber] = useState(user?.phone);
   const [userData, setUserData] = useState({});
   // console.log('🚀 ~ JobDetails ~ userData:', userData);
-  console.log('🚀 ~ JobDetails ~ userData:', JSON.stringify(userData,null,2));
+  console.log('🚀 ~ JobDetails ~ userData:', JSON.stringify(userData, null, 2));
   // const [desc, setDesc] = useState(bidDone == true ? bidData?.coverletter : '');
   const [desc, setDesc] = useState(userData?.coverletter);
   const [fullName, setFullName] = useState(user?.first_name);
@@ -79,7 +80,7 @@ const JobDetails = props => {
   );
   const [imageModalVisible, setImageModalVisible] = useState(false);
   const [finalImagesArray, setFinalImagesArray] = useState([]);
-  console.log("🚀 ~ JobDetails ~ finalImagesArray:", finalImagesArray)
+  console.log('🚀 ~ JobDetails ~ finalImagesArray:', finalImagesArray);
   const [imagePickerVisible, setImagePickerVisible] = useState(false);
   const [isBidUpdate, setISbidUpdate] = useState(true);
   const [multiImages, setMultiImages] = useState([]);
@@ -106,9 +107,9 @@ const JobDetails = props => {
       if (mainuserData) {
         setBidDone(true);
         setUserData(mainuserData);
-        setDesc(mainuserData?.coverletter)
-        setCoverLetterRole(mainuserData?.expertise)
-        setMultiImages(userData?.images)
+        setDesc(mainuserData?.coverletter);
+        setCoverLetterRole(mainuserData?.expertise);
+        setMultiImages(userData?.images);
       }
     }
   };
@@ -173,11 +174,13 @@ const JobDetails = props => {
       formData.append(`images[${index}]`, item),
     );
 
- 
     setIsLoading(true);
     const response = await Post(url, formData, apiHeader(token));
     setIsLoading(false);
-    console.log("🚀 ~ bidNow ~ response:", JSON.stringify(response?.data?.bid_info, null, 2))
+    console.log(
+      '🚀 ~ bidNow ~ response:',
+      JSON.stringify(response?.data?.bid_info, null, 2),
+    );
 
     if (response != undefined) {
       // dispatch(setBidDetail(response?.data?.quote_info));
@@ -198,7 +201,7 @@ const JobDetails = props => {
       expertise: coverletterRole,
       coverletter: desc,
     };
-    console.log("🚀 ~ UpdateBid ~ body.bidData:", bidData?.id)
+    console.log('🚀 ~ UpdateBid ~ body.bidData:', bidData?.id);
 
     for (let key in body) {
       if (body[key] == '') {
@@ -242,11 +245,14 @@ const JobDetails = props => {
 
     // formData.append('attachment', attachmentImage)
 
-//  return   console.log("🚀 ~ UpdateBid ~ formData:", JSON.stringify(formData,null,2))
+    //  return   console.log("🚀 ~ UpdateBid ~ formData:", JSON.stringify(formData,null,2))
     setIsLoading(true);
     const response = await Post(url, formData, apiHeader(token));
     setIsLoading(false);
-    console.log("🚀 ~ UpdateBid ~ response:", JSON.stringify(response?.data?.bid_info,null,2))
+    console.log(
+      '🚀 ~ UpdateBid ~ response:',
+      JSON.stringify(response?.data?.bid_info, null, 2),
+    );
 
     if (response != undefined) {
       Platform.OS == 'android'
@@ -263,11 +269,9 @@ const JobDetails = props => {
 
   useEffect(() => {
     bidDetails();
-    
   }, []);
 
-  
-console.log("dESC===>, ", desc, coverletterRole)
+  console.log('dESC===>, ', desc, coverletterRole);
   const imageDelete = async id => {
     const url = `auth/negotiator/bid_image_delete/${id}`;
     const response = await Delete(url, apiHeader(token));
@@ -505,15 +509,15 @@ console.log("dESC===>, ", desc, coverletterRole)
                   iconType={FontAwesome}
                   marginTop={moderateScale(30, 0.3)}
                 />
-                {userRole != 'Business Qbidder' && (
-                  <Detailcards
-                    data={numeral(data?.quoted_price).format('$0,0a')}
-                    iconName={'calculator'}
-                    title={'Orginal Price '}
-                    iconType={Entypo}
-                    marginTop={moderateScale(30, 0.3)}
-                  />
-                )}
+                {/* {userRole != 'Business Qbidder' && ( */}
+                <Detailcards
+                  data={data?.quoted_price}
+                  iconName={'calculator'}
+                  title={'Orginal Price '}
+                  iconType={Entypo}
+                  marginTop={moderateScale(30, 0.3)}
+                />
+                {/* )} */}
                 <Detailcards
                   data={data?.service_preference}
                   iconName={'briefcase'}
@@ -875,16 +879,15 @@ console.log("dESC===>, ", desc, coverletterRole)
       <Modal
         isVisible={isModalVisible}
         onBackdropPress={() => {
-      if(userData?.length < 1){
-        setFullName('');
-        setEmail('');
-        setNumber('');
-        setCoverLetterRole('');
-        setDesc('');
-      setModalVisible(false);
-        
-      }
-      setModalVisible(false);
+          if (userData?.length < 1) {
+            setFullName('');
+            setEmail('');
+            setNumber('');
+            setCoverLetterRole('');
+            setDesc('');
+            setModalVisible(false);
+          }
+          setModalVisible(false);
         }}>
         <View
           style={{
@@ -928,6 +931,7 @@ console.log("dESC===>, ", desc, coverletterRole)
                 color={Color.themeColor}
                 placeholderColor={Color.themeLightGray}
                 borderRadius={moderateScale(25, 0.3)}
+                disable
               />
               <TextInputWithTitle
                 secureText={false}
@@ -946,6 +950,7 @@ console.log("dESC===>, ", desc, coverletterRole)
                 color={Color.themeColor}
                 placeholderColor={Color.themeLightGray}
                 borderRadius={moderateScale(25, 0.3)}
+                disable
               />
               <TextInputWithTitle
                 secureText={false}
@@ -965,6 +970,7 @@ console.log("dESC===>, ", desc, coverletterRole)
                 placeholderColor={Color.themeLightGray}
                 borderRadius={moderateScale(25, 0.3)}
                 keyboardType={'numeric'}
+                disable
               />
               <DropDownSingleSelect
                 array={UserCoverLetterArray}
@@ -1060,9 +1066,11 @@ console.log("dESC===>, ", desc, coverletterRole)
                                   zIndex: 1,
                                 }}
                                 onPress={() => {
-                                  let newArray =multiImages.filter(item1 => item1?.id !== item?.id );
+                                  let newArray = multiImages.filter(
+                                    item1 => item1?.id !== item?.id,
+                                  );
                                   // newArray.splice(index, 1);
-                                  
+
                                   setMultiImages(newArray);
                                   imageDelete(item?.id);
                                   // setAttachmentImage({})

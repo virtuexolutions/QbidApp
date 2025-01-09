@@ -456,7 +456,7 @@ const CreateNew = props => {
             ]}>
             Upload vendor Qouted list
           </CustomText>
-          {fromupdatequote && (
+          {fromupdatequote == true ? (
             <View
               style={{
                 flexDirection: 'row',
@@ -519,6 +519,7 @@ const CreateNew = props => {
                   }}
                 />
               </View>
+
               <View style={styles.imagesContainer}>
                 <FlatList
                   horizontal
@@ -584,64 +585,73 @@ const CreateNew = props => {
                 </View>
               </View>
             </View>
-          )}
-          {/* <View style={styles.imagesContainer}>
-            <FlatList
-              horizontal
-              data={multiImages}
-              showsHorizontalScrollIndicator={false}
-              style={{
-                flexGrow: 0,
-              }}
-              renderItem={({item, index}) => {
-                return (
-                  <View
-                    style={[
-                      styles.addImageContainer,
-                      {borderWidth: 0, borderRadius: moderateScale(10, 0.3)},
-                    ]}>
-                    <Icon
-                      name={'close'}
-                      as={FontAwesome}
-                      color={Color.themeColor}
-                      size={moderateScale(12, 0.3)}
-                      style={{
-                        position: 'absolute',
-                        right: 1,
-                        top: 1,
-                        zIndex: 1,
-                      }}
-                      onPress={() => {
-                        let newArray = [...multiImages];
-                        newArray.splice(index, 1);
-                        setMultiImages(newArray);
-                      }}
-                    />
-                    <CustomImage
-                      source={{uri: fromupdatequote ? item?.image : item?.uri}}
-                      resizeMode={'stretch'}
-                      style={{
-                        width: moderateScale(50, 0.3),
-                        height: moderateScale(60, 0.3),
-                      }}
-                    />
-                  </View>
-                );
-              }}
-            />
-
-            <View style={styles.addImageContainer}>
-              <Icon
-                name={'plus'}
-                as={AntDesign}
-                color={Color.themeColor}
-                size={moderateScale(30, 0.3)}
-                onPress={() => {
-                  setShowMultiImageModal(true);
+          ) : (
+            <View
+              style={[
+                styles.imagesContainer,
+                {
+                  width: windowWidth * 0.8,
+                },
+              ]}>
+              <FlatList
+                horizontal
+                data={multiImages}
+                showsHorizontalScrollIndicator={false}
+                style={{
+                  flexGrow: 0,
+                }}
+                renderItem={({item, index}) => {
+                  return (
+                    <View
+                      style={[
+                        styles.addImageContainer,
+                        // {borderWidth: 0, borderRadius: moderateScale(10, 0.3)},
+                      ]}>
+                      <Icon
+                        name={'close'}
+                        as={FontAwesome}
+                        color={Color.themeColor}
+                        size={moderateScale(12, 0.3)}
+                        style={{
+                          position: 'absolute',
+                          right: 1,
+                          top: 1,
+                          zIndex: 1,
+                        }}
+                        onPress={() => {
+                          let newArray = [...multiImages];
+                          newArray.splice(index, 1);
+                          setMultiImages(newArray);
+                        }}
+                      />
+                      <CustomImage
+                        source={{
+                          uri: item?.uri,
+                        }}
+                        resizeMode={'stretch'}
+                        style={{
+                          width: moderateScale(50, 0.3),
+                          height: moderateScale(60, 0.3),
+                        }}
+                      />
+                    </View>
+                  );
                 }}
               />
+
+              <View style={styles.addImageContainer}>
+                <Icon
+                  name={'plus'}
+                  as={AntDesign}
+                  color={Color.themeColor}
+                  size={moderateScale(30, 0.3)}
+                  onPress={() => {
+                    setShowMultiImageModal(true);
+                  }}
+                />
+              </View>
             </View>
-          </View> */}
+          )}
           <TextInputWithTitle
             titleText={'Special Notes for negotiators'}
             secureText={false}

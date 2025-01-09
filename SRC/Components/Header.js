@@ -133,14 +133,13 @@ const Header = props => {
           <CustomImage
             onPress={() => {
               userRole == 'Qbid Member'
-                ? alert('Action required')
+                ? alert('Alert Sent, Specialist would contact you soon')
                 : navigationN.navigate('NegotiatorPortfolio');
             }}
             source={
               userRole == 'Qbid Member'
-              ? require('../Assets/Images/Group.png')
-              :
-              user?.photo
+                ? require('../Assets/Images/Group.png')
+                : user?.photo
                 ? {uri: `${user?.photo}`}
                 : require('../Assets/Images/man1.jpg')
             }
@@ -150,7 +149,6 @@ const Header = props => {
               height: '100%',
             }}
           />
-        
         </TouchableOpacity>
       ) : (
         <View

@@ -151,7 +151,7 @@ const NotificationScreen = () => {
   },[isFocused])
   const getDeviceToken = async () => {
     const token = await messaging().getToken();
-    console, log('device token here ==== >>>>> >>>', token);
+    console.log('device token here ==== >>>>> >>>', token);
   };
 
   useEffect(() => {

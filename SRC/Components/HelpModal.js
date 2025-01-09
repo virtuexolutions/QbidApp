@@ -6,6 +6,7 @@ import {
   Platform,
   OS,
   ToastAndroid,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useState} from 'react';
 import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
@@ -92,7 +93,13 @@ const HelpModal = ({modalVisible, setModalVisible}) => {
           width={windowWidth * 0.5}
           height={windowHeight * 0.05}
           borderRadius={moderateScale(30, 0.4)}
-          text={'help'}
+          text={
+            isLoading ? (
+              <ActivityIndicator size={'small'} color={Color.white} />
+            ) : (
+              'help'
+            )
+          }
           fontSize={moderateScale(15, 0.3)}
           onPress={() => {
             help();
