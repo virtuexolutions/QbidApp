@@ -50,6 +50,7 @@ const NegotiatorPortfolio = props => {
   // const data = props?.route?.params?.data
 
   const userdata = useSelector(state => state.commonReducer.userData);
+  console.log("🚀 ~ userdata:", userdata)
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
@@ -212,14 +213,15 @@ const NegotiatorPortfolio = props => {
   // }
 
   const reviews = async () => {
-    const url = 'auth/review';
+    const url = 'auth/negotiator/review_list';
 
     setIsLoading(true);
-    const response = await Get('auth/review', token);
+    const response = await Get(url, token);
+    console.log('🚀 ~ reviews ~ response:', response?.data);
     setIsLoading(false);
 
     if (response != undefined) {
-      setReview(response?.data?.review);
+      setReview(response?.data?.review_list);
     }
   };
 
@@ -729,8 +731,10 @@ const NegotiatorPortfolio = props => {
                   </CustomText>
                 );
               }}
-              data={item?.ratings ? item?.ratings : userdata?.negotiator_review}
+              data={review}
+              // data={item?.ratings ? item?.ratings : userdata?.negotiator_review}
               renderItem={({item, index}) => {
+                console.log("🚀 ~ item:", item?.user)
                 return (
                   <View style={styles.view}>
                     <View style={styles.mainview}>
@@ -739,7 +743,7 @@ const NegotiatorPortfolio = props => {
                           height: '100%',
                           width: '100%',
                         }}
-                        source={{uri: item?.user_info?.photo}}
+                        source={{uri: item?.user?.photo}}
                       />
                     </View>
                     <View

@@ -25,11 +25,14 @@ import {ActivityIndicator} from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import ReviewModal from './ReviewModal';
 import {useIsFocused} from '@react-navigation/native';
+import {Icon} from 'native-base';
+import Feather from 'react-native-vector-icons/Feather';
 
 const MyQouteCard = ({item, type}) => {
   const isFocused = useIsFocused();
   console.log('🚀 ~ MyQouteCard ~ item:', item?.status);
   const token = useSelector(state => state.authReducer.token);
+  console.log('🚀 ~ MyQouteCard ~ token ============= from :', token);
   const [modalVisible, setModalVisible] = useState(false);
   const [cmpLoading, setCmpLoading] = useState(false);
   const [rbRef, setRbRef] = useState(null);
@@ -54,7 +57,16 @@ const MyQouteCard = ({item, type}) => {
     }
   };
 
-
+  const quoteDelete = async () => {
+    const url = `auth/member/quote_delete`;
+    const body = {
+      id: item?.id,
+    };
+    const response = await Post(url, body, apiHeader(token));
+    console.log('🚀 ~ quoteDelete ~ response:', response?.data);
+    if (response != undefined) {
+    }
+  };
 
   return (
     <TouchableOpacity
@@ -63,6 +75,22 @@ const MyQouteCard = ({item, type}) => {
       onPress={() => {
         navigationService.navigate('JobDetails', {item: item, type: true});
       }}>
+      {item?.status == 'pending' && (
+        <Icon
+          onPress={() => {
+            quoteDelete();
+          }}
+          style={{
+            position: 'absolute',
+            right: 10,
+            top: 10,
+          }}
+          name={'trash'}
+          as={Feather}
+          size={moderateScale(20, 0.6)}
+          color={Color.blue}
+        />
+      )}
       <View
         style={{
           position: 'absolute',

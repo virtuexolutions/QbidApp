@@ -37,6 +37,7 @@ const HomeScreen = () => {
   const isFocused = useIsFocused();
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const userData = useSelector(state => state.commonReducer.userData);
+  console.log("🚀 ~ HomeScreen ~ userData:", userData)
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
   console.log('🚀 ~ HomeScreen ~ token:', token);
@@ -47,6 +48,7 @@ const HomeScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [myQuotes, setMyQuotes] = useState([]);
+  console.log("🚀 ~ HomeScreen ~ myQuotes:", myQuotes)
   const [proposals, setProposals] = useState([]);
   const [modalVisible1, setModalVisible1] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);

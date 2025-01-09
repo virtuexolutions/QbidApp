@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Text,
   ToastAndroid,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
@@ -39,27 +40,35 @@ import {validateEmail} from '../Config';
 import moment from 'moment';
 import {SliderBox} from 'react-native-image-slider-box';
 import ImageSlider from 'react-native-image-slider';
+import {Rating} from 'react-native-ratings';
+import ReviewModal from '../Components/ReviewModal';
 
 const CompleteJobs = props => {
   const data1 = props?.route?.params?.item;
-  
+  console.log('🚀 ~ CompleteJobs ~ data1:', data1);
+
   const user = useSelector(state => state.commonReducer.userData);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
+  console.log("🚀 ~ token:", token)
+  const [rbRef, setRbRef] = useState(null);
 
-  const [images, setImages] = useState([])
-  console.log("🚀 ~ CompleteJobs ~ images:", images)
-
-
-
+  const [images, setImages] = useState([]);
+  console.log('🚀 ~ CompleteJobs ~ images:', images);
+  const [buttonName, setbuttonName] = useState(
+    data1?.status == 'onGoing'
+      ? 'Complete'
+      : data1?.status == 'completed' && [0, undefined].includes(data1?.rating)
+      ? 'Review'
+      : 'reviewed',
+  );
   useEffect(() => {
-    setImages(data1?.images?.map((item)=>{return ({uri:item?.image})}))
-  
-    
-  }, [])
-  
-
-
+    setImages(
+      data1?.images?.map(item => {
+        return {uri: item?.image};
+      }),
+    );
+  }, []);
 
   return (
     <ScreenBoiler
@@ -81,37 +90,44 @@ const CompleteJobs = props => {
           ? Color.themeBgColorNegotiator
           : Color.themebgBusinessQbidder
       }>
-      <LinearGradient
-        style={{
-          height: windowHeight * 0.97,
-        }}
-        start={{x: 0, y: 0}}
-        end={{x: 1, y: 0}}
-        colors={
-          userRole == 'Qbid Member'
-            ? Color.themeBgColor
-            : userRole == 'Qbid Negotiator'
-            ? Color.themeBgColorNegotiator
-            : Color.themebgBusinessQbidder
-        }>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={styles.sectionContainer}
-          contentContainerStyle={{
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={styles.sectionContainer}
+        contentContainerStyle={{}}>
+        <LinearGradient
+          style={{
+            height: windowHeight * 0.97,
             paddingBottom: moderateScale(80, 0.6),
-          }}>
+          }}
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 0}}
+          colors={
+            userRole == 'Qbid Member'
+              ? Color.themeBgColor
+              : userRole == 'Qbid Negotiator'
+              ? Color.themeBgColorNegotiator
+              : Color.themebgBusinessQbidder
+          }>
           <View>
-        <ImageSlider
-         loopBothSides
-         autoPlayWithInterval={3000}
-         images={images}
-         customSlide={({ index, item, style, width }) => (
-           // It's important to put style here because it's got offset inside
-           <View key={index} style={[style,{width: windowWidth , height: windowHeight * 0.25}]}>
-          <Image source={item} style={{width: "100%", height: "100%"}} />
-           </View>
-         )}
-        />
+            <ImageSlider
+              loopBothSides
+              autoPlayWithInterval={3000}
+              images={images}
+              customSlide={({index, item, style, width}) => (
+                // It's important to put style here because it's got offset inside
+                <View
+                  key={index}
+                  style={[
+                    style,
+                    {width: windowWidth, height: windowHeight * 0.25},
+                  ]}>
+                  <Image
+                    source={item}
+                    style={{width: '100%', height: '100%'}}
+                  />
+                </View>
+              )}
+            />
             {/* <SliderBox
               autoplay={false}
               images={images}
@@ -123,34 +139,28 @@ const CompleteJobs = props => {
                 fontSize: moderateScale(20, 0.6),
                 paddingVertical: moderateScale(20, 0.3),
                 color: Color.white,
-                paddingHorizontal:moderateScale(10,0.6)
+                paddingHorizontal: moderateScale(10, 0.6),
               }}
               isBold>
               {data1?.title}
             </CustomText>
-            <View
-              style={styles.parentview}>
+            <View style={styles.parentview}>
               <View style={styles.views}>
                 <CustomText
                   style={[
                     styles.viewText,
                     {
-                    
                       color: Color.black,
                     },
                   ]}
                   isBold>
-                 quoted price
+                  quoted price
                 </CustomText>
                 <CustomText style={styles.viewText} isBold>
                   {data1?.quoted_price}
                 </CustomText>
               </View>
-              <View
-                style={
-                  styles.views
-                  
-                  }>
+              <View style={styles.views}>
                 <CustomText
                   style={[
                     styles.viewText,
@@ -160,11 +170,11 @@ const CompleteJobs = props => {
                     },
                   ]}
                   isBold>
-                 asking price
+                  asking price
                 </CustomText>
                 <CustomText style={styles.viewText} isBold>
-                {data1?.asking_price}
-                 
+                  {data1?.asking_price}
+
                   {/* {data1?.notes} */}
                 </CustomText>
               </View>
@@ -195,7 +205,7 @@ const CompleteJobs = props => {
                 earning from this project
               </CustomText>
               <CustomText style={styles.heading1} isBold>
-               {data1?.user_info?.total_earning}
+                {data1?.user_info?.total_earning}
               </CustomText>
             </View>
             <CustomText style={styles.heading1} isBold>
@@ -208,7 +218,7 @@ const CompleteJobs = props => {
                     height: '100%',
                     width: '100%',
                   }}
-                  source={{uri :data1?.user_info?.photo}}
+                  source={{uri: data1?.user_info?.photo}}
                 />
               </View>
               <View
@@ -223,22 +233,45 @@ const CompleteJobs = props => {
                       textTransform: 'uppercase',
                     },
                   ]}>
-                 {data1?.user_info?.first_name}
+                  {data1?.user_info?.first_name}
                   {/* {item?.name} */}
                 </CustomText>
                 <CustomText style={styles.usertext}>
-                {data1?.user_info?.email}
+                  {data1?.user_info?.email}
                   {/* {item?.comment} */}
                 </CustomText>
               </View>
             </View>
             <View>
-              <CustomText style={styles.reviewheading} isBold>
-                Review
-              </CustomText>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}>
+                <CustomText style={styles.reviewheading} isBold>
+                  Review
+                </CustomText>
+                <TouchableOpacity onPress={() => rbRef.open()}>
+                  <CustomText
+                    style={{
+                      fontSize: moderateScale(12, 0.6),
+                      marginRight: moderateScale(15, 0.6),
+                      textDecorationLine: 'underline',
+                      color: Color.white,
+                    }}
+                    isBold>
+                    Write an Review
+                  </CustomText>
+                </TouchableOpacity>
+              </View>
               <FlatList
                 data={data1?.review}
                 renderItem={({item, index}) => {
+                  console.log(
+                    '🚀 ~ CompleteJobs ~ item:',
+                    JSON.stringify(item, null, 2),
+                  );
                   return (
                     <View style={styles.reviewcard}>
                       <View style={styles.reviewimage}>
@@ -247,7 +280,7 @@ const CompleteJobs = props => {
                             height: '100%',
                             width: '100%',
                           }}
-                          source={{uri:item?.user_info?.photo}}
+                          source={{uri: item?.user_info?.photo}}
                         />
                       </View>
                       <View
@@ -269,12 +302,13 @@ const CompleteJobs = props => {
                             ]}>
                             {item?.user_info?.first_name}
                           </CustomText>
-                          <Icon
+                          <Rating  imageSize={moderateScale(10,.6)} ratingCount={item?.rating} />
+                          {/* <Icon
                             name="star"
                             as={FontAwesome}
                             color={'black'}
                             size={15}
-                          />
+                          /> */}
                         </View>
                         <CustomText style={styles.reviewtext}>
                           {item?.text}
@@ -289,8 +323,14 @@ const CompleteJobs = props => {
               />
             </View>
           </View>
-        </ScrollView>
-      </LinearGradient>
+          <ReviewModal
+            setRef={setRbRef}
+            item={data1}
+            rbRef={rbRef}
+            setbuttonName={setbuttonName}
+          />
+        </LinearGradient>
+      </ScrollView>
     </ScreenBoiler>
   );
 };
@@ -325,7 +365,7 @@ const styles = ScaledSheet.create({
     paddingHorizontal: moderateScale(5, 0.3),
     paddingVertical: moderateScale(5, 0.3),
     color: Color.black,
-    textAlign:'center',
+    textAlign: 'center',
     // backgroundColor:'blue'
   },
   imageConatiner: {
@@ -338,14 +378,13 @@ const styles = ScaledSheet.create({
     fontSize: moderateScale(20, 0.6),
     paddingVertical: moderateScale(15, 0.3),
     color: Color.white,
-    paddingHorizontal:moderateScale(10,0.6)
+    paddingHorizontal: moderateScale(10, 0.6),
   },
   description: {
     fontSize: moderateScale(14, 0.6),
     width: windowWidth * 0.87,
     color: Color.white,
-    paddingHorizontal:moderateScale(10,0.6)
-
+    paddingHorizontal: moderateScale(10, 0.6),
   },
   view2: {
     flexDirection: 'row',
@@ -357,8 +396,7 @@ const styles = ScaledSheet.create({
   heading1: {
     fontSize: moderateScale(18, 0.6),
     color: Color.white,
-    paddingHorizontal:moderateScale(10,0.6)
-
+    paddingHorizontal: moderateScale(10, 0.6),
   },
   userview: {
     flexDirection: 'row',
@@ -383,11 +421,10 @@ const styles = ScaledSheet.create({
   reviewheading: {
     fontSize: moderateScale(20, 0.6),
     color: Color.white,
-    paddingHorizontal:moderateScale(10,0.6)
-
+    paddingHorizontal: moderateScale(10, 0.6),
   },
   reviewcard: {
-    marginHorizontal:moderateScale(15,0.6),
+    marginHorizontal: moderateScale(15, 0.6),
     flexDirection: 'row',
     marginVertical: moderateScale(10, 0.3),
     paddingHorizontal: moderateScale(10, 0.3),
@@ -413,10 +450,10 @@ const styles = ScaledSheet.create({
     fontSize: moderateScale(12, 0.6),
     width: windowWidth * 0.75,
   },
-  parentview:{
+  parentview: {
     flexDirection: 'row',
     width: windowWidth,
-    justifyContent:'space-between',
-    paddingHorizontal:moderateScale(15,0.6),
-  } 
+    justifyContent: 'space-between',
+    paddingHorizontal: moderateScale(15, 0.6),
+  },
 });

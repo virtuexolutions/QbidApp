@@ -27,7 +27,9 @@ const CreateNew = props => {
   const hire = props?.route?.params?.hire;
   const quoteData = props?.route?.params?.data;
   console.log('🚀 ~ CreateNew ~ quoteData:', quoteData);
+  console.log('🚀 ~ CreateNew ~ quoteData:', quoteData?.images);
   console.log('🚀 ~ CreateNew ~ quoteData:', quoteData?.id);
+  // const fromupdatequote = true;
   const fromupdatequote = props?.route?.params?.fromupdatequote;
 
   const negotiater_id = props?.route?.params?.id;
@@ -36,7 +38,8 @@ const CreateNew = props => {
   const token = useSelector(state => state.authReducer.token);
   console.log('🚀 ~ CreateNew ~ token:', token);
   const location = useSelector(state => state.commonReducer.location);
-
+  const [qouteImages, setQuoteImages] = useState(quoteData?.images);
+  console.log('🚀 ~ CreateNew ~ qouteImages:', qouteImages);
   const [qouteTitle, setQouteTitle] = useState(
     fromupdatequote ? quoteData?.title : '',
   );
@@ -156,15 +159,18 @@ const CreateNew = props => {
 
     const formData = new FormData();
 
-    if (multiImages.length == 0) {
-      return Platform.OS == 'android'
-        ? ToastAndroid.show(`add atleast one image `, ToastAndroid.SHORT)
-        : Alert.alert(`add atleast one image `);
+    // if (multiImages.length == 0) {
+    //   return Platform.OS == 'android'
+    //     ? ToastAndroid.show(`add atleast one image `, ToastAndroid.SHORT)
+    //     : Alert.alert(`add atleast one image `);
+    // }
+    if (multiImages?.length > 0) {
+      multiImages?.map((item, index) =>
+        formData.append(`images[${index}]`, item),
+      );
+    } else {
+      formData.append('images[]', null);
     }
-
-    multiImages?.map((item, index) =>
-      formData.append(`images[${index}]`, item),
-    );
     for (let key in body) {
       if (body[key] == '') {
         return Platform.OS == 'android'
@@ -174,8 +180,7 @@ const CreateNew = props => {
         formData.append(key, body[key]);
       }
     }
-    //
-    //  return  console.log('====================== from data', JSON.stringify(formData ,null ,2));
+    // return console.log("🚀 ~ updateQuote ~ formData:", JSON.stringify(formData,null,2))
     setIsLoading(true);
     const response = await Post(url, formData, apiHeader(token, true));
     setIsLoading(false);
@@ -289,8 +294,7 @@ const CreateNew = props => {
           : Color.themebgBusinessQbidder
       }
       showHeader={true}
-      //  showBack={true}
-    >
+      showBack={fromupdatequote}>
       <LinearGradient
         style={
           {
@@ -456,26 +460,27 @@ const CreateNew = props => {
             ]}>
             Upload vendor Qouted list
           </CustomText>
-          {fromupdatequote == true ? (
-            <View
-              style={{
-                flexDirection: 'row',
-                width: windowWidth * 0.9,
-                paddingHorizontal: moderateScale(10, 0.6),
-                justifyContent: 'flex-start',
-                flexWrap: 'wrap',
-                alignItems: 'flex-start',
-                paddingVertical: moderateScale(15, 0.6),
-              }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              width: windowWidth * 0.9,
+              paddingHorizontal: moderateScale(10, 0.6),
+              justifyContent: 'flex-start',
+              flexWrap: 'wrap',
+              alignItems: 'flex-start',
+              paddingVertical: moderateScale(15, 0.6),
+            }}>
+            {fromupdatequote && (
               <View style={[styles.imagesContainer]}>
                 <FlatList
                   horizontal
-                  data={quoteData?.images}
+                  data={qouteImages}
                   showsHorizontalScrollIndicator={false}
                   style={{
                     flexGrow: 0,
                   }}
                   renderItem={({item, index}) => {
+                    console.log('🚀 ~ CreateNew ~ item:', item);
                     return (
                       <View
                         style={[
@@ -498,9 +503,13 @@ const CreateNew = props => {
                           }}
                           onPress={() => {
                             // setAttachmentImage({})
-                            let newArray = [...multiImages];
-                            newArray.splice(index, 1);
-                            setMultiImages(newArray);
+                            setQuoteImages(prevQouteImages =>
+                              prevQouteImages?.filter(
+                                item1 => item1?.id !== item?.id,
+                              ),
+                            );
+                            // let newArray = [...multiImages];
+                            //  quoteData?.images?.splice(index,1)
                           }}
                         />
                         <CustomImage
@@ -519,80 +528,9 @@ const CreateNew = props => {
                   }}
                 />
               </View>
+            )}
 
-              <View style={styles.imagesContainer}>
-                <FlatList
-                  horizontal
-                  data={multiImages}
-                  showsHorizontalScrollIndicator={false}
-                  style={{
-                    flexGrow: 0,
-                  }}
-                  renderItem={({item, index}) => {
-                    return (
-                      <View
-                        style={[
-                          styles.addImageContainer,
-                          {
-                            borderWidth: 0,
-                            borderRadius: moderateScale(10, 0.3),
-                          },
-                        ]}>
-                        <Icon
-                          name={'close'}
-                          as={FontAwesome}
-                          color={Color.themeColor}
-                          size={moderateScale(12, 0.3)}
-                          style={{
-                            position: 'absolute',
-                            right: 1,
-                            top: 1,
-                            zIndex: 1,
-                          }}
-                          onPress={() => {
-                            // setAttachmentImage({})
-                            let newArray = [...multiImages];
-                            newArray.splice(index, 1);
-                            setMultiImages(newArray);
-                          }}
-                        />
-                        <CustomImage
-                          // source={require('../Assets/Images/dummyman1.png')}
-                          source={{
-                            uri: item?.uri,
-                          }}
-                          // source={{uri :attachmentImage?.uri}}
-                          resizeMode={'stretch'}
-                          style={{
-                            width: moderateScale(50, 0.3),
-                            height: moderateScale(60, 0.3),
-                          }}
-                        />
-                      </View>
-                    );
-                  }}
-                />
-                <View style={styles.addImageContainer}>
-                  <Icon
-                    name={'plus'}
-                    as={AntDesign}
-                    color={Color.themeColor}
-                    size={moderateScale(30, 0.3)}
-                    onPress={() => {
-                      setShowMultiImageModal(true);
-                    }}
-                  />
-                </View>
-              </View>
-            </View>
-          ) : (
-            <View
-              style={[
-                styles.imagesContainer,
-                {
-                  width: windowWidth * 0.8,
-                },
-              ]}>
+            <View style={styles.imagesContainer}>
               <FlatList
                 horizontal
                 data={multiImages}
@@ -601,11 +539,15 @@ const CreateNew = props => {
                   flexGrow: 0,
                 }}
                 renderItem={({item, index}) => {
+                  console.log('🚀 ~ CreateNew ~ item:', item);
                   return (
                     <View
                       style={[
                         styles.addImageContainer,
-                        // {borderWidth: 0, borderRadius: moderateScale(10, 0.3)},
+                        {
+                          borderWidth: 0,
+                          borderRadius: moderateScale(10, 0.3),
+                        },
                       ]}>
                       <Icon
                         name={'close'}
@@ -619,15 +561,18 @@ const CreateNew = props => {
                           zIndex: 1,
                         }}
                         onPress={() => {
-                          let newArray = [...multiImages];
-                          newArray.splice(index, 1);
-                          setMultiImages(newArray);
+                          multiImages.splice(index, 1);
+                          setMultiImages(prevImages =>
+                            prevImages?.splice(index, 1),
+                          );
                         }}
                       />
                       <CustomImage
+                        // source={require('../Assets/Images/dummyman1.png')}
                         source={{
                           uri: item?.uri,
                         }}
+                        // source={{uri :attachmentImage?.uri}}
                         resizeMode={'stretch'}
                         style={{
                           width: moderateScale(50, 0.3),
@@ -636,6 +581,74 @@ const CreateNew = props => {
                       />
                     </View>
                   );
+                }}
+              />
+              <View style={styles.addImageContainer}>
+                <Icon
+                  name={'plus'}
+                  as={AntDesign}
+                  color={Color.themeColor}
+                  size={moderateScale(30, 0.3)}
+                  onPress={() => {
+                    setShowMultiImageModal(true);
+                  }}
+                />
+              </View>
+            </View>
+          </View>
+          {/* <View style={styles.imagesContainer}>
+            <FlatList
+              horizontal
+              data={multiImages}
+              showsHorizontalScrollIndicator={false}
+              style={{
+                flexGrow: 0,
+              }}
+              renderItem={({item, index}) => {
+                return (
+                  <View
+                    style={[
+                      styles.addImageContainer,
+                      {borderWidth: 0, borderRadius: moderateScale(10, 0.3)},
+                    ]}>
+                    <Icon
+                      name={'close'}
+                      as={FontAwesome}
+                      color={Color.themeColor}
+                      size={moderateScale(12, 0.3)}
+                      style={{
+                        position: 'absolute',
+                        right: 1,
+                        top: 1,
+                        zIndex: 1,
+                      }}
+                      onPress={() => {
+                        let newArray = [...multiImages];
+                        newArray.splice(index, 1);
+                        setMultiImages(newArray);
+                      }}
+                    />
+                    <CustomImage
+                      source={{uri: fromupdatequote ? item?.image : item?.uri}}
+                      resizeMode={'stretch'}
+                      style={{
+                        width: moderateScale(50, 0.3),
+                        height: moderateScale(60, 0.3),
+                      }}
+                    />
+                  </View>
+                );
+              }}
+            />
+
+            <View style={styles.addImageContainer}>
+              <Icon
+                name={'plus'}
+                as={AntDesign}
+                color={Color.themeColor}
+                size={moderateScale(30, 0.3)}
+                onPress={() => {
+                  setShowMultiImageModal(true);
                 }}
               />
 
@@ -652,6 +665,7 @@ const CreateNew = props => {
               </View>
             </View>
           )}
+            */}
           <TextInputWithTitle
             titleText={'Special Notes for negotiators'}
             secureText={false}

@@ -18,7 +18,7 @@ import TextInputWithTitle from '../Components/TextInputWithTitle';
 import CustomButton from '../Components/CustomButton';
 import {ActivityIndicator} from 'react-native';
 import ReviewCard from '../Components/ReviewCard';
-import BidderDetail from '../Components/BidderDetail';
+import BidderDetail from './BidderDetail';
 
 const Detailcards = ({title, data, iconName, iconType , marginTop , containerStyle , textColor}) => {
     const userRole = useSelector(state => state.commonReducer.selectedRole);

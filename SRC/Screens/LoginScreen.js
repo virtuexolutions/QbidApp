@@ -107,6 +107,7 @@ const LoginScreen = () => {
       password: password,
       device_token: device_token,
     };
+  //  return console.log("🚀 ~ Login ~ body:", body)
     for (let key in body) {
       if (body[key] == '') {
         return Platform.OS == 'android'
