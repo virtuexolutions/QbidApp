@@ -37,10 +37,9 @@ const HomeScreen = () => {
   const isFocused = useIsFocused();
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const userData = useSelector(state => state.commonReducer.userData);
-  console.log("🚀 ~ HomeScreen ~ userData:", userData)
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
-  console.log('🚀 ~ HomeScreen ~ token:', token);
+  console.log("🚀 ~ HomeScreen ~ token:", token)
 
   const [searchData, setSearchData] = useState('');
   const [showMultiImageModal, setShowMultiImageModal] = useState(false);
@@ -48,7 +47,6 @@ const HomeScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [myQuotes, setMyQuotes] = useState([]);
-  console.log("🚀 ~ HomeScreen ~ myQuotes:", myQuotes)
   const [proposals, setProposals] = useState([]);
   const [modalVisible1, setModalVisible1] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
@@ -129,23 +127,10 @@ const HomeScreen = () => {
             paddingBottom: moderateScale(105, 0.3),
             paddingTop: moderateScale(40, 0.3),
           }}>
-          <View
-            style={{
-              width: windowWidth * 0.93,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              paddingHorizontal: moderateScale(10, 0.6),
-              alignItems: 'center',
-            }}>
+          <View style={styles.searchView}>
             <SearchContainer
               onPress={() => {
                 if (selectedData1 == '') {
-                  // return Platform.OS == 'android'
-                  //   ? ToastAndroid.show(
-                  //       'please select any category',
-                  //       ToastAndroid.SHORT,
-                  //     )
-                  //   :
                   Alert.alert('Please select any category');
                 } else {
                   navigationService.navigate('SeeAllScreen', {
@@ -203,6 +188,7 @@ const HomeScreen = () => {
             </View>
           ) : (
             <FlatList
+              scrollEnabled={false}
               ListEmptyComponent={() => {
                 return (
                   <NoData
@@ -332,16 +318,9 @@ const HomeScreen = () => {
             </View>
           ) : (
             <FlatList
+              scrollEnabled={false}
               ListEmptyComponent={() => {
-                return (
-                  <NoData
-                    style={{
-                      height: windowHeight * 0.2,
-                      width: windowWidth * 0.5,
-                      alignItems: 'center',
-                    }}
-                  />
-                );
+                return <NoData style={styles.NoData} />;
               }}
               data={helpResponse}
               // data={myQuotes.filter(item => item?.type == 'help')}
@@ -437,57 +416,16 @@ const styles = ScaledSheet.create({
     position: 'absolute',
     bottom: 0,
   },
+  NoData: {
+    height: windowHeight * 0.2,
+    width: windowWidth * 0.5,
+    alignItems: 'center',
+  },
+  searchView: {
+    width: windowWidth * 0.93,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: moderateScale(10, 0.6),
+    alignItems: 'center',
+  },
 });
-
-{
-  /* <FlatList
-      data={[{
-        companyName : 'ABC company',
-        fullName : 'john marco',
-        number : '12345678',
-        address : 'abc street newyork , USA',
-        email : 'john@gmail.com',
-        Qbid_member_name : 'Chris',
-        Qbid_member_email : 'chrisnevins@gmail.com',
-        contact : '+1(333)111-1111',
-        image : 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_960_720.jpg'
-      },
-      {
-        companyName : 'ABC company',
-        fullName : 'john marco',
-        number : '12345678',
-        address : 'abc street newyork , USA',
-        email : 'john@gmail.com',
-        Qbid_member_name : 'Chris',
-        Qbid_member_email : 'chrisnevins@gmail.com',
-        contact : '+1(333)333-1111',
-        image : 'https://media.istockphoto.com/id/1021170914/photo/beautiful-landscape-in-park-with-tree-and-green-grass-field-at-morning.jpg?s=612x612&w=is&k=20&c=Qd0K-pvuKcje8CGDcJkJ3UJzHbGtGYRw8wwcbno99O4='
-
-      },
-      {
-        companyName : 'ABC company',
-        fullName : 'john marco',
-        number : '12345678',
-        address : 'abc street newyork , USA',
-        email : 'john@gmail.com',
-        Qbid_member_name : 'Chris',
-        Qbid_member_email : 'chrisnevins@gmail.com',
-        contact : '+1(333)111-222',
-        image : 'https://media.istockphoto.com/id/1216579927/photo/colorful-sunset-scenery-on-open-field.jpg?s=612x612&w=is&k=20&c=qPm0H72LjrnQ22yWKPIycy6tCQsutL230c7-Ttl8_FU='
-
-
-      },
-    ]}
-      showsVerticalScrollIndicator ={false}
-      contentContainerStyle={{
-        paddingTop : moderateScale(20,0.3),
-        paddingBottom : moderateScale(50,0.3),
-
-      }}
-      renderItem={({item , index})=>{
-        return(
-          <BidDetailCard item={item} />
-        )
-      }}
-      /> */
-}

@@ -1,4 +1,13 @@
-import { StyleSheet, Text, View, TouchableOpacity,  FlatList, Platform, ToastAndroid, Alert} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  FlatList,
+  Platform,
+  ToastAndroid,
+  Alert,
+} from 'react-native';
 import React, {useRef, useState} from 'react';
 import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -13,9 +22,9 @@ import TextInputWithTitle from './TextInputWithTitle';
 import {Post} from '../Axios/AxiosInterceptorFunction';
 import {useSelector} from 'react-redux';
 import CustomButton from './CustomButton';
-import { ActivityIndicator } from 'react-native';
+import {ActivityIndicator} from 'react-native';
 
-const ReviewModal = ({setRef,rbRef, item, setbuttonName}) => {
+const ReviewModal = ({setRef, rbRef, item, setbuttonName}) => {
   const token = useSelector(state => state.authReducer.token);
   const [loading, setLoading] = useState(false);
   const [review, setReview] = useState('');
@@ -35,19 +44,19 @@ const ReviewModal = ({setRef,rbRef, item, setbuttonName}) => {
     const response = await Post(url, body, apiHeader(token));
     setLoading(false);
     if (response != undefined) {
-    
-      Platform.OS == 'android'? ToastAndroid.show('Review sent',ToastAndroid.SHORT) : Alert.alert('Review sent')
-     setRating(0)
-    setReview('')
-    setbuttonName('reviewed')
-     rbRef.close()
+      Platform.OS == 'android'
+        ? ToastAndroid.show('Review sent', ToastAndroid.SHORT)
+        : Alert.alert('Review sent');
+      setRating(0);
+      setReview('');
+      setbuttonName('reviewed');
+      rbRef.close();
     }
-
   };
 
   return (
     <RBSheet
-    closeOnDragDown={true}
+      closeOnDragDown={true}
       ref={ref => setRef(ref)}
       height={450}
       dragFromTopOnly={true}
@@ -116,12 +125,20 @@ const ReviewModal = ({setRef,rbRef, item, setbuttonName}) => {
         />
 
         <CustomButton
-          text={loading ? <ActivityIndicator size={'small'}  color={'white'}/>:'send review'}
+          text={
+            loading ? (
+              <ActivityIndicator size={'small'} color={'white'} />
+            ) : (
+              'send review'
+            )
+          }
           textColor={Color.white}
           width={windowWidth * 0.55}
           height={windowHeight * 0.08}
           marginTop={moderateScale(15, 0.3)}
-          onPress={() => {sendReview()}}
+          onPress={() => {
+            sendReview();
+          }}
           bgColor={Color.themeColor}
           borderRadius={moderateScale(30, 0.3)}
           fontSize={moderateScale(15, 0.3)}

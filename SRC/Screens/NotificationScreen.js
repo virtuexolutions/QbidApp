@@ -116,10 +116,6 @@ const NotificationScreen = () => {
     const response = await Get(url, token);
     setIsLoading(false);
     if (response != undefined) {
-      console.log(
-        '🚀 ~ helpNotify ~ response:',
-        JSON.stringify(response?.data, null, 2),
-      );
       setHelpNotification(response?.data?.notification_info);
     }
   };
@@ -133,25 +129,27 @@ const NotificationScreen = () => {
 
   // }, []);
 
-  const getNotifications = async () =>{
+  const getNotifications = async () => {
     const url = 'auth/negotiator/notification';
     setIsLoading(true);
     const response = await Get(url, token);
-    console.log("🚀 ~ getNotifications ~ response:", JSON.stringify(response?.data,null, 2))
+    console.log(
+      '🚀 ~ getNotifications ~ response:',
+      JSON.stringify(response?.data, null, 2),
+    );
     setIsLoading(false);
-    if(response != undefined){
+    if (response != undefined) {
       setMemberNotifications(response?.data?.notification_info);
     }
-  }
+  };
 
-  useEffect(()=>{
-    if(userRole =="Qbid Member" ){
+  useEffect(() => {
+    if (userRole == 'Qbid Member') {
       getNotifications();
     }
-  },[isFocused])
+  }, [isFocused]);
   const getDeviceToken = async () => {
     const token = await messaging().getToken();
-    console.log('device token here ==== >>>>> >>>', token);
   };
 
   useEffect(() => {
@@ -200,7 +198,9 @@ const NotificationScreen = () => {
           </View>
         ) : (
           <FlatList
-            data={userRole == 'Qbid Member' ? memberNotifications : helpNotification}
+            data={
+              userRole == 'Qbid Member' ? memberNotifications : helpNotification
+            }
             showsVerticalScrollIndicator={false}
             key={item => item?.id}
             contentContainerStyle={{
@@ -218,9 +218,9 @@ const NotificationScreen = () => {
                 <NotificationCard
                   image={
                     // userRole != 'Qbid Member'
-                      // ? item?.user_info?.photo
-                      item?.user_info?.photo
-                      // : item?.image
+                    // ? item?.user_info?.photo
+                    item?.user_info?.photo
+                    // : item?.image
                   }
                   // name={
                   //   userRole != 'Qbid Member'
@@ -235,7 +235,7 @@ const NotificationScreen = () => {
                     // userRole != 'Qbid Member'
                     //   ? moment(item.created_at).format('ll')
                     //   : moment(item.created_at).format('ll')
-                      moment(item.created_at).format('ll')
+                    moment(item.created_at).format('ll')
                   }
                   onPress={() => {
                     setModalVisible(true);

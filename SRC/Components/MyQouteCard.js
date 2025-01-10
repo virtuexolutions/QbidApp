@@ -30,9 +30,7 @@ import Feather from 'react-native-vector-icons/Feather';
 
 const MyQouteCard = ({item, type}) => {
   const isFocused = useIsFocused();
-  console.log('🚀 ~ MyQouteCard ~ item:', item?.status);
   const token = useSelector(state => state.authReducer.token);
-  console.log('🚀 ~ MyQouteCard ~ token ============= from :', token);
   const [modalVisible, setModalVisible] = useState(false);
   const [cmpLoading, setCmpLoading] = useState(false);
   const [rbRef, setRbRef] = useState(null);

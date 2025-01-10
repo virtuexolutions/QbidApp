@@ -22,6 +22,7 @@ import {Post} from '../Axios/AxiosInterceptorFunction';
 import ImageView from 'react-native-image-viewing';
 
 const JobCard = ({fromSeeAll, style, onPress, item, getProposal}) => {
+  console.log('🚀 ~ JobCard ~ item:', item?.status);
   const token = useSelector(state => state.authReducer.token);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
 
@@ -29,7 +30,6 @@ const JobCard = ({fromSeeAll, style, onPress, item, getProposal}) => {
   const [declineLoading, setDeclineLoading] = useState(false);
   const [imageModal, setImageModal] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-
 
   const imagesArray = (
     item?.images ? item?.images : item?.quote_info?.images
@@ -43,9 +43,8 @@ const JobCard = ({fromSeeAll, style, onPress, item, getProposal}) => {
     const response = await Post(url, {status: value}, apiHeader(token));
     value == 'onGoing' ? setLoading(false) : setDeclineLoading(false);
     if (response != undefined) {
-     
       setModalVisible(false);
-      getProposal()
+      getProposal();
     }
   };
 
@@ -85,8 +84,10 @@ const JobCard = ({fromSeeAll, style, onPress, item, getProposal}) => {
               overflow: 'hidden',
             }}>
             <CustomImage
-              source={item?.images?.length > 0 ? {uri:item?.images[0]?.image} :
-                item?.quote_info?.images.length > 0
+              source={
+                item?.images?.length > 0
+                  ? {uri: item?.images[0]?.image}
+                  : item?.quote_info?.images.length > 0
                   ? {uri: item?.quote_info?.images[0]?.image}
                   : require('../Assets/Images/man1.jpg')
               }
@@ -97,22 +98,33 @@ const JobCard = ({fromSeeAll, style, onPress, item, getProposal}) => {
               }}
             />
           </TouchableOpacity>
-          <CustomText
-            isBold
-            numberOfLines={2}
-            style={{
-              width: windowWidth * 0.2,
-              fontSize: fromSeeAll
-                ? moderateScale(11, 0.6)
-                : moderateScale(9, 0.6),
-              marginLeft: moderateScale(5, 0.3),
-            }}>
-            {item?.title
-              ? item?.title
-              : item?.quote_info?.title
-              ? item?.quote_info?.title
-              : item?.bid_name}
-          </CustomText>
+          <View>
+            <CustomText
+              isBold
+              numberOfLines={2}
+              style={{
+                width: windowWidth * 0.2,
+                fontSize: fromSeeAll
+                  ? moderateScale(11, 0.6)
+                  : moderateScale(9, 0.6),
+                marginLeft: moderateScale(5, 0.3),
+              }}>
+              {item?.title
+                ? item?.title
+                : item?.quote_info?.title
+                ? item?.quote_info?.title
+                : item?.bid_name}
+            </CustomText>
+            <CustomText
+              numberOfLines={2}
+              style={{
+                width: windowWidth * 0.2,
+                fontSize: moderateScale(8, 0.6),
+                marginLeft: moderateScale(5, 0.3),
+              }}>
+              {item?.status}
+            </CustomText>
+          </View>
         </View>
         <CustomText
           numberOfLines={3}
@@ -142,7 +154,7 @@ const JobCard = ({fromSeeAll, style, onPress, item, getProposal}) => {
               style={{
                 fontSize: moderateScale(8, 0.6),
               }}>
-             Business Quote 
+              Business Quote
             </CustomText>
           </View>
           <View

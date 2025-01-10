@@ -54,7 +54,7 @@ const NegotiatorHomeScreen = () => {
   const [isLocation, setIsLocation] = useState(false);
   const [bidList, setBidList] = useState([]);
   const [helpBidList, setHelpBidList] = useState([]);
-  
+
   // const getRecommand =async () => {
 
   //   const url = 'auth/negotiator/quote/recommended'
@@ -86,7 +86,6 @@ const NegotiatorHomeScreen = () => {
         setRecommended(response1?.data?.quote_info?.data);
     }
     if (response2 != undefined) {
-    
       ![null, undefined, ''].includes(response2?.data?.quote_info?.data) &&
         setWorking(response2?.data?.quote_info?.data);
       // setWorking(prev => [...prev, ...response2?.data?.hiring_info?.data]);
@@ -120,7 +119,6 @@ const NegotiatorHomeScreen = () => {
       isLocation,
     })
       .then(location => {
-     
         setIsLocation(location);
         dispatch(setLocation(location));
       })

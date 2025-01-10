@@ -26,9 +26,6 @@ import {useNavigation} from '@react-navigation/native';
 const CreateNew = props => {
   const hire = props?.route?.params?.hire;
   const quoteData = props?.route?.params?.data;
-  console.log('🚀 ~ CreateNew ~ quoteData:', quoteData);
-  console.log('🚀 ~ CreateNew ~ quoteData:', quoteData?.images);
-  console.log('🚀 ~ CreateNew ~ quoteData:', quoteData?.id);
   // const fromupdatequote = true;
   const fromupdatequote = props?.route?.params?.fromupdatequote;
 

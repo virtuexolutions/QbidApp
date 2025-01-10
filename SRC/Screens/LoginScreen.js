@@ -50,11 +50,6 @@ const LoginScreen = () => {
   const [previousScale, setPreviousScale] = useState(1);
   const [translateX, setTranslateX] = useState(0);
   const fcmToken = useSelector(state => state.authReducer.fcmToken);
-  console.log(
-    '🚀 ~ LoginScreen ==================== >>> ~ fcmToken:',
-    fcmToken,
-  );
-
   const [translateY, setTranslateY] = useState(0);
 
   const servicesArray = ['Qbid Member', 'Business Qbidder'];

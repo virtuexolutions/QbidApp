@@ -61,10 +61,6 @@ const MessagesScreen = props => {
     const response = await Get(url, token);
     setIsLoading(false);
     if (response != undefined) {
-      console.log(
-        '🚀 ~ success ========================== >>>>>>>>>>  :',
-        response?.data,
-      );
     }
   };
 

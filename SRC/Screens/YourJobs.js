@@ -36,6 +36,7 @@ const YourJobs = props => {
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const token = useSelector(state => state.authReducer.token);
+  console.log('🚀 ~ token:', token);
 
   const isFocused = useIsFocused();
   const scrollViewRef = useRef();
@@ -182,7 +183,7 @@ const YourJobs = props => {
               paddingBottom: moderateScale(80, 0.6),
             }}
             renderItem={({item, index}) => {
-              console.log('🚀 ~ YourJobs ~ item:', item?.id);
+              console.log('🚀 ~ YourJobs ~ item:', item);
               console.log(index % 2 == 0);
               return type != 'Seeking Help' ? (
                 <TouchableOpacity

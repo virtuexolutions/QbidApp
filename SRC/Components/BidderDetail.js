@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Image, TouchableOpacity} from 'react-native';
+import {View, Image, TouchableOpacity, ActivityIndicator} from 'react-native';
 import {ScaledSheet, moderateScale} from 'react-native-size-matters';
 import CustomText from '../Components/CustomText';
 import Constants from '../Assets/Utilities/Constants';
@@ -17,7 +17,7 @@ import {useNavigation} from '@react-navigation/native';
 import {Post} from '../Axios/AxiosInterceptorFunction';
 
 const BidderDetail = ({item, photo, title, date, message}) => {
-  console.log('🚀 ~ BidderDetail ~ item:', item);
+  console.log("🚀 ~ BidderDetail ~ item:", item)
   const token = useSelector(state => state.authReducer.token);
   const navigation = useNavigation();
   const userRole = useSelector(state => state.commonReducer.selectedRole);
@@ -36,8 +36,8 @@ const BidderDetail = ({item, photo, title, date, message}) => {
     setIsLoading(true);
     const response = await Post(url, body, apiHeader(token));
     setIsLoading(false);
-    console.log('🚀 ~ bidDelete ~ response:', response?.data);
     if (response != undefined) {
+    console.log("🚀 ~ bidDelete ~ response:", response?.data)
     }
   };
 
@@ -113,8 +113,7 @@ const BidderDetail = ({item, photo, title, date, message}) => {
       {item?.attachment?.length > 0 && (
         <CustomText
           onPress={() => {
-            console.log('hfjshfjkkjsdfjhs');
-            // if (finalImagesArray.length > 0) {
+            // if (finalImagesArray.length > 0) {F
             setImageModalVisible(true);
             // } else {
             //   return Platform.OS == 'android'
@@ -218,21 +217,27 @@ const BidderDetail = ({item, photo, title, date, message}) => {
             ? 'Rejected'
             : 'pending'}
         </CustomText>
-
-        <Icon
-          onPress={() => {
-            item?.splice(0, 1);
-            // bidDelete();
-          }}
-          style={{
-            position: 'absolute',
-            right: -25,
-          }}
-          as={Feather}
-          name="trash"
-          size={moderateScale(12, 0.6)}
-          color={Color.white}
-        />
+        {item?.status == 'pending' &&
+          userRole == 'Business Qbidder' &&
+          (isLoading ? (
+            <ActivityIndicator size={'small'} color={'white'} />
+          ) : (
+            <Icon
+              onPress={() => {
+                console.log('assaassssssssssssssssssssssssssss', (item = {}));
+                // item = {}
+                bidDelete();
+              }}
+              style={{
+                position: 'absolute',
+                right: -25,
+              }}
+              as={Feather}
+              name="trash"
+              size={moderateScale(12, 0.6)}
+              color={Color.white}
+            />
+          ))}
       </View>
     </View>
   );
