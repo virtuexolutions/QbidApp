@@ -526,7 +526,68 @@ const CreateNew = props => {
                 />
               </View>
             )}
-
+            {/* {fromupdatequote && (
+              <View style={[styles.imagesContainer]}>
+                <FlatList
+                  scrollEnabled={false}
+                  horizontal
+                  data={bidDataImages}
+                  showsHorizontalScrollIndicator={false}
+                  style={{
+                    flexGrow: 0,
+                  }}
+                  renderItem={({item, index}) => {
+                    return (
+                      <View
+                        style={[
+                          styles.addImageContainer,
+                          {
+                            borderWidth: 0,
+                            borderRadius: moderateScale(10, 0.3),
+                          },
+                        ]}>
+                        <Icon
+                          name={'close'}
+                          as={FontAwesome}
+                          color={Color.themeColor}
+                          size={moderateScale(12, 0.3)}
+                          style={{
+                            position: 'absolute',
+                            right: 1,
+                            top: 1,
+                            zIndex: 1,
+                          }}
+                          onPress={() => {
+                            // let newArray =multiImages.filter(item1 => item1?.id !== item?.id );
+                            // newArray.splice(index, 1);
+                            setBidDataImages(prevImages =>
+                              prevImages?.filter(
+                                item1 => item1?.id !== item?.id,
+                              ),
+                            );
+                            // setMultiImages(newArray);
+                            imageDelete(item?.id);
+                            // setAttachmentImage({})
+                          }}
+                        />
+                        <CustomImage
+                          source={{
+                            // uri: item?.image,
+                            uri: bidDone ? item?.image : item?.uri,
+                          }}
+                          // source={{uri :attachmentImage?.uri}}
+                          resizeMode={'stretch'}
+                          style={{
+                            width: moderateScale(50, 0.3),
+                            height: moderateScale(60, 0.3),
+                          }}
+                        />
+                      </View>
+                    );
+                  }}
+                />
+              </View>
+            )} */}
             <View style={styles.imagesContainer}>
               <FlatList
                 horizontal
@@ -536,7 +597,6 @@ const CreateNew = props => {
                   flexGrow: 0,
                 }}
                 renderItem={({item, index}) => {
-                  console.log('🚀 ~ CreateNew ~ item:', item);
                   return (
                     <View
                       style={[
@@ -737,11 +797,11 @@ const styles = ScaledSheet.create({
   },
   addImageContainer: {
     width: windowWidth * 0.14,
+    height: windowHeight * 0.07,
     backgroundColor: Color.white,
     borderRadius: moderateScale(5, 0.3),
     borderWidth: 2,
     borderColor: Color.blue,
-    height: windowHeight * 0.07,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: moderateScale(10, 0.3),

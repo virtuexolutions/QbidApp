@@ -28,6 +28,8 @@ import CustomImage from '../Components/CustomImage';
 import DropDownSingleSelect from '../Components/DropDownSingleSelect';
 import {useIsFocused} from '@react-navigation/native';
 import ReviewModal from '../Components/ReviewModal';
+import {imageUrl} from '../Config';
+import {off} from 'npm';
 
 const YourJobs = props => {
   const type = props?.route?.params?.type;
@@ -138,7 +140,7 @@ const YourJobs = props => {
             marginHorizontal: moderateScale(15, 0.3),
           }}
         />
-
+        {/* 
         {isLoading ? (
           <View
             style={{
@@ -150,140 +152,85 @@ const YourJobs = props => {
             }}>
             <ActivityIndicator color={'white'} size={'large'} />
           </View>
-        ) : (
-          <FlatList
-            ListEmptyComponent={() => {
-              return (
-                <View
-                  style={{
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: windowHeight * 0.5,
-                  }}>
-                  <NoData
-                    style={{
-                      width: windowWidth * 0.95,
-                      height: windowHeight * 0.3,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
+        ) : ( */}
+        <FlatList
+          ListEmptyComponent={() => {
+            return (
+              <View style={styles.nodataView}>
+                <NoData style={styles.NoData} />
+              </View>
+            );
+          }}
+          ref={scrollViewRef}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
+          data={completedJobscards}
+          numColumns={type != 'Seeking Help' ? 2 : 1}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            width: windowWidth,
+            alignItems: 'center',
+            paddingBottom: moderateScale(80, 0.6),
+          }}
+          renderItem={({item, index}) => {
+            console.log('🚀 ~ YourJobs ~ item:', item);
+            console.log(index % 2 == 0);
+            return type != 'Seeking Help' ? (
+              <TouchableOpacity
+                onPress={() =>
+                  navigationService.navigate('CompleteJobs', {item: item})
+                }
+                style={styles.card}>
+                <View style={styles.imageView}>
+                  <CustomImage
+                    style={styles.image}
+                    source={{uri: item?.user_info?.photo}}
                   />
                 </View>
-              );
-            }}
-            ref={scrollViewRef}
-            onScroll={handleScroll}
-            scrollEventThrottle={16}
-            data={completedJobscards}
-            numColumns={type != 'Seeking Help' ? 2 : 1}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{
-              width: windowWidth,
-              alignItems: 'center',
-              paddingBottom: moderateScale(80, 0.6),
-            }}
-            renderItem={({item, index}) => {
-              console.log('🚀 ~ YourJobs ~ item:', item);
-              console.log(index % 2 == 0);
-              return type != 'Seeking Help' ? (
-                <TouchableOpacity
-                  onPress={() =>
-                    navigationService.navigate('CompleteJobs', {item: item})
-                  }
+                <View
                   style={{
-                    flexDirection: 'row',
-                    marginVertical: moderateScale(10, 0.3),
                     paddingHorizontal: moderateScale(10, 0.3),
-                    backgroundColor: Color.white,
-                    width: windowWidth * 0.45,
-                    borderRadius: moderateScale(10, 0.3),
-                    marginHorizontal: moderateScale(5, 0.3),
-                    paddingVertical: moderateScale(10, 0.3),
-                    alignItems: 'center',
                   }}>
-                  <View
-                    style={{
-                      height: windowHeight * 0.08,
-                      width: windowHeight * 0.08,
-                      borderRadius: 10,
-                      overflow: 'hidden',
-                    }}>
-                    <CustomImage
-                      style={{
-                        height: '100%',
-                        width: '100%',
-                      }}
-                      source={{uri: item?.user_info?.photo}}
-                      // {uri: user?.photo}
-                    />
-                  </View>
-                  <View
-                    style={{
-                      paddingTop: moderateScale(15, 0.3),
-                      paddingHorizontal: moderateScale(10, 0.3),
-                      // alignItems:'center',
-                      justifyContent: 'center',
-                    }}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        // justifyContent:'center'
-                      }}>
-                      <CustomText
-                        isBold
-                        numberOfLines={1}
-                        style={{
-                          color: Color.black,
-                          fontSize: moderateScale(12, 0.6),
-                          // textTransform: 'uppercase',
-                          width: windowWidth * 0.2,
-                          // backgroundColor:'red',
-                          // paddingRight: moderateScale(10, 0.3),
-                        }}>
-                        {item?.user_info?.first_name}
-                      </CustomText>
-                    </View>
-                    <CustomText
-                      style={{
-                        color: Color.black,
-                        fontSize: moderateScale(12, 0.6),
-                        width: windowWidth * 0.75,
-                      }}>
-                      earning
+                  <View style={styles.row}>
+                    <CustomText numberOfLines={1} style={styles.title}>
+                      quote title :
                     </CustomText>
-                    <CustomText
-                      style={{
-                        color: Color.black,
-                        fontSize: moderateScale(12, 0.6),
-                        width: windowWidth * 0.75,
-                      }}>
-                      {item?.user_info?.total_earning}
+                    <CustomText numberOfLines={1} style={styles.titletext}>
+                      {item?.title}
                     </CustomText>
                   </View>
-                </TouchableOpacity>
-              ) : (
-                <Card item={item} />
-              );
-            }}
-            ListHeaderComponent={() => {
-              return <CustomText style={styles.header}>{type}</CustomText>;
-            }}
-            ListFooterComponent={() => {
-              return (
-                loadMore && (
-                  <View
-                    style={{
-                      alignSelf: 'center',
-                      marginTop: moderateScale(10, 0.3),
-                    }}>
-                    <ActivityIndicator size={'small'} color={'white'} />
+                  <View style={styles.row2}>
+                    <CustomText style={styles.off}>
+                      offeringpercentage :
+                    </CustomText>
+                    <CustomText style={styles.off}>
+                      {item?.offering_percentage}
+                    </CustomText>
                   </View>
-                )
-              );
-            }}
-          />
-        )}
+                </View>
+              </TouchableOpacity>
+            ) : (
+              <Card item={item} />
+            );
+          }}
+          ListHeaderComponent={() => {
+            return <CustomText style={styles.header}>{type}</CustomText>;
+          }}
+          ListFooterComponent={() => {
+            return (
+              loadMore && (
+                <View
+                  style={{
+                    alignSelf: 'center',
+                    marginTop: moderateScale(10, 0.3),
+                  }}>
+                  <ActivityIndicator size={'small'} color={'white'} />
+                </View>
+              )
+            );
+          }}
+        />
+        {/* // )} */}
         {/* </ScrollView> */}
         <CustomStatusModal
           isModalVisible={isModalVisible}
@@ -315,5 +262,64 @@ const styles = ScaledSheet.create({
     marginLeft: moderateScale(15, 0.3),
     fontSize: moderateScale(20, 0.6),
     paddingTop: moderateScale(10, 0.3),
+  },
+  nodataView: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: windowHeight * 0.5,
+  },
+  NoData: {
+    width: windowWidth * 0.95,
+    height: windowHeight * 0.3,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  card: {
+    // flexDirection: 'row',
+    marginVertical: moderateScale(10, 0.3),
+    // paddingHorizontal: moderateScale(10, 0.3),
+    backgroundColor: Color.white,
+    width: windowWidth * 0.42,
+    height: windowHeight * 0.15,
+    borderRadius: moderateScale(10, 0.3),
+    marginHorizontal: moderateScale(5, 0.3),
+    // paddingVertical: moderateScale(10, 0.3),
+    alignItems: 'center',
+  },
+  imageView: {
+    height: windowHeight * 0.1,
+    width: '100%',
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  image: {
+    height: '100%',
+    width: '100%',
+  },
+  row: {
+    flexDirection: 'row',
+    width: windowWidth * 0.42,
+    paddingVertical: moderateScale(3, 0.6),
+    paddingHorizontal: moderateScale(3, 0.6),
+  },
+  row2: {
+    flexDirection: 'row',
+    width: windowWidth * 0.42,
+    paddingHorizontal: moderateScale(3, 0.6),
+  },
+  title: {
+    color: Color.black,
+    fontSize: moderateScale(10, 0.6),
+  },
+  titletext: {
+    color: Color.black,
+    fontSize: moderateScale(10, 0.6),
+    paddingHorizontal: moderateScale(2, 0.6),
+    width : windowWidth *0.25,
+  },
+  off: {
+    color: Color.black,
+    fontSize: moderateScale(10, 0.6),
+    paddingHorizontal : moderateScale(2,.6)
   },
 });

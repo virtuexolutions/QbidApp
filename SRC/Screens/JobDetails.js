@@ -44,6 +44,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import {setBidDetail} from '../Store/slices/common';
 import {Rating} from 'react-native-ratings';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import ReviewAskingModal from '../Components/ReviewAskingModal';
 
 const JobDetails = props => {
   const data1 = props?.route?.params?.item;
@@ -53,6 +54,7 @@ const JobDetails = props => {
   const user = useSelector(state => state.commonReducer.userData);
   const token = useSelector(state => state.authReducer.token);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
+  console.log('🚀 ~ userRole:', userRole);
   const UserCoverLetterArray = useSelector(
     state => state.commonReducer.servicesArray,
   );
@@ -62,7 +64,6 @@ const JobDetails = props => {
   const dispatch = useDispatch();
 
   const [data, setData] = useState();
-  console.log('🚀 ~ data:', data);
   const [checked, setChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [bidDone, setBidDone] = useState(false);
@@ -80,6 +81,9 @@ const JobDetails = props => {
   const [isBidUpdate, setISbidUpdate] = useState(true);
   const [multiImages, setMultiImages] = useState([]);
   const [attachmentImage, setAttachmentImage] = useState({});
+  const [askingforReview, setAskingforReview] = useState(false);
+  console.log('🚀 ~ askingforReview:', askingforReview);
+  console.log('🚀 ~ bidDetails ~ data?.status:', data?.status);
 
   const bidDetails = async () => {
     const url = `auth/negotiator/quote_detail/${
@@ -90,7 +94,6 @@ const JobDetails = props => {
     setIsLoading(false);
 
     if (response != undefined) {
-      console.log('🚀 ~ bidDetails ~ response:', response?.data);
       setData(response?.data?.quote_info);
 
       const mainuserData = response?.data?.quote_info?.bids?.find(
@@ -251,9 +254,27 @@ const JobDetails = props => {
     setModalVisible(!isModalVisible);
   };
 
+  console.log(
+    data?.status?.toLocaleLowerCase(),
+    'data?.status?.toLocaleLowerCase()',
+  );
+
+  // useEffect(() => {
+  //   if (userRole == 'Qbid Member') {
+  //     setAskingforReview(true);
+  //   }
+  // }, [data?.status === 'completed' ]);
+  useEffect(() => {
+    if (data?.status === 'completed' && userRole === 'Qbid Member') {
+      setAskingforReview(true);
+    } else {
+      setAskingforReview(false);
+    }
+  }, [data?.status, userRole]);
+
   useEffect(() => {
     bidDetails();
-  }, []);
+  }, [isFocused]);
 
   console.log('dESC===>, ', desc, coverletterRole);
   const imageDelete = async id => {
@@ -263,9 +284,6 @@ const JobDetails = props => {
       // dispatch(setBidDetail(response?.data?.quote_info));
     }
   };
-
-  // const benefit = (data?.offering_percentage / 100) * data?.asking_price;
-  // console.log('🚀 ~ benefit:', benefit);
   return (
     <ScreenBoiler
       hideUser={false}
@@ -567,27 +585,11 @@ const JobDetails = props => {
               )} */}
               {userRole != 'Qbid Member' && (
                 <>
-                  <CustomText
-                    isBold
-                    style={{
-                      color: Color.white,
-                      fontSize: moderateScale(17, 0.6),
-                      marginVertical: moderateScale(10, 0.3),
-                    }}>
+                  <CustomText isBold style={styles.detailText}>
                     User Details
                   </CustomText>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                    }}>
-                    <View
-                      style={{
-                        width: moderateScale(60, 0.3),
-                        height: moderateScale(50, 0.3),
-                        borderRadius: moderateScale(10, 0.3),
-                        overflow: 'hidden',
-                      }}>
+                  <View style={styles.view}>
+                    <View style={styles.ImageView}>
                       <CustomImage
                         source={
                           data?.user_info?.photo
@@ -604,12 +606,7 @@ const JobDetails = props => {
                       style={{
                         marginLeft: moderateScale(5, 0.3),
                       }}>
-                      <CustomText
-                        isBold
-                        style={{
-                          color: Color.white,
-                          fontSize: moderateScale(17, 0.6),
-                        }}>
+                      <CustomText isBold style={styles.text}>
                         {`${data?.user_info?.first_name} ${data?.user_info?.last_name}`}
                       </CustomText>
                       <CustomText
@@ -656,60 +653,28 @@ const JobDetails = props => {
 
               {userRole == 'Qbid Member' && data1?.type != 'specific' ? (
                 <>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}>
-                    <CustomText
-                      isBold
-                      style={{
-                        color: Color.white,
-                        fontSize: moderateScale(14, 0.6),
-                        marginBottom: moderateScale(10, 0.3),
-                        marginTop: moderateScale(20, 0.3),
-                      }}>
+                  <View style={styles.row2}>
+                    <CustomText isBold style={styles.txt}>
                       {data?.status != 'review'
                         ? 'The Best Quote for your Project'
                         : 'review'}
                     </CustomText>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        marginRight: moderateScale(15, 0.6),
-                      }}>
-                      <CustomText
-                        isBold
-                        style={{
-                          color: Color.white,
-                          fontSize: moderateScale(13, 0.6),
-                          marginBottom: moderateScale(10, 0.3),
-                          marginTop: moderateScale(20, 0.3),
-                          color: Color.blue,
-                        }}>
+                    <View style={styles.bidrow}>
+                      <CustomText isBold style={styles.bidtxt}>
                         {data?.status != 'review'
                           ? 'Total bids'
                           : 'total review '}
                       </CustomText>
-                      <CustomText
-                        isBold
-                        style={{
-                          color: Color.white,
-                          fontSize: moderateScale(13, 0.6),
-                          marginBottom: moderateScale(10, 0.3),
-                          marginTop: moderateScale(20, 0.3),
-                          color: Color.white,
-                          marginLeft: moderateScale(7, 0.6),
-                        }}>
+                      <CustomText isBold style={styles.bidlength}>
                         {data?.status != 'review'
                           ? data?.bids?.length
                           : data?.review?.length}
                       </CustomText>
                     </View>
                   </View>
+                  {/* {data?.status.toLocaleLowerCase() == 'completed' &&
+                    setAskingforReview(true)} */}
+
                   {data?.status != 'review' ? (
                     <FlatList
                       key={item => item?.id}
@@ -722,12 +687,7 @@ const JobDetails = props => {
                       ListEmptyComponent={() => {
                         return (
                           <NoData
-                            style={{
-                              width: windowWidth * 0.95,
-                              height: windowHeight * 0.18,
-                              // backgroundColor: 'green',
-                              alignItems: 'center',
-                            }}
+                            style={styles.noData}
                             text={'No requests yet'}
                           />
                         );
@@ -752,18 +712,7 @@ const JobDetails = props => {
                             />
                             {data?.status == 'pending' &&
                               item?.status == 'pending' && (
-                                <View
-                                  key={index}
-                                  style={{
-                                    flexDirection: 'row',
-                                    // backgroundColor: 'black',
-                                    justifyContent: 'space-between',
-                                    width: windowWidth * 0.55,
-                                    alignSelf: 'center',
-                                    paddingVertical: moderateScale(5, 0.6),
-                                    alignItems: 'center',
-                                    marginBottom: moderateScale(5, 0.6),
-                                  }}>
+                                <View key={index} style={styles.statusbtn}>
                                   <CustomButton
                                     isBold
                                     text={
@@ -825,12 +774,7 @@ const JobDetails = props => {
                       ListEmptyComponent={() => {
                         return (
                           <NoData
-                            style={{
-                              width: windowWidth * 0.95,
-                              height: windowHeight * 0.18,
-                              // backgroundColor: 'green',
-                              alignItems: 'center',
-                            }}
+                            style={styles.noData}
                             text={'No requests yet'}
                           />
                         );
@@ -887,36 +831,16 @@ const JobDetails = props => {
                 bidDone &&
                 data1?.type != 'specific' ? (
                 <>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      // backgroundColor: 'red',
-                      justifyContent: 'space-between',
-                      paddingRight: moderateScale(16, 0.6),
-                    }}>
-                    <CustomText
-                      isBold
-                      style={{
-                        color: Color.white,
-                        fontSize: moderateScale(17, 0.6),
-                        marginVertical: moderateScale(20, 0.3),
-                      }}>
+                  {/* {data1?.status.toLocaleLowerCase() == 'completed' &&
+                    setAskingforReview(true)} */}
+
+                  <View style={styles.h1View}>
+                    <CustomText isBold style={styles.h1}>
                       Your Bid Details
                     </CustomText>
 
                     <>
-                      <View
-                        style={{
-                          marginTop: moderateScale(10, 0.6),
-                          padding: moderateScale(5, 0.6),
-                          // width: windowWidth * 0.1,
-                          height: windowHeight * 0.05,
-                          paddingHorizontal: moderateScale(10, 0.6),
-                          backgroundColor: 'white',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          borderRadius: moderateScale(10, 0.6),
-                        }}>
+                      <View style={styles.priceBox}>
                         <View>
                           <CustomText
                             isBold
@@ -1011,7 +935,11 @@ const JobDetails = props => {
           )}
         </LinearGradient>
       </ScrollView>
-
+      <ReviewAskingModal
+        data={userRole == 'Qbid Member' ? data : data1}
+        setModalVisible={setAskingforReview}
+        modalVisible={askingforReview}
+      />
       <ImageView
         images={finalImagesArray}
         imageIndex={0}
@@ -1032,14 +960,7 @@ const JobDetails = props => {
           }
           setModalVisible(false);
         }}>
-        <View
-          style={{
-            width: windowWidth * 0.9,
-
-            height: windowHeight * 0.9,
-            borderRadius: moderateScale(15, 0.3),
-            backgroundColor: '#f2fce4',
-          }}>
+        <View style={styles.modalView}>
           <ScrollView
             scrollEnabled={false}
             contentContainerStyle={{
@@ -1167,16 +1088,7 @@ const JobDetails = props => {
                 children={'attachments'}
               />
               <View style={{}}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    width: windowWidth * 0.8,
-                    paddingHorizontal: moderateScale(10, 0.6),
-                    justifyContent: 'flex-start',
-                    flexWrap: 'wrap',
-                    alignItems: 'flex-start',
-                    paddingVertical: moderateScale(15, 0.6),
-                  }}>
+                <View style={styles.bidView}>
                   {isBidUpdate && (
                     <View style={[styles.imagesContainer]}>
                       <FlatList
@@ -1387,7 +1299,6 @@ const styles = ScaledSheet.create({
   },
   imagesContainer: {
     marginTop: moderateScale(10, 0.3),
-    // marginLeft: moderateScale(10, 0.3),
     flexWrap: 'wrap',
     flexDirection: 'row',
     alignSelf: 'center',
@@ -1403,7 +1314,6 @@ const styles = ScaledSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: moderateScale(10, 0.3),
-    // marginTop: moderateScale(5, 0.3),
     shadowColor: Color.themeColor,
     shadowOffset: {
       width: 0,
@@ -1425,23 +1335,118 @@ const styles = ScaledSheet.create({
     textAlign: 'center',
     alignItems: 'center',
     marginRight: moderateScale(10, 0.3),
-    // paddingTop: moderateScale(5, 0.6),
   },
   row: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     width: windowWidth * 0.95,
-    // backgroundColor : 'red',
     justifyContent: 'space-between',
   },
   title: {
     fontSize: moderateScale(15, 0.6),
     color: '#353434',
-    // backgroundColor:'red',
     width: windowWidth * 0.9,
     marginleft: moderateScale(10, 0.3),
-    // textAlign: 'left',
-    // paddingHorizontal:moderateScale(10,.6),
     marginTop: moderateScale(15, 0.3),
+  },
+  statusbtn: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: windowWidth * 0.55,
+    alignSelf: 'center',
+    paddingVertical: moderateScale(5, 0.6),
+    alignItems: 'center',
+    marginBottom: moderateScale(5, 0.6),
+  },
+  noData: {
+    width: windowWidth * 0.95,
+    height: windowHeight * 0.18,
+    alignItems: 'center',
+  },
+  h1View: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingRight: moderateScale(16, 0.6),
+  },
+  h1: {
+    color: Color.white,
+    fontSize: moderateScale(17, 0.6),
+    marginVertical: moderateScale(20, 0.3),
+  },
+  priceBox: {
+    marginTop: moderateScale(10, 0.6),
+    padding: moderateScale(5, 0.6),
+    height: windowHeight * 0.05,
+    paddingHorizontal: moderateScale(10, 0.6),
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: moderateScale(10, 0.6),
+  },
+  modalView: {
+    width: windowWidth * 0.9,
+    height: windowHeight * 0.9,
+    borderRadius: moderateScale(15, 0.3),
+    backgroundColor: '#f2fce4',
+  },
+  bidView: {
+    flexDirection: 'row',
+    width: windowWidth * 0.8,
+    paddingHorizontal: moderateScale(10, 0.6),
+    justifyContent: 'flex-start',
+    flexWrap: 'wrap',
+    alignItems: 'flex-start',
+    paddingVertical: moderateScale(15, 0.6),
+  },
+  detailText: {
+    color: Color.white,
+    fontSize: moderateScale(17, 0.6),
+    marginVertical: moderateScale(10, 0.3),
+  },
+  view: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  ImageView: {
+    width: moderateScale(60, 0.3),
+    height: moderateScale(50, 0.3),
+    borderRadius: moderateScale(10, 0.3),
+    overflow: 'hidden',
+  },
+  text: {
+    color: Color.white,
+    fontSize: moderateScale(17, 0.6),
+  },
+  row2: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  txt: {
+    color: Color.white,
+    fontSize: moderateScale(14, 0.6),
+    marginBottom: moderateScale(10, 0.3),
+    marginTop: moderateScale(20, 0.3),
+  },
+  bidrow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginRight: moderateScale(15, 0.6),
+  },
+  bidtxt: {
+    color: Color.white,
+    fontSize: moderateScale(13, 0.6),
+    marginBottom: moderateScale(10, 0.3),
+    marginTop: moderateScale(20, 0.3),
+    color: Color.blue,
+  },
+  bidlength: {
+    color: Color.white,
+    fontSize: moderateScale(13, 0.6),
+    marginBottom: moderateScale(10, 0.3),
+    marginTop: moderateScale(20, 0.3),
+    color: Color.white,
+    marginLeft: moderateScale(7, 0.6),
   },
 });

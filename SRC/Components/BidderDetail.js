@@ -17,7 +17,6 @@ import {useNavigation} from '@react-navigation/native';
 import {Post} from '../Axios/AxiosInterceptorFunction';
 
 const BidderDetail = ({item, photo, title, date, message}) => {
-  console.log("🚀 ~ BidderDetail ~ item:", item)
   const token = useSelector(state => state.authReducer.token);
   const navigation = useNavigation();
   const userRole = useSelector(state => state.commonReducer.selectedRole);

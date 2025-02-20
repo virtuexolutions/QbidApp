@@ -24,7 +24,15 @@ import {useSelector} from 'react-redux';
 import CustomButton from './CustomButton';
 import {ActivityIndicator} from 'react-native';
 
-const ReviewModal = ({setRef, rbRef, item, setbuttonName}) => {
+const ReviewModal = ({
+  setRef,
+  rbRef,
+  item,
+  onClose,
+  setbuttonName,
+  setModalVisible,
+}) => {
+  console.log('🚀 ~ ReviewModal ~ rbRef:', rbRef?.close);
   const token = useSelector(state => state.authReducer.token);
   const [loading, setLoading] = useState(false);
   const [review, setReview] = useState('');
@@ -42,15 +50,16 @@ const ReviewModal = ({setRef, rbRef, item, setbuttonName}) => {
     }
     setLoading(true);
     const response = await Post(url, body, apiHeader(token));
+    console.log('🚀 ~ sendReview ~ response:', response?.data?.review);
     setLoading(false);
-    if (response != undefined) {
+    if (response?.data?.review) {
+      onClose();
       Platform.OS == 'android'
         ? ToastAndroid.show('Review sent', ToastAndroid.SHORT)
         : Alert.alert('Review sent');
       setRating(0);
       setReview('');
       setbuttonName('reviewed');
-      rbRef.close();
     }
   };
 
