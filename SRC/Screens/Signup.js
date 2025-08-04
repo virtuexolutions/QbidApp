@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   ImageBackground,
@@ -12,13 +12,13 @@ import Color from '../Assets/Utilities/Color';
 import CustomStatusBar from '../Components/CustomStatusBar';
 import CustomText from '../Components/CustomText';
 import CustomImage from '../Components/CustomImage';
-import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
-import {moderateScale, ScaledSheet} from 'react-native-size-matters';
+import { apiHeader, windowHeight, windowWidth } from '../Utillity/utils';
+import { moderateScale, ScaledSheet } from 'react-native-size-matters';
 import TextInputWithTitle from '../Components/TextInputWithTitle';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import CustomButton from '../Components/CustomButton';
-import {Icon, ScrollView} from 'native-base';
+import { Icon, ScrollView } from 'native-base';
 import {
   SetFCMToken,
   setMilageRing,
@@ -26,16 +26,16 @@ import {
   setUserToken,
   setWalkThrough,
 } from '../Store/slices/auth';
-import messaging, {firebase} from '@react-native-firebase/messaging';
+import messaging, { firebase } from '@react-native-firebase/messaging';
 
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import DropDownSingleSelect from '../Components/DropDownSingleSelect';
 import navigationService from '../navigationService';
 import CustomDropDownMultiSelect from '../Components/CustomDropDownMultiSelect';
 import ImagePickerModal from '../Components/ImagePickerModal';
-import {setSelectedRole, setUserData} from '../Store/slices/common';
-import {validateEmail} from '../Config';
-import {Post} from '../Axios/AxiosInterceptorFunction';
+import { setSelectedRole, setUserData } from '../Store/slices/common';
+import { validateEmail } from '../Config';
+import { Post } from '../Axios/AxiosInterceptorFunction';
 
 const Signup = () => {
   const fcmToken = useSelector(state => state.authReducer.fcmToken);
@@ -119,9 +119,9 @@ const Signup = () => {
     if (password.length < 8) {
       return Platform.OS == 'android'
         ? ToastAndroid.show(
-            'Password should atleast 8 character long',
-            ToastAndroid.SHORT,
-          )
+          'Password should atleast 8 character long',
+          ToastAndroid.SHORT,
+        )
         : Alert.alert('Password should atleast 8 character long');
     }
     if (password != confirmPassword) {
@@ -150,9 +150,9 @@ const Signup = () => {
     ) {
       return Platform.OS == 'android'
         ? ToastAndroid.show(
-            'Languages and expertise are required',
-            ToastAndroid.SHORT,
-          )
+          'Languages and expertise are required',
+          ToastAndroid.SHORT,
+        )
         : Alert.alert('Languages and expertise are required');
     } else {
       language?.map((item, index) =>
@@ -167,9 +167,9 @@ const Signup = () => {
     if (!checked) {
       return Platform.OS == 'android'
         ? ToastAndroid.show(
-            'Please accept terms and conditions',
-            ToastAndroid.SHORT,
-          )
+          'Please accept terms and conditions',
+          ToastAndroid.SHORT,
+        )
         : Alert.alert('Please accept terms and conditions');
     }
 
@@ -181,7 +181,7 @@ const Signup = () => {
       dispatch(setUserData(response?.data?.user_info));
       dispatch(setSelectedRole(response?.data?.user_info?.role));
       dispatch(setUserLogin(response?.data?.token));
-      dispatch(setUserToken({token: response?.data?.token}));
+      dispatch(setUserToken({ token: response?.data?.token }));
       dispatch(setMilageRing(false));
     }
   };
@@ -198,7 +198,7 @@ const Signup = () => {
         .getToken()
         .then(_token => {
           console.log('🚀 Sign Up_token:', _token);
-          dispatch(SetFCMToken({fcmToken: _token}));
+          dispatch(SetFCMToken({ fcmToken: _token }));
           //  dispatch(SetFCMToken(_token));
         })
         .catch(() => console.log('token error'));
@@ -211,8 +211,8 @@ const Signup = () => {
           userRole == 'Qbid Member'
             ? Color.blue
             : userRole == 'Qbid Negotiator'
-            ? Color.themeColor
-            : Color.black
+              ? Color.themeColor
+              : Color.black
         }
         barStyle={'light-content'}
       />
@@ -226,8 +226,8 @@ const Signup = () => {
           userRole == 'Qbid Member'
             ? require('../Assets/Images/backgroundImage.png')
             : userRole == 'Qbid Negotiator'
-            ? require('../Assets/Images/backgroungNegotiator.png')
-            : require('../Assets/Images/businessQibd.png')
+              ? require('../Assets/Images/backgroungNegotiator.png')
+              : require('../Assets/Images/businessQibd.png')
         }>
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -243,7 +243,7 @@ const Signup = () => {
           }}>
           <View>
             {Object.keys(image).length > 0 ? (
-              <CustomImage source={{uri: image?.uri}} style={styles.image} />
+              <CustomImage source={{ uri: image?.uri }} style={styles.image} />
             ) : (
               <CustomImage
                 style={styles.image}
@@ -261,8 +261,8 @@ const Signup = () => {
                     userRole == 'Qbid Member'
                       ? Color.blue
                       : userRole == 'Qbid Negotiator'
-                      ? Color.themeColor
-                      : Color.black,
+                        ? Color.themeColor
+                        : Color.black,
                 },
               ]}>
               <Icon
@@ -360,7 +360,7 @@ const Signup = () => {
           <TextInputWithTitle
             titleText={'Contact'}
             secureText={false}
-            placeholder={'Contact'}
+            placeholder={'Cell Number'}
             setText={setContact}
             value={contact}
             viewHeight={0.07}
@@ -377,7 +377,7 @@ const Signup = () => {
           <TextInputWithTitle
             titleText={'Address'}
             secureText={false}
-            placeholder={'Address'}
+            placeholder={'Home Address'}
             setText={setAddress}
             value={address}
             viewHeight={0.07}
@@ -472,11 +472,11 @@ const Signup = () => {
               <CustomDropDownMultiSelect
                 title={'Pick Languages'}
                 array={[
-                  {name: 'English', id: 'English'},
-                  {name: 'Dutch', id: 'Dutch'},
-                  {name: 'Spanish', id: 'Spanish'},
-                  {name: 'French', id: 'French'},
-                  {name: 'Portugese', id: 'Portugese'},
+                  { name: 'English', id: 'English' },
+                  { name: 'Dutch', id: 'Dutch' },
+                  { name: 'Spanish', id: 'Spanish' },
+                  { name: 'French', id: 'French' },
+                  { name: 'Portugese', id: 'Portugese' },
                 ]}
                 item={language}
                 setItem={setLanguage}
@@ -500,6 +500,7 @@ const Signup = () => {
               />
             </>
           )}
+
           <View
             style={{
               flexDirection: 'row',
@@ -517,7 +518,7 @@ const Signup = () => {
               size={moderateScale(13, 0.3)}
             />
             <CustomText
-              onPress={() => {}}
+              onPress={() => { }}
               style={[
                 styles.txt3,
                 {
@@ -536,8 +537,8 @@ const Signup = () => {
                         userRole == 'Qbid Member'
                           ? Color.blue
                           : userRole == 'Qbid Negotiator'
-                          ? Color.themeColor
-                          : Color.black,
+                            ? Color.themeColor
+                            : Color.black,
                     },
                   ]}>
                   Terms And Conditions
@@ -545,6 +546,13 @@ const Signup = () => {
               }
             </CustomText>
           </View>
+          <CustomText style={{
+            color: Color.white,
+            fontSize: moderateScale(12, 0.6),
+            textAlign: 'left', fontWeight: '600',
+            width: windowWidth * 0.86,
+            marginTop: moderateScale(10, 0.6)
+          }}>Must Add Photo in Profile to Proceed</CustomText>
           <CustomButton
             text={
               isLoading ? (
@@ -564,8 +572,8 @@ const Signup = () => {
               userRole == 'Qbid Member'
                 ? Color.blue
                 : userRole == 'Qbid Negotiator'
-                ? Color.themeColor
-                : Color.black
+                  ? Color.themeColor
+                  : Color.black
             }
             borderRadius={moderateScale(30, 0.3)}
           />
@@ -576,7 +584,7 @@ const Signup = () => {
 
             <TouchableOpacity
               activeOpacity={0.8}
-              style={{marginLeft: windowWidth * 0.01}}
+              style={{ marginLeft: windowWidth * 0.01 }}
               onPress={() => navigationService.navigate('LoginScreen')}>
               <CustomText
                 style={[
@@ -586,8 +594,8 @@ const Signup = () => {
                       userRole == 'Qbid Member'
                         ? Color.blue
                         : userRole == 'Qbid Negotiator'
-                        ? Color.themeColor
-                        : Color.black,
+                          ? Color.themeColor
+                          : Color.black,
                   },
                 ]}>
                 {'Sign In'}

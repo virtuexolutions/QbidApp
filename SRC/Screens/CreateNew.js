@@ -316,13 +316,13 @@ const CreateNew = props => {
             paddingTop: moderateScale(40, 0.3),
           }}>
           <CustomText isBold style={styles.header}>
-            Vendor Qoutes price
+            Enter Quote Pricing Details
           </CustomText>
 
           <TextInputWithTitle
-            titleText={'Qoute Title'}
+            titleText={'Enter a QBID Project Title Name'}
             secureText={false}
-            placeholder={'Qoute Title'}
+            placeholder={'Enter a QBID Project Title Name'}
             setText={setQouteTitle}
             value={qouteTitle}
             viewHeight={0.07}
@@ -338,9 +338,9 @@ const CreateNew = props => {
           />
 
           <TextInputWithTitle
-            titleText={'City'}
+            titleText={'Zip Code Location of Project'}
             secureText={false}
-            placeholder={'City'}
+            placeholder={'Zip Code Location of Project'}
             setText={setCity}
             value={city}
             viewHeight={0.07}
@@ -374,9 +374,9 @@ const CreateNew = props => {
           />
 
           <TextInputWithTitle
-            titleText={'Vendor Qouted Price'}
+            titleText={'Enter current total quote of project'}
             secureText={false}
-            placeholder={'Vendor Qouted Price'}
+            placeholder={'Enter current total quote of project'}
             setText={setVendorQoutedPrice}
             value={vendorQoutedPrice}
             viewHeight={0.07}
@@ -393,9 +393,9 @@ const CreateNew = props => {
           />
 
           <TextInputWithTitle
-            titleText={'My Budget'}
+            titleText={'Enter your maximum desired budget'}
             secureText={false}
-            placeholder={'My Budget'}
+            placeholder={'Enter your maximum desired budget'}
             setText={setAskingPrice}
             value={askingPrice}
             viewHeight={0.07}
@@ -724,9 +724,9 @@ const CreateNew = props => {
           )}
             */}
           <TextInputWithTitle
-            titleText={'Special Notes for negotiators'}
+            titleText={'Special Notes to Company Bidding on Project'}
             secureText={false}
-            placeholder={'Special Notes for negotiators'}
+            placeholder={'Special Notes to Company Bidding on Project'}
             setText={setDescription}
             value={description}
             viewHeight={0.2}

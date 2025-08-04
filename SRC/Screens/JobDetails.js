@@ -8,13 +8,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import LinearGradient from 'react-native-linear-gradient';
-import {ScrollView} from 'react-native';
-import {moderateScale, ScaledSheet} from 'react-native-size-matters';
-import {useDispatch, useSelector} from 'react-redux';
-import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
+import { ScrollView } from 'react-native';
+import { moderateScale, ScaledSheet } from 'react-native-size-matters';
+import { useDispatch, useSelector } from 'react-redux';
+import { apiHeader, windowHeight, windowWidth } from '../Utillity/utils';
 import CustomImage from '../Components/CustomImage';
 import CustomText from '../Components/CustomText';
 import Color from '../Assets/Utilities/Color';
@@ -22,33 +22,34 @@ import ShowMoreAndShowLessText from '../Components/ShowMoreAndShowLessText';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {Center, Icon} from 'native-base';
+import { Center, Icon } from 'native-base';
 import MarkCheckWithText from '../Components/MarkCheckWithText';
 import TextInputWithTitle from '../Components/TextInputWithTitle';
 import CustomButton from '../Components/CustomButton';
-import {ActivityIndicator} from 'react-native';
+import { ActivityIndicator } from 'react-native';
 import ReviewCard from '../Components/ReviewCard';
 import BidderDetail from '../Components/BidderDetail';
 import Detailcards from '../Components/Detailcards';
 import Modal from 'react-native-modal';
 import DropDownSingleSelect from '../Components/DropDownSingleSelect';
-import {Delete, Get, Post} from '../Axios/AxiosInterceptorFunction';
+import { Delete, Get, Post } from '../Axios/AxiosInterceptorFunction';
 import numeral from 'numeral';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import NoData from '../Components/NoData';
-import {validateEmail} from '../Config';
+import { validateEmail } from '../Config';
 import ImageView from 'react-native-image-viewing';
 import ImagePickerModal from '../Components/ImagePickerModal';
-import {mode} from 'native-base/lib/typescript/theme/tools';
+import { mode } from 'native-base/lib/typescript/theme/tools';
 import Feather from 'react-native-vector-icons/Feather';
-import {setBidDetail} from '../Store/slices/common';
-import {Rating} from 'react-native-ratings';
+import { setBidDetail } from '../Store/slices/common';
+import { Rating } from 'react-native-ratings';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import ReviewAskingModal from '../Components/ReviewAskingModal';
+import { width } from 'deprecated-react-native-prop-types/DeprecatedImagePropType';
 
 const JobDetails = props => {
   const data1 = props?.route?.params?.item;
-  console.log('🚀 ~ data1:', data1);
+  console.log('🚀 ~ data1:', data1?.type);
   const type = props?.route?.params?.type;
   // const bidData = useSelector(state => state.commonReducer.bidDetail);
   const user = useSelector(state => state.commonReducer.userData);
@@ -64,11 +65,13 @@ const JobDetails = props => {
   const dispatch = useDispatch();
 
   const [data, setData] = useState();
+  console.log("🚀 ~ JobDetails ~ data:", data)
   const [checked, setChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [bidDone, setBidDone] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [Email, setEmail] = useState(user?.email);
+  const [price, setPrice] = useState('');
   const [number, setNumber] = useState(user?.phone);
   const [userData, setUserData] = useState({});
   const [bidDataImages, setBidDataImages] = useState([]);
@@ -86,9 +89,8 @@ const JobDetails = props => {
   console.log('🚀 ~ bidDetails ~ data?.status:', data?.status);
 
   const bidDetails = async () => {
-    const url = `auth/negotiator/quote_detail/${
-      data1?.quote_id ? data1?.quote_id : data1?.id
-    }`;
+    const url = `auth/negotiator/quote_detail/${data1?.quote_id ? data1?.quote_id : data1?.id
+      }`;
     setIsLoading(true);
     const response = await Get(url, token);
     setIsLoading(false);
@@ -99,8 +101,9 @@ const JobDetails = props => {
       const mainuserData = response?.data?.quote_info?.bids?.find(
         item => item.user_info?.id == user?.id,
       );
+      console.log("🚀 ~ bidDetails ~ mainuserData:", mainuserData)
       response?.data?.quote_info?.images?.map(item => {
-        return setFinalImagesArray(prev => [...prev, {uri: item?.image}]);
+        return setFinalImagesArray(prev => [...prev, { uri: item?.image }]);
       });
 
       if (mainuserData) {
@@ -117,7 +120,7 @@ const JobDetails = props => {
   const changeStatus = async (value, id) => {
     const url = `auth/member/bid/${id}`;
     setIsLoading(true);
-    const response = await Post(url, {status: value}, apiHeader(token));
+    const response = await Post(url, { status: value }, apiHeader(token));
     setIsLoading(false);
     if (response != undefined) {
       bidDetails();
@@ -134,7 +137,9 @@ const JobDetails = props => {
       phone: number,
       expertise: coverletterRole,
       coverletter: desc,
+      price: price
     };
+    console.log("🚀 ~ bidNow ~ body:", body)
     for (let key in body) {
       if (body[key] == '') {
         return Platform.OS == 'android'
@@ -179,11 +184,11 @@ const JobDetails = props => {
     setIsLoading(false);
     if (response != undefined) {
       // dispatch(setBidDetail(response?.data?.quote_info));
-
       setBidDone(true);
       setModalVisible(!isModalVisible);
     }
   };
+
   const UpdateBid = async () => {
     const url = 'auth/negotiator/bid';
     const formData = new FormData();
@@ -195,39 +200,41 @@ const JobDetails = props => {
       phone: number,
       expertise: coverletterRole,
       coverletter: desc,
+      price: price
     };
-    
+    console.log("🚀 ~ UpdateBid ~ body:", body)
+
     for (let key in body) {
       if (body[key] == '') {
         return Platform.OS == 'android'
-        ? ToastAndroid.show(`${key} is required`, ToastAndroid.SHORT)
-        : Alert.alert(`${key} is required`);
+          ? ToastAndroid.show(`${key} is required`, ToastAndroid.SHORT)
+          : Alert.alert(`${key} is required`);
       }
     }
-    
+
     if (isNaN(number)) {
       return Platform.OS == 'android'
         ? ToastAndroid.show('phone is not a number', ToastAndroid.SHORT)
         : Alert.alert('phone is not a number');
-      }
-      if (!validateEmail(Email)) {
-        return Platform.OS == 'android'
+    }
+    if (!validateEmail(Email)) {
+      return Platform.OS == 'android'
         ? ToastAndroid.show('email is not validate', ToastAndroid.SHORT)
         : Alert.alert('email is not validate');
-      }
-      if (coverletterRole == 'Expertise In') {
-        return Platform.OS == 'android'
+    }
+    if (coverletterRole == 'Expertise In') {
+      return Platform.OS == 'android'
         ? ToastAndroid.show('Please select any role', ToastAndroid.SHORT)
         : Alert.alert('Please select any role');
-      }
-      if (desc == '') {
-        return Platform.OS == 'android'
+    }
+    if (desc == '') {
+      return Platform.OS == 'android'
         ? ToastAndroid.show('coverLetter is empty ', ToastAndroid.SHORT)
         : Alert.alert('coverLetter is empty ');
-      }
-      // if (desc.length < 100) {
-        //   return Platform.OS == 'android'
-        //     ? ToastAndroid.show('Description is too short', ToastAndroid.SHORT)
+    }
+    // if (desc.length < 100) {
+    //   return Platform.OS == 'android'
+    //     ? ToastAndroid.show('Description is too short', ToastAndroid.SHORT)
     //     : Alert.alert('Description is too short');
     // }
     for (let key in body) {
@@ -235,17 +242,17 @@ const JobDetails = props => {
     }
     multiImages?.map((item, index) =>
       formData.append(`images[${index}]`, item),
-  );
-  
-  // formData.append('attachment', attachmentImage)
+    );
+
+    // formData.append('attachment', attachmentImage)
     setIsLoading(true);
     const response = await Post(url, formData, apiHeader(token));
     setIsLoading(false);
     // return  console.log("🚀 ~ UpdateBid ~ body:", response?.data)
     if (response != undefined) {
       Platform.OS == 'android'
-      ? ToastAndroid.show('bid update succesfully ', ToastAndroid.SHORT)
-      : alert.alert('vid update succesfully ');
+        ? ToastAndroid.show('bid update succesfully ', ToastAndroid.SHORT)
+        : alert.alert('vid update succesfully ');
       // dispatch(setBidDetail(response?.data?.bid_info));
       setModalVisible(false);
     }
@@ -294,16 +301,16 @@ const JobDetails = props => {
         userRole == 'Qbid Member'
           ? Color.themeBgColor
           : userRole == 'Qbid Negotiator'
-          ? Color.themeBgColorNegotiator
-          : Color.themebgBusinessQbidder
+            ? Color.themeBgColorNegotiator
+            : Color.themebgBusinessQbidder
       }
       statusBarContentStyle={'light-content'}
       headerColor={
         userRole == 'Qbid Member'
           ? Color.themeBgColor
           : userRole == 'Qbid Negotiator'
-          ? Color.themeBgColorNegotiator
-          : Color.themebgBusinessQbidder
+            ? Color.themeBgColorNegotiator
+            : Color.themebgBusinessQbidder
       }>
       <ScrollView
         scrollEnabled={true}
@@ -321,14 +328,14 @@ const JobDetails = props => {
             paddingTop: moderateScale(40, 0.6),
             paddingLeft: moderateScale(15, 0.6),
           }}
-          start={{x: 0, y: 0}}
-          end={{x: 1, y: 0}}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
           colors={
             userRole == 'Qbid Member'
               ? Color.themeBgColor
               : userRole == 'Qbid Negotiator'
-              ? Color.themeBgColorNegotiator
-              : Color.themebgBusinessQbidder
+                ? Color.themeBgColorNegotiator
+                : Color.themebgBusinessQbidder
           }>
           {isLoading ? (
             <View
@@ -358,7 +365,7 @@ const JobDetails = props => {
                   <CustomImage
                     source={
                       data?.images?.length > 0
-                        ? {uri: data?.images[0]?.image}
+                        ? { uri: data?.images[0]?.image }
                         : require('../Assets/Images/dummyman1.png')
                     }
                     style={{
@@ -391,7 +398,7 @@ const JobDetails = props => {
                 </View>
                 {userRole != 'Business Qbidder' &&
                   'pending'.toLocaleLowerCase() ==
-                    data?.status.toLocaleLowerCase() && (
+                  data?.status.toLocaleLowerCase() && (
                     <TouchableOpacity
                       onPress={() => {
                         navigation.navigate('CreateNew', {
@@ -438,8 +445,8 @@ const JobDetails = props => {
                         userRole == 'Qbid Member'
                           ? Color.blue
                           : userRole == 'Qbid Negotiator'
-                          ? Color.themeColor
-                          : Color.black,
+                            ? Color.themeColor
+                            : Color.black,
                     }}
                   />
 
@@ -594,7 +601,7 @@ const JobDetails = props => {
                       <CustomImage
                         source={
                           data?.user_info?.photo
-                            ? {uri: data?.user_info?.photo}
+                            ? { uri: data?.user_info?.photo }
                             : require('../Assets/Images/dummyman1.png')
                         }
                         style={{
@@ -696,7 +703,8 @@ const JobDetails = props => {
                       contentContainerStyle={{
                         paddingBottom: moderateScale(30, 0.6),
                       }}
-                      renderItem={({item, index}) => {
+                      renderItem={({ item, index }) => {
+                        console.log('itemmmmmmmmmmmmmmm', item)
                         return (
                           <>
                             <BidderDetail
@@ -709,6 +717,7 @@ const JobDetails = props => {
                                 status: item?.status,
                                 id: item?.id,
                                 attachment: item?.images,
+                                price: item?.price
                               }}
                             />
                             {data?.status == 'pending' &&
@@ -733,8 +742,8 @@ const JobDetails = props => {
                                       userRole == 'Qbid Member'
                                         ? Color.blue
                                         : userRole == 'Qbid Negotiator'
-                                        ? Color.themeColor
-                                        : Color.black
+                                          ? Color.themeColor
+                                          : Color.black
                                     }
                                     borderRadius={moderateScale(30, 0.3)}
                                     fontSize={moderateScale(11, 0.6)}
@@ -752,8 +761,8 @@ const JobDetails = props => {
                                       userRole == 'Qbid Member'
                                         ? Color.blue
                                         : userRole == 'Qbid Negotiator'
-                                        ? Color.themeColor
-                                        : Color.black
+                                          ? Color.themeColor
+                                          : Color.black
                                     }
                                     borderRadius={moderateScale(30, 0.3)}
                                     fontSize={moderateScale(11, 0.6)}
@@ -783,7 +792,7 @@ const JobDetails = props => {
                       contentContainerStyle={{
                         paddingBottom: moderateScale(30, 0.6),
                       }}
-                      renderItem={({item, index}) => {
+                      renderItem={({ item, index }) => {
                         return (
                           <View style={styles.reviewCard}>
                             <View></View>
@@ -793,7 +802,7 @@ const JobDetails = props => {
                                   height: '100%',
                                   width: '100%',
                                 }}
-                                source={{uri: item?.user_info?.photo}}
+                                source={{ uri: item?.user_info?.photo }}
                               />
                             </View>
 
@@ -849,10 +858,9 @@ const JobDetails = props => {
                               color: Color.black,
                               fontSize: moderateScale(17, 0.6),
                             }}>
-                            {`$${
-                              (data?.offering_percentage / 100) *
+                            {`$${(data?.offering_percentage / 100) *
                               data?.asking_price
-                            }`}
+                              }`}
                           </CustomText>
                         </View>
                       </View>
@@ -871,11 +879,12 @@ const JobDetails = props => {
                       id: data?.id,
                       bid_id: data?.bids[0]?.id,
                       // attachment :
+                      price: data?.bids[0]?.price
                     }}
                   />
                   {data?.bids &&
                     data?.bids[0]?.status?.toLowerCase() !=
-                      'accept'.toLowerCase() && (
+                    'accept'.toLowerCase() && (
                       <CustomButton
                         text={'Update Bid'}
                         textColor={Color.white}
@@ -905,8 +914,8 @@ const JobDetails = props => {
                           userRole == 'Qbid Member'
                             ? Color.blue
                             : userRole == 'Qbid Negotiator'
-                            ? Color.themeColor
-                            : Color.black,
+                              ? Color.themeColor
+                              : Color.black,
                       }}
                     />
 
@@ -923,8 +932,8 @@ const JobDetails = props => {
                         userRole == 'Qbid Member'
                           ? Color.blue
                           : userRole == 'Qbid Negotiator'
-                          ? Color.themeColor
-                          : Color.black
+                            ? Color.themeColor
+                            : Color.black
                       }
                       borderRadius={moderateScale(30, 0.3)}
                       alignSelf={'flex-start'}
@@ -968,17 +977,33 @@ const JobDetails = props => {
               paddingVertical: moderateScale(5, 0.6),
               alignItems: 'center',
             }}>
-            <View style={{marginTop: moderateScale(20, 0.3)}}>
+            <View style={{ marginTop: moderateScale(20, 0.3), flexDirection: 'row', width: windowWidth * 0.8, justifyContent: "space-between" }}>
+              <Icon
+                name={'arrowleft'}
+                as={AntDesign}
+                size={moderateScale(22, 0.3)}
+                color={
+                  userRole == 'Qbid Member'
+                    ? Color.blue
+                    : userRole == 'Qbid Negotiator'
+                      ? Color.themeColor
+                      : Color.black
+                }
+                onPress={() => {
+                  setModalVisible(false);
+                }}
+              />
               <CustomText
                 isBold
                 style={{
                   fontSize: moderateScale(14, 0.6),
+                  width: windowWidth * 0.5
                 }}>
                 QBid Proposal
               </CustomText>
             </View>
 
-            <View style={{marginTop: moderateScale(10, 0.3)}}>
+            <View style={{ marginTop: moderateScale(10, 0.3) }}>
               <TextInputWithTitle
                 secureText={false}
                 placeholder={'Full Name'}
@@ -1037,6 +1062,29 @@ const JobDetails = props => {
                 keyboardType={'numeric'}
                 disable
               />
+              {userRole === 'Business Qbidder' ? (
+                <TextInputWithTitle
+                  secureText={false}
+                  placeholder={'Enter Bid Price'}
+                  setText={setPrice}
+                  value={price}
+                  viewHeight={0.06}
+                  viewWidth={0.75}
+                  inputWidth={0.68}
+                  border={1}
+                  borderColor={
+                    userRole == 'Qbid Negotiator' ? Color.blue : Color.black
+                  }
+                  backgroundColor={'#FFFFFF'}
+                  marginTop={moderateScale(15, 0.6)}
+                  color={Color.themeColor}
+                  placeholderColor={Color.themeLightGray}
+                  borderRadius={moderateScale(25, 0.3)}
+                  keyboardType={'numeric'}
+                />
+              )
+                : (<></>)
+              }
               <DropDownSingleSelect
                 array={UserCoverLetterArray}
                 backgroundColor={'white'}
@@ -1060,7 +1108,8 @@ const JobDetails = props => {
                 multiline={true}
                 secureText={false}
                 placeholder={
-                  'Optional but PS the additional info to help you get a deal'
+                  userRole === 'Business Qbidder' ?
+                    'Please include any relevant information that may assist the Member in choosing you as the recipient of the QBID quote' : 'Optional but PS the additional info to help you get a deal'
                 }
                 setText={setDesc}
                 value={desc}
@@ -1086,8 +1135,13 @@ const JobDetails = props => {
                   },
                 ]}
                 isBold={true}
-                children={'attachments'}
+                children={'Attachments'}
               />
+              <CustomText style={{
+                width: windowWidth * 0.8
+              }}>
+                Please attach your quote to the QBID for member review and consideration
+              </CustomText>
               <View style={{}}>
                 <View style={styles.bidView}>
                   {isBidUpdate && (
@@ -1100,7 +1154,7 @@ const JobDetails = props => {
                         style={{
                           flexGrow: 0,
                         }}
-                        renderItem={({item, index}) => {
+                        renderItem={({ item, index }) => {
                           return (
                             <View
                               style={[
@@ -1162,7 +1216,7 @@ const JobDetails = props => {
                       style={{
                         flexGrow: 0,
                       }}
-                      renderItem={({item, index}) => {
+                      renderItem={({ item, index }) => {
                         return (
                           <View
                             style={[
@@ -1239,8 +1293,8 @@ const JobDetails = props => {
                 marginTop={moderateScale(5, 0.3)}
                 onPress={() => {
                   userRole != 'Qbid Member' &&
-                  bidDone &&
-                  data1?.type != 'specific'
+                    bidDone &&
+                    data1?.type != 'specific'
                     ? UpdateBid()
                     : bidNow();
                 }}
@@ -1248,8 +1302,8 @@ const JobDetails = props => {
                   userRole == 'Qbid Member'
                     ? Color.blue
                     : userRole == 'Qbid Negotiator'
-                    ? Color.themeColor
-                    : Color.black
+                      ? Color.themeColor
+                      : Color.black
                 }
                 borderRadius={moderateScale(30, 0.3)}
                 disabled={isLoading ? true : false}
@@ -1259,7 +1313,7 @@ const JobDetails = props => {
                 show={imagePickerVisible}
                 setShow={setImagePickerVisible}
                 setMultiImages={setMultiImages}
-                // setFileObject={setAttachmentImage}
+              // setFileObject={setAttachmentImage}
               />
             </View>
           </ScrollView>
@@ -1386,7 +1440,7 @@ const styles = ScaledSheet.create({
   },
   modalView: {
     width: windowWidth * 0.9,
-    height: windowHeight * 0.9,
+    height: windowHeight * 0.95,
     borderRadius: moderateScale(15, 0.3),
     backgroundColor: '#f2fce4',
   },

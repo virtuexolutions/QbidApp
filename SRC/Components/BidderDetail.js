@@ -1,23 +1,20 @@
-import React, {useState} from 'react';
-import {View, Image, TouchableOpacity, ActivityIndicator} from 'react-native';
-import {ScaledSheet, moderateScale} from 'react-native-size-matters';
-import CustomText from '../Components/CustomText';
-import Constants from '../Assets/Utilities/Constants';
-import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
-import Color from '../Assets/Utilities/Color';
-import moment from 'moment';
-import RatingComponent from './RatingComponent';
-import {useSelector} from 'react-redux';
-import {FlatList} from 'react-native';
-import CustomImage from './CustomImage';
+import { useNavigation } from '@react-navigation/native';
+import { Icon } from 'native-base';
+import { useState } from 'react';
+import { ActivityIndicator, Image, View } from 'react-native';
 import ImageView from 'react-native-image-viewing';
-import {Icon} from 'native-base';
+import { ScaledSheet, moderateScale } from 'react-native-size-matters';
 import Feather from 'react-native-vector-icons/Feather';
-import {useNavigation} from '@react-navigation/native';
-import {Post} from '../Axios/AxiosInterceptorFunction';
+import { useSelector } from 'react-redux';
+import Color from '../Assets/Utilities/Color';
+import Constants from '../Assets/Utilities/Constants';
+import { Post } from '../Axios/AxiosInterceptorFunction';
+import CustomText from '../Components/CustomText';
+import { apiHeader, windowHeight, windowWidth } from '../Utillity/utils';
+import RatingComponent from './RatingComponent';
 
-const BidderDetail = ({item, photo, title, date, message}) => {
-  console.log('🚀 ~ BidderDetail ~ item:', item?.bid_id);
+const BidderDetail = ({ item, photo, price, title, date, message }) => {
+  console.log('🚀 ~ BidderDetail ~ item:', item);
   const token = useSelector(state => state.authReducer.token);
   console.log("🚀 ~ BidderDetail ~ token:", token)
   const navigation = useNavigation();
@@ -26,17 +23,16 @@ const BidderDetail = ({item, photo, title, date, message}) => {
   const [imageModalVisible, setImageModalVisible] = useState(false);
 
   const imagesArray = item?.attachment?.map((item, index) => {
-    return {uri: item?.image};
+    return { uri: item?.image };
   });
-
+    
   const bidDelete = async id => {
-    // return  console.log("🚀 ~ bidDelete ~ id:", id ,`auth/negotiator/negotiator/bid/${id}?_method=delete`)
-    const url = `auth/negotiator/bid_delete`;
+    const url = `auth/negotiator/bid_delete`;   
     const body = {
       id: item?.bid_id,
     };
     setIsLoading(true);
-    const response = await Post(url,body , apiHeader(token));
+    const response = await Post(url, body, apiHeader(token));
     setIsLoading(false);
     if (response != undefined) {
     }
@@ -48,24 +44,24 @@ const BidderDetail = ({item, photo, title, date, message}) => {
         styles.container,
         userRole == 'Qbid Member'
           ? {
-              borderColor: Color.lightGrey,
-              backgroundColor: 'transparent',
-            }
+            borderColor: Color.lightGrey,
+            backgroundColor: 'transparent',
+          }
           : {
-              borderColor: Color.lightGrey,
-              backgroundColor: 'transparent',
-            },
+            borderColor: Color.lightGrey,
+            backgroundColor: 'transparent',
+          },
       ]}>
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <Image
           source={
             item?.image
-              ? {uri: item?.image}
+              ? { uri: item?.image }
               : require('../Assets/Images/dummyman1.png')
           }
           style={styles.image}
         />
-        <View style={{marginLeft: moderateScale(10, 0.3)}}>
+        <View style={{ marginLeft: moderateScale(10, 0.3) }}>
           <CustomText
             noOfLines={2}
             style={[
@@ -77,11 +73,11 @@ const BidderDetail = ({item, photo, title, date, message}) => {
               },
               userRole == 'Qbid Member'
                 ? {
-                    borderColor: Color.black,
-                  }
+                  borderColor: Color.black,
+                }
                 : {
-                    borderColor: Color.lightGrey,
-                  },
+                  borderColor: Color.lightGrey,
+                },
             ]}>
             {item?.name}
           </CustomText>
@@ -94,8 +90,8 @@ const BidderDetail = ({item, photo, title, date, message}) => {
               marginTop: moderateScale(1, 0.3),
             }}
             starSize={moderateScale(9, 0.3)}
-            // ratingGiven={star}
-            // setRatingGiven={setStar}
+          // ratingGiven={star}
+          // setRatingGiven={setStar}
           />
         </View>
       </View>
@@ -111,7 +107,22 @@ const BidderDetail = ({item, photo, title, date, message}) => {
         ]}>
         {item?.description}
       </CustomText>
-      {item?.attachment?.length > 0 && (
+      <View style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+      }}>
+        {item?.attachment?.length > 0 && (
+          <CustomText
+            isBold
+            style={{
+              color: Color.blue,
+              fontSize: moderateScale(12, 0.6),
+              marginTop: moderateScale(10, 0.3),
+            }}>
+            Attachments...
+          </CustomText>
+        )}
         <CustomText
           onPress={() => {
             // if (finalImagesArray.length > 0) {F
@@ -128,9 +139,10 @@ const BidderDetail = ({item, photo, title, date, message}) => {
             fontSize: moderateScale(12, 0.6),
             marginTop: moderateScale(10, 0.3),
           }}>
-          Attachments...
+          {"$ " + item?.price}
         </CustomText>
-      )}
+      </View>
+
       {/* <FlatList
         data={item?.review}
         renderItem={({item, index}) => {
@@ -201,8 +213,8 @@ const BidderDetail = ({item, photo, title, date, message}) => {
               userRole == 'Qbid Member'
                 ? Color.blue
                 : userRole == 'Qbid Negotiator'
-                ? Color.themeColor
-                : Color.black,
+                  ? Color.themeColor
+                  : Color.black,
           }}
         />
 
@@ -215,8 +227,8 @@ const BidderDetail = ({item, photo, title, date, message}) => {
           {item?.status == 'accept'
             ? 'Accepted'
             : item?.status == 'reject'
-            ? 'Rejected'
-            : 'pending'}
+              ? 'Rejected'
+              : 'pending'}
         </CustomText>
         {item?.status == 'pending' &&
           userRole == 'Business Qbidder' &&

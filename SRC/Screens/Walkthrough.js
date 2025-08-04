@@ -29,25 +29,25 @@ const Walkthrough = props => {
     {
       key: '1',
       title: 'What Is Qbid',
-      text: 'A "State of the art" revolutionary app designed to conquer escalating inflationary costs that are depleting income. QBID is quick but effective was of ensuring the best possible outcome of any given project that qbid represents.\nwe work to get you best possible deal',
+      text: 'QBID is an innovative application developed to address rising costs impacting household budgets. It offers an efficient and reliable method for achieving optimal outcomes in any project it represents. Our team is dedicated to securing the most favorable deals for our users.',
       logo: require('../Assets/Images/walkthrough1.jpg'),
     },
     {
       key: '2',
-      title: 'How QBID Delivers you great value',
-      text: 'Qbid welcomes your qoutes and get you the best negotiator accordingly who work hard to negotiate until best value comes',
+      title: 'How QBID Delivers Exceptional Value',
+      text: 'QBID invites you to submit your quotes. Simply capture a photo and upload your quote; QBID will then work diligently to secure the most competitive negotiated bid outcome for you.',
       logo: require('../Assets/Images/walkthrough2.jpg'),
     },
     {
       key: '3',
       title: 'Why To Become QBID Member',
-      text: '1. Quick and easy to use \n2. you are incharge from beginning to end \n3. various expertise holding negotiator at your service \n4. save your money as well as avoid get mug with expert negotiator advice',
+      text: '1.  User-friendly and efficient application for easy access.\n2.	 Full control throughout the entire process is maintained by you. \n3.  Multiple companies and vendors compete for your business, ensuring the best options. \n4. 	Save valuable time and avoid the uncertainty of whether you are being taken advantage of. \nWith QBID at your service, such concerns are a thing of the past.',
       logo: require('../Assets/Images/walkthrough3.jpg'),
     },
     {
       key: '4',
-      title: 'Why To Become QBID Negotiator',
-      text: '1. remote work opportunity without any hesitation \n2. Secure Earning platform \n3. Earn your bread with the best you know \n4. Soul rights holder with no one to interfare ',
+      title: 'Reasons to consider using QBID for your company:',
+      text: '1.	Remote work capability from any location. \n2.	Secure earning platform.\n3.	Instant bid notifications accessible via phone or internet-connected devices. \n4. Flexibility to select bids of interest.  \n5.	Membership options for bid notification alerts. \n6. 	Opportunity for a second attempt at securing bids. \n7. Option to withdraw bids if preferences change.',
       logo: require('../Assets/Images/walkthrough1.jpg'),
     },
   ];
