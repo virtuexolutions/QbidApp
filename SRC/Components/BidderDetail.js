@@ -17,7 +17,9 @@ import {useNavigation} from '@react-navigation/native';
 import {Post} from '../Axios/AxiosInterceptorFunction';
 
 const BidderDetail = ({item, photo, title, date, message}) => {
+  console.log('🚀 ~ BidderDetail ~ item:', item?.bid_id);
   const token = useSelector(state => state.authReducer.token);
+  console.log("🚀 ~ BidderDetail ~ token:", token)
   const navigation = useNavigation();
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const [isLoading, setIsLoading] = useState(false);
@@ -27,16 +29,16 @@ const BidderDetail = ({item, photo, title, date, message}) => {
     return {uri: item?.image};
   });
 
-  const bidDelete = async () => {
+  const bidDelete = async id => {
+    // return  console.log("🚀 ~ bidDelete ~ id:", id ,`auth/negotiator/negotiator/bid/${id}?_method=delete`)
     const url = `auth/negotiator/bid_delete`;
     const body = {
       id: item?.bid_id,
     };
     setIsLoading(true);
-    const response = await Post(url, body, apiHeader(token));
+    const response = await Post(url,body , apiHeader(token));
     setIsLoading(false);
     if (response != undefined) {
-    console.log("🚀 ~ bidDelete ~ response:", response?.data)
     }
   };
 
@@ -223,9 +225,9 @@ const BidderDetail = ({item, photo, title, date, message}) => {
           ) : (
             <Icon
               onPress={() => {
-                console.log('assaassssssssssssssssssssssssssss', (item = {}));
+                console.log('assaassssssssssssssssssssssssssss', item?.bid_id);
                 // item = {}
-                bidDelete();
+                bidDelete(item?.bid_id);
               }}
               style={{
                 position: 'absolute',

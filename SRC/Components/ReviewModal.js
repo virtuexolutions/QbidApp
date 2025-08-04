@@ -48,9 +48,10 @@ const ReviewModal = ({
           : Alert.alert(`${key} is required`);
       }
     }
+  //  return  console.log("🚀 ~ sendReview ~ body:", body)
     setLoading(true);
     const response = await Post(url, body, apiHeader(token));
-    console.log('🚀 ~ sendReview ~ response:', response?.data?.review);
+   return  console.log('🚀 ~ sendReview ~ response:', response?.data?.review);
     setLoading(false);
     if (response?.data?.review) {
       onClose();

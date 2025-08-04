@@ -39,7 +39,7 @@ import {Post} from '../Axios/AxiosInterceptorFunction';
 
 const Signup = () => {
   const fcmToken = useSelector(state => state.authReducer.fcmToken);
-  console.log("🚀 ~ Signup ~ fcmToken:", fcmToken)
+  console.log('🚀 ~ Signup ~ fcmToken:', fcmToken);
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   const dispatch = useDispatch();
@@ -48,10 +48,10 @@ const Signup = () => {
   const [selectedRole, setselectedRole] = useState(
     userRole ? userRole : 'Qbid Member',
   );
-  console.log('hfjsdhfjsdjkf' ,selectedRole)
+  console.log('hfjsdhfjsdjkf', selectedRole);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [companyName, setCompanyName] = useState(''); 
+  const [companyName, setCompanyName] = useState('');
   const [email, setEmail] = useState('');
   const [contact, setContact] = useState('');
   const [address, setAddress] = useState('');
@@ -60,8 +60,8 @@ const Signup = () => {
   const [zipCode, setZipCode] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState(false);
-  const [services, setServices] = useState([]); 
-  const [language, setLanguage] = useState([]); 
+  const [services, setServices] = useState([]);
+  const [language, setLanguage] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [checked, setChecked] = useState(false);
@@ -80,7 +80,7 @@ const Signup = () => {
       password: password,
       confirm_password: confirmPassword,
       role: selectedRole,
-      device_token: fcmToken
+      device_token: fcmToken,
       // company_name :companyName,
     };
 
@@ -130,20 +130,20 @@ const Signup = () => {
         : Alert.alert('Password does not match');
     }
 
-    if (selectedRole == 'Qbid Negotiator' || selectedRole == 'Business Qbidder' ) {
+    if (
+      selectedRole == 'Qbid Negotiator' ||
+      selectedRole == 'Business Qbidder'
+    ) {
       if (companyName == '') {
         return Platform.OS == 'android'
-          ? ToastAndroid.show(
-              'company name is required',
-              ToastAndroid.SHORT,
-            )
+          ? ToastAndroid.show('company name is required', ToastAndroid.SHORT)
           : Alert.alert('company name required');
       }
     }
-if(selectedRole == 'Business Qbidder'){
+    if (selectedRole == 'Business Qbidder') {
       // company_name :companyName,
-  formData.append('company_name', companyName)
-}
+      formData.append('company_name', companyName);
+    }
     if (
       selectedRole != 'Qbid Member' &&
       (language.length == 0 || services.length == 0)
@@ -162,8 +162,8 @@ if(selectedRole == 'Business Qbidder'){
         formData.append(`expertise[${index}]`, item),
       );
     }
-    
-//  return  console.log("🚀 ~ Register ~ formData:", JSON.stringify(formData, null, 2))
+
+    //  return  console.log("🚀 ~ Register ~ formData:", JSON.stringify(formData, null, 2))
     if (!checked) {
       return Platform.OS == 'android'
         ? ToastAndroid.show(
@@ -186,25 +186,24 @@ if(selectedRole == 'Business Qbidder'){
     }
   };
 
-  const UserRoleArray = [ 'Qbid Member', 'Business Qbidder'];
+  const UserRoleArray = ['Qbid Member', 'Business Qbidder'];
   useEffect(() => {
     dispatch(setSelectedRole(selectedRole));
   }, [selectedRole]);
 
-  useEffect(() =>{
-  if(fcmToken == null){
-    console.log('Condition matched === .');
-    messaging()
-    .getToken()
-    .then(_token => {
-      console.log('🚀 Sign Up_token:', _token);
-     dispatch( SetFCMToken({fcmToken: _token}));
-      //  dispatch(SetFCMToken(_token));
-    })
-    .catch(() => console.log('token error'));
-
-  }
-  },[])
+  useEffect(() => {
+    if (fcmToken == null) {
+      console.log('Condition matched === .');
+      messaging()
+        .getToken()
+        .then(_token => {
+          console.log('🚀 Sign Up_token:', _token);
+          dispatch(SetFCMToken({fcmToken: _token}));
+          //  dispatch(SetFCMToken(_token));
+        })
+        .catch(() => console.log('token error'));
+    }
+  }, []);
   return (
     <>
       <CustomStatusBar
@@ -321,26 +320,27 @@ if(selectedRole == 'Business Qbidder'){
             placeholderColor={Color.themeLightGray}
             borderRadius={moderateScale(25, 0.3)}
           />
-          {userRole == 'Qbid Negotiator' || userRole == 'Business Qbidder' && (
-            <>
-              <TextInputWithTitle
-                titleText={'Company Name'}
-                secureText={false}
-                placeholder={'Company Name'}
-                setText={setCompanyName}
-                value={companyName}
-                viewHeight={0.07}
-                viewWidth={0.9}
-                inputWidth={0.86}
-                borderColor={'#ffffff'}
-                backgroundColor={'#FFFFFF'}
-                marginTop={moderateScale(15, 0.3)}
-                color={Color.themeColor}
-                placeholderColor={Color.themeLightGray}
-                borderRadius={moderateScale(25, 0.3)}
-              />
-            </>
-          )}
+          {userRole == 'Qbid Negotiator' ||
+            (userRole == 'Business Qbidder' && (
+              <>
+                <TextInputWithTitle
+                  titleText={'Company Name'}
+                  secureText={false}
+                  placeholder={'Company Name'}
+                  setText={setCompanyName}
+                  value={companyName}
+                  viewHeight={0.07}
+                  viewWidth={0.9}
+                  inputWidth={0.86}
+                  borderColor={'#ffffff'}
+                  backgroundColor={'#FFFFFF'}
+                  marginTop={moderateScale(15, 0.3)}
+                  color={Color.themeColor}
+                  placeholderColor={Color.themeLightGray}
+                  borderRadius={moderateScale(25, 0.3)}
+                />
+              </>
+            ))}
           <TextInputWithTitle
             titleText={'Email'}
             secureText={false}

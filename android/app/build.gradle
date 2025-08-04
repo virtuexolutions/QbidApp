@@ -1,8 +1,8 @@
 apply plugin: "com.android.application"
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 apply plugin: 'com.google.gms.google-services'
-import com.android.build.OutputFile
-import org.apache.tools.ant.taskdefs.condition.Os
+// import com.android.build.OutputFile
+// import org.apache.tools.ant.taskdefs.condition.Os
 
 /**
  * The react.gradle file registers a task for each build variant (e.g. bundleDebugJsAndAssets
@@ -232,22 +232,26 @@ android {
     }
 
     // applicationVariants are e.g. debug, release
-    applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-            // For each separate APK per architecture, set a unique version code as described here:
-            // https://developer.android.com/studio/build/configure-apk-splits.html
-            // Example: versionCode 1 will generate 1001 for armeabi-v7a, 1002 for x86, etc.
-            def versionCodes = ["armeabi-v7a": 1, "x86": 2, "arm64-v8a": 3, "x86_64": 4]
-            def abi = output.getFilter(OutputFile.ABI)
-            if (abi != null) {  // null for the universal-debug, universal-release variants
-                output.versionCodeOverride =
-                        defaultConfig.versionCode * 1000 + versionCodes.get(abi)
-            }
+    // applicationVariants.all { variant ->
+    //     variant.outputs.each { output ->
+    //         // For each separate APK per architecture, set a unique version code as described here:
+    //         // https://developer.android.com/studio/build/configure-apk-splits.html
+    //         // Example: versionCode 1 will generate 1001 for armeabi-v7a, 1002 for x86, etc.
+    //         def versionCodes = ["armeabi-v7a": 1, "x86": 2, "arm64-v8a": 3, "x86_64": 4]
+    //         def abi = output.getFilter(OutputFile.ABI)
+    //         if (abi != null) {  // null for the universal-debug, universal-release variants
+    //             output.versionCodeOverride =
+    //                     defaultConfig.versionCode * 1000 + versionCodes.get(abi)
+    //         }
 
-        }
-    }
+    //     }
+    // }
 }
-
+configurations {
+    all {
+        exclude group: 'com.google.errorprone', module: 'error_prone_annotations'
+    }
+}   
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
@@ -258,7 +262,12 @@ dependencies {
     // implementation project(':react-native-push-notification')
     implementation (platform("com.google.firebase:firebase-bom:33.1.2"))    
     implementation ("com.google.firebase:firebase-analytics")
-    
+
+    configurations.all {
+        resolutionStrategy {
+            force "com.google.errorprone:error_prone_annotations:2.9.0"
+        }
+    }    
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.fbjni'
     }

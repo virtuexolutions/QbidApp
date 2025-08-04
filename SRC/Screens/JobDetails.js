@@ -196,38 +196,38 @@ const JobDetails = props => {
       expertise: coverletterRole,
       coverletter: desc,
     };
-
+    
     for (let key in body) {
       if (body[key] == '') {
         return Platform.OS == 'android'
-          ? ToastAndroid.show(`${key} is required`, ToastAndroid.SHORT)
-          : Alert.alert(`${key} is required`);
+        ? ToastAndroid.show(`${key} is required`, ToastAndroid.SHORT)
+        : Alert.alert(`${key} is required`);
       }
     }
-
+    
     if (isNaN(number)) {
       return Platform.OS == 'android'
         ? ToastAndroid.show('phone is not a number', ToastAndroid.SHORT)
         : Alert.alert('phone is not a number');
-    }
-    if (!validateEmail(Email)) {
-      return Platform.OS == 'android'
+      }
+      if (!validateEmail(Email)) {
+        return Platform.OS == 'android'
         ? ToastAndroid.show('email is not validate', ToastAndroid.SHORT)
         : Alert.alert('email is not validate');
-    }
-    if (coverletterRole == 'Expertise In') {
-      return Platform.OS == 'android'
+      }
+      if (coverletterRole == 'Expertise In') {
+        return Platform.OS == 'android'
         ? ToastAndroid.show('Please select any role', ToastAndroid.SHORT)
         : Alert.alert('Please select any role');
-    }
-    if (desc == '') {
-      return Platform.OS == 'android'
+      }
+      if (desc == '') {
+        return Platform.OS == 'android'
         ? ToastAndroid.show('coverLetter is empty ', ToastAndroid.SHORT)
         : Alert.alert('coverLetter is empty ');
-    }
-    // if (desc.length < 100) {
-    //   return Platform.OS == 'android'
-    //     ? ToastAndroid.show('Description is too short', ToastAndroid.SHORT)
+      }
+      // if (desc.length < 100) {
+        //   return Platform.OS == 'android'
+        //     ? ToastAndroid.show('Description is too short', ToastAndroid.SHORT)
     //     : Alert.alert('Description is too short');
     // }
     for (let key in body) {
@@ -235,16 +235,17 @@ const JobDetails = props => {
     }
     multiImages?.map((item, index) =>
       formData.append(`images[${index}]`, item),
-    );
-
-    // formData.append('attachment', attachmentImage)
+  );
+  
+  // formData.append('attachment', attachmentImage)
     setIsLoading(true);
     const response = await Post(url, formData, apiHeader(token));
     setIsLoading(false);
+    // return  console.log("🚀 ~ UpdateBid ~ body:", response?.data)
     if (response != undefined) {
       Platform.OS == 'android'
-        ? ToastAndroid.show('bid update succesfully ', ToastAndroid.SHORT)
-        : alert.alert('vid update succesfully ');
+      ? ToastAndroid.show('bid update succesfully ', ToastAndroid.SHORT)
+      : alert.alert('vid update succesfully ');
       // dispatch(setBidDetail(response?.data?.bid_info));
       setModalVisible(false);
     }
