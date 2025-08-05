@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import LinearGradient from 'react-native-linear-gradient';
 import { ScrollView } from 'react-native';
@@ -45,7 +45,9 @@ import { setBidDetail } from '../Store/slices/common';
 import { Rating } from 'react-native-ratings';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import ReviewAskingModal from '../Components/ReviewAskingModal';
-import { width } from 'deprecated-react-native-prop-types/DeprecatedImagePropType';
+import { height, width } from 'deprecated-react-native-prop-types/DeprecatedImagePropType';
+import QueryCard from '../Components/QueryCard';
+import QuerySheet from '../Components/QuerySheet';
 
 const JobDetails = props => {
   const data1 = props?.route?.params?.item;
@@ -85,6 +87,9 @@ const JobDetails = props => {
   const [multiImages, setMultiImages] = useState([]);
   const [attachmentImage, setAttachmentImage] = useState({});
   const [askingforReview, setAskingforReview] = useState(false);
+  const [isQuery, setIsQuery] = useState(false);
+  const refRBSheet = useRef(null);
+  console.log("🚀 ~ JobDetails ~ refRBSheet:", refRBSheet)
   console.log('🚀 ~ askingforReview:', askingforReview);
   console.log('🚀 ~ bidDetails ~ data?.status:', data?.status);
 
@@ -188,6 +193,24 @@ const JobDetails = props => {
       setModalVisible(!isModalVisible);
     }
   };
+
+
+  const queryData = [
+    {
+      id: 1,
+      text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry?',
+      image: require('../Assets/Images/dummyman1.png'),
+      name: 'test user',
+      date: '8-5-2025'
+    },
+    {
+      id: 1,
+      text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry?',
+      image: require('../Assets/Images/dummyman1.png'),
+      name: 'test user',
+      date: '8-5-2025'
+    }
+  ]
 
   const UpdateBid = async () => {
     const url = 'auth/negotiator/bid';
@@ -318,7 +341,7 @@ const JobDetails = props => {
         style={styles.sectionContainer}
         contentContainerStyle={
           {
-            // backgroundColor:'redx'
+            backgroundColor: 'red'
           }
         }>
         <LinearGradient
@@ -591,6 +614,7 @@ const JobDetails = props => {
                   </View>
                 </>
               )} */}
+
               {userRole != 'Qbid Member' && (
                 <>
                   <CustomText isBold style={styles.detailText}>
@@ -658,9 +682,35 @@ const JobDetails = props => {
                   </View>
                 </>
               )}
-
               {userRole == 'Qbid Member' && data1?.type != 'specific' ? (
                 <>
+                  <View style={styles.row2}>
+                    <CustomText isBold style={styles.txt}>
+                      Quote-related Queries
+                    </CustomText>
+                    <CustomText isBold style={[styles.bidtxt,
+                    {
+                      marginRight: moderateScale(15, 0.6)
+                    }
+                    ]}>
+                      View All
+                    </CustomText>
+                  </View>
+                  <View
+                    style={{
+                      height: windowHeight * 0.11
+                    }}
+                  >
+                    <QueryCard
+                      image={queryData[0]?.image}
+                      name={queryData[0]?.name}
+                      date={queryData[0]?.date}
+                      query={queryData[0]?.text}
+                      onPress={() => {
+                        refRBSheet.current?.open()
+                      }}
+                    />
+                  </View>
                   <View style={styles.row2}>
                     <CustomText isBold style={styles.txt}>
                       {data?.status != 'review'
@@ -680,6 +730,8 @@ const JobDetails = props => {
                       </CustomText>
                     </View>
                   </View>
+
+
                   {/* {data?.status.toLocaleLowerCase() == 'completed' &&
                     setAskingforReview(true)} */}
 
@@ -841,14 +893,10 @@ const JobDetails = props => {
                 bidDone &&
                 data1?.type != 'specific' ? (
                 <>
-                  {/* {data1?.status.toLocaleLowerCase() == 'completed' &&
-                    setAskingforReview(true)} */}
-
                   <View style={styles.h1View}>
                     <CustomText isBold style={styles.h1}>
                       Your Bid Details
                     </CustomText>
-
                     <>
                       <View style={styles.priceBox}>
                         <View>
@@ -882,6 +930,7 @@ const JobDetails = props => {
                       price: data?.bids[0]?.price
                     }}
                   />
+
                   {data?.bids &&
                     data?.bids[0]?.status?.toLowerCase() !=
                     'accept'.toLowerCase() && (
@@ -904,11 +953,13 @@ const JobDetails = props => {
               ) : (
                 data1?.type != 'specific' && (
                   <>
+                    {/* <CustomText isBold style={styles.detailText}>Need more information</CustomText> */}
+
                     <MarkCheckWithText
-                      checked={checked}
-                      setChecked={setChecked}
-                      textPrimary={'I want to boost '}
-                      textSecondary={'my Bid'}
+                      checked={isQuery}
+                      setChecked={setIsQuery}
+                      textPrimary={'I Need more Information about this quote'}
+                      // textSecondary={'Information about this quote'}
                       textStyleSecondary={{
                         color:
                           userRole == 'Qbid Member'
@@ -919,6 +970,64 @@ const JobDetails = props => {
                       }}
                     />
 
+                    {isQuery &&
+                      <>
+                        <CustomText isBold style={styles.detailText}>Add Your query</CustomText>
+                        <TextInputWithTitle
+                          multiline={true}
+                          secureText={false}
+                          placeholder={'If you have any questions or concerns related to a quote, feel free to write your query here. One of our members will respond to assist you. Once your query is resolved, you can proceed to place your bid with full confidence.'}
+                          setText={setDesc}
+                          value={desc}
+                          viewHeight={0.15}
+                          viewWidth={0.9}
+                          inputWidth={0.8}
+                          border={1}
+                          borderColor={
+                            userRole == 'Qbid Negotiator' ? Color.blue : Color.black
+                          }
+                          backgroundColor={'#FFFFFF'}
+                          marginTop={moderateScale(10, 0.6)}
+                          color={Color.themeColor}
+                          placeholderColor={Color.themeLightGray}
+                          borderRadius={moderateScale(10, 0.3)}
+                        />
+                        <CustomButton
+                          text={'Submit'}
+                          textColor={Color.white}
+                          width={windowWidth * 0.92}
+                          height={windowHeight * 0.07}
+                          marginTop={moderateScale(20, 0.3)}
+                          onPress={() => {
+                            toggleModal();
+                          }}
+                          bgColor={
+                            userRole == 'Qbid Member'
+                              ? Color.blue
+                              : userRole == 'Qbid Negotiator'
+                                ? Color.themeColor
+                                : Color.black
+                          }
+                          borderRadius={moderateScale(30, 0.3)}
+                          alignSelf={'flex-start'}
+                        />
+                      </>
+                    }
+
+                    <MarkCheckWithText
+                      checked={checked}
+                      setChecked={setChecked}
+                      textPrimary={'I want to boost'}
+                      textSecondary={'my Bid'}
+                      textStyleSecondary={{
+                        color:
+                          userRole == 'Qbid Member'
+                            ? Color.blue
+                            : userRole == 'Qbid Negotiator'
+                              ? Color.themeColor
+                              : Color.black,
+                      }}
+                    />
                     <CustomButton
                       text={'Bid on this Job Now'}
                       textColor={Color.white}
@@ -956,7 +1065,6 @@ const JobDetails = props => {
         visible={imageModalVisible}
         onRequestClose={() => setImageModalVisible(false)}
       />
-
       <Modal
         isVisible={isModalVisible}
         onBackdropPress={() => {
@@ -1308,13 +1416,18 @@ const JobDetails = props => {
                 borderRadius={moderateScale(30, 0.3)}
                 disabled={isLoading ? true : false}
               />
-
+              <QuerySheet
+                refRBSheet={refRBSheet}
+                // setRef={setrefRBSheet}
+                item={queryData}
+              />
               <ImagePickerModal
                 show={imagePickerVisible}
                 setShow={setImagePickerVisible}
                 setMultiImages={setMultiImages}
               // setFileObject={setAttachmentImage}
               />
+
             </View>
           </ScrollView>
         </View>

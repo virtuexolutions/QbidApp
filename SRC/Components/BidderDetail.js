@@ -25,9 +25,9 @@ const BidderDetail = ({ item, photo, price, title, date, message }) => {
   const imagesArray = item?.attachment?.map((item, index) => {
     return { uri: item?.image };
   });
-    
+
   const bidDelete = async id => {
-    const url = `auth/negotiator/bid_delete`;   
+    const url = `auth/negotiator/bid_delete`;
     const body = {
       id: item?.bid_id,
     };
