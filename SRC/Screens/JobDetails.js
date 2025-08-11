@@ -1,53 +1,46 @@
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { Icon } from 'native-base';
+import { useEffect, useState } from 'react';
 import {
+  ActivityIndicator,
   Alert,
   FlatList,
   Platform,
-  StyleSheet,
-  Text,
+  ScrollView,
   ToastAndroid,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import ScreenBoiler from '../Components/ScreenBoiler';
+import ImageView from 'react-native-image-viewing';
 import LinearGradient from 'react-native-linear-gradient';
-import { ScrollView } from 'react-native';
+import Modal from 'react-native-modal';
+import { Rating } from 'react-native-ratings';
 import { moderateScale, ScaledSheet } from 'react-native-size-matters';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Entypo from 'react-native-vector-icons/Entypo';
+import Feather from 'react-native-vector-icons/Feather';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useDispatch, useSelector } from 'react-redux';
-import { apiHeader, windowHeight, windowWidth } from '../Utillity/utils';
+import Color from '../Assets/Utilities/Color';
+import { Delete, Get, Post } from '../Axios/AxiosInterceptorFunction';
+import BidderDetail from '../Components/BidderDetail';
+import CustomButton from '../Components/CustomButton';
 import CustomImage from '../Components/CustomImage';
 import CustomText from '../Components/CustomText';
-import Color from '../Assets/Utilities/Color';
-import ShowMoreAndShowLessText from '../Components/ShowMoreAndShowLessText';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Entypo from 'react-native-vector-icons/Entypo';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import { Center, Icon } from 'native-base';
-import MarkCheckWithText from '../Components/MarkCheckWithText';
-import TextInputWithTitle from '../Components/TextInputWithTitle';
-import CustomButton from '../Components/CustomButton';
-import { ActivityIndicator } from 'react-native';
-import ReviewCard from '../Components/ReviewCard';
-import BidderDetail from '../Components/BidderDetail';
 import Detailcards from '../Components/Detailcards';
-import Modal from 'react-native-modal';
 import DropDownSingleSelect from '../Components/DropDownSingleSelect';
-import { Delete, Get, Post } from '../Axios/AxiosInterceptorFunction';
-import numeral from 'numeral';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
-import NoData from '../Components/NoData';
-import { validateEmail } from '../Config';
-import ImageView from 'react-native-image-viewing';
 import ImagePickerModal from '../Components/ImagePickerModal';
-import { mode } from 'native-base/lib/typescript/theme/tools';
-import Feather from 'react-native-vector-icons/Feather';
-import { setBidDetail } from '../Store/slices/common';
-import { Rating } from 'react-native-ratings';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import ReviewAskingModal from '../Components/ReviewAskingModal';
-import { height, width } from 'deprecated-react-native-prop-types/DeprecatedImagePropType';
-import QueryCard from '../Components/QueryCard';
+import MarkCheckWithText from '../Components/MarkCheckWithText';
+import NoData from '../Components/NoData';
 import QuerySheet from '../Components/QuerySheet';
+import ReviewAskingModal from '../Components/ReviewAskingModal';
+import ScreenBoiler from '../Components/ScreenBoiler';
+import ShowMoreAndShowLessText from '../Components/ShowMoreAndShowLessText';
+import TextInputWithTitle from '../Components/TextInputWithTitle';
+import { validateEmail } from '../Config';
+import { apiHeader, windowHeight, windowWidth } from '../Utillity/utils';
+import BidDetailsModal from '../Components/BidDetailsModal';
 
 const JobDetails = props => {
   const data1 = props?.route?.params?.item;
@@ -88,10 +81,13 @@ const JobDetails = props => {
   const [attachmentImage, setAttachmentImage] = useState({});
   const [askingforReview, setAskingforReview] = useState(false);
   const [isQuery, setIsQuery] = useState(false);
-  const refRBSheet = useRef(null);
-  console.log("🚀 ~ JobDetails ~ refRBSheet:", refRBSheet)
-  console.log('🚀 ~ askingforReview:', askingforReview);
-  console.log('🚀 ~ bidDetails ~ data?.status:', data?.status);
+  const [refRBSheet, setrefRBSheet] = useState(false);
+  const [detailsModalVisible, setDetailsModalVisible] = useState(false);
+  const [selectedBid, setSelectedBid] = useState({})
+
+  useEffect(() => {
+    bidDetails();
+  }, [isFocused]);
 
   const bidDetails = async () => {
     const url = `auth/negotiator/quote_detail/${data1?.quote_id ? data1?.quote_id : data1?.id
@@ -102,7 +98,6 @@ const JobDetails = props => {
 
     if (response != undefined) {
       setData(response?.data?.quote_info);
-
       const mainuserData = response?.data?.quote_info?.bids?.find(
         item => item.user_info?.id == user?.id,
       );
@@ -194,7 +189,6 @@ const JobDetails = props => {
     }
   };
 
-
   const queryData = [
     {
       id: 1,
@@ -217,7 +211,7 @@ const JobDetails = props => {
     const formData = new FormData();
     const body = {
       quote_id: data?.id,
-      bid_id: userData?.id,
+      bid_id: data?.bids[0]?.id,
       fullname: fullName,
       email: Email,
       phone: number,
@@ -268,6 +262,7 @@ const JobDetails = props => {
     );
 
     // formData.append('attachment', attachmentImage)
+    console.log("🚀 ~ UpdateBid ~ formData:", formData)
     setIsLoading(true);
     const response = await Post(url, formData, apiHeader(token));
     setIsLoading(false);
@@ -303,9 +298,6 @@ const JobDetails = props => {
     }
   }, [data?.status, userRole]);
 
-  useEffect(() => {
-    bidDetails();
-  }, [isFocused]);
 
   console.log('dESC===>, ', desc, coverletterRole);
   const imageDelete = async id => {
@@ -684,7 +676,7 @@ const JobDetails = props => {
               )}
               {userRole == 'Qbid Member' && data1?.type != 'specific' ? (
                 <>
-                  <View style={styles.row2}>
+                  {/* <View style={styles.row2}>
                     <CustomText isBold style={styles.txt}>
                       Quote-related Queries
                     </CustomText>
@@ -707,10 +699,10 @@ const JobDetails = props => {
                       date={queryData[0]?.date}
                       query={queryData[0]?.text}
                       onPress={() => {
-                        refRBSheet.current?.open()
+                        setrefRBSheet(true)
                       }}
                     />
-                  </View>
+                  </View> */}
                   <View style={styles.row2}>
                     <CustomText isBold style={styles.txt}>
                       {data?.status != 'review'
@@ -730,11 +722,8 @@ const JobDetails = props => {
                       </CustomText>
                     </View>
                   </View>
-
-
                   {/* {data?.status.toLocaleLowerCase() == 'completed' &&
                     setAskingforReview(true)} */}
-
                   {data?.status != 'review' ? (
                     <FlatList
                       key={item => item?.id}
@@ -760,6 +749,11 @@ const JobDetails = props => {
                         return (
                           <>
                             <BidderDetail
+                              onPressDetails={() => {
+                                setDetailsModalVisible(true)
+                                setSelectedBid(item)
+                              }
+                              }
                               item={{
                                 image: item?.user_info?.photo,
                                 name: item?.user_info?.company_name,
@@ -922,11 +916,9 @@ const JobDetails = props => {
                       description: userData?.coverletter
                         ? userData?.coverletter
                         : desc,
-                      // status: data?.status,
                       status: data?.bids[0]?.status,
                       id: data?.id,
                       bid_id: data?.bids[0]?.id,
-                      // attachment :
                       price: data?.bids[0]?.price
                     }}
                   />
@@ -954,7 +946,7 @@ const JobDetails = props => {
                 data1?.type != 'specific' && (
                   <>
                     {/* <CustomText isBold style={styles.detailText}>Need more information</CustomText> */}
-
+                    {/* 
                     <MarkCheckWithText
                       checked={isQuery}
                       setChecked={setIsQuery}
@@ -1012,7 +1004,7 @@ const JobDetails = props => {
                           alignSelf={'flex-start'}
                         />
                       </>
-                    }
+                    } */}
 
                     <MarkCheckWithText
                       checked={checked}
@@ -1080,7 +1072,6 @@ const JobDetails = props => {
         }}>
         <View style={styles.modalView}>
           <ScrollView
-            scrollEnabled={false}
             contentContainerStyle={{
               paddingVertical: moderateScale(5, 0.6),
               alignItems: 'center',
@@ -1418,7 +1409,7 @@ const JobDetails = props => {
               />
               <QuerySheet
                 refRBSheet={refRBSheet}
-                // setRef={setrefRBSheet}
+                setRef={setrefRBSheet}
                 item={queryData}
               />
               <ImagePickerModal
@@ -1432,6 +1423,8 @@ const JobDetails = props => {
           </ScrollView>
         </View>
       </Modal>
+
+      <BidDetailsModal show={detailsModalVisible} setShow={setDetailsModalVisible} data={selectedBid}/>
     </ScreenBoiler>
   );
 };

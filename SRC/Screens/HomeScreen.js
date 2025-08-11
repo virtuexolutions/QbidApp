@@ -9,25 +9,25 @@ import {
   ToastAndroid,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import Color from '../Assets/Utilities/Color';
-import {moderateScale, ScaledSheet} from 'react-native-size-matters';
-import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
+import { moderateScale, ScaledSheet } from 'react-native-size-matters';
+import { apiHeader, windowHeight, windowWidth } from '../Utillity/utils';
 import CustomText from '../Components/CustomText';
-import {Actionsheet, Icon} from 'native-base';
-import {ScrollView} from 'react-native';
+import { Actionsheet, Icon } from 'native-base';
+import { ScrollView } from 'react-native';
 import SearchContainer from '../Components/SearchContainer';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MyQouteCard from '../Components/MyQouteCard';
 import navigationService from '../navigationService';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CustomStatusModal from '../Components/CustomStatusModal';
 import LinearGradient from 'react-native-linear-gradient';
-import {setUserToken} from '../Store/slices/auth';
+import { setUserToken } from '../Store/slices/auth';
 import CustomAlertModal from '../Components/CustomAlertModal';
-import {Get, Post} from '../Axios/AxiosInterceptorFunction';
-import {useIsFocused} from '@react-navigation/native';
+import { Get, Post } from '../Axios/AxiosInterceptorFunction';
+import { useIsFocused } from '@react-navigation/native';
 import NoData from '../Components/NoData';
 import VendorCards from '../Components/VendorCards';
 import HelpCard from '../Components/HelpCard';
@@ -109,15 +109,15 @@ const HomeScreen = () => {
       statusBarBackgroundColor={Color.themeBgColor}
       statusBarContentStyle={'dark-content'}
       showHeader={true}
-      //  showBack={true}
+    //  showBack={true}
     >
       <LinearGradient
         style={{
           width: windowWidth,
           height: windowHeight * 0.89,
         }}
-        start={{x: 0, y: 0}}
-        end={{x: 1, y: 0}}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
         colors={[Color.themeColor, '#83D475', '#ABE098']}>
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -207,7 +207,7 @@ const HomeScreen = () => {
                 paddingHorizontal: moderateScale(15, 0.3),
                 paddingTop: moderateScale(10, 0.3),
               }}
-              renderItem={({item, index}) => {
+              renderItem={({ item, index }) => {
                 return <VendorCards item={item} />;
                 // return <NegotiatorCard key={index} item={item} />;
               }}
@@ -280,7 +280,7 @@ const HomeScreen = () => {
                 paddingHorizontal: moderateScale(15, 0.3),
                 paddingTop: moderateScale(20, 0.3),
               }}
-              renderItem={({item, index}) => {
+              renderItem={({ item, index }) => {
                 return <MyQouteCard item={item} key={index} type={'quote'} />;
               }}
             />
@@ -330,7 +330,7 @@ const HomeScreen = () => {
                 paddingHorizontal: moderateScale(15, 0.3),
                 paddingTop: moderateScale(20, 0.3),
               }}
-              renderItem={({item, index}) => {
+              renderItem={({ item, index }) => {
                 return <HelpCard item={item} />;
               }}
             />
@@ -340,7 +340,7 @@ const HomeScreen = () => {
       <CustomStatusModal
         isModalVisible={modalVisible1}
         setModalVisible={setModalVisible1}
-        statusArray={[{name: 'negotiator'}, {name: 'quotes'}]}
+        statusArray={[{ name: 'negotiator' }, { name: 'quotes' }]}
         data={selectedData1}
         setData={setSelectedData1}
         text={'category'}
@@ -348,7 +348,7 @@ const HomeScreen = () => {
       <CustomStatusModal
         isModalVisible={modalVisible2}
         setModalVisible={setModalVisible2}
-        statusArray={[{name: 'Level 5'}, {name: 'level 4'}, {name: 'level 3'}]}
+        statusArray={[{ name: 'Level 5' }, { name: 'level 4' }, { name: 'level 3' }]}
         data={selectedData2}
         setData={setSelectedData2}
         text={'filter negotiator level'}
@@ -357,9 +357,9 @@ const HomeScreen = () => {
         isModalVisible={modalVisible3}
         setModalVisible={setModalVisible3}
         statusArray={[
-          {name: 'Completed'},
-          {name: 'Pending'},
-          {name: 'onGoing'},
+          { name: 'Completed' },
+          { name: 'Pending' },
+          { name: 'onGoing' },
         ]}
         data={selectedData3}
         setData={setSelectedData3}

@@ -61,7 +61,6 @@ const ReviewAskingModal = ({modalVisible, setModalVisible, data}) => {
         setModalVisible={setModalVisible}
         onClose={() => {
           rbRef.close(), setModalVisible(false);
-          console.log('hweeeeeeeeeeeeeeeekooooooooooooooooo');
         }}
       />
     </Modal>

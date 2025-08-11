@@ -1,28 +1,22 @@
+import { useState } from 'react';
 import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  FlatList,
-  Platform,
-  ToastAndroid,
+  ActivityIndicator,
   Alert,
+  Platform,
+  StyleSheet,
+  ToastAndroid,
+  View
 } from 'react-native';
-import React, {useRef, useState} from 'react';
-import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
+import { AirbnbRating } from 'react-native-ratings';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import CustomText from '../Components/CustomText';
-import {Icon} from 'native-base';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {TextInput} from 'react-native';
-import {moderateScale} from 'react-native-size-matters';
+import { moderateScale } from 'react-native-size-matters';
+import { useSelector } from 'react-redux';
 import Color from '../Assets/Utilities/Color';
-import {AirbnbRating} from 'react-native-ratings';
-import TextInputWithTitle from './TextInputWithTitle';
-import {Post} from '../Axios/AxiosInterceptorFunction';
-import {useSelector} from 'react-redux';
+import { Post } from '../Axios/AxiosInterceptorFunction';
+import CustomText from '../Components/CustomText';
+import { apiHeader, windowHeight, windowWidth } from '../Utillity/utils';
 import CustomButton from './CustomButton';
-import {ActivityIndicator} from 'react-native';
+import TextInputWithTitle from './TextInputWithTitle';
 
 const ReviewModal = ({
   setRef,
@@ -32,7 +26,6 @@ const ReviewModal = ({
   setbuttonName,
   setModalVisible,
 }) => {
-  console.log('🚀 ~ ReviewModal ~ rbRef:', rbRef?.close);
   const token = useSelector(state => state.authReducer.token);
   const [loading, setLoading] = useState(false);
   const [review, setReview] = useState('');
@@ -40,7 +33,7 @@ const ReviewModal = ({
 
   const sendReview = async () => {
     const url = 'auth/review';
-    const body = {rating: rating, quote_id: item?.id, text: review};
+    const body = { rating: rating, quote_id: item?.id, text: review };
     for (let key in body) {
       if (body[key] == '') {
         return Platform.OS == 'android'
@@ -48,13 +41,12 @@ const ReviewModal = ({
           : Alert.alert(`${key} is required`);
       }
     }
-  //  return  console.log("🚀 ~ sendReview ~ body:", body)
     setLoading(true);
     const response = await Post(url, body, apiHeader(token));
-   return  console.log('🚀 ~ sendReview ~ response:', response?.data?.review);
+    console.log('🚀 ~ sendReview ~ response:', response?.data?.review);
     setLoading(false);
     if (response?.data?.review) {
-      onClose();
+      rbRef.close()
       Platform.OS == 'android'
         ? ToastAndroid.show('Review sent', ToastAndroid.SHORT)
         : Alert.alert('Review sent');

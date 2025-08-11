@@ -5,30 +5,29 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import { moderateScale } from 'react-native-size-matters';
 import Color from '../Assets/Utilities/Color';
 import { windowHeight, windowWidth } from '../Utillity/utils';
+import Modal from 'react-native-modal';
+import { View } from 'native-base';
 
 const QuerySheet = ({
     refRBSheet,
+    setRef
 }) => {
     console.log('yahaaa per h')
     return (
-        <RBSheet
-            closeOnDragDown={true}
-            ref={refRBSheet}
-            height={450}
-            dragFromTopOnly={true}
-            openDuration={250}
-            customStyles={{
-                container: {
-                    borderTopRightRadius: 25,
-                    borderTopLeftRadius: 25,
-                    height: windowHeight * 0.65,
-                    backgroundColor: 'red'
-                },
+        <Modal
+            isVisible={refRBSheet}
+            onBackdropPress={() => {
+                setRef(false);
             }}>
-            <View style={{ padding: 20 }}>
-                <Text>Sheet Content</Text>
+            <View style={{
+                width: windowWidth,
+                height: windowHeight * 0.5,
+                backgroundColor: "red"
+            }}
+            >
+
             </View>
-        </RBSheet>
+        </Modal>
     );
 };
 

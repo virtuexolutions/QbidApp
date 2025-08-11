@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { Icon } from 'native-base';
 import { useState } from 'react';
-import { ActivityIndicator, Image, View } from 'react-native';
+import { ActivityIndicator, Image, TouchableOpacity, View } from 'react-native';
 import ImageView from 'react-native-image-viewing';
 import { ScaledSheet, moderateScale } from 'react-native-size-matters';
 import Feather from 'react-native-vector-icons/Feather';
@@ -12,8 +12,9 @@ import { Post } from '../Axios/AxiosInterceptorFunction';
 import CustomText from '../Components/CustomText';
 import { apiHeader, windowHeight, windowWidth } from '../Utillity/utils';
 import RatingComponent from './RatingComponent';
+import BidDetailsModal from './BidDetailsModal';
 
-const BidderDetail = ({ item, photo, price, title, date, message }) => {
+const BidderDetail = ({ item, photo, price, title, date, message, onPressDetails }) => {
   console.log('🚀 ~ BidderDetail ~ item:', item);
   const token = useSelector(state => state.authReducer.token);
   console.log("🚀 ~ BidderDetail ~ token:", token)
@@ -39,7 +40,7 @@ const BidderDetail = ({ item, photo, price, title, date, message }) => {
   };
 
   return (
-    <View
+    <TouchableOpacity activeOpacity={0.5} onPress={onPressDetails}
       style={[
         styles.container,
         userRole == 'Qbid Member'
@@ -252,7 +253,8 @@ const BidderDetail = ({ item, photo, price, title, date, message }) => {
             />
           ))}
       </View>
-    </View>
+
+    </TouchableOpacity>
   );
 };
 const styles = ScaledSheet.create({
