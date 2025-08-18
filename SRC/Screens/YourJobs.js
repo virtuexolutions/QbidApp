@@ -27,7 +27,6 @@ import NoData from '../Components/NoData';
 import CustomImage from '../Components/CustomImage';
 import DropDownSingleSelect from '../Components/DropDownSingleSelect';
 import {useIsFocused} from '@react-navigation/native';
-import ReviewModal from '../Components/ReviewModal';
 import {imageUrl} from '../Config';
 import {off} from 'npm';
 

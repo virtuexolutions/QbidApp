@@ -67,6 +67,7 @@ const JobDetails = props => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [Email, setEmail] = useState(user?.email);
   const [price, setPrice] = useState('');
+  console.log(price, '=====================>')
   const [number, setNumber] = useState(user?.phone);
   const [userData, setUserData] = useState({});
   const [bidDataImages, setBidDataImages] = useState([]);
@@ -919,7 +920,7 @@ const JobDetails = props => {
                       status: data?.bids[0]?.status,
                       id: data?.id,
                       bid_id: data?.bids[0]?.id,
-                      price: data?.bids[0]?.price
+                      price: data?.bids[0]?.price || price
                     }}
                   />
 
@@ -1424,7 +1425,7 @@ const JobDetails = props => {
         </View>
       </Modal>
 
-      <BidDetailsModal show={detailsModalVisible} setShow={setDetailsModalVisible} data={selectedBid}/>
+      <BidDetailsModal show={detailsModalVisible} setShow={setDetailsModalVisible} data={selectedBid} />
     </ScreenBoiler>
   );
 };

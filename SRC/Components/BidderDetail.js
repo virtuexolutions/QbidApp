@@ -34,6 +34,7 @@ const BidderDetail = ({ item, photo, price, title, date, message, onPressDetails
     };
     setIsLoading(true);
     const response = await Post(url, body, apiHeader(token));
+    console.log(response?.data, 'responseeeeeeeeeeeeeeeeeeee')
     setIsLoading(false);
     if (response != undefined) {
     }

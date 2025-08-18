@@ -30,7 +30,7 @@ const ReviewModal = ({
   const [loading, setLoading] = useState(false);
   const [review, setReview] = useState('');
   const [rating, setRating] = useState(0);
-
+  console.log('ReviewModal itemmmmmmmmmmm', item)
   const sendReview = async () => {
     const url = 'auth/review';
     const body = { rating: rating, quote_id: item?.id, text: review };

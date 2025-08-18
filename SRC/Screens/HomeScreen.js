@@ -31,7 +31,6 @@ import { useIsFocused } from '@react-navigation/native';
 import NoData from '../Components/NoData';
 import VendorCards from '../Components/VendorCards';
 import HelpCard from '../Components/HelpCard';
-// import SkeeingHelpCard from '../Components/SkeeingHelpCard';
 
 const HomeScreen = () => {
   const isFocused = useIsFocused();
@@ -64,6 +63,8 @@ const HomeScreen = () => {
       Get('auth/member/quote', token),
       Get('auth/member/quote_help', token),
     ]);
+
+    console.log(response2?.data?.quote_info?.data, 'response2response2response2response2')
 
     setIsLoading(false);
     if (response1 != undefined) {
