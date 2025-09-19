@@ -8,22 +8,22 @@ import {
   ToastAndroid,
   ActivityIndicator,
 } from 'react-native';
-import React, {useState} from 'react';
-import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
+import React, { useState } from 'react';
+import { apiHeader, windowHeight, windowWidth } from '../Utillity/utils';
 import Color from '../Assets/Utilities/Color';
-import {moderateScale} from 'react-native-size-matters';
-import {useSelector} from 'react-redux';
+import { moderateScale } from 'react-native-size-matters';
+import { useSelector } from 'react-redux';
 import Modal from 'react-native-modal';
 
 import CustomText from './CustomText';
 import CustomButton from './CustomButton';
 import CustomImage from './CustomImage';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import DropDownSingleSelect from './DropDownSingleSelect';
-import {Post} from '../Axios/AxiosInterceptorFunction';
+import { Post } from '../Axios/AxiosInterceptorFunction';
 // import { platform } from 'os';
 
-const HelpModal = ({modalVisible, setModalVisible}) => {
+const HelpModal = ({ modalVisible, setModalVisible }) => {
   const token = useSelector(state => state.authReducer.token);
   const userData = useSelector(state => state.commonReducer.userData);
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
@@ -36,16 +36,16 @@ const HelpModal = ({modalVisible, setModalVisible}) => {
     const body = {
       service_preference: selectedService,
     };
-
+    console.log(body, 'body')
     setIsLoading(true);
     const response = await Post(url, body, apiHeader(token));
     setIsLoading(false);
     if (response != undefined) {
       Platform.OS == 'android'
         ? ToastAndroid.show(
-            '“Alert Sent, Specialist would contact you soon',
-            ToastAndroid.SHORT,
-          )
+          '“Alert Sent, Specialist would contact you soon',
+          ToastAndroid.SHORT,
+        )
         : alert('“Alert Sent, Specialist would contact you soon');
       setSelectedService('');
       setModalVisible(false);
@@ -70,24 +70,28 @@ const HelpModal = ({modalVisible, setModalVisible}) => {
           />
         </View>
         <CustomText style={styles.heading} isBold>
-          how can i help you
+          What Type of Business do you need help with?
         </CustomText>
-
-        <DropDownSingleSelect
-          array={servicesArray.filter(x => x?.name)}
-          item={selectedService}
-          setItem={setSelectedService}
-          placeholder={'Service preference'}
-          width={windowWidth * 0.7}
-          dropDownHeight={windowHeight * 0.06}
-          dropdownStyle={{
-            borderWidth: moderateScale(1, 0.6),
-            width: windowWidth * 0.7,
-            borderRadius: moderateScale(15, 0.6),
-            marginTop: moderateScale(15, 0.3),
-          }}
-        />
-
+        <View
+        //  style={{
+        //   ma
+        // }}
+        >
+          <DropDownSingleSelect
+            array={servicesArray.filter(x => x?.name)}
+            item={selectedService}
+            setItem={setSelectedService}
+            placeholder={'Service preference'}
+            dropDownHeight={windowHeight * 0.05}
+            height={windowHeight * 0.05}
+            dropdownStyle={{
+              borderWidth: moderateScale(1, 0.6),
+              width: windowWidth * 0.7,
+              borderRadius: moderateScale(15, 0.6),
+              marginTop: moderateScale(15, 0.3),
+            }}
+          />
+        </View>
         <CustomButton
           textColor={Color.white}
           width={windowWidth * 0.5}
@@ -106,7 +110,7 @@ const HelpModal = ({modalVisible, setModalVisible}) => {
           }}
           isBold
           bgColor={Color.blue}
-          marginTop={moderateScale(15, 0.3)}
+          marginTop={moderateScale(20, 0.3)}
           marginBottom={moderateScale(5, 0.3)}
         />
       </View>
@@ -121,7 +125,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.white,
     borderRadius: moderateScale(20, 0.3),
     padding: moderateScale(10, 0.6),
-    height: windowHeight * 0.35,
+    height: windowHeight * 0.38,
     width: windowWidth * 0.8,
     borderWidth: moderateScale(2, 0.6),
     borderColor: Color.blue,
@@ -136,6 +140,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     color: Color.blue,
-    fontSize: moderateScale(22, 0.6),
+    fontSize: moderateScale(16, 0.6),
+    textAlign: "center"
   },
 });

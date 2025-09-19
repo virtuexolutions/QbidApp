@@ -44,6 +44,7 @@ import YourJobs from './Screens/YourJobs';
 import CompleteJobs from './Screens/CompleteJobs';
 import CreateNewHelp from './Screens/CreateNewHelp';
 import MessagesScreen from './Screens/MessagesScreen';
+import PrivacyPolicy from './Screens/PrivacyPolicy';
 
 const AppNavigator = () => {
   // const isLogin = false;
@@ -115,6 +116,7 @@ const AppNavigator = () => {
           <RootNav.Screen name="ChangePassword" component={ChangePassword} />
           <RootNav.Screen name="CreateNewHelp" component={CreateNewHelp} />
           <RootNav.Screen name="MessagesScreen" component={MessagesScreen} />
+          <RootNav.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
         </RootNav.Navigator>
       </NavigationContainer>
     );
@@ -139,7 +141,6 @@ export const TabNavigation = () => {
           let color = Color.themeColor;
           let size = moderateScale(20, 0.3);
           let type = Ionicons;
-
           if (
             route.name === 'HomeScreen' ||
             route.name === 'NegotiatorHomeScreen'
@@ -188,7 +189,7 @@ export const TabNavigation = () => {
                 ? Color.themeColor
                 : Color.black
               : Color.themeLightGray;
-            size = focused ? moderateScale(30, 0.3) : moderateScale(20, 0.3);
+            size = focused ? moderateScale(30, 0.3) : moderateScale(25, 0.3);
           } else {
             iconName = focused ? 'settings-outline' : 'settings-sharp';
             color = focused
@@ -205,13 +206,13 @@ export const TabNavigation = () => {
               style={{
                 borderWidth: 5,
                 borderColor: Color.lightGrey,
-                height: moderateScale(60, 0.3),
-                width: moderateScale(60, 0.3),
-                borderRadius: moderateScale(30, 0.3),
+                height: moderateScale(70, 0.3),
+                width: moderateScale(70, 0.3),
+                borderRadius: moderateScale(40, 0.3),
                 backgroundColor: Color.themeColor,
                 justifyContent: 'center',
                 alignItems: 'center',
-                marginTop: moderateScale(-30, 0.3),
+                marginTop: moderateScale(-35, 0.3),
               }}>
               <Icon
                 name={'plus'}

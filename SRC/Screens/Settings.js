@@ -1,14 +1,14 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { ActivityIndicator, View } from 'react-native';
 import Color from '../Assets/Utilities/Color';
 import CustomText from '../Components/CustomText';
 import CustomImage from '../Components/CustomImage';
-import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
-import {moderateScale, ScaledSheet} from 'react-native-size-matters';
-import {useDispatch, useSelector} from 'react-redux';
+import { apiHeader, windowHeight, windowWidth } from '../Utillity/utils';
+import { moderateScale, ScaledSheet } from 'react-native-size-matters';
+import { useDispatch, useSelector } from 'react-redux';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import LinearGradient from 'react-native-linear-gradient';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import CustomButton from '../Components/CustomButton';
 import {
   setMilageRing,
@@ -20,7 +20,7 @@ import ImageView from 'react-native-image-viewing';
 // import RNInstalledApplication from 'react-native-installed-application';
 import moment from 'moment/moment';
 import navigationService from '../navigationService';
-import {setUserLogOut} from '../Store/slices/common';
+import { setUserLogOut } from '../Store/slices/common';
 import HelpModal from '../Components/HelpModal';
 
 const Settings = () => {
@@ -57,29 +57,29 @@ const Settings = () => {
         userRole == 'Qbid Member'
           ? Color.themeBgColor
           : userRole == 'Qbid Negotiator'
-          ? Color.themeBgColorNegotiator
-          : Color.themebgBusinessQbidder
+            ? Color.themeBgColorNegotiator
+            : Color.themebgBusinessQbidder
       }
       statusBarContentStyle={'light-content'}
       headerColor={
         userRole == 'Qbid Member'
           ? Color.themeBgColor
           : userRole == 'Qbid Negotiator'
-          ? Color.themeBgColorNegotiator
-          : Color.themebgBusinessQbidder
+            ? Color.themeBgColorNegotiator
+            : Color.themebgBusinessQbidder
       }>
       <LinearGradient
         style={{
           minHeight: windowHeight * 0.89,
         }}
-        start={{x: 0, y: 0}}
-        end={{x: 1, y: 0}}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
         colors={
           userRole == 'Qbid Member'
             ? Color.themeBgColor
             : userRole == 'Qbid Negotiator'
-            ? Color.themeBgColorNegotiator
-            : Color.themebgBusinessQbidder
+              ? Color.themeBgColorNegotiator
+              : Color.themebgBusinessQbidder
         }>
         <KeyboardAwareScrollView
           showsVerticalScrollIndicator={false}
@@ -101,7 +101,7 @@ const Settings = () => {
               onPress={() => {
                 setIsVisible(true);
               }}
-              source={{uri: user?.photo}}
+              source={{ uri: user?.photo }}
               style={[styles.image]}
             />
           </View>
@@ -109,8 +109,8 @@ const Settings = () => {
             isBold
             style={[
               styles.text,
-              {fontSize: moderateScale(17, 0.3)},
-              userRole != 'Qbid Member' && {color: Color.white},
+              { fontSize: moderateScale(17, 0.3) },
+              userRole != 'Qbid Member' && { color: Color.white },
             ]}>
             {`${user?.first_name} ${user?.last_name}`}
           </CustomText>
@@ -156,7 +156,7 @@ const Settings = () => {
               height={windowHeight * 0.07}
               marginTop={moderateScale(10, 0.3)}
               onPress={() => {
-                navigationService.navigate('MileRange', {fromSetting: true});
+                navigationService.navigate('MileRange', { fromSetting: true });
               }}
               bgColor={Color.white}
               // isGradient
@@ -258,6 +258,20 @@ const Settings = () => {
           />
           <CustomButton
             isBold
+            text={'Privacy policy'}
+            textColor={Color.themeDarkGray}
+            width={windowWidth * 0.9}
+            height={windowHeight * 0.07}
+            marginTop={moderateScale(10, 0.3)}
+            onPress={() => {
+              navigationService.navigate('PrivacyPolicy');
+            }}
+            bgColor={Color.white}
+            // isGradient
+            borderRadius={moderateScale(30, 0.3)}
+          />
+          <CustomButton
+            isBold
             text={'Logout'}
             textColor={Color.themeDarkGray}
             width={windowWidth * 0.9}
@@ -274,7 +288,7 @@ const Settings = () => {
           />
         </KeyboardAwareScrollView>
         <ImageView
-          images={[{uri: user?.photo}]}
+          images={[{ uri: user?.photo }]}
           imageIndex={0}
           visible={isVisible}
           onRequestClose={() => {

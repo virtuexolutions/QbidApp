@@ -1,25 +1,26 @@
-import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import moment from 'moment';
-import {FlatList} from 'native-base';
-import {moderateScale, ScaledSheet} from 'react-native-size-matters';
+import { FlatList } from 'native-base';
+import { moderateScale, ScaledSheet } from 'react-native-size-matters';
 import NotificationCard from '../Components/NotificationCard';
-import {windowHeight, windowWidth} from '../Utillity/utils';
+import { windowHeight, windowWidth } from '../Utillity/utils';
 import Color from '../Assets/Utilities/Color';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomText from '../Components/CustomText';
-import {useSelector} from 'react-redux';
-import {useState} from 'react';
+import { useSelector } from 'react-redux';
+import { useState } from 'react';
 import HelpRequestModal from '../Components/HelpRequestModal';
-import {Get} from '../Axios/AxiosInterceptorFunction';
-import {useEffect} from 'react';
-import {useIsFocused} from '@react-navigation/native';
+import { Get } from '../Axios/AxiosInterceptorFunction';
+import { useEffect } from 'react';
+import { useIsFocused } from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
 
 const NotificationScreen = () => {
   const isFocused = useIsFocused();
   const userRole = useSelector(state => state.commonReducer.selectedRole);
+  console.log(userRole, 'userRoleeeeeeeeeeee')
   const token = useSelector(state => state.authReducer.token);
   const [selected, setSelected] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -114,20 +115,18 @@ const NotificationScreen = () => {
     const url = 'auth/negotiator/notification';
     setIsLoading(true);
     const response = await Get(url, token);
+    console.log(response?.data, '===============>')
     setIsLoading(false);
     if (response != undefined) {
       setHelpNotification(response?.data?.notification_info);
     }
   };
   useEffect(() => {
-    if (userRole != 'Qbid Member') {
+    if (userRole != 'Business Qbidder') {
       helpNotify();
     }
   }, [isFocused]);
 
-  // useEffect(() => {
-
-  // }, []);
 
   const getNotifications = async () => {
     const url = 'auth/negotiator/notification';
@@ -163,29 +162,29 @@ const NotificationScreen = () => {
         userRole == 'Qbid Member'
           ? Color.themeBgColor
           : userRole == 'Qbid Negotiator'
-          ? Color.themeBgColorNegotiator
-          : Color.themebgBusinessQbidder
+            ? Color.themeBgColorNegotiator
+            : Color.themebgBusinessQbidder
       }
       statusBarContentStyle={'light-content'}
       headerColor={
         userRole == 'Qbid Member'
           ? Color.themeBgColor
           : userRole == 'Qbid Negotiator'
-          ? Color.themeBgColorNegotiator
-          : Color.themebgBusinessQbidder
+            ? Color.themeBgColorNegotiator
+            : Color.themebgBusinessQbidder
       }>
       <LinearGradient
         style={{
           height: windowHeight * 0.9,
         }}
-        start={{x: 0, y: 0}}
-        end={{x: 1, y: 0}}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
         colors={
           userRole == 'Qbid Member'
             ? Color.themeBgColor
             : userRole == 'Qbid Negotiator'
-            ? Color.themeBgColorNegotiator
-            : Color.themebgBusinessQbidder
+              ? Color.themeBgColorNegotiator
+              : Color.themebgBusinessQbidder
         }>
         {isLoading ? (
           <View
@@ -212,8 +211,8 @@ const NotificationScreen = () => {
               minHeight: windowHeight * 0.9,
               // backgroundColor : Color.themeColor
             }}
-            renderItem={({item, index}) => {
-              // console.log("🚀 ~ NotificationScreen ~ item=======>:", item)
+            renderItem={({ item, index }) => {
+              console.log("🚀 ~ NotificationScreen ~ item=======>:", item)
               return (
                 <NotificationCard
                   image={
@@ -252,7 +251,7 @@ const NotificationScreen = () => {
                   isBold
                   style={[
                     styles.header,
-                    userRole != 'Qbid Member' && {color: Color.white},
+                    userRole != 'Qbid Member' && { color: Color.white },
                   ]}>
                   Notifications
                 </CustomText>

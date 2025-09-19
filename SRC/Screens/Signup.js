@@ -377,7 +377,7 @@ const Signup = () => {
           <TextInputWithTitle
             titleText={'Address'}
             secureText={false}
-            placeholder={'Home Address'}
+            placeholder={selectedRole == 'Business Qbidder' ? 'Company Address' : 'Home Address'}
             setText={setAddress}
             value={address}
             viewHeight={0.07}
@@ -488,7 +488,7 @@ const Signup = () => {
                 }}
               />
               <CustomDropDownMultiSelect
-                title={'Pick Expertise'}
+                title={'Pick Expertise you conduct'}
                 array={servicesArray}
                 item={services}
                 setItem={setServices}

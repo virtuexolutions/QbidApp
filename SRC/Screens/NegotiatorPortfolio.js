@@ -9,12 +9,12 @@ import {
   Alert,
   ToastAndroid,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import LinearGradient from 'react-native-linear-gradient';
 import Color from '../Assets/Utilities/Color';
-import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
+import { apiHeader, windowHeight, windowWidth } from '../Utillity/utils';
 import {
   moderateScale,
   moderateVerticalScale,
@@ -25,23 +25,23 @@ import ImagePickerModal from '../Components/ImagePickerModal';
 import Constants from '../Assets/Utilities/Constants';
 import RatingComponent from '../Components/RatingComponent';
 import CustomText from '../Components/CustomText';
-import {Icon} from 'native-base';
+import { Icon } from 'native-base';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import ImageView from 'react-native-image-viewing';
 import Detailcards from '../Components/Detailcards';
 import CustomButton from '../Components/CustomButton';
-import {ActivityIndicator} from 'react-native';
+import { ActivityIndicator } from 'react-native';
 import CustomModal from '../Components/CustomModal';
 import TextInputWithTitle from '../Components/TextInputWithTitle';
 import CustomDropDownMultiSelect from '../Components/CustomDropDownMultiSelect';
-import {useNavigation} from '@react-navigation/native';
-import {AirbnbRating} from 'react-native-ratings';
+import { useNavigation } from '@react-navigation/native';
+import { AirbnbRating } from 'react-native-ratings';
 import moment from 'moment';
 
-import {Post, Get} from '../Axios/AxiosInterceptorFunction';
-import {setUserData} from '../Store/slices/common';
+import { Post, Get } from '../Axios/AxiosInterceptorFunction';
+import { setUserData } from '../Store/slices/common';
 import navigationService from '../navigationService';
 
 const NegotiatorPortfolio = props => {
@@ -74,8 +74,8 @@ const NegotiatorPortfolio = props => {
         ? true
         : false
       : userdata?.status == 'active'
-      ? true
-      : false,
+        ? true
+        : false,
   );
 
   const [firstName, setFirstName] = useState(
@@ -117,8 +117,8 @@ const NegotiatorPortfolio = props => {
         ? item?.city
         : 'not availble'
       : userdata?.city
-      ? userdata?.city
-      : '',
+        ? userdata?.city
+        : '',
   );
   const [state, setState] = useState(
     fromSearch
@@ -126,8 +126,8 @@ const NegotiatorPortfolio = props => {
         ? item?.state
         : 'not availble'
       : userdata?.state
-      ? userdata?.state
-      : '',
+        ? userdata?.state
+        : '',
   );
   const [zipCode, setZipCode] = useState(
     fromSearch
@@ -135,30 +135,30 @@ const NegotiatorPortfolio = props => {
         ? item?.zip
         : 'not availble'
       : userdata?.zip
-      ? userdata?.zip
-      : '',
+        ? userdata?.zip
+        : '',
   );
   const [services, setServices] = useState(
     fromSearch
       ? item?.expertise
         ? JSON.parse(item?.expertise)
         : item?.user_info?.expertise
-        ? JSON.parse(item?.user_info?.expertise)
-        : []
+          ? JSON.parse(item?.user_info?.expertise)
+          : []
       : userdata?.expertise
-      ? JSON.parse(userdata?.expertise)
-      : [],
+        ? JSON.parse(userdata?.expertise)
+        : [],
   );
   const [language, setLanguage] = useState(
     fromSearch
       ? item?.language
         ? JSON.parse(item?.language)
         : item?.user_info?.language
-        ? JSON.parse(item?.user_info?.language)
-        : []
+          ? JSON.parse(item?.user_info?.language)
+          : []
       : userdata?.language
-      ? JSON.parse(userdata?.language)
-      : [],
+        ? JSON.parse(userdata?.language)
+        : [],
   );
 
   const [isLoading, setIsLoading] = useState(false);
@@ -288,30 +288,30 @@ const NegotiatorPortfolio = props => {
         userRole == 'Qbid Member'
           ? Color.themeBgColor
           : userRole == 'Qbid Negotiator'
-          ? Color.themeBgColorNegotiator
-          : Color.themebgBusinessQbidder
+            ? Color.themeBgColorNegotiator
+            : Color.themebgBusinessQbidder
       }
       statusBarContentStyle={'light-content'}
       headerColor={
         userRole == 'Qbid Member'
           ? Color.themeBgColor
           : userRole == 'Qbid Negotiator'
-          ? Color.themeBgColorNegotiator
-          : Color.themebgBusinessQbidder
+            ? Color.themeBgColorNegotiator
+            : Color.themebgBusinessQbidder
       }
       showBack={true}>
       <LinearGradient
         style={{
           height: windowHeight * 0.96,
         }}
-        start={{x: 0, y: 0}}
-        end={{x: 1, y: 0}}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
         colors={
           userRole == 'Qbid Member'
             ? Color.themeBgColor
             : userRole == 'Qbid Negotiator'
-            ? Color.themeBgColorNegotiator
-            : Color.themebgBusinessQbidder
+              ? Color.themeBgColorNegotiator
+              : Color.themebgBusinessQbidder
         }>
         {!availibility && (
           <View
@@ -361,10 +361,10 @@ const NegotiatorPortfolio = props => {
                   setImageToShow([
                     fromSearch
                       ? {
-                          uri: item?.coverphoto
-                            ? item?.coverphoto
-                            : item?.user_info?.coverphoto,
-                        }
+                        uri: item?.coverphoto
+                          ? item?.coverphoto
+                          : item?.user_info?.coverphoto,
+                      }
                       : userdata?.coverphoto,
                   ]);
                   setVisible(true);
@@ -372,13 +372,13 @@ const NegotiatorPortfolio = props => {
                 source={
                   userRole != 'Qbid Member'
                     ? Object.keys(coverPhoto).length > 0
-                      ? {uri: coverPhoto?.uri}
-                      : {uri: userdata?.coverphoto}
+                      ? { uri: coverPhoto?.uri }
+                      : { uri: userdata?.coverphoto }
                     : {
-                        uri: item?.coverphoto
-                          ? item?.coverphoto
-                          : item?.user_info?.coverphoto,
-                      }
+                      uri: item?.coverphoto
+                        ? item?.coverphoto
+                        : item?.user_info?.coverphoto,
+                    }
                 }
                 style={{
                   width: '100%',
@@ -418,13 +418,13 @@ const NegotiatorPortfolio = props => {
               }}>
               <CustomImage
                 onPress={() => {
-                  setImageToShow([{uri: userdata?.photo}]);
+                  setImageToShow([{ uri: userdata?.photo }]);
                   setVisible(true);
                 }}
                 source={
                   fromSearch
-                    ? {uri: item?.photo ? item?.photo : item?.user_info?.photo}
-                    : {uri: userdata?.photo}
+                    ? { uri: item?.photo ? item?.photo : item?.user_info?.photo }
+                    : { uri: userdata?.photo }
                 }
                 style={styles.image}
               />
@@ -442,8 +442,8 @@ const NegotiatorPortfolio = props => {
                         userRole == 'Qbid Member'
                           ? Color.blue
                           : userRole == 'Qbid Negotiator'
-                          ? Color.themeColor
-                          : Color.black,
+                            ? Color.themeColor
+                            : Color.black,
                     },
                   ]}>
                   <Icon
@@ -482,7 +482,7 @@ const NegotiatorPortfolio = props => {
                 </CustomText>
               </TouchableOpacity>
             )}
-            <View style={{marginLeft: moderateScale(10, 0.3)}}>
+            <View style={{ marginLeft: moderateScale(10, 0.3) }}>
               <CustomText
                 numberOfLines={2}
                 style={[
@@ -494,11 +494,11 @@ const NegotiatorPortfolio = props => {
                   },
                   userRole == 'Qbid Member'
                     ? {
-                        borderColor: Color.black,
-                      }
+                      borderColor: Color.black,
+                    }
                     : {
-                        borderColor: Color.lightGrey,
-                      },
+                      borderColor: Color.lightGrey,
+                    },
                 ]}>
                 {`${firstName} ${lastName}`}
               </CustomText>
@@ -542,11 +542,11 @@ const NegotiatorPortfolio = props => {
                     ? item?.numb_jobs_done
                       ? item?.numb_jobs_done
                       : item?.user_info?.numb_jobs_done
-                      ? item?.user_info?.numb_jobs_done
-                      : 0
+                        ? item?.user_info?.numb_jobs_done
+                        : 0
                     : userdata?.numb_jobs_done
-                    ? userdata?.numb_jobs_done
-                    : 0
+                      ? userdata?.numb_jobs_done
+                      : 0
                 }
                 title={'Jobs'}
               />
@@ -628,8 +628,8 @@ const NegotiatorPortfolio = props => {
                     ? item?.company_name
                       ? item?.company_name
                       : item?.user_info?.company_name
-                      ? item?.user_info?.company_name
-                      : 'not availble'
+                        ? item?.user_info?.company_name
+                        : 'not availble'
                     : userdata?.company_name
                 }
                 iconName={'building'}
@@ -646,10 +646,10 @@ const NegotiatorPortfolio = props => {
                   rating > 4
                     ? 'Platinum'
                     : rating > 3.5
-                    ? 'Gold'
-                    : rating > 3
-                    ? 'Silver'
-                    : 'Bronze'
+                      ? 'Gold'
+                      : rating > 3
+                        ? 'Silver'
+                        : 'Bronze'
                 }
                 iconName={'trophy'}
                 title={'Qbid Level'}
@@ -676,8 +676,8 @@ const NegotiatorPortfolio = props => {
                         userRole == 'Qbid Member'
                           ? Color.blue
                           : userRole == 'Qbid Negotiator'
-                          ? Color.themeColor
-                          : Color.black,
+                            ? Color.themeColor
+                            : Color.black,
                     }}
                   />
                   <CustomText
@@ -707,8 +707,8 @@ const NegotiatorPortfolio = props => {
                         userRole == 'Qbid Member'
                           ? Color.blue
                           : userRole == 'Qbid Negotiator'
-                          ? Color.themeColor
-                          : Color.black,
+                            ? Color.themeColor
+                            : Color.black,
                     }}
                   />
                   <CustomText
@@ -732,8 +732,7 @@ const NegotiatorPortfolio = props => {
                 );
               }}
               data={review}
-              // data={item?.ratings ? item?.ratings : userdata?.negotiator_review}
-              renderItem={({item, index}) => {
+              renderItem={({ item, index }) => {
                 console.log("🚀 ~ item:", item?.user)
                 return (
                   <View style={styles.view}>
@@ -743,7 +742,7 @@ const NegotiatorPortfolio = props => {
                           height: '100%',
                           width: '100%',
                         }}
-                        source={{uri: item?.user?.photo}}
+                        source={{ uri: item?.user?.photo }}
                       />
                     </View>
                     <View
@@ -774,8 +773,8 @@ const NegotiatorPortfolio = props => {
                 userRole == 'Qbid Member'
                   ? Color.blue
                   : userRole == 'Qbid Negotiator'
-                  ? Color.themeColor
-                  : Color.black
+                    ? Color.themeColor
+                    : Color.black
               }
               borderRadius={moderateScale(30, 0.3)}
               onPress={() => {
@@ -813,14 +812,14 @@ const NegotiatorPortfolio = props => {
               alignItems: 'center',
               paddingVertical: moderateScale(10, 0.6),
             }}
-            start={{x: 0, y: 0}}
-            end={{x: 1, y: 0}}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
             colors={
               userRole == 'Qbid Member'
                 ? Color.themeBgColor
                 : userRole == 'Qbid Negotiator'
-                ? Color.themeBgColorNegotiator
-                : Color.themebgBusinessQbidder
+                  ? Color.themeBgColorNegotiator
+                  : Color.themebgBusinessQbidder
             }>
             <TouchableOpacity
               onPress={() => {
@@ -1042,11 +1041,11 @@ const NegotiatorPortfolio = props => {
                 <CustomDropDownMultiSelect
                   title={'Pick Languages'}
                   array={[
-                    {name: 'English', id: 'English'},
-                    {name: 'Dutch', id: 'Dutch'},
-                    {name: 'Spanish', id: 'Spanish'},
-                    {name: 'French', id: 'French'},
-                    {name: 'Portugese', id: 'Portugese'},
+                    { name: 'English', id: 'English' },
+                    { name: 'Dutch', id: 'Dutch' },
+                    { name: 'Spanish', id: 'Spanish' },
+                    { name: 'French', id: 'French' },
+                    { name: 'Portugese', id: 'Portugese' },
                   ]}
                   item={language}
                   setItem={setLanguage}
@@ -1090,8 +1089,8 @@ const NegotiatorPortfolio = props => {
                 userRole == 'Qbid Member'
                   ? Color.blue
                   : userRole == 'Qbid Negotiator'
-                  ? Color.themeColor
-                  : Color.black
+                    ? Color.themeColor
+                    : Color.black
               }
               borderRadius={moderateScale(30, 0.3)}
             />
@@ -1262,8 +1261,8 @@ const DetailContainer = ({
           userRole == 'Qbid Member'
             ? Color.blue
             : userRole == 'Qbid Negotiator'
-            ? Color.themeColor
-            : Color.black
+              ? Color.themeColor
+              : Color.black
         }
         size={moderateScale(20, 0.6)}
       />

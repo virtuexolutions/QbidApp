@@ -39,7 +39,6 @@ const HomeScreen = () => {
   const servicesArray = useSelector(state => state.commonReducer.servicesArray);
   const token = useSelector(state => state.authReducer.token);
   console.log("🚀 ~ HomeScreen ~ token:", token)
-
   const [searchData, setSearchData] = useState('');
   const [showMultiImageModal, setShowMultiImageModal] = useState(false);
   const [multiImages, setMultiImages] = useState([]);
@@ -64,8 +63,6 @@ const HomeScreen = () => {
       Get('auth/member/quote_help', token),
     ]);
 
-    console.log(response2?.data?.quote_info?.data, 'response2response2response2response2')
-
     setIsLoading(false);
     if (response1 != undefined) {
       setNegotiator(response1?.data?.negotitator_info);
@@ -74,6 +71,7 @@ const HomeScreen = () => {
       setMyQuotes(response2?.data?.quote_info?.data);
     }
     if (response3 != undefined) {
+      console.log(response3?.data?.quote_info?.data, 'responseeeeeeeeeeeeeeeeeeeeeeeeeeeee3')
       setHelpResponse(response3?.data?.quote_info?.data);
     }
   };
@@ -110,7 +108,6 @@ const HomeScreen = () => {
       statusBarBackgroundColor={Color.themeBgColor}
       statusBarContentStyle={'dark-content'}
       showHeader={true}
-    //  showBack={true}
     >
       <LinearGradient
         style={{
@@ -189,7 +186,7 @@ const HomeScreen = () => {
             </View>
           ) : (
             <FlatList
-              scrollEnabled={false}
+              scrollEnabled={true}
               ListEmptyComponent={() => {
                 return (
                   <NoData
@@ -324,7 +321,6 @@ const HomeScreen = () => {
                 return <NoData style={styles.NoData} />;
               }}
               data={helpResponse}
-              // data={myQuotes.filter(item => item?.type == 'help')}
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{

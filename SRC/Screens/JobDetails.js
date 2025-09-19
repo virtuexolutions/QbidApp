@@ -48,6 +48,7 @@ const JobDetails = props => {
   const type = props?.route?.params?.type;
   // const bidData = useSelector(state => state.commonReducer.bidDetail);
   const user = useSelector(state => state.commonReducer.userData);
+  console.log(user, 'userrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
   const token = useSelector(state => state.authReducer.token);
   const userRole = useSelector(state => state.commonReducer.selectedRole);
   console.log('🚀 ~ userRole:', userRole);
@@ -60,13 +61,13 @@ const JobDetails = props => {
   const dispatch = useDispatch();
 
   const [data, setData] = useState();
-  console.log("🚀 ~ JobDetails ~ data:", data)
+  console.log("🚀 ~ JobDetails ~ data:", data?.review)
   const [checked, setChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [bidDone, setBidDone] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [Email, setEmail] = useState(user?.email);
-  const [price, setPrice] = useState('');
+  const [price, setPrice] = useState('0');
   console.log(price, '=====================>')
   const [number, setNumber] = useState(user?.phone);
   const [userData, setUserData] = useState({});
@@ -85,10 +86,24 @@ const JobDetails = props => {
   const [refRBSheet, setrefRBSheet] = useState(false);
   const [detailsModalVisible, setDetailsModalVisible] = useState(false);
   const [selectedBid, setSelectedBid] = useState({})
-
+  const [myBids, setMyBids] = useState([])
   useEffect(() => {
     bidDetails();
   }, [isFocused]);
+
+
+  useEffect(() => {
+    if (user?.expertise) {
+      try {
+        const expertiseArray = JSON.parse(user.expertise);
+        if (Array.isArray(expertiseArray) && expertiseArray.length > 0) {
+          setCoverLetterRole(expertiseArray[0]);
+        }
+      } catch (error) {
+        console.log("Expertise parse error:", error);
+      }
+    }
+  }, [user]);
 
   const bidDetails = async () => {
     const url = `auth/negotiator/quote_detail/${data1?.quote_id ? data1?.quote_id : data1?.id
@@ -308,6 +323,33 @@ const JobDetails = props => {
       // dispatch(setBidDetail(response?.data?.quote_info));
     }
   };
+
+
+
+  // const myBids = data?.bids.filter(
+  //   (bid) => bid.user_id == user.id
+  // );
+
+  // if (myBids?.length > 0) {
+  //   console.log("Meri sari bids:", myBids);
+  // }
+
+  useEffect(() => {
+    if (data?.bids && user?.id) {
+      const myBids = data.bids.filter(
+        (bid) => bid.user_id == user.id
+      );
+
+      if (myBids.length > 0) {
+        setMyBids(myBids)
+        setPrice(myBids[0].price ?? '')
+      } else {
+        setMyBids(myBids)
+        setPrice('');
+      }
+    }
+  }, [data, user]);
+
   return (
     <ScreenBoiler
       hideUser={false}
@@ -917,10 +959,10 @@ const JobDetails = props => {
                       description: userData?.coverletter
                         ? userData?.coverletter
                         : desc,
-                      status: data?.bids[0]?.status,
+                      status: myBids[0]?.status,
                       id: data?.id,
-                      bid_id: data?.bids[0]?.id,
-                      price: data?.bids[0]?.price || price
+                      bid_id: myBids[0]?.id,
+                      price: price ? price : myBids[0]?.price
                     }}
                   />
 
@@ -1165,7 +1207,7 @@ const JobDetails = props => {
               {userRole === 'Business Qbidder' ? (
                 <TextInputWithTitle
                   secureText={false}
-                  placeholder={'Enter Bid Price'}
+                  placeholder={price != null ? price : 'price'}
                   setText={setPrice}
                   value={price}
                   viewHeight={0.06}
@@ -1189,9 +1231,7 @@ const JobDetails = props => {
                 array={UserCoverLetterArray}
                 backgroundColor={'white'}
                 item={coverletterRole}
-                borderColor={
-                  userRole == 'Qbid Negotiator' ? Color.blue : Color.black
-                }
+                borderColor={userRole == 'Qbid Negotiator' ? Color.blue : Color.black}
                 borderWidth={1}
                 marginTop={moderateScale(20, 0.6)}
                 setItem={setCoverLetterRole}
@@ -1203,13 +1243,12 @@ const JobDetails = props => {
                   width: windowWidth * 0.75,
                 }}
               />
-
               <TextInputWithTitle
                 multiline={true}
                 secureText={false}
                 placeholder={
                   userRole === 'Business Qbidder' ?
-                    'Please include any relevant information that may assist the Member in choosing you as the recipient of the QBID quote' : 'Optional but PS the additional info to help you get a deal'
+                    'Please include any relevant information that may assist the Member in choosing you as the recipient of the QBID quote' : 'Please include any relevant information that may assist the Member in choosing you as the recipient of the QBID quote'
                 }
                 setText={setDesc}
                 value={desc}

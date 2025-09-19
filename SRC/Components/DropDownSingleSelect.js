@@ -1,14 +1,14 @@
-import React, {useState, useEffect} from 'react';
-import {Dimensions, View} from 'react-native';
-import {scale, moderateScale, ScaledSheet} from 'react-native-size-matters';
+import React, { useState, useEffect } from 'react';
+import { Dimensions, View } from 'react-native';
+import { scale, moderateScale, ScaledSheet } from 'react-native-size-matters';
 import SelectDropdown from 'react-native-select-dropdown';
-import {Icon} from 'native-base';
+import { Icon } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Color from '../Assets/Utilities/Color';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {windowWidth} from '../Utillity/utils';
+import { windowWidth } from '../Utillity/utils';
 
 
 const width = Dimensions.get('window').width;
@@ -35,18 +35,18 @@ const DropDownSingleSelect = ({
   Colors,
   dropdownStyle,
 }) => {
-  const [data , setData] = useState([])
+  const [data, setData] = useState([])
 
   useEffect(() => {
     setData([])
-    array?.map((x , index)=>{
-      return(
-        typeof(array[0]) == 'object' ? setData((prev)=>[...prev , x?.name]) :setData(prev=>[...prev , x])
+    array?.map((x, index) => {
+      return (
+        typeof (array[0]) == 'object' ? setData((prev) => [...prev, x?.name]) : setData(prev => [...prev, x])
       )
     })
-    
+
   }, [])
-  
+
 
   return (
     <View
@@ -55,7 +55,7 @@ const DropDownSingleSelect = ({
         !iconName && {
           paddingLeft: 0,
           marginBottom: 10,
-          marginTop:marginTop
+          marginTop: marginTop
         },
         myJobs && {
           backgroundColor: Color.themeInputText,
@@ -83,8 +83,8 @@ const DropDownSingleSelect = ({
           size={moderateScale(22, 0.3)}
           style={[
             styles.icon2,
-            backgroundColor && {color: Color.themeGray},
-            myJobs && {color: '#ffffff00'},
+            backgroundColor && { color: Color.themeGray },
+            myJobs && { color: '#ffffff00' },
           ]}
         />
       )}
@@ -95,7 +95,7 @@ const DropDownSingleSelect = ({
           ...styles.dropDownBtn,
           width: width * 0.89,
 
-          ...(disabled && {backgroundColor: `${Color.veryLightGray}90`}),
+          ...(disabled && { backgroundColor: `${Color.veryLightGray}90` }),
           ...(myJobs && {
             backgroundColor: `${Color.themeInputText}`,
             width: windowWidth * 0.35,
@@ -103,8 +103,8 @@ const DropDownSingleSelect = ({
           }),
           ...(backgroundColor && {
             backgroundColor: backgroundColor,
-            borderWidth:borderWidth,
-            borderColor:borderColor,
+            borderWidth: borderWidth,
+            borderColor: borderColor,
           }),
           ...(!iconName && {
             width: width,
@@ -112,7 +112,7 @@ const DropDownSingleSelect = ({
         }}
         buttonTextStyle={{
           ...styles.dropDownBtnText,
-          ...(item !== '' && {color: Colors ? Colors : Color.themeBlack}),
+          ...(item !== '' && { color: Colors ? Colors : Color.themeBlack }),
           ...(backgroundColor && {
             color: `${Color.veryLightGray}`,
             fontSize: moderateScale(12, 0.3),
@@ -128,7 +128,7 @@ const DropDownSingleSelect = ({
             left: moderateScale(40, 0.6),
           }),
         }}
-        rowStyle={{...styles.dropDownRow}}
+        rowStyle={{ ...styles.dropDownRow }}
         rowTextStyle={{
           ...styles.dropDownRowText,
         }}
@@ -149,7 +149,7 @@ const DropDownSingleSelect = ({
                     position: 'absolute',
                     left: -8,
                   },
-                  backgroundColor && {color: Color.themeGray},
+                  backgroundColor && { color: Color.themeGray },
                 ]}
               />
             </>

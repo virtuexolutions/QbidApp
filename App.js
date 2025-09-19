@@ -1,14 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import {Platform} from 'react-native';
-import {PersistGate} from 'redux-persist/integration/react';
-import {Provider, useDispatch, useSelector} from 'react-redux';
-import {StripeProvider} from '@stripe/stripe-react-native';
-import messaging, {firebase} from '@react-native-firebase/messaging';
-import PushNotification, {Notifications} from 'react-native-push-notification';
-import {PermissionsAndroid} from 'react-native';
-import {NativeBaseProvider} from 'native-base';
-import {store, persistor} from './SRC/Store/index';
-import {stripeKey} from './SRC/Config';
+import React, { useEffect, useState } from 'react';
+import { Platform } from 'react-native';
+import { PersistGate } from 'redux-persist/integration/react';
+import { Provider, useDispatch, useSelector } from 'react-redux';
+import { StripeProvider } from '@stripe/stripe-react-native';
+import messaging, { firebase } from '@react-native-firebase/messaging';
+import PushNotification, { Notifications } from 'react-native-push-notification';
+import { PermissionsAndroid } from 'react-native';
+import { NativeBaseProvider } from 'native-base';
+import { store, persistor } from './SRC/Store/index';
+import { stripeKey } from './SRC/Config';
 import {
   requestCameraPermission,
   requestLocationPermission,
@@ -53,8 +53,8 @@ const App = () => {
   return (
     <StripeProvider
       publishableKey={'pk_test_qblFNYngBkEdjEZ16jxxoWSM'}
-      // merchantIdentifier="merchant.identifier" // required for Apple Pay
-      // urlScheme="your-url-scheme" // required for 3D Secure and bank redirects
+    // merchantIdentifier="merchant.identifier" // required for Apple Pay
+    // urlScheme="your-url-scheme" // required for 3D Secure and bank redirects
     >
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
@@ -139,7 +139,6 @@ const MainContainer = () => {
       .getToken()
       .then(_token => {
         console.log('🚀 ~mg here ================  .then ~ _token:', _token);
-        //  dispatch(SetFCMToken(_token));
       })
       .catch(() => console.log('token error'));
     GetPermission();
