@@ -61,7 +61,7 @@ const JobDetails = props => {
   const dispatch = useDispatch();
 
   const [data, setData] = useState();
-  console.log("🚀 ~ JobDetails ~ data:", data?.review)
+  console.log("🚀 ~ JobDetails ~ data:", data)
   const [checked, setChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [bidDone, setBidDone] = useState(false);
@@ -882,6 +882,7 @@ const JobDetails = props => {
                         paddingBottom: moderateScale(30, 0.6),
                       }}
                       renderItem={({ item, index }) => {
+                        console.log(item, 'iteeeeeeeeeeeeeeeeemmmmmmmm')
                         return (
                           <View style={styles.reviewCard}>
                             <View></View>

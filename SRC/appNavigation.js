@@ -45,6 +45,8 @@ import CompleteJobs from './Screens/CompleteJobs';
 import CreateNewHelp from './Screens/CreateNewHelp';
 import MessagesScreen from './Screens/MessagesScreen';
 import PrivacyPolicy from './Screens/PrivacyPolicy';
+import Detailcards from './Components/Detailcards';
+import HelpDetails from './Screens/HelpDetails';
 
 const AppNavigator = () => {
   // const isLogin = false;
@@ -117,6 +119,7 @@ const AppNavigator = () => {
           <RootNav.Screen name="CreateNewHelp" component={CreateNewHelp} />
           <RootNav.Screen name="MessagesScreen" component={MessagesScreen} />
           <RootNav.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
+          <RootNav.Screen name="HelpDetails" component={HelpDetails} />
         </RootNav.Navigator>
       </NavigationContainer>
     );

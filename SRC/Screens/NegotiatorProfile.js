@@ -6,17 +6,17 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import ScreenBoiler from '../Components/ScreenBoiler';
-import {FlatList, Icon} from 'native-base';
-import {windowHeight, windowWidth} from '../Utillity/utils';
-import {moderateScale, ScaledSheet} from 'react-native-size-matters';
+import { FlatList, Icon } from 'native-base';
+import { windowHeight, windowWidth } from '../Utillity/utils';
+import { moderateScale, ScaledSheet } from 'react-native-size-matters';
 import CategoriesSelector from '../Components/CategoriesSelector';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import CustomText from '../Components/CustomText';
 import Color from '../Assets/Utilities/Color';
-import {ScrollView} from 'react-native';
+import { ScrollView } from 'react-native';
 import SearchContainer from '../Components/SearchContainer';
 import ProductCard from '../Components/ProductCard';
 import {
@@ -24,7 +24,7 @@ import {
   setProductColor,
   setProductSize,
 } from '../Store/slices/common';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CustomImage from '../Components/CustomImage';
 import LinearGradient from 'react-native-linear-gradient';
 import numeral from 'numeral';
@@ -40,6 +40,7 @@ const NegotiatorProfile = props => {
   const [showMore, setShowMore] = useState(false);
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
+  
   const detail = {
     image: require('../Assets/Images/shoes2.jpg'),
     name: 'Shoes nike',
@@ -100,8 +101,8 @@ const NegotiatorProfile = props => {
         userRole == 'Qbid Member'
           ? Color.blue
           : userRole == 'Qbid Negotiator'
-          ? Color.themeColor
-          : Color.black
+            ? Color.themeColor
+            : Color.black
       }
       statusBarContentStyle={'dark-content'}
       // headerColor={Color.white}
@@ -138,7 +139,7 @@ const NegotiatorProfile = props => {
           data={detail?.array}
           horizontal
           pagingEnabled
-          renderItem={({item, index}) => {
+          renderItem={({ item, index }) => {
             return (
               <View
                 style={{
@@ -155,15 +156,15 @@ const NegotiatorProfile = props => {
                 />
                 {/* <View style={{position : 'absolute' , bottom : 0}}> */}
                 <LinearGradient
-                  start={{x: 0, y: 0}}
-                  end={{x: 0, y: 1}}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 0, y: 1 }}
                   colors={['#8A8A8A00', '#000000']}
                   style={{
                     position: 'absolute',
                     bottom: 0,
                     borderRadius: 5,
                     justifyContent: 'flex-end',
-                    shadowOffset: {height: 2, width: 0},
+                    shadowOffset: { height: 2, width: 0 },
                     shadowOpacity: 1,
                     shadowRadius: 4,
                     width: '100%',
@@ -352,7 +353,7 @@ const styles = ScaledSheet.create({
     borderRadius: moderateScale(10, 0.3),
     marginRight: moderateScale(5, 0.3),
   },
-  scroll:{
+  scroll: {
     paddingTop: moderateScale(10, 0.3),
     alignItems: 'center',
     paddingBottom: moderateScale(30, 0.3),

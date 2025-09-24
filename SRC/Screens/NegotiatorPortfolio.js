@@ -750,42 +750,51 @@ const NegotiatorPortfolio = props => {
                         paddingHorizontal: moderateScale(10, 0.3),
                       }}>
                       <CustomText isBold style={styles.text}>
-                        {item?.user_info?.first_name}
+                        {item?.user?.first_name + ' ' + item?.user?.last_name}
                       </CustomText>
                       <CustomText style={styles.text2}>{item?.text}</CustomText>
-                      <CustomText style={styles.text2}>
-                        {moment().format('MMM Do, YYYY')}
-                      </CustomText>
+                      <View style={{
+                        flexDirection: 'row'
+                      }}>
+                        <CustomText style={[styles.text2, {
+                          width: windowWidth * 0.09,
+                        }]} isBold>Date : </CustomText>
+                        <CustomText style={styles.text2}>
+                          {moment().format('MMM Do, YYYY')}
+                        </CustomText>
+                      </View>
                     </View>
                   </View>
                 );
               }}
             />
           </View>
-          {userRole == 'Qbid Member' && (
-            <CustomButton
-              text={'Hire Now'}
-              textColor={Color.white}
-              width={windowWidth * 0.92}
-              height={windowHeight * 0.07}
-              marginTop={moderateScale(20, 0.3)}
-              bgColor={
-                userRole == 'Qbid Member'
-                  ? Color.blue
-                  : userRole == 'Qbid Negotiator'
-                    ? Color.themeColor
-                    : Color.black
-              }
-              borderRadius={moderateScale(30, 0.3)}
-              onPress={() => {
-                navigationService.navigate('CreateNew', {
-                  hire: true,
-                  id: item?.id,
-                });
-              }}
-              disabled={!fromSearch && item?.status == 'active' ? false : true}
-            />
-          )}
+          {
+            userRole == 'Qbid Member' && (
+              <CustomButton
+                text={'Hire Now'}
+                textColor={Color.white}
+                width={windowWidth * 0.92}
+                height={windowHeight * 0.07}
+                marginTop={moderateScale(20, 0.3)}
+                bgColor={
+                  userRole == 'Qbid Member'
+                    ? Color.blue
+                    : userRole == 'Qbid Negotiator'
+                      ? Color.themeColor
+                      : Color.black
+                }
+                borderRadius={moderateScale(30, 0.3)}
+                onPress={() => {
+                  navigationService.navigate('CreateNew', {
+                    hire: true,
+                    id: item?.id,
+                  });
+                }}
+                disabled={!fromSearch && item?.status == 'active' ? false : true}
+              />
+            )
+          }
         </ScrollView>
         <ImagePickerModal
           show={showModal}
@@ -1175,9 +1184,12 @@ const styles = ScaledSheet.create({
   },
   view: {
     flexDirection: 'row',
-    marginVertical: moderateScale(10, 0.3),
+    marginVertical: moderateScale(5, 0.3),
     paddingHorizontal: moderateScale(10, 0.3),
-    // backgroundColor:'red'
+    paddingVertical: moderateScale(10, 0.6),
+    backgroundColor: Color.lightGrey,
+    width: windowWidth * 0.95,
+    borderRadius: moderateScale(10, 0.6)
   },
   mainview: {
     height: windowHeight * 0.06,

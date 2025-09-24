@@ -115,17 +115,11 @@ const NotificationScreen = () => {
     const url = 'auth/negotiator/notification';
     setIsLoading(true);
     const response = await Get(url, token);
-    console.log(response?.data, '===============>')
     setIsLoading(false);
     if (response != undefined) {
       setHelpNotification(response?.data?.notification_info);
     }
   };
-  useEffect(() => {
-    if (userRole != 'Business Qbidder') {
-      helpNotify();
-    }
-  }, [isFocused]);
 
 
   const getNotifications = async () => {
@@ -145,8 +139,11 @@ const NotificationScreen = () => {
   useEffect(() => {
     if (userRole == 'Qbid Member') {
       getNotifications();
+    } else {
+      helpNotify();
     }
   }, [isFocused]);
+
   const getDeviceToken = async () => {
     const token = await messaging().getToken();
   };

@@ -9,29 +9,29 @@ import {
   ToastAndroid,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import Color from '../Assets/Utilities/Color';
-import {moderateScale, ScaledSheet} from 'react-native-size-matters';
-import {windowHeight, windowWidth} from '../Utillity/utils';
+import { moderateScale, ScaledSheet } from 'react-native-size-matters';
+import { windowHeight, windowWidth } from '../Utillity/utils';
 import CustomText from '../Components/CustomText';
-import {Actionsheet, Icon} from 'native-base';
-import {ScrollView} from 'react-native';
+import { Actionsheet, Icon } from 'native-base';
+import { ScrollView } from 'react-native';
 import SearchContainer from '../Components/SearchContainer';
 import Entypo from 'react-native-vector-icons/Entypo';
 import navigationService from '../navigationService';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CustomStatusModal from '../Components/CustomStatusModal';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomAlertModal from '../Components/CustomAlertModal';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import JobCard from '../Components/JobCard';
-import {Get} from '../Axios/AxiosInterceptorFunction';
-import {useIsFocused} from '@react-navigation/native';
+import { Get } from '../Axios/AxiosInterceptorFunction';
+import { useIsFocused } from '@react-navigation/native';
 import GetLocation from 'react-native-get-location';
 import NoData from '../Components/NoData';
-import {setLocation} from '../Store/slices/common';
+import { setLocation } from '../Store/slices/common';
 import CustomImage from '../Components/CustomImage';
 import AcceptedHelpRequestCard from '../Components/AcceptedHelpRequestCard';
 
@@ -124,7 +124,7 @@ const NegotiatorHomeScreen = () => {
         dispatch(setLocation(location));
       })
       .catch(error => {
-        const {code, message} = error;
+        const { code, message } = error;
         console.warn(code, message);
       });
   };
@@ -139,8 +139,8 @@ const NegotiatorHomeScreen = () => {
         userRole == 'Qbid Member'
           ? Color.themeBgColor
           : userRole == 'Qbid Negotiator'
-          ? Color.themeBgColorNegotiator
-          : Color.themebgBusinessQbidder
+            ? Color.themeBgColorNegotiator
+            : Color.themebgBusinessQbidder
       }
       statusBarContentStyle={'dark-content'}
       showHeader={true}
@@ -148,22 +148,22 @@ const NegotiatorHomeScreen = () => {
         userRole == 'Qbid Member'
           ? Color.themeBgColor
           : userRole == 'Qbid Negotiator'
-          ? Color.themeBgColorNegotiator
-          : Color.themebgBusinessQbidder
+            ? Color.themeBgColorNegotiator
+            : Color.themebgBusinessQbidder
       }>
       <LinearGradient
         style={{
           width: windowWidth,
           height: windowHeight * 0.9,
         }}
-        start={{x: 0, y: 0}}
-        end={{x: 1, y: 0}}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
         colors={
           userRole == 'Qbid Member'
             ? Color.themeBgColor
             : userRole == 'Qbid Negotiator'
-            ? Color.themeBgColorNegotiator
-            : Color.themebgBusinessQbidder
+              ? Color.themeBgColorNegotiator
+              : Color.themebgBusinessQbidder
         }>
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -185,9 +185,9 @@ const NegotiatorHomeScreen = () => {
                 if (selectedStatus == '') {
                   return Platform.OS == 'android'
                     ? ToastAndroid.show(
-                        'Please select any category',
-                        ToastAndroid.SHORT,
-                      )
+                      'Please select any category',
+                      ToastAndroid.SHORT,
+                    )
                     : Alert.alert('Please select any category');
                 } else {
                   navigationService.navigate('SeeAllNegotiator', {
@@ -269,7 +269,7 @@ const NegotiatorHomeScreen = () => {
                   {userData?.total_earning}
                 </CustomText>
               </View>
-              <View style={[styles.revenueContainer, {marginTop: '2%'}]}>
+              <View style={[styles.revenueContainer, { marginTop: '2%' }]}>
                 <Icon
                   name="star"
                   as={AntDesign}
@@ -291,10 +291,10 @@ const NegotiatorHomeScreen = () => {
                   {userData?.average_rating > 4
                     ? 'Platinum'
                     : userData?.average_rating > 3.5
-                    ? 'Gold'
-                    : userData?.average_rating > 3
-                    ? 'Silver'
-                    : 'Bronze'}
+                      ? 'Gold'
+                      : userData?.average_rating > 3
+                        ? 'Silver'
+                        : 'Bronze'}
                 </CustomText>
               </View>
             </View>
@@ -330,13 +330,13 @@ const NegotiatorHomeScreen = () => {
                   contentContainerStyle={{
                     paddingHorizontal: moderateScale(15, 0.3),
                   }}
-                  renderItem={({item, index}) => {
+                  renderItem={({ item, index }) => {
                     return (
                       <JobCard
                         key={index}
                         item={item}
                         onPress={() => {
-                          navigationService.navigate('JobDetails', {item});
+                          navigationService.navigate('JobDetails', { item });
                         }}
                       />
                     );
@@ -389,7 +389,7 @@ const NegotiatorHomeScreen = () => {
                   contentContainerStyle={{
                     paddingHorizontal: moderateScale(15, 0.3),
                   }}
-                  renderItem={({item, index}) => {
+                  renderItem={({ item, index }) => {
                     return (
                       <JobCard
                         key={index}
@@ -441,7 +441,7 @@ const NegotiatorHomeScreen = () => {
                   contentContainerStyle={{
                     paddingHorizontal: moderateScale(15, 0.3),
                   }}
-                  renderItem={({item, index}) => {
+                  renderItem={({ item, index }) => {
                     return (
                       <JobCard
                         key={index}
@@ -492,7 +492,7 @@ const NegotiatorHomeScreen = () => {
                       />
                     );
                   }}
-                  renderItem={({item, index}) => {
+                  renderItem={({ item, index }) => {
                     return (
                       <JobCard
                         key={index}
@@ -520,7 +520,6 @@ const NegotiatorHomeScreen = () => {
                     View all
                   </CustomText>
                 </View>
-
                 <FlatList
                   data={helpBidList}
                   horizontal
@@ -539,7 +538,7 @@ const NegotiatorHomeScreen = () => {
                       />
                     );
                   }}
-                  renderItem={({item, index}) => {
+                  renderItem={({ item }) => {
                     return <AcceptedHelpRequestCard item={item} />;
                   }}
                 />
@@ -551,10 +550,10 @@ const NegotiatorHomeScreen = () => {
           isModalVisible={isModalVisible}
           setModalVisible={setIsModalVisible}
           statusArray={[
-            {name: 'Recommended'},
-            {name: 'Working On'},
-            {name: 'Job Request'},
-            {name: 'applied Jobs'},
+            { name: 'Recommended' },
+            { name: 'Working On' },
+            { name: 'Job Request' },
+            { name: 'applied Jobs' },
           ]}
           data={selectedStatus}
           setData={setSelectedStatus}
@@ -613,6 +612,7 @@ const styles = ScaledSheet.create({
   recommendedContainer: {
     width: windowWidth,
     marginTop: moderateScale(20, 0.3),
+    marginBottom: moderateScale(20, 0.6)
   },
   heading: {
     color: Color.white,

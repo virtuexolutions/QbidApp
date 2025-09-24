@@ -1,22 +1,23 @@
-import {StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
-import {moderateScale} from 'react-native-size-matters';
+import { moderateScale } from 'react-native-size-matters';
 import CustomText from './CustomText';
 import CustomImage from './CustomImage';
-import {windowHeight, windowWidth} from '../Utillity/utils';
+import { windowHeight, windowWidth } from '../Utillity/utils';
 import Color from '../Assets/Utilities/Color';
+import navigationService from '../navigationService';
 
-const AcceptedHelpRequestCard = ({item}) => {
- 
+const AcceptedHelpRequestCard = ({ item }) => {
+  console.log(item, 'iteeeeeeeeeeeeeeeeeeem')
   return (
-    <View style={styles.container}>                                            
+    <TouchableOpacity style={styles.container} onPress={() => item?.title != null ? navigationService.navigate('HelpDetails', { data: item }) : null}>
       <View style={styles.imageContainer}>
         <CustomImage
           style={{
             width: '100%',
             height: '100%',
           }}
-          source={{uri :item?.user_info?.photo}}
+          source={{ uri: item?.user_info?.photo }}
         />
       </View>
       <View style={styles.rowContainer}>
@@ -28,10 +29,9 @@ const AcceptedHelpRequestCard = ({item}) => {
             {
               paddingHorizontal: moderateScale(10, 0.6),
               width: windowWidth * 0.28,
-            //   backgroundColor: 'red',
             },
           ]}>
-          {item?.user_info?.first_name}dfbsfbsgasgdjkasgdhgasdghh
+          {item?.user_info?.first_name}
         </CustomText>
       </View>
       <View style={styles.rowContainer}>
@@ -43,13 +43,27 @@ const AcceptedHelpRequestCard = ({item}) => {
             {
               paddingHorizontal: moderateScale(10, 0.6),
               width: windowWidth * 0.28,
-            //   backgroundColor: 'red'
             },
           ]}>
           {item?.service_preference}
         </CustomText>
       </View>
-    </View>
+      <View style={styles.rowContainer}>
+        <CustomText style={styles.text}>Status :</CustomText>
+        <CustomText isBold
+          numberOfLines={1}
+          style={[
+            styles.text,
+            {
+              paddingHorizontal: moderateScale(7, 0.6),
+              width: windowWidth * 0.28,
+              color: item?.title != null ? '#03a300' : Color.veryLightGray
+            },
+          ]}>
+          {item?.title != null ? "details added" : 'AWAITING DETAILS'}
+        </CustomText>
+      </View>
+    </TouchableOpacity>
   );
 };
 

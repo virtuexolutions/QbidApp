@@ -43,10 +43,10 @@ const HelpModal = ({ modalVisible, setModalVisible }) => {
     if (response != undefined) {
       Platform.OS == 'android'
         ? ToastAndroid.show(
-          '“Alert Sent, Specialist would contact you soon',
+          'Alert Sent, Specialist would contact you soon',
           ToastAndroid.SHORT,
         )
-        : alert('“Alert Sent, Specialist would contact you soon');
+        : alert('Alert Sent, Specialist would contact you soon');
       setSelectedService('');
       setModalVisible(false);
     }

@@ -71,7 +71,6 @@ const HomeScreen = () => {
       setMyQuotes(response2?.data?.quote_info?.data);
     }
     if (response3 != undefined) {
-      console.log(response3?.data?.quote_info?.data, 'responseeeeeeeeeeeeeeeeeeeeeeeeeeeee3')
       setHelpResponse(response3?.data?.quote_info?.data);
     }
   };
@@ -316,7 +315,6 @@ const HomeScreen = () => {
             </View>
           ) : (
             <FlatList
-              scrollEnabled={false}
               ListEmptyComponent={() => {
                 return <NoData style={styles.NoData} />;
               }}

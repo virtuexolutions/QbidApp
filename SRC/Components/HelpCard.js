@@ -1,7 +1,7 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
-import {windowHeight, windowWidth} from '../Utillity/utils';
-import {moderateScale} from 'react-native-size-matters';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { windowHeight, windowWidth } from '../Utillity/utils';
+import { moderateScale } from 'react-native-size-matters';
 import CustomImage from './CustomImage';
 import CustomText from './CustomText';
 import CustomButton from './CustomButton';
@@ -9,8 +9,8 @@ import navigationService from '../navigationService';
 import AskingModal from '../Components/AskingModal';
 import { useNavigation } from '@react-navigation/native';
 
-const HelpCard = ({item}) => { 
-  const navigation =useNavigation()
+const HelpCard = ({ item }) => {
+  const navigation = useNavigation()
   const [modalVisible, setModalVisible] = useState(false);
   return (
     <>
@@ -50,8 +50,7 @@ const HelpCard = ({item}) => {
           <CustomImage
             onPress={() => {
               item?.status == 'accepted' &&
-              navigation.navigate('NegotiatorPortfolio',{item:item?.negotiator_info, fromSearch:true})
-                
+                navigation.navigate('NegotiatorPortfolio', { item: item?.negotiator_info, fromSearch: true })
             }}
             style={{
               height: '100%',
@@ -59,7 +58,7 @@ const HelpCard = ({item}) => {
             }}
             source={
               item?.user_info?.photo
-                ? {uri: item?.user_info?.photo}
+                ? { uri: item?.user_info?.photo }
                 : require('../Assets/Images/dummyman2.png')
             }
           />
@@ -69,12 +68,12 @@ const HelpCard = ({item}) => {
           text={'view Details'}
           textColor={Color.white}
           onPress={() => {
-            if(item?.title != null){
-              navigationService.navigate('CreateNewHelp' ,{item:item})
-            }else{
-              item?.status == 'accepted'&&
-              setModalVisible(true);
-            }
+            navigationService.navigate('CreateNewHelp', { item: item })
+            // if (item?.title != null) {
+            // } else {
+            //   item?.status == 'accepted' &&
+            //     setModalVisible(true);
+            // }
           }}
           bgColor={Color.blue}
           width={windowWidth * 0.5}
@@ -83,7 +82,7 @@ const HelpCard = ({item}) => {
           fontSize={moderateScale(13, 0.3)}
         />
       </TouchableOpacity>
-    <AskingModal
+      <AskingModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         item={item}
